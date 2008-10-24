@@ -1,0 +1,7 @@
+public class CLASS
+ {
+   public String generate(String appName, String packageName, String moduleTrackerPackageName)
+   {
+     return "";
+   }
+ }

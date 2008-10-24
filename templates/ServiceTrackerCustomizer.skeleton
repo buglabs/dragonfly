@@ -1,0 +1,7 @@
+public class CLASS
+ {
+   public String generate(List serviceNames, String appName, String packageName, String appPackageName, boolean genApp)
+   {
+     return "";
+   }
+ }

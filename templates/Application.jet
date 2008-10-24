@@ -1,0 +1,113 @@
+<%@ jet package="com.buglabs.dragonfly.generators.jet" imports="java.util.*" class="Application" skeleton="Application.skeleton" %>
+package <%=packageName%>;
+
+import com.buglabs.application.IServiceProvider;
+import com.buglabs.application.MainApplicationThread;
+import java.util.*;
+<%
+	Iterator siter = services.iterator();
+	while(siter.hasNext()) {
+		String sname = (String) siter.next();
+%>
+import <%=sname%>;
+<%
+	}
+%>
+
+/**
+ * <%=appName%> Main application thread. The run method is invoked 
+ * by the applications service tracker when all services are accounted for.
+ *
+ */
+public class <%=appName%> extends MainApplicationThread {
+
+	private IServiceProvider serviceProv;
+	private boolean ran;
+	
+	public <%=appName%>(IServiceProvider serviceProv) {
+		this.serviceProv = serviceProv;
+		ran = false;
+	}
+	
+	/**
+	 * Informs the caller whether this thread ran.
+n.	 */
+	public boolean getRan() {
+		return ran;
+	}
+	
+	private void ran() {
+		ran = true;
+	}
+	
+	/**
+     * This method is invoked as a result of all services
+     * becoming available for the application. The list of services is
+     * obtained from the getServices() method.
+     */
+	public void run() {
+		//Main application loop the run method will commence
+		//once all service dependencies are satisfied.
+		while(!tearDownRequested) {
+			System.out.println("Running: <%=appName%>");
+			
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("<%=appName%> stopped");	
+		
+		/**
+		 * Let the service tracker know we ran.
+		 */
+		ran();
+	}
+	
+	/**
+     * Provides a list of service names that this application depends on.
+     *
+     */
+	public List getServices() {
+		List services = new ArrayList();
+<%
+	Iterator si = services.iterator();
+	while(si.hasNext()) {
+		String sq = (String) si.next();
+%>
+		services.add("<%=sq%>");
+<%
+	}
+%>
+		return services;
+	}
+<%
+	Iterator serviceIter = services.iterator();
+	while(serviceIter.hasNext()) {
+		String serviceQualified = (String) serviceIter.next();
+		
+		int i = serviceQualified.lastIndexOf(".");
+		String service = "";
+		if(i < 0) {
+			service = serviceQualified;
+		} else {
+			service = serviceQualified.substring(i+1, serviceQualified.length());
+		}
+		
+%>
+
+	/**
+	 * Queries the service provider for <%=service%>.
+	 *
+	 * @return a handle to the a(n) <%=service%> service.
+	 */
+	private <%=service%> get<%=service%>() {
+		return (<%=service%>) serviceProv.getService(<%=service%>.class);
+	}
+<%
+	}//end of while(serviceIter.hasNext()) {
+%>
+}
