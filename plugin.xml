@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <!--
+   <extension
+         id="Builder"
+         name="BugScript Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder>
+         <run class="com.buglabs.dragonfly.builder.IncrementalProjectBuilder"/>
+      </builder>
+   </extension>
+   -->
+   <extension
+         id="BugNature"
+         name="BugNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="com.buglabs.dragonfly.BugNature"/>
+      </runtime>
+   </extension>
+    <extension
+         id="com.buglabs.dragonfly.BugApplicationNature"
+         name="BugApplicationNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="com.buglabs.dragonfly.BugApplicationNature"/>
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="com.buglabs.dragonfly.jdt.BugClasspathContainerInitializer"
+            id="com.buglabs.dragonfly.jdt.BugClasspathContainerInitializer"/>
+      <classpathContainerInitializer
+            class="com.buglabs.dragonfly.jdt.PhoneMEClasspathContainerInitializer"
+            id="com.buglabs.dragonfly.jdt.PhoneMEClasspathContainer"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="com.buglabs.dragonfly.DragonflyPreferenceInitializer"/>
+   </extension>
+   <extension
+         point="com.buglabs.osgi.concierge.core.packageproviders">
+      <packageprovider
+            class="com.buglabs.dragonfly.BugPackageProvider">
+      </packageprovider>
+   </extension>
+
+</plugin>
