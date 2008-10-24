@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dragonfly Help Plug-in
+Bundle-SymbolicName: com.buglabs.dragonfly.help; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.buglabs.dragonfly.help.Activator
+Bundle-Vendor: Bug Labs, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Dragonfly SDK" topic="html/toc.html">
+   	<topic label="Getting Started">
+      <anchor id="gettingstarted"/>
+   	</topic>
+   
+	<topic label="Tasks">
+      <anchor id="tasks"/>
+   	</topic>
+      
+   	<topic label="Interact with BUG Community">
+      <anchor id="bugCommunity"/>
+   	</topic>
+   	
+   	<topic label="Tips and Tricks">
+      <anchor id="tipsAndTricks"/>
+   	</topic>
+   	
+   	<topic label="API">
+      <anchor id="api"/>
+   	</topic>   
+</toc>

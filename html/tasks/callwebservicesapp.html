@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Call a Web Service in an Application</title>
+	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
+</head>
+
+<body bgcolor="#ffffff">
+<h1>Call a Web Service in an Application</h1>
+<p>
+
+Create a basic application for BUG using a Web service that displays a message on the system output console.
+
+<h2>Create the project</h2>
+<ol>
+<li>If necessary, switch Perspectives to the Dragonfly perspective.</li>
+<li>Go to File > New > Project. 
+      Or, click the New BUG Project icon in the toolbar.</li>
+<li>In the New Project wizard, click the arrow to open the Dragonfly node.</li>
+<li>Select BUG Application, then click Next.</li>
+<li>In the New BUG Project window:
+      In the Name field, type:<code> LCD Helloworld</code> .
+      In the Target section, leave Virtual BUG selected.</li>
+<li>Click Find BUG services.</li>
+<li>In the Find BUG services list, mark the checkbox next to<code> com.bugalbs.status.IStatusBarProvider,</code> then click Finish.</li>
+<li>In left-side Project Explorer view, expand the <code>lcdhelloworld.servicetracker</code> node.</li>
+<li>Double-click to edit the LCD_HelloworldServiceTracker.java file.</li>
+<li>Find the doStart() method. This method gets called by Concierge when all our requested services are available. In this instance, we can expect<code> IStatusBarProvider</code> to be available.</li>
+<li>In doStart() add the code in Snippet A below.</li>
+<li>In doStop() add the code in Snippet B.</li>
+<li>Add the fields in Snippet C up towards the top of the class. </li>
+</ol>
+</p>
+
+<p>
+<h2>LCD Helloworld code snippets</h2>
+
+<h3>Snippet A</h3>
+
+<pre class="exampletext">
+<em class=examplecode>
+<code>
+statusBar = (IStatusBarProvider) this.getService(IStatusBarProvider.class);
+key = statusBar.acquireRegion("Hello World!".length());
+
+if (key != null) {
+    statusBar.write(key, "Hello World!");
+}
+
+</code>
+</em>
+</pre>
+</p>
+<p>
+
+<h3>Snippet B</h3>
+<pre class="exampletext">
+<em class=examplecode>
+<code>
+if (key != null) {
+    statusBar.releaseRegion(key);
+}
+</code>
+</em>
+</pre>
+</p>
+<p>
+
+<h3>Snippet C</h3>
+<pre class="exampletext">
+<em class=examplecode>
+<code>
+
+private IStatusBarProvider statusBar;
+private String key;
+
+
+</code>
+</em>
+</pre>
+</p>
+
+<p>
+
+<h2>Run it!</h2>
+
+Stop the Virtual BUG by pressing Esc when the Virtual BUG is selected, and restart the Virtual BUG. You should see the global greeting on the LCD screen.
+
+
+</p>
+
+<p>
+
+<h2>Concepts</h2>
+<ol>
+<li>We use an OSGi utility class called the ServiceTracker so that our code runs when and if the services we need are available. When the Activator creates the service, it tells the OSGi runtime which services we are interested in. This information is actually contained in the ServiceTracker implementation <code>(initServices())</code>.</li>
+<li>The Status Bar is a shared resource, so we must interact with it in such a way that we do not overwhelm other programs. The <code>IStatusBar.aquireRegion</code> method is the way in which we do this. The <code>IStatusBar</code> implementation manages its resources and will give us what we ask for if it is available. Be sure to release the region when your application stops so that it is free for use by other bundles.</li>
+</ol>
+
+</p>
+
+
+
+</body>
+</html>
