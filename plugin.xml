@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.buglabs.dragonfly.ui.PerspectiveFactory"
+            fixed="false"
+            icon="icons/color/dfly.gif"
+            id="com.buglabs.dragonfly.ui.perspective"
+            name="Dragonfly"/>
+   </extension>
+   
+    <!-- Activate java action set for Dragonfly Perspective -->
+   	<extension point="org.eclipse.ui.perspectiveExtensions">
+ 		<perspectiveExtension targetID="com.buglabs.dragonfly.ui.perspective">
+ 			<actionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+ 		</perspectiveExtension>
+	</extension>
+ 
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="com.buglabs.dragonfly.wizardCategory"
+            class="com.buglabs.dragonfly.ui.wizards.bug.NewProjectWizard"
+            hasPages="true"
+            icon="icons/color/connect.gif"
+            id="com.buglabs.dragonfly.ui.wizards.bugProject"
+            name="BUG Connection"
+            project="true"/>
+      <category
+            id="com.buglabs.dragonfly.wizardCategory"
+            name="Dragonfly"/>
+      <wizard
+            category="com.buglabs.dragonfly.wizardCategory"
+            class="com.buglabs.dragonfly.ui.wizards.bugProject.NewBugProjectWizard"
+            hasPages="true"
+            icon="icons/color/project.gif"
+            id="com.buglabs.dragonfly.ui.wizards.bugProgram.NewBugProgramWizard"
+            name="BUG Application"
+            project="true"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.buglabs.dragonfly.ui.editors.BugMultipageEditor"
+            contributorClass="com.buglabs.dragonfly.ui.editors.DragonflyEditorContributor"
+            icon="icons/bug.gif"
+            id="com.buglabs.dragonfly.ui.editors.DragonflyEditor"
+            name="BUG Modules"/>
+      <editor
+            class="com.buglabs.dragonfly.ui.editors.BrowserEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="html"
+            icon="icons/bugnet.gif"
+            id="com.buglabs.dragonfly.ui.editors.BrowserEditor"
+            name="Browser"/>
+      <editor
+            class="com.buglabs.dragonfly.ui.editors.PhysicalEditor"
+            default="false"
+            icon="icons/color/v_edit.gif"
+            id="com.buglabs.dragonfly.ui.physicalEditor"
+            name="BUG Physical Editor"/>
+ 	 <editor
+            class="com.buglabs.dragonfly.ui.editors.GenericBrowserEditor"
+            default="false"
+            icon="icons/color/v_edit.gif"
+            id="com.buglabs.dragonfly.ui.editors.genericBrowserEditor"
+            name="Create new account"/>            
+      <editor
+            class="com.buglabs.dragonfly.ui.editors.ManifestEditor"
+            default="false"
+            filenames="MANIFEST.MF"
+            icon="icons/color/manifest.gif"
+            id="com.buglabs.dragonfly.ui.editors.ManifestEditor"
+            name="BUG Manifest Editor"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="com.buglabs.dragonfly.ui.ProgramNode"
+            objectClass="com.buglabs.dragonfly.model.ProgramNode">
+         <action
+               class="com.buglabs.dragonfly.ui.actions.ImportBundleActionDelegate"
+               enablesFor="1"
+               icon="icons/color/app_import.gif"
+               id="com.buglabs.dragonfly.ui.importAction"
+               label="Import into Dragonfly SDK"
+               menubarPath="refresh"
+               tooltip="Import this bundle into your workspace as a new plug-in project."/>
+               
+               <action
+               class="com.buglabs.dragonfly.ui.actions.RemoveBundleActionDelegate"
+               enablesFor="+"
+               icon="icons/color/app_remove.gif"
+               id="com.buglabs.dragonfly.ui.removeBundleAction"
+               label="Remove application"
+               menubarPath="refresh"
+               tooltip="Remove this bundle from the BUG."/>
+      </objectContribution>
+      
+       <objectContribution
+            adaptable="false"
+            id="com.buglabs.dragonfly.ui.ApplicationFolderNode"
+            objectClass="com.buglabs.dragonfly.model.ApplicationFolderNode">
+            
+ 			  <action
+               class="com.buglabs.dragonfly.ui.actions.RemoveAllBundleActionDelegate"
+               enablesFor="1"
+               icon="icons/color/app_remove.gif"
+               id="com.buglabs.dragonfly.ui.removeAllBundleAction"
+               label="Remove all applications"
+               menubarPath="refresh"
+               tooltip="Remove all bundles from the BUG."/>
+                           
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.buglabs.dragonfly.ui.actions.ExportJarAction"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="com.buglabs.dragonfly.ui.actions.ExportJarActionDelegate"
+               icon="icons/color/dwnld.gif"
+               id="com.buglabs.dragonfly.ui.actions.ExportJarActionDelegate"
+               label="Send to BUG"
+               menubarPath="bug"/>
+         <action
+               class="com.buglabs.dragonfly.ui.actions.ExportToBUGNetActionDelegate"
+               icon="icons/color/bugnet.gif"
+               id="com.buglabs.dragonfly.ui.actions.ExportToBUGNet"
+               label="Send to BUGnet"
+               menubarPath="bug"/>
+         <visibility>
+            <objectState
+                  name="projectNature"
+                  value="com.buglabs.dragonfly.BugApplicationNature"/>
+         </visibility>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.buglabs.dragonfly.ui.actions.BUGActions"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="com.buglabs.dragonfly.ui.actions.ShowBUGAction"
+               icon="icons/color/v_edit.gif"
+               id="com.buglabs.dragonfly.ui.action.ShowBUGAction"
+               label="Show BUG"
+               menubarPath="com.buglabs.dragonfly.ui.BUGMenu/BUGConnection"/>
+         <filter
+               name="projectNature"
+               value="com.buglabs.dragonfly.BugNature"/>
+         <action
+               class="com.buglabs.dragonfly.ui.actions.RefreshBugActionObjectDelegate"
+               icon="icons/color/connect.gif"
+               id="com.buglabs.dragonfly.ui.actions.RefreshBugAction"
+               label="Refresh Connection"
+               menubarPath="com.buglabs.dragonfly.ui.BUGMenu/BUGConnection"/>
+         <menu
+               id="com.buglabs.dragonfly.ui.BUGMenu"
+               label="BUG">
+            <groupMarker name="BUGConnection"/>
+         </menu>
+      </objectContribution>
+            
+      <viewerContribution
+            id="com.buglabs.dragonfly.ui.actions.RefreshPhysicalEditorAction"
+            targetID="com.buglabs.dragonfly.ui.physicalEditor">
+         <action
+               class="com.buglabs.dragonfly.ui.actions.RefreshPhysicalEditorAction"
+               icon="icons/color/v_edit.gif"
+               id="com.buglabs.dragonfly.ui.actions.RefreshPhysicalEditorAction"
+               label="Refresh"
+               menubarPath="refresh"/>
+      </viewerContribution>
+      
+<objectContribution
+            adaptable="false"
+            id="com.buglabs.dragonfly.model.BugConnection"
+            objectClass="com.buglabs.dragonfly.model.BugConnection">
+         <action
+               class="com.buglabs.dragonfly.ui.actions.PropertyDialogActionDelegate"
+               enablesFor="1"
+               id="com.buglabs.dragonfly.ui.bugConnectionProperty"
+               label="Properties"
+               menubarPath="refresh"
+               tooltip="BUG Connection Properties"/>
+      </objectContribution>
+      
+<!--      
+	  <objectContribution
+            adaptable="false"
+            id="com.buglabs.dragonfly.model.GetServiceNode"
+            objectClass="com.buglabs.dragonfly.model.GetServiceNode">
+         <action
+               class="com.buglabs.dragonfly.ui.actions.PreviewGetWSActionDelegate"
+               enablesFor="1"
+               id="com.buglabs.dragonfly.ui.previewGetWSAction"
+               label="Run Web Service"
+               menubarPath="refresh"
+               tooltip="Preview Web Service"/>
+      </objectContribution>
+-->
+                  
+   </extension>
+<extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="com.buglabs.dragonfly.ui.view.category.Dragonfly"
+            class="com.buglabs.dragonfly.ui.views.BUGNetView"
+            icon="icons/color/bugnet.gif"
+            id="com.buglabs.dragonfly.ui.BUGNetView"
+            name="BUGnet"/>
+      <category
+            id="com.buglabs.dragonfly.ui.view.category.Dragonfly"
+            name="Dragonfly"/>
+      <view
+            allowMultiple="false"
+            category="com.buglabs.dragonfly.ui.view.category.Dragonfly"
+            class="com.buglabs.dragonfly.ui.views.mybugs.MyBugsView"
+            icon="icons/color/app.gif"
+            id="com.buglabs.dragonfly.ui.MyBugsView"
+            name="My BUGs"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewer viewerId="com.buglabs.dragonfly.navigator.view">
+         <popupMenu
+               allowsPlatformContributions="true"
+               id="com.dragonfly.navigator.contentmenu"/>
+      </viewer>
+      <viewerContentBinding viewerId="com.buglabs.dragonfly.navigator.view">
+         <includes>
+            <contentExtension
+                  isRoot="true"
+                  pattern="org.eclipse.ui.navigator.resourceContent"/>
+            <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.*"/> 
+         </includes>
+      </viewerContentBinding>
+      <viewerActionBinding viewerId="com.buglabs.dragonfly.navigator.view">
+         <includes>
+            <actionExtension pattern="org.eclipse.ui.navigator.resources.*"/>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            activeByDefault="true"
+            contentProvider="com.buglabs.dragonfly.ui.providers.BugContentProvider"
+            icon="icons/color/dfly.gif"
+            id="com.buglabs.navigatorContent"
+            labelProvider="com.buglabs.dragonfly.ui.providers.BugLabelProvider"
+            name="BUG Content"
+            priority="normal">
+         <triggerPoints>
+            <or>
+               <instanceof value="org.eclipse.core.resources.IProject"/>
+               <instanceof value="com.buglabs.dragonfly.model.ITreeNode"/>
+               <instanceof value="com.buglabs.dragonfly.model.IModelNode"/>
+               <instanceof value="org.eclipse.core.resources.IWorkspaceRoot"/>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+               <instanceof value="com.buglabs.dragonfly.model.ITreeNode"/>
+               <instanceof value="com.buglabs.dragonfly.model.IModelNode"/>
+               <adapt type="org.eclipse.core.resources.IProject"/>
+            </or>
+         </possibleChildren>
+         <dropAssistant
+               class="com.buglabs.dragonfly.ui.dnd.ProgramDropAdapter"
+               id="com.buglabs.dragonfly.ui.dnd.ProgramDropAdapter">
+            <possibleDropTargets>
+               <or>
+                  <instanceof value="com.buglabs.dragonfly.model.ITreeNode"/>
+                  <instanceof value="org.eclipse.core.resources.IWorkspaceRoot"/>
+               </or>
+            </possibleDropTargets>
+         </dropAssistant>
+      </navigatorContent>
+      <commonFilter
+            activeByDefault="true"
+            class="com.buglabs.dragonfly.ui.filters.ApplicationFilter"
+            description="Filters non Application Bundles"
+            id="com.buglabs.dragonfly.ui.filters.ApplicationFilter"
+            name="Non-BUG Bundles"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="com.buglabs.dragonfly.ui.views.SampleView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList"/>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="com.buglabs.dragonfly.ui.perspective">
+         <actionSet id="com.buglabs.dragonfly.ui.actionsets.Dragonfly"/>
+         <actionSet id="org.eclipse.debug.ui.launchActionSet"/>
+      </perspectiveExtension>
+   </extension>
+   
+   <!-- Preference pages -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+         <!--
+		<page id="BUGSKCategory"
+ 			name="BUG SDK"
+    		class="com.buglabs.dragonfly.ui.preferences.BUGSDKPreferencePage"/>
+    		-->
+      	<page
+            id="com.buglabs.dragonfly.ui.preferences.BugNetPreferencePage"
+            class="com.buglabs.dragonfly.ui.preferences.BugNetPreferencePage"
+            name="BUGnet"/>
+         <!--   
+	  	<page
+         category="BUGSKCategory"
+         class="com.buglabs.dragonfly.ui.preferences.VirtualBugPreferencePage"
+         id="com.buglabs.dragonfly.ui.preferences.VirtualBugPreferencePage"
+         name="Virtual BUG"/>
+         -->            
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension
+                  isRoot="false"
+                  pattern="com.buglabs.*"/>
+            <actionExtension pattern="com.buglabs.dragonfly.ui.OpenProvider"/>
+         </includes>
+      </viewerContentBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="icons/color/connect.gif"
+            id="com.buglabs.dragonfly.ui.images.bug"
+            natureId="com.buglabs.dragonfly.BugNature"/>
+      <image
+            icon="icons/color/project.gif"
+            id="com.buglabs.dragonfly.ui.images.bugapp"
+            natureId="com.buglabs.dragonfly.BugApplicationNature"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.dropActions">
+      <action
+            class="com.buglabs.dragonfly.ui.actions.BugNetToIDEActionDelegate"
+            id="com.buglabs.dragonfly.ui.actions.BugNetToIDEAction"/>
+   </extension>
+   
+    <extension
+         point="org.eclipse.ui.dropActions">
+      <action
+            class="com.buglabs.dragonfly.ui.actions.MyBugsViewToIDEActionDelegate"
+            id="com.buglabs.dragonfly.ui.actions.MyBugsViewToIDEAction"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="com.buglabs.dragonfly.ui.actionsets.Dragonfly"
+            label="Dragonfly Actions">
+            
+         <action
+               class="com.buglabs.dragonfly.ui.actions.LaunchNewBugWizard"
+               icon="icons/color/connect.gif"
+               id="com.buglabs.dragonfly.ui.actions.newBug"
+               label="New BUG Connection"
+               style="push"
+               toolbarPath="dragonfly/1/newBug"/>
+               
+         <action
+               class="com.buglabs.dragonfly.ui.actions.LaunchNewProjectWizard"
+               icon="icons/color/app.gif"
+               id="com.buglabs.dragonfly.ui.actions.newBugProject"
+               label="New BUG Project"
+               style="push"
+               toolbarPath="dragonfly/2/newBugProject"/>
+               
+         <action
+               class="com.buglabs.dragonfly.ui.actions.LaunchVirtualBugAction"
+               icon="icons/color/virtual_bug.gif"
+               id="com.buglabs.dragonfly.ui.actions.LaunchVirtualBugAction"
+               label="Launch Virtual BUG"
+               style="push"
+               toolbarPath="dragonfly/3/launchVirtualBug"/>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate"
+            id="com.buglabs.dragonfly.launch.virtualBug"
+            modes="run, debug"
+            name="Virtual BUG"
+            sourceLocatorId="com.buglabs.dragonfly.launch.BugKernelSourceLocator"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="com.buglabs.dragonfly.ui.launch.VirtualBugTabGroup"
+            id="com.buglabs.dragonfly.ui.launch.VirtualBugTabGroup"
+            type="com.buglabs.dragonfly.launch.virtualBug">
+         <launchMode mode="debug"/>
+         <launchMode mode="run"/>
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut"
+            icon="icons/color/virtual_bug.gif"
+            id="com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut"
+            label="Virtual BUG"
+            modes="run, debug">
+         <perspective id="com.buglabs.dragonfly.ui.perspective"/>
+         <contextualLaunch>
+            <enablement>
+               <with variable="selection">
+                  <count value="*"/>
+               </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="com.buglabs.dragonfly.ui.exportWizards"
+            name="Dragonfly"/>
+      <wizard
+            category="com.buglabs.dragonfly.ui.exportWizards"
+            class="com.buglabs.dragonfly.ui.wizards.exportBugApp.BugApplicationExportWizard"
+            icon="icons/color/app_export.gif"
+            id="com.buglabs.dragonfly.ui.wizards.exportBugApp"
+            name="BUG Application"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            class="com.buglabs.dragonfly.launch.BugKernelSourceLocator"
+            id="com.buglabs.dragonfly.launch.BugKernelSourceLocator"
+            name="BugKernel Source Locator"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="com.buglabs.dragonfly.launch.virtualBug"
+            icon="icons/color/virtual_bug.gif"
+            id="com.buglabs.dragonfly.launch.virtualBugImage"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            adaptable="false"
+            class="com.buglabs.dragonfly.ui.properties.BugConnectionPropertyPage"
+            id="com.buglabs.dragonfly.ui.properties.BugConnection"
+            name="BUG Connection"
+            objectClass="com.buglabs.dragonfly.model.ITreeNode">
+         <filter
+               name="projectNature"
+               value="com.buglabs.dragonfly.BugNature"/>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.buglabs.dragonfly.ui.handler.WelcomeHandler"
+            id="help.sdk_welcome"
+            name="Dragonfly SDK Welcome">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:help?after=group.about.ext">
+            <command
+                  commandId="help.sdk_welcome"
+                  label="Dragonfly SDK Welcome"
+                  icon="icons/color/bugnet.gif"
+                  style="push">
+            </command>
+      </menuContribution>
+   </extension>
+</plugin>

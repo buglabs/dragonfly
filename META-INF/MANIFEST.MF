@@ -1,0 +1,40 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dragonfly UI Plug-in
+Bundle-SymbolicName: com.buglabs.dragonfly.ui; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.buglabs.dragonfly.ui.Activator
+Bundle-Vendor: Bug Labs, Inc.
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.buglabs.osgi.concierge.core,
+ com.buglabs.osgi.concierge.runtime,
+ com.buglabs.osgi.concierge.ui,
+ com.buglabs.dragonfly,
+ org.eclipse.core.resources,
+ org.eclipse.jface.text,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.ui.forms,
+ org.eclipse.ui.navigator,
+ com.buglabs.common,
+ org.eclipse.pde.ui,
+ com.buglabs.dragonfly.generators,
+ org.eclipse.debug.core,
+ org.eclipse.debug.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.launching,
+ org.eclipse.gef,
+ ch.ethz.iks.slp,
+ com.buglabs.phoneme.personal,
+ org.eclipse.ui.views
+Eclipse-LazyStart: true
+Export-Package: com.buglabs.dragonfly.launch,
+ com.buglabs.dragonfly.ui.actions,
+ com.buglabs.dragonfly.ui.draw2d,
+ com.buglabs.dragonfly.ui.info,
+ com.buglabs.dragonfly.ui.jobs,
+ com.buglabs.dragonfly.ui.launch,
+ com.buglabs.dragonfly.ui.swt,
+ com.buglabs.dragonfly.ui.wizards.bugProject
