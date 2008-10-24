@@ -1,0 +1,12 @@
+New Features
+-------------
+
+This version of the SDK uses version 2 of the web services.
+
+
+Release Notes
+---------------
+This corresponds to Trac Ticket # 54 - http://trac/trac/test/ticket/54
+
+Bugs fixed in this build:
+#263 - Code now checks for slash at the end of the BUGnet url, so a user can type in a slash or leave it out and it will still work.

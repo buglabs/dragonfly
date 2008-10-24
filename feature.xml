@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.buglabs.dragonfly.feature"
+      label="Dragonfly SDK"
+      version="1.0.0.qualifier"
+      provider-name="Bug Labs, Inc."
+      plugin="com.buglabs.dragonfly.ui">
+
+   <description>
+      The BUG SDK, called Dragonfly, is how you connect your computer with your BUG. In the SDK you can modify the properties of your BUG, configure modules, and create new BUG applications. Finally, Dragonfly interacts with BUGnet so you can upload and download applications to and from your computer or your BUG.
+   </description>
+
+   <copyright>
+      Copyright 2008 Bug Labs, Inc.  All rights reserved.
+   </copyright>
+
+   <license>
+      Copyright 2008 Bug Labs, Inc.  All rights reserved.
+ 
+This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+
+Contributors:
+    Bug Labs, Inc. - initial API and implementation
+   </license>
+
+   <url>
+      <update label="Dragonfly SDK Update Site" url="http://buglabs.net/sdk/production/current/updatesite"/>
+      <discovery label="Dragonfly SDK Update Site" url="http://buglabs.net/sdk/production/current/updatesite"/>
+   </url>
+
+   <requires>
+      <import feature="org.eclipse.gef"/>
+      <import feature="org.eclipse.pde" version="3.3.2" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.buglabs.dragonfly"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.dragonfly.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.buglabs.dragonfly.bug.kernel"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.buglabs.common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.buglabs.osgi.concierge.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.osgi.concierge.runtime"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.osgi.concierge.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.dragonfly.generators"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.ethz.iks.slp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.phoneme.personal"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
