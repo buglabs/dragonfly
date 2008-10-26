@@ -1,5 +1,12 @@
+<!-- Note copyEmulatorJars target -->
 <project name="Build specific targets and properties" default="noDefault">
+	<path id="svnant.classpath"  >
+		<fileset dir="/usr/share/ant/lib/svn/" >
+			<include name="*.jar" />
+		</fileset>
+	</path>
 
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
 	<!-- ===================================================================== -->
 	<!-- Run a given ${target} on all elements being built -->
 	<!-- Add on <ant> task for each top level element being built. -->
@@ -19,6 +26,7 @@
 	<!-- ===================================================================== -->
 
 	<target name="assemble.com.buglabs.dragonfly.feature">
+		<antcall target="copyEmulatorJars" />
 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
 	</target>
 
@@ -94,12 +102,17 @@
 	<!-- Steps to do after fetching the build elements -->
 	<!-- ===================================================================== -->
 	<target name="postFetch">
+	</target>
+
+	<!-- ===================================================================== -->
+	<!-- We are not fetching anything so this target will copy emulator files -->
+	<!-- ===================================================================== -->
+	<target name="copyEmulatorJars">
 		<!-- we need to build the virtual bug, which is not an eclipse plugin -->
 		<property name="virtualBugJarTargetDir" value="${buildDirectory}/plugins/com.buglabs.dragonfly.bug.kernel/kernel/" />
-		<echo message="Copying emulator jars from directory: ${CCBaseDirectory}">
-		</echo>
+		<echo message="Copying emulator jars from directory: ${virtualBugJarTargetDir}"/>
 		<copy todir="${virtualBugJarTargetDir}">
-			<fileset dir="${CCBaseDirectory}/artifacts/com.buglabs.bug.emulator/current/" />
+			<fileset dir="${basBuildDir}/artifacts/com.buglabs.bug.emulator/current/" />
 		</copy>
 	</target>
 
@@ -156,70 +169,75 @@
 	<!-- Steps to do after the build is done. -->
 	<!-- ===================================================================== -->
 	<target name="postBuild">
-		<property name="outputDir" location="${buildDirectory}/${buildLabel}" />
-		<property name="distDir" location="${buildDirectory}/../dist" />
-		<property name="UpdateSiteStagingLocation" value="${buildDirectory}/${updateSite}" />
-		<property name="sitePackagePrefix" value="${updateSite}" />
+			<property name="outputDir" location="${buildDirectory}/${buildLabel}" />
+			<property name="distDir" location="${buildDirectory}/../dist" />
+			<property name="UpdateSiteStagingLocation" value="${buildDirectory}/${updateSite}" />
+			<property name="sitePackagePrefix" value="${updateSite}" />
 
-		<delete dir="${UpdateSiteStagingLocation}" />
-		<antcall target="generateUpdateSite" />
+			<delete dir="${UpdateSiteStagingLocation}" />
+			<antcall target="generateUpdateSite" />
 
-		<copy todir="${distDir}">
-			<fileset dir="${outputDir}" />
-		</copy>
+			<copy todir="${distDir}">
+				<fileset dir="${outputDir}" />
+			</copy>
 
-		<mkdir dir="${distDir}/updatesite" />
-		<copy todir="${distDir}/updatesite">
-			<fileset dir="${UpdateSiteStagingLocation}" />
-		</copy>
+			<mkdir dir="${distDir}/updatesite" />
+			<copy todir="${distDir}/updatesite">
+				<fileset dir="${UpdateSiteStagingLocation}" />
+			</copy>
 
-		<zip destfile="${distDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}" excludes="CVS .project" />
+			<zip destfile="${distDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}" excludes="CVS .project" />
 
-		<delete dir="${publishDir}" />
-		<mkdir dir="${publishDir}" />
-		<copy todir="${publishDir}">
-			<fileset dir="${distDir}" />
-		</copy>
-		<!--
-		<antcall target="remotePublish" />
-		-->
-	</target>
+			<delete dir="${publishDir}" />
+			<mkdir dir="${publishDir}" />
+			<copy todir="${publishDir}">
+				<fileset dir="${distDir}" />
+			</copy>
+			<!--
+			<antcall target="remotePublish" />
+			-->
+		</target>
 
-	<target name="generateUpdateSite">
-		<!-- Create the directory structure -->
-		<mkdir dir="${UpdateSiteStagingLocation}" />
-		<mkdir dir="${UpdateSiteStagingLocation}/features" />
-		<mkdir dir="${UpdateSiteStagingLocation}/plugins" />
-		<!-- Build the jar files -->
-		<antcall target="allElements">
-			<param name="genericTargets" value="${builder}/customTargets.xml" />
-			<param name="target" value="updateSiteExport" />
-		</antcall>
-		<antcall target="copySiteXmlFromCvs" />
-		<antcall target="updateSiteXml" />
-	</target>
-	<target name="updateSiteExport">
-		<ant antfile="build.xml" dir="${buildDirectory}/features/${id}/" target="build.update.jar">
-			<property name="feature.destination" value="${UpdateSiteStagingLocation}/features" />
-			<property name="plugin.destination" value="${UpdateSiteStagingLocation}/plugins" />
-		</ant>
-	</target>
-	<target name="copySiteXmlFromCvs" unless="isNightlyBuild">
-		<cvs cvsRoot="${mapsRepo}" package="${updateSite}" dest="${buildDirectory}" tag="${mapsCheckoutTag}" />
-	</target>
+		<target name="generateUpdateSite">
+			<!-- Create the directory structure -->
+			<mkdir dir="${UpdateSiteStagingLocation}" />
+			<mkdir dir="${UpdateSiteStagingLocation}/features" />
+			<mkdir dir="${UpdateSiteStagingLocation}/plugins" />
+			<!-- Build the jar files -->
+			<antcall target="allElements">
+				<param name="genericTargets" value="${builder}/customTargets.xml" />
+				<param name="target" value="updateSiteExport" />
+			</antcall>
+			<antcall target="copySiteXmlFromCvs" />
+			<antcall target="updateSiteXml" />
+		</target>
+		<target name="updateSiteExport">
+			<ant antfile="build.xml" dir="${buildDirectory}/features/${id}/" target="build.update.jar">
+				<property name="feature.destination" value="${UpdateSiteStagingLocation}/features" />
+				<property name="plugin.destination" value="${UpdateSiteStagingLocation}/plugins" />
+			</ant>
+		</target>
+		<target name="copySiteXmlFromCvs" unless="isNightlyBuild">
+			<copy file="${buildDirectory}/../../${updateSite}/site.xml" tofile="${buildDirectory}/${updateSite}/site.xml"/>
+			<!--
+			<svn javahl="false">
+				<update dir="${buildDirectory}/${updateSite}" recurse="false" />
+			</svn>
+			-->
+		</target>
 
-	<!-- Now lets add the build number in here -->
+		<!-- Now lets add the build number in here -->
 
-	<target name="updateSiteXml">
-		<replace file="${buildDirectory}/${updateSite}/site.xml" token="qualifier" value="${forceContextQualifier}" />
-	</target>
+		<target name="updateSiteXml">
+			<replace file="${buildDirectory}/${updateSite}/site.xml" token="qualifier" value="${forceContextQualifier}" />
+		</target>
 
-	<!-- here is where we copy the updatesite to the local web server for outside access -->
-	<target name="remotePublish">
-		<copy todir="${CCBaseDirectory}/release/com.buglabs.dragonfly">
-			<fileset dir="${UpdateSiteStagingLocation}" />
-		</copy>
-	</target>
+		<!-- here is where we copy the updatesite to the local web server for outside access -->
+		<target name="remotePublish">
+			<copy todir="${CCBaseDirectory}/release/com.buglabs.dragonfly">
+				<fileset dir="${UpdateSiteStagingLocation}" />
+			</copy>
+		</target>
 
 	<!-- ===================================================================== -->
 	<!-- Steps to do to test the build results -->
