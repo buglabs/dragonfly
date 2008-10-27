@@ -182,6 +182,7 @@
 			</copy>
 			<echo message="@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ----> UpdateDir: ${UpdateSiteStagingLocation}" />
 			<echo message="@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ----> DistDir: ${distDir}" />
+			<echo message="@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ----> OutputDir: ${outputDir}" />
 			<mkdir dir="${distDir}/updatesite" />
 			<copy todir="${distDir}/updatesite">
 				<fileset dir="${UpdateSiteStagingLocation}" />
