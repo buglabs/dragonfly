@@ -180,7 +180,7 @@
 			<copy todir="${distDir}">
 				<fileset dir="${outputDir}" />
 			</copy>
-
+			<echo message="@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ----> UpdateDir: ${UpdateSiteStagingLocation}" />
 			<mkdir dir="${distDir}/updatesite" />
 			<copy todir="${distDir}/updatesite">
 				<fileset dir="${UpdateSiteStagingLocation}" />
