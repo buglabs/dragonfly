@@ -37,8 +37,14 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	private String httpPortValue;
 
 	private Text txtGpsLog;
+	
+	private Text txtAccelerometerLog;
 
 	private Text txtImages;
+	
+	private final static String GPS_LOG_LABEL = "GPS Log: ";
+	
+	private final static String ACC_LOG_LABEL = "Accelerometer Log: ";
 
 	public VirtualBugTab() {
 
@@ -97,15 +103,41 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 			}
 		});
 
-		Label lblGpsLog = new Label(composite, SWT.NONE);
-		lblGpsLog.setText("GPS Log: ");
-
 		GridData gdText = new GridData(GridData.FILL_HORIZONTAL);
 		gdText.grabExcessHorizontalSpace = true;
 
+		
+		GridData gdButton = new GridData();
+		gdButton.horizontalAlignment = SWT.BEGINNING;
+		
+		// create GPS field
+		Label gpsLabel = new Label(composite, SWT.NONE);
+		gpsLabel.setText(GPS_LOG_LABEL);
+		
 		txtGpsLog = new Text(composite, SWT.BORDER);
-		txtGpsLog.setLayoutData(gdText);
-		txtGpsLog.addModifyListener(new ModifyListener() {
+		createLog(composite, gdText, txtGpsLog, gdButton);
+		
+		// create ACCELEROMETER field
+		Label accLabel = new Label(composite, SWT.NONE);
+		accLabel.setText(ACC_LOG_LABEL);
+		
+		txtAccelerometerLog = new Text(composite, SWT.BORDER);
+		createLog(composite, gdText, txtAccelerometerLog ,gdButton);
+		
+		// create IMAGE field
+		Label lblImages = new Label(composite, SWT.NONE);
+		lblImages.setText("Images: ");
+		
+		txtImages = new Text(composite, SWT.BORDER);
+		createLog(composite, gdText, txtImages ,gdButton);
+
+		setControl(composite);
+	}
+
+	private void createLog(Composite composite, GridData gdText, Text textField, GridData gdButton) {
+		
+		textField.setLayoutData(gdText);
+		textField.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 
@@ -114,33 +146,10 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 			}
 		});
 
-		GridData gdButton = new GridData();
-		gdButton.horizontalAlignment = SWT.BEGINNING;
 		Button btnBrowse = new Button(composite, SWT.PUSH);
 		btnBrowse.setText("Browse...");
 		btnBrowse.setLayoutData(gdButton);
-		btnBrowse.addMouseListener(new BrowseMouseListener(txtGpsLog));
-		// Create Images Content
-		Label lblImages = new Label(composite, SWT.NONE);
-		lblImages.setText("Images: ");
-
-		txtImages = new Text(composite, SWT.BORDER);
-		txtImages.setLayoutData(gdText);
-		txtImages.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-
-				setDirty(true);
-				updateLaunchConfigurationDialog();
-			}
-		});
-
-		Button btnBrowseImages = new Button(composite, SWT.PUSH);
-		btnBrowseImages.setText("Browse...");
-		btnBrowseImages.setLayoutData(gdButton);
-		btnBrowseImages.addMouseListener(new BrowseMouseListener(txtImages));
-
-		setControl(composite);
+		btnBrowse.addMouseListener(new BrowseMouseListener(textField));
 	}
 
 	public boolean isValid(ILaunchConfiguration launchConfig) {
@@ -189,15 +198,23 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		}
 
 		try {
+			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""); //$NON-NLS-1$
 			txtImages.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""));
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize images.", e);
 		}
 
 		try {
+			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""); //$NON-NLS-1$
 			txtGpsLog.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""));
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize GPS log.", e);
+		}
+		
+		try {
+			txtAccelerometerLog.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, ""));
+		} catch (CoreException e) {
+			UIUtils.handleVisualError("Unable to initialize Accelerometer log.", e);
 		}
 	}
 
@@ -216,6 +233,7 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
 		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
 		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
+		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
 		
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_DEFAULT_BUGPORT, httpPortValue);
 		
