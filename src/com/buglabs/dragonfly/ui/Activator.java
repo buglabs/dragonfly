@@ -132,7 +132,7 @@ public class Activator extends AbstractUIPlugin {
 
 	public static final String IMAGE_COLOR_V_EDIT = "icons/color/v_edit.gif"; //$NON-NLS-1$	
 
-	public static final String IMAGE_CONNECTION_PROJECT = "/icons/color/connect.gif"; //$NON-NLS-1$
+	public static final String IMAGE_CONNECTION_PROJECT = "/icons/color/staticConnection.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_CONNECTION_ADD = "/icons/color/add.gif"; //$NON-NLS-1$	
 
