@@ -19,7 +19,10 @@ import com.buglabs.dragonfly.model.FolderNode;
 import com.buglabs.dragonfly.model.IModelNode;
 import com.buglabs.dragonfly.model.Module;
 import com.buglabs.dragonfly.model.ProgramNode;
+import com.buglabs.dragonfly.model.SLPBugConnection;
 import com.buglabs.dragonfly.model.ServiceNode;
+import com.buglabs.dragonfly.model.StaticBugConnection;
+import com.buglabs.dragonfly.model.VirtualBUGConnection;
 import com.buglabs.dragonfly.ui.Activator;
 
 public class BugLabelProvider implements ILabelProvider {
@@ -40,13 +43,21 @@ public class BugLabelProvider implements ILabelProvider {
 
 			if (name.equals("camera")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_CAMERA);
-			} else if (name.equals("gps")) {
+			} 
+			else if (name.equals("gps")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_GPS);
-			} else if (name.equals("lcd")) {
+			} 
+			else if (name.equals("lcd")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_LCD);
 			}
 			else if(name.equals("motion")){
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_MOTION);
+			}
+			else if(name.equals("audio")){
+				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_SOUND);
+			}
+			else if(name.equals("vonhippel")){
+				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_VH);
 			}
 
 			return shared.getImage(ISharedImages.IMG_OBJ_ELEMENT);
@@ -55,12 +66,17 @@ public class BugLabelProvider implements ILabelProvider {
 		if (element instanceof ProgramNode) {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_BUGVIEW_APPLICATION);
 		}
-		if (element instanceof ServiceNode) {
+		else if (element instanceof ServiceNode) {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_SERVICES);
 		}
-
-		if (element instanceof Bug) {
-			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_CONNECTION_PROJECT);
+		else if (element instanceof VirtualBUGConnection) {
+			return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
+		}
+		else if(element instanceof StaticBugConnection){
+			return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
+		}
+		else if(element instanceof SLPBugConnection){
+			return Activator.getDefault().getImageRegistry().get(Activator.ICON_SLP_BUG);
 		}
 
 		return null;

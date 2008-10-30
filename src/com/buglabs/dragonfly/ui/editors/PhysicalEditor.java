@@ -320,7 +320,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			Label lblFigure = new Label(labelprovider.getText(modules[0]));
 
 			lblFigure.setBorder(roundBorder);
-			lblFigure.setBackgroundColor(ColorConstants.orange);
+			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[0]));
 			lblFigure.setIconTextGap(5);
@@ -351,7 +351,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			labelLayer.add(lblFigure, new RelativeLocator(moduleSlot1Figure, .9, -0.3));
 
 			lblFigure.setBorder(roundBorder);
-			lblFigure.setBackgroundColor(ColorConstants.orange);
+			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[1]));
 
@@ -377,7 +377,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			Label lblFigure = new Label(labelprovider.getText(modules[2]));
 			labelLayer.add(lblFigure, new RelativeLocator(moduleSlot2Figure, 0.1, 1.3));
 			lblFigure.setBorder(roundBorder);
-			lblFigure.setBackgroundColor(ColorConstants.orange);
+			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[2]));
 
@@ -404,7 +404,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			Label lblFigure = new Label(labelprovider.getText(modules[3]));
 			labelLayer.add(lblFigure, new RelativeLocator(moduleSlot3Figure, .9, 1.2));
 			lblFigure.setBorder(roundBorder);
-			lblFigure.setBackgroundColor(ColorConstants.orange);
+			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[3]));
 

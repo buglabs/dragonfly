@@ -107,6 +107,10 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_COLOR_M_LCD = "icons/color/lcdModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_MOTION = "icons/color/motionModule.gif"; //$NON-NLS-1$
+	
+	public static final String IMAGE_COLOR_M_SOUND = "icons/color/soundModule.gif"; //$NON-NLS-1$
+	
+	public static final String IMAGE_COLOR_M_VH = "icons/color/vhModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_MANIFEST = "icons/color/manifest.gif"; //$NON-NLS-1$
 
@@ -142,13 +146,20 @@ public class Activator extends AbstractUIPlugin {
 	
 	public static final String IMAGE_COLOR_APP_REMOVE = "/icons/color/app_remove.gif"; //$NON-NLS-1$
 	
-	public static final String IMAGE_COLOR_APP_SEARCH = "/icons/color/app_search.gif"; //$NON-NLS-1$
+	public static final String IMAGE_COLOR_APP_SEARCH = "/icons/color/new/bugnetSearch.gif"; //$NON-NLS-1$
 
 	public static final String PLUGIN_ID = "com.buglabs.dragonfly.ui"; //$NON-NLS-1$
 
 	private static final String saveFileName = "bugs.xml"; //$NON-NLS-1$
 
 	private static final String LOOPBACK_IP_ADDRESS = "127.0.0.1"; //$NON-NLS-1$
+
+	public static final String ICON_VIRTUAL_BUG = "/icons/color/new/myBUG.gif";
+	
+	public static final String ICON_SLP_BUG = "/icons/color/new/slpBUG.gif";
+	
+	public static final String ICON_STATIC_BUG = "/icons/color/new/staticBUG.gif";
+	
 
 	private static Activator plugin;
 
@@ -357,6 +368,8 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_COLOR_M_GPS, getImageDescriptor(IMAGE_COLOR_M_GPS).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_LCD, getImageDescriptor(IMAGE_COLOR_M_LCD).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_MOTION, getImageDescriptor(IMAGE_COLOR_M_MOTION).createImage());
+		imageRegistry.put(IMAGE_COLOR_M_SOUND, getImageDescriptor(IMAGE_COLOR_M_SOUND).createImage());
+		imageRegistry.put(IMAGE_COLOR_M_VH, getImageDescriptor(IMAGE_COLOR_M_VH).createImage());
 		imageRegistry.put(IMAGE_COLOR_MANIFEST, getImageDescriptor(IMAGE_COLOR_MANIFEST).createImage());
 		imageRegistry.put(IMAGE_COLOR_MODULE, getImageDescriptor(IMAGE_COLOR_MODULE).createImage());
 		imageRegistry.put(IMAGE_COLOR_PROJECT, getImageDescriptor(IMAGE_COLOR_PROJECT).createImage());
@@ -379,6 +392,11 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_COLOR_SERVICES, getImageDescriptor(IMAGE_COLOR_SERVICES).createImage());
 		imageRegistry.put(IMAGE_COLOR_APP_REMOVE, getImageDescriptor(IMAGE_COLOR_APP_REMOVE).createImage());
 		imageRegistry.put(IMAGE_COLOR_APP_SEARCH, getImageDescriptor(IMAGE_COLOR_APP_SEARCH).createImage());
+		
+		imageRegistry.put(ICON_SLP_BUG, getImageDescriptor(ICON_SLP_BUG).createImage());
+		imageRegistry.put(ICON_STATIC_BUG, getImageDescriptor(ICON_STATIC_BUG).createImage());
+		imageRegistry.put(ICON_VIRTUAL_BUG, getImageDescriptor(ICON_VIRTUAL_BUG).createImage());
+		
 	}
 
 	public File exportToJar(IProject proj) throws CoreException {
