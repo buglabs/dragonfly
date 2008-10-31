@@ -38,6 +38,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 	private static final String TYPE = "type";
 	private static final String VIRTUAL_BUG = "VIRTUAL_BUG";
 	private IAction action;
+	private Object lock = new Object();
 
 	public void init(IWorkbenchWindow window) {
 		DebugPlugin.getDefault().addDebugEventListener(this);
@@ -47,6 +48,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 		try {
 			this.action = action;
 			
+			DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(false);
 			// about to launch a Virtual BUG, disable action
 			ServerSocket socket = new ServerSocket(Integer.parseInt(DragonflyActivator.getDefault().getHttpPort()));
 			socket.close();
@@ -125,13 +127,26 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 
 	private void removeVBFromBugsView() {
 		Collection children = MyBugsView.getRoot().getChildren();
-		Iterator iterator = children.iterator();
-		while(iterator.hasNext()){
-			Object bugConnection = iterator.next();
+		Object[] array = children.toArray();
+		
+		for(int i = 0; i < array.length; i++){
+			Object bugConnection = array[i];
 			if(bugConnection instanceof VirtualBUGConnection){
+				DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(true);
 				MyBugsView.getRoot().removeChild((IModelNode) bugConnection);
 				DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(this, BugListener.REMOVE_BUG, null, bugConnection));
-			}
+			}	
 		}
+		/*Iterator iterator = children.iterator();
+		while(iterator.hasNext()){
+			synchronized (lock ) {
+				Object bugConnection = iterator.next();
+				if(bugConnection instanceof VirtualBUGConnection){
+					DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(true);
+					MyBugsView.getRoot().removeChild((IModelNode) bugConnection);
+					DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(this, BugListener.REMOVE_BUG, null, bugConnection));
+				}	
+			}
+		}*/
 	}
 }
