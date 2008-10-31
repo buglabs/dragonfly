@@ -180,7 +180,7 @@ public abstract class BugListener extends Thread {
 				monitor.worked(33);
 				monitor.done();
 			} catch (Exception e) {
-				 // not relevant here, we care only about good connections
+				return new Status(IStatus.WARNING, IRuntimeConstants.PI_RUNTIME, 1, e.getMessage(), e); //$NON-NLS-1$
 			}
 			return Status.OK_STATUS;
 		}
