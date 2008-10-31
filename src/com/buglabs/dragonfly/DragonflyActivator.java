@@ -102,6 +102,8 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 
 	private ResourceBundle resourceBundle;
 
+	private boolean isVirtualBugRemovedByTerminate;
+
 	public DragonflyActivator() {
 		plugin = this;
 		bugList = new ArrayList();
@@ -356,6 +358,14 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	 */
 	public ResourceBundle getResourceBundle() {
 		return resourceBundle;
+	}
+
+	public boolean isVirtualBugRemovedByTerminate() {
+		return isVirtualBugRemovedByTerminate;
+	}
+	
+	public void setVirtualBugRemovedByTerminate(boolean b){
+		isVirtualBugRemovedByTerminate = b;
 	}
 
 	/**

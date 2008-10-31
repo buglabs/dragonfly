@@ -19,6 +19,7 @@ import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.exception.NodeNotUniqueException;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
+import com.buglabs.dragonfly.model.VirtualBUGConnection;
 
 public abstract class BugListener extends Thread {
 	/**
@@ -68,6 +69,12 @@ public abstract class BugListener extends Thread {
 						}
 						if (!root.childExists(bug)) {
 							URL url = bug.getUrl();
+							if(bug instanceof VirtualBUGConnection){
+								boolean virtualBugRemovedByTerminate = DragonflyActivator.getDefault().isVirtualBugRemovedByTerminate();
+								if(virtualBugRemovedByTerminate){
+									continue;
+								}
+							}
 							TestConnectionJob con = new TestConnectionJob(url.toString());
 							con.schedule();
 							con.addJobChangeListener(new IJobChangeListener(){
