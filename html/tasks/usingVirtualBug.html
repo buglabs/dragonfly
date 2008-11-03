@@ -9,17 +9,27 @@
 
 <body bgcolor="#ffffff">
 <p>
-<h1>Using the Virtual BUG</h1>
+<h1>Using the Virtual BUG</h1><br>
 
-The Virtual BUG is a software application written in Java that aims to emulate the BUG Runtime environment from the JVM up. Java applications and OSGi bundles that run on the Virtual BUG should work without modification on the real BUGbase unit.
+The Virtual BUG is a software application written in Java that aims to emulate the BUG Runtime environment from the JVM up. Java applications and OSGi bundles that run on the Virtual BUG should work without modification on the real BUGbase unit. While the Virtual BUG is a good way to get familiar with how a real hardware unit works, it is by no means identical to a physical BUG. All the APIs that are used for modules are identical, but how the software modules behave is different than how a real module will behave.
+For example, our Camera Module in the Virtual BUG is configured to send you images stored on the hard drive. However, it does not take pictures.
+<br><br>
+To launch the Virtual BUG select the Virtual BUG icon <img src="../images/virtual_bug.gif"> from the Toolbar.<br>
 
-<br>While the Virtual BUG is a good way to get familiar with how a real hardware unit works, it is by no means identical to a physical BUG. All the APIs that are used for modules are identical, but how the software modules behave is different than how a real module will behave.
+<br>
+Tips:
+<br><br>
+Virtual BUG Web Services:<br>
+<ul>
+	<li>After you launch the Virtual BUG navigate to <a href="http://localhost:8082/">http://localhost:8082/</a> in a web browser.</li>
+</ul>
 
-<br>For example, our Camera Module in the Virtual BUG is configured to send you images stored on the hard drive. However, it does not take pictures.
-
-<br>Some tips:
-
-<br>When to use the Virtual BUG
+Accessing the OSGi console on the Virtual BUG:
+<ul>
+	<li>While using the Virtual BUG simply type commands in the Console view</li>
+	<li>Type 'help' in the Console to review the valid command usage.</li>
+</ul>
+When to use the Virtual BUG:
 <ol>
 <li>Prototyping BUG OSGi applications</li>
 <li>Experimenting with hardware modules</li>
@@ -27,9 +37,7 @@ The Virtual BUG is a software application written in Java that aims to emulate t
 <li>Running and testing Java code</li>
 <li>Test driving a new module before purchasing </li>
 </ol>
-
-
-<br>When the Virtual BUG is not going to be of help
+When the Virtual BUG is not going to be of help:
 <ol>
 <li>Prototyping Linux drivers for BUG</li>
 <li>Compiling Linux C programs for use on the BUG</li>
@@ -42,14 +50,12 @@ The Virtual BUG is a software application written in Java that aims to emulate t
 
 <h2>Virtual BUG Interface</h2>
 
-The Virtual BUG is a window application that attempts to resemble a physical BUG unit. The images we have used are not from production units so there will most likely be differences between how the current Virtual BUG looks and how the final production product will look.
+The Virtual BUG is a window application that attempts to resemble a physical BUG unit. This is subject to change.
 
 <br>The window shows the BUG from the side which contains four hot keys, a small LCD screen, and navigation buttons. On the top and bottom of the window are BUGmodule connectors.
 
 
-<br>Clicking on a Virtual BUG navigation button will trigger the action as if on a real BUG. Click on a non-active part of the BUG to drag it around the screen.
-
-<br>To quit the Virtual BUG, press Esc.
+<br>Clicking on a Virtual BUG navigation button will trigger press/depress actions as if on a real BUG. To quit the Virtual BUG, press Esc. key when the Virtual BUG window is selected.
 
 
 
@@ -59,15 +65,15 @@ The buttons to the left of the LCD display are configurable hot key buttons. App
 
 
 
-<h3>LCD</h3>
+<h3>Base LCD</h3>
 
 The Base Unit LCD screen is used to display status information as well as let users view and modify configuration information.
 
 <br>When the BUG is at rest, the Status Bar is toggled and displays information provided by the base unit as well as by each connected module, if applicable. For example, a connected GPS module will add basic location data to the Status Bar.
 
-<br>By default, the LCD screen displays the simulated system battery and the current time.
+<br>By default, the LCD screen displays the current time and any module icons for modules that are attached.
 
-<br>User applications can also contribute information to the LCD screen. See LCD Helloworld for an example of this.
+<br>User applications can also contribute information to the LCD screen.
 
 
 
@@ -79,44 +85,45 @@ The navigation buttons provide a way of using a simple menu on the BUG.
 
 <br>Pressing a navigation button will cause the Status Bar to stop and the top level of menus to be displayed.
 
-<br>Users can add lists and actions to the navigation menu. See Menu Extender to see an example of how this is done.
+<br>Users can add lists and actions to the navigation menu. See <a href="http://buglabs.net/applications/Menu%20Extender">Menu Extender</a> to see an example of how this is done.
 
 
 
 <h3>Modules</h3>
 
-On the Virtual BUG, modules can be added/removed by clicking on the Virtual BUG image near the module connectors or by pressing 1-4 while the Virtual BUG is the active window.
+On the Virtual BUG, modules can be added/removed by clicking on the Virtual BUG image near the module connectors or by pressing 1-4 on your keyboard while the Virtual BUG is the active window.
 
-<br>A dialog box gives the user a choice of available modules to connect to the base unit, as well as EMPTY for no module. Selecting a module will change the rendering of the Virtual BUG, showing hardware attached to the module connector that was selected.
+<br>A dialog box gives the user a choice of available modules to connect to the base unit, as well as EMPTY for no module. Selecting a module will change the rendering of the Virtual BUG, showing hardware attached to the module connector.
 
 </p>
 
 <p>
-<h2>Menu</h2>
+<h3>Menu</h3>
 
 The Menu system is essentially a tree that is navigated with the directional buttons on the BUG. Upon selection, container nodes yield their children, and leaf nodes 'execute'. User programs are able to extend the Menu for their own purposes.
 
 <br>Default Structure
 <ul>
-    <li>* (root) Status Bar</li>
-    <ul>
-    	<li>Applications</li>
+    <li>Access</li>
+    	<ul>
+    		<li>(enable/disable services on the BUG)</li>
+    	</ul>
+    <li>Applications</li>
     	<ul>
     	    <li>(list of all applications running on BUG) </li>
     	</ul>
-    </ul>
-    <ul>
-        <li>Modules</li>
+    <li>Modules</li>
         <ul>
     	    <li>(list of all modules connected to BUG) </li>
-    	    </ul>
-        </ul>
-       <ul>    	    
-        <li>Services</li>
+    	</ul>   	    
+     <li>Services</li>
         <ul>
     	    <li>(list of all services on BUG) </li>
     	</ul>
-   </ul> 	    
+    <li>Settings</li>
+    	<ul>
+    		<li>(Status Backlight, Shutdown & About)</li>
+    	</ul>
 </ul>
 
 

@@ -14,44 +14,15 @@
 Create a basic application for BUG that displays a message on the system output console.
 <ol>
 <li>If necessary, switch Perspective to the Dragonfly perspective.</li>
-<li>Select the New BUG Project icon in the toolbar.</li>
+<li>Select the New BUG Project icon <img src="../images/app.gif"> in the toolbar.</li>
 <li>In the New BUG Project window, in the Name field, type:<code> Hello World </code>.</li>
 <li>Click Finish.</li>
 <li>In left-side Project Explorer view, expand the node for the Hello World application.</li>
 <li>Expand the node for the helloworld package.</li>
 <li>Double-click on Activator.java to edit. </li>
-<li>In the Java editor, in the start method of activator class, type:<code> System.out.println("Hello World :)");</code>
-      so that it looks like this: </li>
-
-
-<p>
-<pre class="exampletext">
-<em class=examplecode>
-<code>
-package helloworld;
-
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
-public class Activator implements BundleActivator {
-
-	public void start(BundleContext context) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println("Hello World :)");
-	}
-
-	public void stop(BundleContext context) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
- }
- 
-
-</code>
-</em>
-</pre>
-</p>
-<li>Go to File > Save to save Activator.java.</li>
+<li>Add System.out.println("Hello World :)"); after the line that begins with public void start</li>
+<li>Select CTRL+S, to save entry</li> 
+<img src="../images/hello_world.gif">
 </ol>
 </p>
 

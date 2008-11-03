@@ -6,11 +6,10 @@
 	<topic label="Anatomy of BUG Application" href="html/tasks/anatomyOfBUGApplication.html"/> 
 	<topic label="Call a Web Service in an Application" href="html/tasks/callwebservicesapp.html"/>
 	<topic label="Debug an Application" href="html/tasks/debuganapp.html"/>
-	<topic label="Uploading BUG Application to BUGnet" href="html/tasks/uploadApplication.html">
-		</topic>
-	<topic label="Download Application to BUG" href="html/tasks/downloadAppToBUG.html">
-		</topic>
-	</topic>	
+	<topic label="Interacting with the BUGnet view" href="html/tasks/interactWithBUGnetView.html"/>
+	<topic label="Interacting with the My BUGs view" href="html/tasks/interactingWithMyBUGView.html"/>
+	<topic label="Uploading BUG Application to BUGnet" href="html/tasks/uploadApplication.html"/>
+	<topic label="Download Application to BUG" href="html/tasks/downloadAppToBUG.html"/>
 	<topic label="Using the Virtual BUG" href="html/tasks/usingVirtualBug.html"/>
 	<topic label="Virtual BUG Launch Configuration" href="html/tasks/launchConfiguration.html"/>
 

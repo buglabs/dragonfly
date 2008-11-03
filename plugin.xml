@@ -9,8 +9,7 @@
       </toc>
       <toc file="tocgettingstarted.xml"/>      
 	  <toc file="toctasks.xml"/>
-      <toc file="tocbugCommunity.xml"/>
-      <toc file="tocTipsAndTricks.xml"/>      
+<!--  <toc file="tocTipsAndTricks.xml"/>   -->
       <toc file="tocAPI.xml"/>
    </extension>
 

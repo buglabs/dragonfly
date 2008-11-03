@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="Interacting with BUG Community" link_to="toc.xml#bugCommunity"> 
-	<topic label="BUG Online Resources"  href="html/bugCommunity/online.html"/>
-	<topic label="Mailing List"  href="html/bugCommunity/mailingList.html"/>
-	<topic label="IRC"  href="html/bugCommunity/irc.html"/>
-</toc>

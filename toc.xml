@@ -9,16 +9,13 @@
 	<topic label="Tasks">
       <anchor id="tasks"/>
    	</topic>
-      
-   	<topic label="Interact with BUG Community">
-      <anchor id="bugCommunity"/>
-   	</topic>
-   	
-   	<topic label="Tips and Tricks">
-      <anchor id="tipsAndTricks"/>
-   	</topic>
-   	
+       	
    	<topic label="API">
       <anchor id="api"/>
-   	</topic>   
+   	</topic> 
+   	
+<!-- <topic label="Tips and Tricks">
+      <anchor id="tipsAndTricks"/>
+   	</topic> -->
+  
 </toc>
