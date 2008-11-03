@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Dragonfly SDK" topic="html/toc.html">
-   	<topic label="Getting Started">
-      <anchor id="GettingStarted"/>
-   	</topic>
-   
+<toc label="Dragonfly SDK" topic="html/overview.html">   
 	<topic label="Working With SDK">
  	  <anchor id="createBUGProject"/>	
       <anchor id="anatomyOfBUGApplication"/>
