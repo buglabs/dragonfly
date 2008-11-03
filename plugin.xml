@@ -7,10 +7,17 @@
             file="toc.xml"
             primary="true">
       </toc>
-      <toc file="tocgettingstarted.xml"/>      
-	  <toc file="toctasks.xml"/>
-<!--  <toc file="tocTipsAndTricks.xml"/>   -->
-      <toc file="tocAPI.xml"/>
+      <toc file="tocGettingStarted.xml"/>      
+	  <toc file="tocCreateBUGProject.xml"/>
+	  <toc file="tocAnatomyOfBUGApplication.xml"/>
+	  <toc file="tocCallWebServicesApp.xml"/>
+	  <toc file="tocDebugAnApp.xml"/>
+	  <toc file="tocInteractingWithBUGnetView.xml"/>
+	  <toc file="tocInteractingWithMyBUGSsView.xml"/>
+	  <toc file="tocUploadApplication.xml"/>
+	  <toc file="tocDownloadAppToBUG.xml"/>
+	  <toc file="tocUsingVirtualBug.xml"/>
+	  <toc file="tocLaunchConfiguration.xml"/>	  
    </extension>
 
 </plugin>

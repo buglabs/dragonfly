@@ -3,19 +3,19 @@
 
 <toc label="Dragonfly SDK" topic="html/toc.html">
    	<topic label="Getting Started">
-      <anchor id="gettingstarted"/>
+      <anchor id="GettingStarted"/>
    	</topic>
    
-	<topic label="Tasks">
-      <anchor id="tasks"/>
+	<topic label="Working With SDK">
+ 	  <anchor id="CreateBUGProject"/>	
+      <anchor id="AnatomyOfBUGApplication"/>
+      <anchor id="CallwebServicesApp"/>       
+      <anchor id="DebugAnApp"/>
+      <anchor id="InteractWithBUGnetView"/>      
+      <anchor id="InteractingWithMyBUGView"/>
+      <anchor id="UploadApplication"/>
+      <anchor id="DownloadAppToBUG"/>  
+      <anchor id="UsingVirtualBug"/>        
+      <anchor id="LaunchConfiguration"/>                              
    	</topic>
-       	
-   	<topic label="API">
-      <anchor id="api"/>
-   	</topic> 
-   	
-<!-- <topic label="Tips and Tricks">
-      <anchor id="tipsAndTricks"/>
-   	</topic> -->
-  
 </toc>
