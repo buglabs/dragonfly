@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="API" link_to="toc.xml#AnatomyOfBUGApplication"> 
-	<topic label="API"  href="html/html/AnatomyOfBUGApplication.html"/>
+<toc label="Anatomy of BUG Application" link_to="toc.xml#anatomyOfBUGApplication"> 
+	<topic label="Anatomy of BUG Application"  href="html/anatomyOfBUGApplication/index.html"/>
 </toc>

@@ -7,15 +7,15 @@
    	</topic>
    
 	<topic label="Working With SDK">
- 	  <anchor id="CreateBUGProject"/>	
-      <anchor id="AnatomyOfBUGApplication"/>
-      <anchor id="CallwebServicesApp"/>       
-      <anchor id="DebugAnApp"/>
-      <anchor id="InteractWithBUGnetView"/>      
-      <anchor id="InteractingWithMyBUGView"/>
-      <anchor id="UploadApplication"/>
-      <anchor id="DownloadAppToBUG"/>  
-      <anchor id="UsingVirtualBug"/>        
-      <anchor id="LaunchConfiguration"/>                              
+ 	  <anchor id="createBUGProject"/>	
+      <anchor id="anatomyOfBUGApplication"/>
+      <anchor id="callwebServicesApp"/>       
+      <anchor id="debugAnApp"/>
+      <anchor id="interactWithBUGnetView"/>      
+      <anchor id="interactingWithMyBUGView"/>
+      <anchor id="uploadApplication"/>
+      <anchor id="downloadAppToBUG"/>  
+      <anchor id="usingVirtualBug"/>        
+      <anchor id="launchConfiguration"/>                              
    	</topic>
 </toc>
