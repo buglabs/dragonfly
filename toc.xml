@@ -5,7 +5,7 @@
 	<topic label="Working With SDK">
  	  <anchor id="createBUGProject"/>	
       <anchor id="anatomyOfBUGApplication"/>
-      <anchor id="callwebServicesApp"/>       
+      <anchor id="callWebServicesApp"/>       
       <anchor id="debugAnApp"/>
       <anchor id="interactingWithBUGnetView"/>      
       <anchor id="interactingWithMyBUGsView"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Call Web Services" link_to="toc.xml#callWebservicesApp"> 
-	<topic label="Call Web Services"  href="html/callWebservicesApp/index.html"/>
+<toc label="Call Web Services" link_to="toc.xml#callWebServicesApp"> 
+	<topic label="Call Web Services"  href="html/callWebServicesApp/index.html"/>
 </toc>
