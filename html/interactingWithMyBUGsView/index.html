@@ -3,47 +3,52 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>BUGnet view</title>
+	<title>My BUGs view</title>
 	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
 </head>
 <body bgcolor="#ffffff">
 <h1>Introduction</h1>
-The BUGnet view allows you to interact with the BUG community. You can browse, upload, or download Applications on http://www.buglabs.net.
+The My BUGs view displays any BUG connections <img src="../images/connect.gif" border="1"/> that are available to the SDK.
 
 <h2>You can:</h2>
 <ul>
-	<li>left click on any Application to bring up the BUGnet Application details page in a Browser window. From this page you can click to Download Latest Version to SDK link to download the Application.</li>
-	<li>right click on any Application and select Import to Dragonfly SDK to download the Application.</li>
-	<li>click the refresh button <img src="../images/refresh.gif" border="1"/> to refresh the BUGnet view.
-	<li>click the Search Applications button <img src="../images/app_search.gif" border="1"/> to bring up BUGnet Applications page to use the search functions.</li>
-	<li>right or left click on any section toggle expand/collapse for the section.</li>
+	<li>click the New BUG connection button <img src="../images/connect.gif" border="1"/> to manually create a BUG connection. This button is available via the Toolbar, My BUGs view title bar, and by right clicking in the My BUGs view.</li>
+	<li>expand the node on a BUG connection to bring up a Physical Editor window for the connection (Note: Selecting the BUGbase in the Physical Editor or double clicking the BUG connection after expanding will enable the Applications by Module section in the BUGnet view).</li>
+	<li>right click a BUG connection to bring up a menu (see Right Click Menu for details).</li>
 </ul><br>
-If you accidently close this view you can go to "Window > Show View > Other > Dragonfly > BUgnet" to display again.
-<h2>BUGnet Preferences</h2>
-A number of settings for the BUGnet view can be accessed via the Eclipse Preferences. Go to: Window > Preferences > BUGnet
-<ul>
-	<li>Enable BUGnet - checkbox that allows you to go into offline mode</li>
-	<br>
-	<li>Server Name - The web service URL to buglabs.net.</li>
-	<br>
-	<li>Number of Applications to display - Accepts 0 to 100. This changes the number of Applications displayed in the My Apps and Top Apps sections.</li>
-	<br>
-	<li>Clear Authentication Data - Clears saved BUGnet Authentication and logs you out of your current session.</li>
-	<br>
-</ul>
-<h2>My Apps</h2>
-This section displays any Applications you have uploaded to BUGnet or any that you have been invited to collaborate on by another BUG user.
-	<br><br>
-	Click the log-in link to bring up the BUGnet Authentication window.
-	<br><br>
-	<img src="../images/bugnet_auth.gif" border="1"/><br><br>
-	
-	You can enter an existing BUGnet Username and Password and click Ok (Optional: check the Save Authentication checkbox). If you don't have BUGnet account you can click the <a href="http://www.buglabs.net/signup">here</a> link to create one.
-    
-<h2>Latest Apps</h2>
-This section displays the latest updated Applications on BUGnet.
-<h2>Applications by Modules</h2>
-This section displays when a Physical Editor is open for any BUG connection (see: <a href="interactingWithMyBUGView.html">MyBUGs view</a>). It returns a list of Applications based on the Modules attached to the BUG. When user has multiple BUG connections this section displays for whichever Physical Editor was last active.
+If you accidently close this view you can go to "Window > Show View > Other > Dragonfly > My BUGs" to display again.
 
-</body>
+<h2>BUG Connection</h2>
+When the Virtual BUG is launched it will automatically appear in the My BUGs view. The same should happen for a Physical BUG when it is connected to your computer via USB or connected to your Network. (If you are having trouble please see <a href="http://buglabs.net/start">http://buglabs.net/start</a>).
+<h3>Creating a New BUG connection</h3><br>
+In some cases it may be necessary to create a BUG connection manually. Selecting a New BUG connection button <img src="../images/connect.gif" border="1"/> will bring up a wizard:
+<br><br>
+<img src="../images/bug_con.gif" border="1"/>
+<br><br>
+After you enter a Name and Address the Test Connection and Finish button will become active (the following screen uses the Virtual BUG address):
+<br><br>
+<img src="../images/bug_con_test.gif" border="1"/>
+<br><br>
+Click Test Connection to validate the connection or click Finish add it to the My BUGs view.
+
+<h3>Right Click Menu</h3>
+<ul>
+	<li>New BUG Connection button <img src="../images/connect.gif" border="1"/> - Opens New BUG Connection Wizard</li>
+	<li>Delete BUG Connection button <img src="../images/deleteBug.gif" border="1"/> - Only active for Manually created Connections</li>
+	<li>Refresh BUG Connection button <img src="../images/refresh.gif" border="1"/></li>
+	<li>Properties - Update BUG connection address</li>
+</ul>
+<h2>Physical Editor Window</h2>
+Expanding the node on a BUG connection opens a Physical Editor for the BUG Connection:
+<br><br>
+<img src="../images/physical_editor.gif" border="1"/>
+<br><br>
+When you click on the BUGbase or any Module in the Physical Editor it will be highlighted in blue and the Properties view will populate with specific information for the component (Note: Selecting the BUGbase in the Physical Editor will enable the Applications by Module section in the <a href="interactWithBUGnetView.html">BUGnet view</a>).
+<br><br>
+<img src="../images/physical_editor_prop.gif" border="1"/>
+<br><br>
+Some of these properties can be changed. For example on the BUGbase you can enable/disable Services.
+<br><br>
+<img src="../images/physical_editor_prop_edit.gif" border="1"/>
+<br><br>
 </html>
