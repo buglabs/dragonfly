@@ -138,6 +138,17 @@ public class HTTPResponse {
     	return status;
 	}
     
+	
+	/**
+	 * 
+	 * get any header field
+	 * 
+	 * @param headerField
+	 * @return
+	 */
+	public String getHeaderField(String headerField) {
+		return _connection.getHeaderField(headerField);
+	}
 
     /**
      * Get error message out of connection

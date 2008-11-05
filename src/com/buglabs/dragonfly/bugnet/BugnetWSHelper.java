@@ -14,10 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Image;
@@ -118,7 +116,7 @@ public class BugnetWSHelper {
 	 * @throws IOException 
 	 * @throws TokenInvalidError 
 	 */
-	public static void addProgram(File jarfile, String name) 
+	public static String addProgram(File jarfile, String name) 
 			throws BugnetAuthenticationException, BugnetException, IOException {
 		HTTPRequest request = new HTTPRequest(new BugnetConnectionProvider());
 		String urlStr = getBugNetBaseURL() + BUGNET_WS_PATH_STRING  + BUGNET_PROGRAM_STRING;
@@ -136,17 +134,20 @@ public class BugnetWSHelper {
 		}
 		
 		// If NOT FOUND, do a post, otherwise try to update with a put
+		String location = null;
 		try {
 			if (status == HTTPResponse.HTTP_CODE_NOT_FOUND) {
 				response = request.post(urlStr + "?" + BUGNET_TITLE_PARAM_STRING + title, 
 						new FileInputStream(jarfile));
+				location = response.getHeaderField("Location");
 			} else {
 				response = request.put(urlStr + "/" + title, new FileInputStream(jarfile));
+				location = response.getHeaderField("Location");
 			}
 		} catch (HTTPException e) {
 			handleBugnetException(e);
 		}
-		
+		return location;
 	}
 
 	/**
@@ -210,6 +211,22 @@ public class BugnetWSHelper {
 
 		if (response_code == HTTPResponse.HTTP_CODE_OK) return true;
 		else return false;
+	}
+	
+	/**
+	 * Get programs list by querystring
+	 * 
+	 * @param querystring
+	 * @return
+	 * @throws BugnetAuthenticationException
+	 * @throws BugnetException
+	 * @throws IOException
+	 */
+	public static List getProgramsByQuerystring(String querystring) 
+			throws BugnetAuthenticationException, BugnetException, IOException {
+		String url = getBugNetBaseURL() + BUGNET_WS_PATH_STRING 
+			+ BUGNET_PROGRAM_STRING + "?" + querystring;
+		return getProgramList(url);
 	}
 	
 	/**
