@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -94,8 +93,6 @@ import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.IBUGnetAuthenticationListener;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
-import com.buglabs.dragonfly.exception.BugnetException;
-import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.model.BUGNetProgramReferenceNode;
 import com.buglabs.dragonfly.model.Bug;
 import com.buglabs.dragonfly.model.BugConnection;
@@ -477,6 +474,10 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 		});
 	}
 
+	/*
+	 * 
+	 * this gets called to fill the insides of some of the form sections
+	 */
 	public synchronized void generateDetail(final Composite c, Collection elems) {
 		labelList = new ArrayList();
 		originalDescriptionList = new ArrayList();
@@ -497,128 +498,166 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 				} else {
 					backgroundColor = lightGray2Color;
 				}
-				Composite comp = toolkit.createComposite(c, SWT.NONE);
-				comp.setBackground(backgroundColor);
-				GridData compgd = GridDataFactory.fillDefaults().create();
-				compgd.grabExcessHorizontalSpace = true;
-				compgd.grabExcessVerticalSpace = true;
-
-				comp.setLayoutData(compgd);
-				comp.setLayout(new GridLayout(3, false));
-
-				// Get get the image and scale it.
-				Image img = DragonflyActivator.getDefault().getImageRegistry().get(prog.getImageKey());
-				if (img == null) {
-					img = Activator.getDefault().getImageRegistry().get(Activator.IMAGE_KEY_IMAGE_NOT_FOUND);
-				}
-
-				Image scaledimg = new Image(null, img.getImageData().scaledTo(52, 39));
-				if (imgreg.get(prog.getImageKey() + "_scaled") != null) { //$NON-NLS-1$
-					imgreg.put(prog.getImageKey() + "_scaled", scaledimg); //$NON-NLS-1$
-				}
-
-				// Label <-- for the image
-				Label imgLabel = toolkit.createLabel(comp, ""); //$NON-NLS-1$
-				imgLabel.setImage(scaledimg);
-				imgLabel.setBackground(backgroundColor);
-				GridData imageGD = GridDataFactory.fillDefaults().create();
-				imageGD.verticalSpan = 3;
-				imgLabel.setLayoutData(imageGD);
-
-				Hyperlink hyperlink = toolkit.createHyperlink(comp, UIUtils.truncateString(prog.getLabel(), 15), SWT.NONE);
-				hyperlink.setToolTipText(prog.getLabel());
-				hyperlink.addHyperlinkListener(new BUGNetHyperlinkListener(prog));
-				HashMap hyperLinkData = new HashMap();
-				hyperLinkData.put("program", prog);
-				hyperLinkData.put("backgroundcolor", backgroundColor);
-				hyperlink.setFont(titleFont);
-				hyperlink.setBackground(backgroundColor);
-				hyperlink.setForeground(new Color(Display.getCurrent(), new RGB(98,83,125)));
-				GridData hGD = GridDataFactory.fillDefaults().create();
-				hGD.grabExcessHorizontalSpace = true;
-				hyperlink.setLayoutData(hGD);
-				hyperlink.setBackgroundMode(SWT.INHERIT_NONE);
-				hyperlink.setData(hyperLinkData);
-
-				Set s = System.getProperties().keySet();
-				String osName = System.getProperty("os.name");
-
-				if (osName != null && !osName.equals("Mac OS X")) {
-					hyperlink.addPaintListener(new PaintListener() {
-
-						public void paintControl(PaintEvent e) {
-							((Hyperlink) e.widget).setBackground((Color) ((Map) e.widget.getData()).get("backgroundcolor"));
-						}
-					});
-				}
-				setupDragSource(hyperlink);
-
-				double rating = 3.5;
-				Rating r = new Rating(comp, SWT.NONE);
-				r.setBackground(backgroundColor);
-				String ratingVal = prog.getRating();
-				if (ratingVal.length() == 0) {
-					ratingVal = "0";
-				}
-				r.setRating(Double.parseDouble(ratingVal));
-				GridData ratingGD = GridDataFactory.fillDefaults().create();
-				ratingGD.widthHint = 50;
-				ratingGD.heightHint = 15;
-				r.setLayoutData(ratingGD);
-
-
-				GridData gd = GridDataFactory.fillDefaults().create();
-				gd.verticalAlignment = SWT.TOP;
-				gd.widthHint = 150;
-				gd.heightHint = 17;
-				gd.horizontalSpan = 2;
-
-				Label lblUserNameAndDownloads = new Label(comp, SWT.NONE);
-				lblUserNameAndDownloads.setText(prog.getUserName() + "  " + prog.getDownload_count() + " downloads");
-				lblUserNameAndDownloads.setLayoutData(gd);
-				lblUserNameAndDownloads.setBackground(backgroundColor);
-				// BB 
-				lblUserNameAndDownloads.setForeground(new Color(Display.getCurrent(), new RGB(123,129,138)));
-				String desc = prog.getDescription().trim();
-
-				if (!desc.equals("")) { //$NON-NLS-1$
-					descLabel = toolkit.createLabel(comp, desc, SWT.NONE);
-					labelList.add(descLabel);
-					originalDescriptionList.add(desc);
-					descLabel.setFont(descriptionFont);
-					descLabel.setLayoutData(gd);
-					descLabel.setBackground(backgroundColor);
-					// BB
-					descLabel.setForeground(new Color(Display.getCurrent(), new RGB(85,85,85)));
-
-					descLabel.setToolTipText(desc);
-				}
-				final Object[] labelArray = labelList.toArray();
-				final Object[] originalDescriptionArray = originalDescriptionList.toArray();
-
-
-				c.addListener(SWT.Resize, new Listener(){
-
-					public void handleEvent(Event event) {
-						if(descLabel != null && !descLabel.isDisposed()){
-							GC gc = new GC(descLabel);
-
-							int width = c.getSize().x / 6;
-
-							for(int i = 0; i < labelArray.length; i++){
-								String shortenText = shortenText(gc, ((String)originalDescriptionArray[i]), width);
-								((Label)labelArray[i]).setText(shortenText);
-								((Label)labelArray[i]).pack(true);
-							}
-						}
-					}
-
-				});
-				createContextMenu(comp, prog);
+				drawAppItem(c, backgroundColor, prog);
 			}
 		}
 	}
 
+	/**
+	 * This is a hack so I can call drawAppItem from
+	 * a helper class.  Need to call this before calling the next method
+	 * 
+	 */
+	public synchronized void setupForDrawingAppItems() {
+		labelList = new ArrayList();
+		originalDescriptionList = new ArrayList();		
+	}
+	
+	/**
+	 * 
+	 * Draws a single app item in a Composite
+	 * 
+	 * @param parent
+	 * @param backgroundColor
+	 * @param prog
+	 */
+	public synchronized void drawAppItem(final Composite parent, 
+			Color backgroundColor, BUGNetProgramReferenceNode prog) {
+		
+		// make sure we set up these array lists
+		if (labelList == null) labelList = new ArrayList();
+		if (originalDescriptionList == null) originalDescriptionList = new ArrayList();
+		
+		Composite comp = toolkit.createComposite(parent, SWT.NONE);
+		comp.setBackground(backgroundColor);
+		GridData compgd = GridDataFactory.fillDefaults().create();
+		compgd.grabExcessHorizontalSpace = true;
+		compgd.grabExcessVerticalSpace = true;
+
+		comp.setLayoutData(compgd);
+		comp.setLayout(new GridLayout(3, false));
+
+		// Get get the image and scale it.
+		Image img = DragonflyActivator.getDefault().getImageRegistry().get(prog.getImageKey());
+		if (img == null) {
+			img = Activator.getDefault().getImageRegistry().get(Activator.IMAGE_KEY_IMAGE_NOT_FOUND);
+		}
+
+		Image scaledimg = new Image(null, img.getImageData().scaledTo(52, 39));
+		if (imgreg.get(prog.getImageKey() + "_scaled") != null) { //$NON-NLS-1$
+			imgreg.put(prog.getImageKey() + "_scaled", scaledimg); //$NON-NLS-1$
+		}
+
+		// Label <-- for the image
+		Label imgLabel = toolkit.createLabel(comp, ""); //$NON-NLS-1$
+		imgLabel.setImage(scaledimg);
+		imgLabel.setBackground(backgroundColor);
+		GridData imageGD = GridDataFactory.fillDefaults().create();
+		imageGD.verticalSpan = 3;
+		imgLabel.setLayoutData(imageGD);
+
+		Hyperlink hyperlink = toolkit.createHyperlink(comp, UIUtils.truncateString(prog.getLabel(), 15), SWT.NONE);
+		hyperlink.setToolTipText(prog.getLabel());
+		hyperlink.addHyperlinkListener(new BUGNetHyperlinkListener(prog));
+		HashMap hyperLinkData = new HashMap();
+		hyperLinkData.put("program", prog);
+		hyperLinkData.put("backgroundcolor", backgroundColor);
+		hyperlink.setFont(titleFont);
+		hyperlink.setBackground(backgroundColor);
+		hyperlink.setForeground(new Color(Display.getCurrent(), new RGB(98,83,125)));
+		GridData hGD = GridDataFactory.fillDefaults().create();
+		hGD.grabExcessHorizontalSpace = true;
+		hyperlink.setLayoutData(hGD);
+		hyperlink.setBackgroundMode(SWT.INHERIT_NONE);
+		hyperlink.setData(hyperLinkData);
+
+		Set s = System.getProperties().keySet();
+		String osName = System.getProperty("os.name");
+
+		if (osName != null && !osName.equals("Mac OS X")) {
+			hyperlink.addPaintListener(new PaintListener() {
+
+				public void paintControl(PaintEvent e) {
+					((Hyperlink) e.widget).setBackground((Color) ((Map) e.widget.getData()).get("backgroundcolor"));
+				}
+			});
+		}
+		setupDragSource(hyperlink);
+
+		double rating = 3.5;
+		Rating r = new Rating(comp, SWT.NONE);
+		r.setBackground(backgroundColor);
+		String ratingVal = prog.getRating();
+		if (ratingVal.length() == 0) {
+			ratingVal = "0";
+		}
+		r.setRating(Double.parseDouble(ratingVal));
+		GridData ratingGD = GridDataFactory.fillDefaults().create();
+		ratingGD.widthHint = 50;
+		ratingGD.heightHint = 15;
+		r.setLayoutData(ratingGD);
+
+
+		GridData gd = GridDataFactory.fillDefaults().create();
+		gd.verticalAlignment = SWT.TOP;
+		gd.widthHint = 150;
+		gd.heightHint = 17;
+		gd.horizontalSpan = 2;
+
+		Label lblUserNameAndDownloads = new Label(comp, SWT.NONE);
+		lblUserNameAndDownloads.setText(prog.getUserName() + "  " + prog.getDownload_count() + " downloads");
+		lblUserNameAndDownloads.setLayoutData(gd);
+		lblUserNameAndDownloads.setBackground(backgroundColor);
+		// BB 
+		lblUserNameAndDownloads.setForeground(new Color(Display.getCurrent(), new RGB(123,129,138)));
+		String desc = prog.getDescription().trim();
+
+		if (!desc.equals("")) { //$NON-NLS-1$
+			descLabel = toolkit.createLabel(comp, desc, SWT.NONE);
+			labelList.add(descLabel);
+			originalDescriptionList.add(desc);
+			descLabel.setFont(descriptionFont);
+			descLabel.setLayoutData(gd);
+			descLabel.setBackground(backgroundColor);
+			// BB
+			descLabel.setForeground(new Color(Display.getCurrent(), new RGB(85,85,85)));
+
+			descLabel.setToolTipText(desc);
+		}
+		final Object[] labelArray = labelList.toArray();
+		final Object[] originalDescriptionArray = originalDescriptionList.toArray();
+
+
+		parent.addListener(SWT.Resize, new Listener(){
+			
+			public void handleEvent(Event event) {				
+				if(descLabel != null && !descLabel.isDisposed()){
+					GC gc = new GC(descLabel);
+
+					int width = parent.getSize().x / 6;
+
+					for(int i = 0; i < labelArray.length; i++){
+						String shortenText = shortenText(gc, ((String)originalDescriptionArray[i]), width);
+						((Label)labelArray[i]).setText(shortenText);
+						((Label)labelArray[i]).pack(true);
+					}
+				}
+			}
+		});
+		createContextMenu(comp, prog);
+	}
+	
+	/**
+	 * Convenience method to get the color settings set in this view
+	 * Should go away after a full-scale cleanup of this code
+	 * 
+	 * @return
+	 */
+	public Color[] getColors() {
+		Color[] colors = {borderColor, lightGrayColor, lightGray2Color}; 
+		return colors;
+	}
+	
 	/**
 	 * Shortens width of the description and adds ellipsis to it.
 	 * @param gc
@@ -875,7 +914,8 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 
 		public void linkActivated(HyperlinkEvent e) {
 			try {
-				//was this line: AuthenticationData data = BUGNetAuthenticationHelper.getAuthenticationData(true);
+				//was this line: 
+				// AuthenticationData data = BUGNetAuthenticationHelper.getAuthenticationData(true);
 				// now it's this line:
 				BugnetAuthenticationHelper.login();
 			} catch (IOException e1) {

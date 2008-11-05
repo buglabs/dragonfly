@@ -25,7 +25,9 @@ import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.ui.BugnetSearchSectionHelper;
 import com.buglabs.dragonfly.ui.views.BUGNetView;
+import com.buglabs.dragonfly.bugnet.BugnetResultManager;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 
 /**
@@ -78,9 +80,10 @@ public class PopulateBUGNetViewModelJob extends Job {
 
 	protected IStatus run(IProgressMonitor monitor) {
 
-		final List apps;
+		//final List apps;
+		final BugnetResultManager resultManager = BugnetResultManager.getInstance();
 		final List userApps;
-
+		
 		try {
 			// if BUGNet was disabled throw exception containing explanation
 			if (!DragonflyActivator.getDefault().getPluginPreferences().getBoolean(DragonflyActivator.PREF_BUGNET_ENABLED)) {
@@ -103,7 +106,9 @@ public class PopulateBUGNetViewModelJob extends Job {
 				username = ""; //$NON-NLS-1$
 			}
 
-			apps = BugnetWSHelper.getLatestApps(numOfTopApps);
+			//apps = BugnetWSHelper.getLatestApps(numOfTopApps);
+			resultManager.setPage(1); // reset page # to page 1
+			resultManager.doQuery();
 			userApps = BugnetWSHelper.getUserApps(username);
 
 			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
@@ -121,14 +126,19 @@ public class PopulateBUGNetViewModelJob extends Job {
 							.getString("PopulateBUGNetViewModelJob.5") + userAppCounter); //$NON-NLS-1$
 					
 					Composite bugnetComposite = PopulateBUGNetViewModelJob.this.bugnetView.createSection(parent, Messages
-							.getString("PopulateBUGNetViewModelJob.4") + " (" + numOfTopApps + ")"); //$NON-NLS-1$
+							.getString("PopulateBUGNetViewModelJob.4")); // + " (" + numOfTopApps + ")"); //$NON-NLS-1$
 					
-					if(apps.size() == 0){
+					BugnetSearchSectionHelper bugnetSearchSection = new BugnetSearchSectionHelper();
+					bugnetSearchSection.init(PopulateBUGNetViewModelJob.this.bugnetView, bugnetComposite, resultManager);
+					
+					/*
+					if(resultManager.getApplications().size() == 0){
 						PopulateBUGNetViewModelJob.this.bugnetView.generateNoApps(bugnetComposite);
 					}
 					else{
-						PopulateBUGNetViewModelJob.this.bugnetView.generateDetail(bugnetComposite, apps);
+						PopulateBUGNetViewModelJob.this.bugnetView.generateDetail(bugnetComposite, resultManager.getApplications());
 					}
+					*/
 
 					if (userApps.isEmpty()) {
 						if (username.trim().equals("")) { //$NON-NLS-1$
