@@ -22,6 +22,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
+import com.buglabs.dragonfly.model.SLPBugConnection;
+import com.buglabs.dragonfly.model.StaticBugConnection;
+import com.buglabs.dragonfly.model.VirtualBUGConnection;
 import com.buglabs.dragonfly.ui.Activator;
 
 /**
@@ -125,16 +128,14 @@ public class BUGConnectionSelectionDialog extends Dialog {
 			}
 
 			public Image getImage(Object element) {
-				if (element instanceof BugConnection) {
-					return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_UPLOAD);
-					/*
-					 * try { if(((IProject) element).hasNature(BugNature.ID)) {
-					 * return
-					 * Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_UPLOAD); } }
-					 * catch (CoreException e) {
-					 * UIUtils.handleNonvisualError("Unable to retrieve image",
-					 * e); }
-					 */
+				if (element instanceof VirtualBUGConnection) {
+					return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
+				}
+				else if(element instanceof StaticBugConnection){
+					return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
+				}
+				else if(element instanceof SLPBugConnection){
+					return Activator.getDefault().getImageRegistry().get(Activator.ICON_SLP_BUG);
 				}
 				return super.getImage(element);
 			}
