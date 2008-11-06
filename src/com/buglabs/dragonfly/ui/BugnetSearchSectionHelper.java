@@ -8,6 +8,8 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
@@ -81,13 +83,18 @@ public class BugnetSearchSectionHelper {
 		toolbar.setLayout(new GridLayout(2,false));
 		
 		// Search Box
-		searchText = toolkit.createText(toolbar, "", SWT.BORDER);
+		searchText = toolkit.createText(toolbar, "", SWT.BORDER | SWT.SEARCH);
 		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		searchText.setLayoutData(gd);
-		
 		// prefill search textbox if it's there
 		String search = resultManager.getSearch();
 		if (search != null) searchText.setText(search);
+		searchText.addSelectionListener(new SelectionAdapter() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+				BugnetSearchJob searchJob = new BugnetSearchJob();
+				searchJob.schedule();				
+			}
+		});
 		
 		// submit button
 		Button button = toolkit.createButton(toolbar, "Search", SWT.PUSH);
@@ -107,6 +114,7 @@ public class BugnetSearchSectionHelper {
 	private void redrawData() {
 		if (data != null) data.dispose();
 		drawData();
+		data.getParent().layout();
 		bugnetView.getForm().reflow(true);		
 	}	
 	
@@ -122,8 +130,8 @@ public class BugnetSearchSectionHelper {
 		List applications = resultManager.getApplications();		
 		GridData gd;
 		// If no apps, display no apps message
-		if (applications == null) {
-			Label cLabel = toolkit.createLabel(data, "No Data Found");
+		if (applications == null || applications.size() == 0) {
+			Label cLabel = toolkit.createLabel(data, "No Applications Found");
 		    gd = new GridData(SWT.FILL, SWT.CENTER, true, true);
 		    cLabel.setLayoutData(gd);			
 			return;
@@ -167,7 +175,6 @@ public class BugnetSearchSectionHelper {
 	    moreLink.setLayoutData(gd);		
 	}
 	
-	
 	/**
 	 * Do the BUGnet Search
 	 * 
@@ -177,9 +184,11 @@ public class BugnetSearchSectionHelper {
 	private class BugnetSearchJob extends Job {
 
 		private IStatus status = Status.OK_STATUS;
+		private DoQueryJob	doQueryJob;
 		
 		public BugnetSearchJob() {
 			super("Bugnet Search");
+			doQueryJob = new DoQueryJob();
 		}
 
 		protected IStatus run(IProgressMonitor monitor) {
@@ -191,13 +200,28 @@ public class BugnetSearchSectionHelper {
 					if (s != null && s.length() > 0) {
 						resultManager.setSearch(searchText.getText());
 					}
-					try {
-						resultManager.doQuery();
-					} catch (IOException e) {
-						UIUtils.handleNonvisualError("There was an error connecting to BUGnet.", e);
-						status = handleException(e);
-					}
-					redrawData();					
+					// Schedule query with query job below
+					doQueryJob.schedule();
+					
+					doQueryJob.addJobChangeListener(new IJobChangeListener(){
+						// Don't need these methods
+						public void aboutToRun(IJobChangeEvent event) {}
+						public void awake(IJobChangeEvent event) {}
+						public void running(IJobChangeEvent event) {}
+						public void scheduled(IJobChangeEvent event) {}
+						public void sleeping(IJobChangeEvent event) {}
+						/**
+						 *  Just need to know when we're done querying BUGnet
+						 */
+						public void done(IJobChangeEvent event) {
+							PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+								public void run() {
+									redrawData();
+								}
+							});
+						}
+						
+					});	
 				}
 			});			
 			return status;
@@ -215,37 +239,84 @@ public class BugnetSearchSectionHelper {
 
 		private IStatus status = Status.OK_STATUS;
 		private Hyperlink sourceLink;
+		private DoQueryJob	doQueryJob;
 		
 		public BugnetMoreResultsJob(Hyperlink source) {
-			super("Bugnet Get More Results");
+			super("Getting more results from BUGnet");
 			sourceLink = source;
+			doQueryJob = new DoQueryJob();
 		}
 
-		protected IStatus run(IProgressMonitor monitor) {
+		protected IStatus run(final IProgressMonitor monitor) {
 			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 				public void run() {
 					// make this hyperlink go away
 					sourceLink.dispose();
-								    
-					// Do the search
-					resultManager.setPage(resultManager.getPage()+1);
+					
+					// Set up result Manager, getting ready for query
 					String s = searchText.getText();
 					if (s != null && s.length() > 0) {
 						resultManager.setSearch(searchText.getText());
 					}
-					try {
-						resultManager.doQuery();
-					} catch (IOException e) {
-						UIUtils.handleNonvisualError("There was an error connecting to BUGnet.", e);
-						status = handleException(e);
-					}
-					addResultsToData();
-					bugnetView.getForm().reflow(true);				
+					resultManager.setPage(resultManager.getPage()+1);
+
+					// Schedule query with query job below
+					doQueryJob.schedule();
+					
+					doQueryJob.addJobChangeListener(new IJobChangeListener(){
+						// Don't need these methods
+						public void aboutToRun(IJobChangeEvent event) {}
+						public void awake(IJobChangeEvent event) {}
+						public void running(IJobChangeEvent event) {}
+						public void scheduled(IJobChangeEvent event) {}
+						public void sleeping(IJobChangeEvent event) {}
+						/**
+						 *  Just need to know when we're done querying BUGnet
+						 */
+						public void done(IJobChangeEvent event) {
+							PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+								public void run() {
+									addResultsToData();
+									bugnetView.getForm().reflow(true);
+								}
+							});
+						}
+						
+					});
 				}
 			});			
 			return status;
 		}
 	}	
+	
+	
+	/**
+	 * 
+	 * A Job just for querying BUGnet
+	 * 
+	 * @author brian
+	 *
+	 */
+	private class DoQueryJob extends Job {
+
+		public DoQueryJob() {
+			super("Retrieving BUGnet applications...");
+		}
+
+		protected IStatus run(IProgressMonitor monitor) {
+			IStatus status = Status.OK_STATUS;
+			try {
+				resultManager.doQuery();
+			} catch (IOException e) {
+				UIUtils.handleNonvisualError("There was an error connecting to BUGnet.", e);
+				status = handleException(e);
+			}
+			return status;
+		}
+		
+	}
+	
+	
 	
 	/**
 	 * helps handle a Job error
