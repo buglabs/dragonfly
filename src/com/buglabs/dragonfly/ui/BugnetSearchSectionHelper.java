@@ -1,7 +1,6 @@
 package com.buglabs.dragonfly.ui;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,12 +10,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -30,18 +27,10 @@ import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
 
 import com.buglabs.dragonfly.bugnet.BugnetResultManager;
-import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
-import com.buglabs.dragonfly.exception.BugnetException;
 import com.buglabs.dragonfly.model.BUGNetProgramReferenceNode;
-import com.buglabs.dragonfly.model.BugConnection;
-import com.buglabs.dragonfly.model.ITreeNode;
-import com.buglabs.dragonfly.ui.providers.Messages;
 import com.buglabs.dragonfly.ui.views.BUGNetView;
-import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
