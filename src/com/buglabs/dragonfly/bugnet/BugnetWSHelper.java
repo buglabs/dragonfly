@@ -307,7 +307,7 @@ public class BugnetWSHelper {
 		String packages = "";
 		
 		for (Iterator i = packageList.iterator(); i.hasNext();) {
-			packages += (String)i.next() + ",";
+			packages += ((String)i.next()).trim() + ",";
 		}
 		packages = packages.substring(0, packages.lastIndexOf(","));
 		String url = getBugNetBaseURL() + BUGNET_WS_PATH_STRING + BUGNET_PROGRAM_STRING
