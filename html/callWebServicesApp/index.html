@@ -130,7 +130,7 @@ public class LCD_HelloworldServiceTracker extends AbstractServiceTracker {
 	public void doStart() {
 		System.out.println("LCD_HelloworldServiceTracker: start");
 		statusBar = (IStatusBarProvider) this.getService(IStatusBarProvider.class);
-			key = statusBar.acquireRegion("Hello World!".length());
+			key = statusBar.acquireRegion("Hello".length());
 			if (key != null) { 
 				statusBar.write(key, "Hello");
 			} 

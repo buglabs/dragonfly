@@ -15,7 +15,7 @@
 	  <toc file="tocInteractingWithBUGnetView.xml"/>
 	  <toc file="tocInteractingWithMyBUGsView.xml"/>
 	  <toc file="tocUploadApplication.xml"/>
-	  <toc file="tocDownloadAppToBUG.xml"/>
+	  <toc file="tocSendAppToBUG.xml"/>
 	  <toc file="tocUsingVirtualBug.xml"/>
 	  <toc file="tocLaunchConfiguration.xml"/>	  
    </extension>
