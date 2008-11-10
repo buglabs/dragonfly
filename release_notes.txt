@@ -1,12 +1,30 @@
 New Features
--------------
+~~~~~~~~~~~~
 
-This version of the SDK uses version 2 of the web services.
+BUGnet view now has searching and paging of results
+Virtual BUG has a new looks that resembles physical hardware 
+Help plugin is available 
 
 
 Release Notes
----------------
-This corresponds to Trac Ticket # 54 - http://trac/trac/test/ticket/54
+~~~~~~~~~~~~~~
+Ticket  	Summary  	 													Owner  	
+====================================================================================== 
+#14 		Von Hippel virtual bug module 									akravets 	
+#92 		Virtual BUG module images 										mateo 			
+#95 		New Interface for modules that are button providers 			akravets 	
+#132 		Fix Version Numbers so they conform to M.m.r[.b] 				akravets 	 	
+#159 		Add acceleration service to the Virtual BUG motion module 		akravets 	
+#186 		Have SDK Open Version Notes Page on BUG App Upload 				bballantine 	
+#193 		Removed building of audio emulator bundle from SDK 				akravets 	
+#196 		Update public wiki page with current Module Services 			kgilmer 	
+#4 			Add Poky Build Support into SDK 								akravets 	
+#144 		Migrate SDK from CVS to SVN 									akravets 	
+#145 		Improve BUGnet view to provide filtering and sorting options 	bballantine 	
+#150 		Control who consumes LCD through Configuration Admin 			kgilmer 	
+#156 		separate OTE plugins 											akravets 	
+#157 		OTE Build scripts 												akravets 	
+#166 		Virtual BUG Connection is not removed from MyBUGs view 			kgilmer 	
+#191 		Add new icons to SDK 											akravets
+#203 		Control who consumes LCD through Configuration Admin 			kgilmer 
 
-Bugs fixed in this build:
-#263 - Code now checks for slash at the end of the BUGnet url, so a user can type in a slash or leave it out and it will still work.
