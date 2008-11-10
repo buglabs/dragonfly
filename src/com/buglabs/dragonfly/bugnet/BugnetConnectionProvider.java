@@ -8,7 +8,9 @@
 package com.buglabs.dragonfly.bugnet;
 
 import java.io.IOException;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 
 import com.buglabs.dragonfly.model.AuthenticationData;
@@ -42,6 +44,10 @@ public class BugnetConnectionProvider implements IConnectionProvider {
 		SSLUtils.verifyHost();
 		URL url = new URL(urlStr);
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+		// Handle authentication retrieval from outside java URL framework
+		// so set default authenticator to one that just returns null
+		// TODO - move existing authentication stuff into custom authenticator
+		Authenticator.setDefault(new NullAuthenticator());
 		connection.setRequestProperty("Authorization", "Basic " + credentials);		
 		return connection;
 	}
@@ -49,6 +55,22 @@ public class BugnetConnectionProvider implements IConnectionProvider {
 	private void setCredentials(String username, String password) {
 		String rawCreds = username + ":" + password;
 		credentials = Base64.encodeBytes(rawCreds.getBytes());		
+	}
+	
+	/**
+	 * Set this authenticator to return null on getPasswordAuthentication()
+	 * This keeps the username password dialog from appearing from within the URL framework
+	 * 
+	 * TODO Rewrite authentication code to use a custom authenticator that shows a dialog.
+	 * 		This would be cleaner than what we're doing now
+	 * 
+	 * @author brian
+	 *
+	 */
+	private class NullAuthenticator extends Authenticator {
+		protected PasswordAuthentication getPasswordAuthentication() {
+			return null;
+		}
 	}
 		
 }
