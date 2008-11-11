@@ -69,11 +69,11 @@ public class BugnetSearchSectionHelper {
 
 	private void drawToolbar() {
 		toolbar = toolkit.createComposite(sectionClient);
-		toolbar.setLayout(new GridLayout(2,false));
+		toolbar.setLayout(new GridLayout(3,false));
 		
 		// Search Box
 		searchText = toolkit.createText(toolbar, "", SWT.BORDER | SWT.SEARCH);
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		searchText.setLayoutData(gd);
 		// prefill search textbox if it's there
 		String search = resultManager.getSearch();
@@ -86,8 +86,9 @@ public class BugnetSearchSectionHelper {
 		});
 		
 		// submit button
-		Button button = toolkit.createButton(toolbar, "Search", SWT.PUSH);
-		gd = new GridData(SWT.END, SWT.CENTER, false, false);
+		Button button = new Button(toolbar,SWT.NONE);
+		button.setText("Search");
+		gd = new GridData(SWT.END, SWT.NONE, false, false);
 		button.setLayoutData(gd);
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
