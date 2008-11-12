@@ -122,9 +122,9 @@ public class UpsertToBugAction extends Action {
 				if (bugApplicationOverwrite) {
 					bugURL = bugConnection.getUrl().toExternalForm();
 				}
-			} /*else {
+			} else {
 				return bugConnection.getUrl().toExternalForm();
-			}*/
+			}
 		}
 
 		return bugURL;
