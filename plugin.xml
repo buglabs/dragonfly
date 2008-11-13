@@ -22,10 +22,10 @@
          point="org.eclipse.ui.newWizards">
       <wizard
             category="com.buglabs.dragonfly.wizardCategory"
-            class="com.buglabs.dragonfly.ui.wizards.bug.NewProjectWizard"
+            class="com.buglabs.dragonfly.ui.wizards.bug.NewBugConnectionWizard"
             hasPages="true"
-            icon="icons/color/connect.gif"
-            id="com.buglabs.dragonfly.ui.wizards.bugProject"
+            icon="icons/color/staticConnection.gif"
+            id="com.buglabs.dragonfly.ui.wizards.bugConnectionWizard"
             name="BUG Connection"
             project="true"/>
       <category
