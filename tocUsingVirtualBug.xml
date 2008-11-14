@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Using Virtual Bug" link_to="toc.xml#usingVirtualBug"> 
-	<topic label="Using Virtual Bug"  href="html/usingVirtualBug/index.html"/>
+<toc label="Using the Virtual Bug" link_to="toc.xml#usingVirtualBug"> 
+	<topic label="Using the Virtual Bug"  href="html/usingVirtualBug/index.html"/>
 </toc>

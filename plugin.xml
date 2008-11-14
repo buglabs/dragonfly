@@ -7,8 +7,7 @@
             file="toc.xml"
             primary="true">
       </toc>
-      <toc file="tocGettingStarted.xml"/>      
-	  <toc file="tocCreateBUGProject.xml"/>
+      <toc file="tocCreateBUGProject.xml"/>
 	  <toc file="tocAnatomyOfBUGApplication.xml"/>
 	  <toc file="tocCallWebServicesApp.xml"/>
 	  <toc file="tocDebugAnApp.xml"/>

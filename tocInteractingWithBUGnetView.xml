@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Interacting With BUGnet View" link_to="toc.xml#interactingWithBUGnetView"> 
-	<topic label="Interacting With BUGnet View"  href="html/interactingWithBUGnetView/index.html"/>
+<toc label="Interacting with the BUGnet View" link_to="toc.xml#interactingWithBUGnetView"> 
+	<topic label="Interacting with the BUGnet View"  href="html/interactingWithBUGnetView/index.html"/>
 </toc>
