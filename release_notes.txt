@@ -1,30 +1,10 @@
-New Features
-~~~~~~~~~~~~
-
-BUGnet view now has searching and paging of results
-Virtual BUG has a new looks that resembles physical hardware 
-Help plugin is available 
-
-
 Release Notes
 ~~~~~~~~~~~~~~
-Ticket  	Summary  	 													Owner  	
-====================================================================================== 
-#14 		Von Hippel virtual bug module 									akravets 	
-#92 		Virtual BUG module images 										mateo 			
-#95 		New Interface for modules that are button providers 			akravets 	
-#132 		Fix Version Numbers so they conform to M.m.r[.b] 				akravets 	 	
-#159 		Add acceleration service to the Virtual BUG motion module 		akravets 	
-#186 		Have SDK Open Version Notes Page on BUG App Upload 				bballantine 	
-#193 		Removed building of audio emulator bundle from SDK 				akravets 	
-#196 		Update public wiki page with current Module Services 			kgilmer 	
-#4 			Add Poky Build Support into SDK 								akravets 	
-#144 		Migrate SDK from CVS to SVN 									akravets 	
-#145 		Improve BUGnet view to provide filtering and sorting options 	bballantine 	
-#150 		Control who consumes LCD through Configuration Admin 			kgilmer 	
-#156 		separate OTE plugins 											akravets 	
-#157 		OTE Build scripts 												akravets 	
-#166 		Virtual BUG Connection is not removed from MyBUGs view 			kgilmer 	
-#191 		Add new icons to SDK 											akravets
-#203 		Control who consumes LCD through Configuration Admin 			kgilmer 
-
+ID  	 Sev  	 Pri  	 OS  	 Assignee  	 Status  	 Resolution  	 Summary
+296 	cri 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	Send to BUG: Can't send App to Physical BUG
+298 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	BUG connection wizard will not run
+299 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	BUG connection icon needs updating in the New Project wizard
+301 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	LCD Module: Isn't persistent in module config when VB is restarted
+302 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	LCD module not recognized in Virtual BUG
+303 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	Virtual BUG: joystick frequently becomes unresponsive
+294 	nor 	P3 	All 	brianc@buglabs.net 	RESO 	FIXE 	Help Contents: changes needed in Dragonfly SDK help guide 
