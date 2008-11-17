@@ -132,9 +132,12 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 		for(int i = 0; i < array.length; i++){
 			Object bugConnection = array[i];
 			if(bugConnection instanceof VirtualBUGConnection){
-				DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(true);
-				MyBugsView.getRoot().removeChild((IModelNode) bugConnection);
-				DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(this, BugListener.REMOVE_BUG, null, bugConnection));
+				DragonflyActivator activator = DragonflyActivator.getDefault();
+				if(activator != null){
+					activator.setVirtualBugRemovedByTerminate(true);
+					MyBugsView.getRoot().removeChild((IModelNode) bugConnection);
+					activator.fireModelChangeEvent(new PropertyChangeEvent(this, BugListener.REMOVE_BUG, null, bugConnection));
+				}
 			}	
 		}
 		/*Iterator iterator = children.iterator();
