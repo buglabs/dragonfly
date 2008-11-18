@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.buglabs.dragonfly.bugnet;
 
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.swt.graphics.Image;
 
 import com.buglabs.dragonfly.DragonflyActivator;
@@ -62,6 +63,10 @@ public class BugnetStateProvider {
 	
 	public int getDefaultApplicationCount() {
 		return DragonflyActivator.getDefault().getPluginPreferences().getInt(DragonflyActivator.PREF_BUGNET_NUM_OF_APPS);		
+	}
+	
+	public Preferences getPreferences() {
+		return DragonflyActivator.getDefault().getPluginPreferences();
 	}
 		
 }

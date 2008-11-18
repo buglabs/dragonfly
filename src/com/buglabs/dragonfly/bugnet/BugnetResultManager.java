@@ -5,6 +5,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
+import org.eclipse.core.runtime.Preferences.PropertyChangeEvent;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
+
+import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
 import com.buglabs.dragonfly.exception.BugnetException;
 
@@ -17,7 +23,7 @@ import com.buglabs.dragonfly.exception.BugnetException;
  * @author brian
  *
  */
-public class BugnetResultManager {
+public class BugnetResultManager implements IPropertyChangeListener {
 	
 	private String search;
 	private int count;
@@ -26,6 +32,12 @@ public class BugnetResultManager {
 	
 	private static BugnetResultManager _instance;
 	
+	/**
+	 * Making this a singleton allows us to keep track of current
+	 * page # and count over different requests
+	 * 
+	 * @return
+	 */
 	public static BugnetResultManager getInstance() {
 		if(_instance == null) {
 			synchronized(BugnetResultManager.class) {
@@ -38,14 +50,8 @@ public class BugnetResultManager {
 	}
 	
 	private BugnetResultManager() {
+		BugnetStateProvider.getInstance().getPreferences().addPropertyChangeListener(this);
 		reset();
-	}
-	
-	public void reset() {
-		this.search = null;
-		this.count = BugnetStateProvider.getInstance().getDefaultApplicationCount();
-		this.page = 1;
-		this.applications = null;		
 	}
 	
 	public String getSearch() {
@@ -68,6 +74,42 @@ public class BugnetResultManager {
 	public void setPage(int page) {
 		this.page = page;
 	}	
+	
+	/**
+	 * Set everything back to defaults
+	 */
+	public void reset() {
+		this.search = null;
+		this.page = 1;
+		this.applications = null;
+		resetCount();
+	}	
+	
+	/**
+	 * Load applications with list of BugnetProgramNodes
+	 * 
+	 * @throws BugnetAuthenticationException
+	 * @throws BugnetException
+	 * @throws IOException
+	 */
+	public void doQuery() throws BugnetAuthenticationException, BugnetException, IOException {
+		applications = BugnetWSHelper.getProgramsByQuerystring(toQueryString());
+	}
+	
+	public List getApplications() {
+		return applications;
+	}
+
+	/**
+	 * called when someone changes the default count
+	 */
+	public void propertyChange(PropertyChangeEvent event) {
+		resetCount();
+	}	
+	
+	private void resetCount() {
+		this.count = BugnetStateProvider.getInstance().getDefaultApplicationCount();
+	}
 	
 	private String toQueryString() {
 		String querystring = "";
@@ -92,12 +134,6 @@ public class BugnetResultManager {
 		}
 		return source;
 	}
-	
-	public void doQuery() throws BugnetAuthenticationException, BugnetException, IOException {
-		applications = BugnetWSHelper.getProgramsByQuerystring(toQueryString());
-	}
-	
-	public List getApplications() {
-		return applications;
-	}
+
+
 }
