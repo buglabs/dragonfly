@@ -127,8 +127,8 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 				}
 
 				PropertyDescriptor descriptor = null;
-
-				if(name.equals("enabled")){
+				
+				if(name.equals("enabled") || (name.indexOf("Status Bar contribution") != -1)){
 					descriptor = new ComboBoxPropertyDescriptor(displayName,displayName,MODULE_STATE);
 				}
 				else{
@@ -178,9 +178,8 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 			Object key = i.next();
 			DescriptorDefinition def = (DescriptorDefinition) configProperty.get(key);
 			String value = def.getValue();
-
 			if(id.equals(key)){
-				if(((String)id).indexOf("enabled") != -1){
+				if(((String)id).indexOf("enabled") != -1 || ((String)id).indexOf("Status Bar contribution") != -1){
 					if(value.equals("true")){
 						return new Integer(0);
 					}
@@ -214,7 +213,8 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 	private void setConfigurationValue(Object id, Object value) throws MalformedURLException, IOException {
 		DescriptorDefinition definition = (DescriptorDefinition) configProperty.get(id);
 		String category = definition.getDescriptor().getCategory();
-		if(category.indexOf("com.buglabs.service.ws") != -1){
+		// TODO: this is bad, needs to be refactored
+		if(category.indexOf("com.buglabs.service.ws") != -1 || category.equals("com.buglabs.bug.emulator.base.Activator") || category.equals("com.buglabs.bug.module.gps.Activator")){
 			value = MODULE_STATE[Integer.parseInt(value.toString())];
 		}
 		
