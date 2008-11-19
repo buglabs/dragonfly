@@ -3,7 +3,7 @@
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.bugnet.net/legal/epl-v10.html
+ * http://www.buglabs.net/legal/epl_license.html
  *******************************************************************************/
 package com.buglabs.dragonfly.ui.wizards.bugProject;
 
@@ -123,6 +123,10 @@ public class CodeGenerationPage extends WizardPage {
 		this.pinfo = pinfo;
 	}
 
+	
+	/**
+	 *  Draw all the parts on the wizard page
+	 */
 	public void createControl(Composite parent) {
 		Composite mainComposite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(1, false);
@@ -137,8 +141,10 @@ public class CodeGenerationPage extends WizardPage {
 
 		targetGroup.setLayoutData(gridData);
 
+		// this is the list of all the bugs you can see
 		createTargetArea(targetGroup);
 
+		// where you choose the services
 		createServicesSection(mainComposite);
 
 		createApplicationLoop(mainComposite);
@@ -364,20 +370,19 @@ public class CodeGenerationPage extends WizardPage {
 		});
 	}
 
+	/**
+	 * Draws the section where you can filter services
+	 * or select a service based on your selection above
+	 * 
+	 * @param mainComposite
+	 */
 	private void createServicesSection(Composite mainComposite) {
+		// set up
 		Composite servicesComposite = new Composite(mainComposite, SWT.NONE);
-
 		GridLayout layout = new GridLayout(2, false);
 		servicesComposite.setLayout(layout);
 
-		GridData gdFillH = new GridData(GridData.FILL_HORIZONTAL);
-		servicesComposite.setLayoutData(gdFillH);
-
-		GridData spanAllFillBoth = new GridData(GridData.FILL_BOTH);
-		spanAllFillBoth.horizontalSpan = layout.numColumns;
-
-		GridData gdFillBoth = GridDataFactory.createFrom(gdFillH).create();
-		gdFillBoth.horizontalSpan = layout.numColumns;
+		// box that surrounds this section
 		Group compServices = new Group(servicesComposite, SWT.NONE);
 		compServices.setText("Required Services");
 		GridData gdServices = new GridData(GridData.FILL_BOTH);
@@ -388,19 +393,27 @@ public class CodeGenerationPage extends WizardPage {
 		compServices.setLayoutData(gdServices);
 		compServices.setLayout(new GridLayout(3, false));
 
+		// text box for services filtering
 		Text txtFilter = new Text(compServices, SWT.BORDER);
-		GridData filterData = new GridData();
+		
+		GridData gdFillH = new GridData(GridData.FILL_HORIZONTAL);
+		servicesComposite.setLayoutData(gdFillH);		
+		
+		GridData gdFillBoth = GridDataFactory.createFrom(gdFillH).create();
+		gdFillBoth.horizontalSpan = layout.numColumns;
+		
 		txtFilter.setLayoutData(gdFillBoth);
 		txtFilter.addModifyListener(new ModifyListener() {
-
 			public void modifyText(ModifyEvent e) {
 				String filter = ((Text) e.widget).getText();
 				filter =filter.replaceAll("\\*", ".*");
-				serviceFilter.setPattern(".*" + filter + ".*");
+				serviceFilter.setPattern(".*" + filter + ".*", 
+						Arrays.asList(dependencyViewer.getCheckedElements()));
 				dependencyViewer.refresh();
 			}
 		});
 
+		// table with list of services to choose from
 		Table modulesTable = new Table(compServices,SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
 		modulesTable.setHeaderVisible(true);
 		modulesTable.setLinesVisible(true);
@@ -509,9 +522,12 @@ public class CodeGenerationPage extends WizardPage {
 		});
 		
 		serviceDescriptionArea = new Text(compServices, SWT.BORDER | SWT.MULTI | SWT.WRAP|SWT.V_SCROLL);
-		GridData data = spanAllFillBoth;
-		data.minimumHeight = 50;
-		serviceDescriptionArea.setLayoutData(data);
+		
+		GridData spanAllFillBoth = new GridData(GridData.FILL_BOTH);
+		spanAllFillBoth.horizontalSpan = layout.numColumns;
+
+		spanAllFillBoth.minimumHeight = 50;
+		serviceDescriptionArea.setLayoutData(spanAllFillBoth);
 		serviceDescriptionArea.setEditable(false);
 	}
 
