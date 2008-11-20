@@ -169,6 +169,9 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 					if (Integer.parseInt(numofapps) > 100) {
 						setErrorMessage("Maximum number of applications is 100");
 						setValid(false);
+					} else if (Integer.parseInt(numofapps) < 1) {
+						setErrorMessage("Minimum number of applications is 1");
+						setValid(false);
 					} else {
 						setErrorMessage(null);
 						setValid(true);
