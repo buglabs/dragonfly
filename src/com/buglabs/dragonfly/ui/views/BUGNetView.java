@@ -447,6 +447,18 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 				Object obj = event.data;
 
 				if (obj instanceof IResource[]) {
+					
+					// First make sure BUGnet is activated
+					if(!DragonflyActivator.getDefault().getPluginPreferences()
+							.getBoolean(DragonflyActivator.PREF_BUGNET_ENABLED)) {
+						// Show a Dialog with the message
+						MessageDialog.openInformation(new Shell(), "BUGnet not enabled.", 
+								"Unable to upload the application to BUGnet because BUGnet is disabled in preferences.  "
+								+ "Please enable BUGnet in preferences and try again.");
+						return;
+					}
+					
+					// now make sure the package is all legit
 					if (((IResource[]) obj).length > 0) {
 						IResource res = ((IResource[]) obj)[0];
 
