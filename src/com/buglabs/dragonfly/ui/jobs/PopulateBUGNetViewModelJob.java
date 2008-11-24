@@ -80,7 +80,6 @@ public class PopulateBUGNetViewModelJob extends Job {
 
 	protected IStatus run(IProgressMonitor monitor) {
 
-		//final List apps;
 		final BugnetResultManager resultManager = BugnetResultManager.getInstance();
 		final List userApps;
 		
@@ -106,9 +105,8 @@ public class PopulateBUGNetViewModelJob extends Job {
 				username = ""; //$NON-NLS-1$
 			}
 
-			//apps = BugnetWSHelper.getLatestApps(numOfTopApps);
 			resultManager.setPage(1); // reset page # to page 1
-			resultManager.doQuery();
+			resultManager.doQuery(); // talks to bugnet, loads applications
 			userApps = BugnetWSHelper.getUserApps(username);
 
 			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
@@ -130,15 +128,6 @@ public class PopulateBUGNetViewModelJob extends Job {
 					
 					BugnetSearchSectionHelper bugnetSearchSection = new BugnetSearchSectionHelper();
 					bugnetSearchSection.init(PopulateBUGNetViewModelJob.this.bugnetView, bugnetComposite, resultManager);
-					
-					/*
-					if(resultManager.getApplications().size() == 0){
-						PopulateBUGNetViewModelJob.this.bugnetView.generateNoApps(bugnetComposite);
-					}
-					else{
-						PopulateBUGNetViewModelJob.this.bugnetView.generateDetail(bugnetComposite, resultManager.getApplications());
-					}
-					*/
 
 					if (userApps.isEmpty()) {
 						if (username.trim().equals("")) { //$NON-NLS-1$

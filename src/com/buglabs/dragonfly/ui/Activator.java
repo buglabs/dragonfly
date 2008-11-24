@@ -248,11 +248,10 @@ public class Activator extends AbstractUIPlugin {
 			bugsFileName.createNewFile();
 		}
 
-		List discoveredBugs = Collections.synchronizedList(new ArrayList()); // map
-		// that
-		// contains
-		// discovered
-		// bugs
+		// list of discovered bugs
+		List discoveredBugs = Collections.synchronizedList(new ArrayList());
+		
+		
 		slpListener = new SLPListener(context, root, discoveredBugs);
 		LoadBugsJob loadBugs = new LoadBugsJob(bugsFileName, root, slpListener);
 		loadBugs.setPriority(Job.SHORT);
