@@ -1,8 +1,13 @@
 package com.buglabs.dragonfly.util;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
@@ -45,16 +50,15 @@ public class SLPListener extends BugListener {
 
 		if (locRef != null) {
 			Locator locator = (Locator) context.getService(locRef);
-
+			
+			// we get all the services that match
 			ServiceLocationEnumeration slenum = locator.findServices(new ServiceType("service:bug"), null, null);
+			
 			while (slenum.hasMoreElements()) {
 				ServiceURL service = (ServiceURL) slenum.nextElement();
-				String host = service.getHost();
-				String networkIterfaceAddress = URLUtils.getNetworkIterfaceAddress(host);
-
 				BugConnection bug = null;
-				// A service provider on the local interface is a Virtual BUG
-				if (host.equals(networkIterfaceAddress)) {
+				
+				if (isVirtualBug(service)) {
 					String bugName = DragonflyActivator.VIRTUAL_BUG;
 					if(virtuaBugExists){
 						bugName = DragonflyActivator.VIRTUAL_BUG + " (" + virtualBugCounter + ")";
@@ -75,7 +79,7 @@ public class SLPListener extends BugListener {
 					}
 				}
 				else{
-					bug = new SLPBugConnection(host, new URL("http://" + service.getHost() + ":" + service.getPort()));
+					bug = new SLPBugConnection(service.getHost(), new URL("http://" + service.getHost() + ":" + service.getPort()));
 				}
 				if(!bugs.contains(bug) && bug != null)
 					bugs.add(bug);
@@ -88,6 +92,17 @@ public class SLPListener extends BugListener {
 		return bugs;
 	}
 
+	/**
+	 * It's a virtual BUG if it's found on one of my local interfaces
+	 * 
+	 * @param service
+	 * @return
+	 */
+	private boolean isVirtualBug(ServiceURL service) {
+		return service.getHost().equals(URLUtils.getNetworkIterfaceAddress(service.getHost()));
+	}
+
+	
 	protected boolean isValidType(Object o) {
 		return o instanceof SLPBugConnection;
 	}

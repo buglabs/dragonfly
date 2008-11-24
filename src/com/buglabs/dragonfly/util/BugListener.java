@@ -26,26 +26,20 @@ public abstract class BugListener extends Thread {
 	 * the interval between scans of service providers.
 	 */
 	private int BUG_SCAN_INTERVAL_MILLIS;
-	
 	public static final String REMOVE_BUG = "remove_bug";
-	
 	public static final String ADD_BUG = "add_bug";
-
 	private static final int MAX_ERROR_COUNT = 5;
-
 	private ITreeNode root;
-
-	private List model;
-
+	private List knownBugList;
 	volatile private boolean terminated = false;
-
 	private int errorCount = 0;
 
-	public BugListener(ITreeNode root, List list) {
+	public BugListener(ITreeNode root, List knownBugList) {
 		this.root = root;
-		model = list;
+		this.knownBugList = knownBugList;
 		try{
-			BUG_SCAN_INTERVAL_MILLIS = Integer.parseInt(System.getProperty("com.buglabs.bug.emulator.scaninterval"));
+			BUG_SCAN_INTERVAL_MILLIS = 
+				Integer.parseInt(System.getProperty("com.buglabs.bug.emulator.scaninterval"));
 		}
 		catch(Exception e){
 			BUG_SCAN_INTERVAL_MILLIS = 7000;
@@ -55,17 +49,19 @@ public abstract class BugListener extends Thread {
 	public void run() {
 		while (!terminated) {
 			try {
-				 List discoveredBugs = getBugs();
+				// make call to child class to get newly discovered bugs
+				List discoveredBugs = getBugs();
 
-				if (model.size() != 0) {
-					removedDisconnectedBugs(model, discoveredBugs);
+				// bugs on knownBugList but not newly discovered are removed
+				if (knownBugList.size() != 0) {
+					removedDisconnectedBugs(knownBugList, discoveredBugs);
 				}
 
 				for (int i = 0; i < discoveredBugs.size(); i++) {
 					final BugConnection bug = (BugConnection) discoveredBugs.get(i);
-					synchronized (model) {
-						if (!model.contains(bug)) {
-							model.add(bug);
+					synchronized (knownBugList) {
+						if (!knownBugList.contains(bug)) {
+							knownBugList.add(bug);
 						}
 						if (!root.childExists(bug)) {
 							URL url = bug.getUrl();
@@ -136,13 +132,19 @@ public abstract class BugListener extends Thread {
 
 	protected abstract boolean isValidType(Object o);
 
-	private synchronized void removedDisconnectedBugs(List model, List bugs) {
+	/**
+	 * 
+	 * 
+	 * @param knownBugs - list of current bugs available (found before?)
+	 * @param foundBugs  - list of bugs that were just discovered
+	 */
+	private synchronized void removedDisconnectedBugs(List knownBugs, List foundBugs) {
 		Stack waste = new Stack();
 		BugConnection bug = null;
-		for (Iterator i = model.iterator(); i.hasNext();) {
+		for (Iterator i = knownBugs.iterator(); i.hasNext();) {
 			bug = (BugConnection) i.next();
 			if (isValidType(bug)) {
-				if (!bugs.contains(bug)) {
+				if (!foundBugs.contains(bug)) {
 					waste.push(bug);
 				}
 			}
@@ -150,12 +152,12 @@ public abstract class BugListener extends Thread {
 
 		while (!waste.isEmpty()) {
 			BugConnection bugToRemove = (BugConnection) waste.pop();
-			model.remove(bugToRemove);
+			knownBugs.remove(bugToRemove);
 			bugToRemove.setConnected(false);
 			if (DragonflyActivator.getDefault() != null && root.removeChild(bugToRemove) != null) {
 				DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(this, REMOVE_BUG, null, bugToRemove));
 			} else {
-				model.remove(bug);
+				knownBugs.remove(bug);
 			}
 		}
 	}
@@ -167,7 +169,7 @@ public abstract class BugListener extends Thread {
 	}
 
 	public List getDiscoveredBugs() {
-		return model;
+		return knownBugList;
 	}
 	
 	private class TestConnectionJob extends Job{
@@ -187,7 +189,7 @@ public abstract class BugListener extends Thread {
 				monitor.worked(33);
 				monitor.done();
 			} catch (Exception e) {
-				return new Status(IStatus.WARNING, IRuntimeConstants.PI_RUNTIME, 1, e.getMessage(), e); //$NON-NLS-1$
+				return new Status(IStatus.WARNING, IRuntimeConstants.PI_RUNTIME, 1, "Trying to connect to " + address + " and got " + e.getMessage(), e); //$NON-NLS-1$
 			}
 			return Status.OK_STATUS;
 		}
