@@ -51,7 +51,7 @@ public class SimpleHttpSever extends Thread {
 		try {
 			serverSocket = new ServerSocket(port);
 		} catch (IOException e1) {
-			UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e1);
+			handleException(e1);
 		}
 		running = true;
 
@@ -77,14 +77,19 @@ public class SimpleHttpSever extends Thread {
 				}
 				refreshBugs();	
 			} catch (IOException e) {
-				UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e);
+				handleException(e);
 			} catch (CoreException e) {
-				UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e);
+				handleException(e);
 			} catch(NullPointerException e) {
-				UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e);
+				handleException(e);
 			}
 		}
 
+	}
+
+	private void handleException(Exception e) {
+		UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e);
+		running = false;
 	}
 
 	/**
