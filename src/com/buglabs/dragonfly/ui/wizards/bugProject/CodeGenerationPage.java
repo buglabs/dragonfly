@@ -27,6 +27,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
+import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -89,36 +90,28 @@ import com.buglabs.dragonfly.util.UIUtils;
  *
  */
 public class CodeGenerationPage extends WizardPage {
-	TableViewer bugsViewer;
-
-	protected BugConnection selectedBugConnection;
-
-	List services = new ArrayList();
-
-	private CheckboxTableViewer dependencyViewer;
-
-	private Text serviceDescriptionArea;
-
-	private ServiceFilter serviceFilter = new ServiceFilter();
-
-	private BugProjectInfo pinfo;
-
-	private GridData gridData;
-
-	private String pageMessage = "";
-
-	private Button btnStartVBUG;
 
 	private static final String BUGLABS_EMULATOR_BUNDLE_NAME = "com.buglabs.bug.emulator";
-
+	
+	private GridData gridData;
 	private Display display = PlatformUI.getWorkbench().getDisplay();
-
+	
+	TableViewer bugsViewer;
+	private CheckboxTableViewer dependencyViewer;
+	private Text serviceDescriptionArea;
+	private Button btnStartVBUG;
 	private Button btnGenerateThreadApp;
-
 	private Button refreshServiceDefintions;
 	
+	protected BugConnection selectedBugConnection;
+	private List services = new ArrayList();
+	private ServiceFilter serviceFilter = new ServiceFilter();
+	private BugProjectInfo pinfo;
+	private String pageMessage = "";
+	
 	protected CodeGenerationPage(BugProjectInfo pinfo) {
-		super("CodeGenerationPage", "Service definition", Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
+		super("CodeGenerationPage", "Service definition", 
+				Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
 		setMessage(pageMessage);
 		this.pinfo = pinfo;
 	}
@@ -143,12 +136,9 @@ public class CodeGenerationPage extends WizardPage {
 
 		// this is the list of all the bugs you can see
 		createTargetArea(targetGroup);
-
 		// where you choose the services
 		createServicesSection(mainComposite);
-
 		createApplicationLoop(mainComposite);
-
 		setControl(mainComposite);
 	}
 
@@ -173,7 +163,8 @@ public class CodeGenerationPage extends WizardPage {
 		bugsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(final SelectionChangedEvent event) {
 				if(((BaseTreeNode)bugsViewer.getInput()).getChildren().size() != 0){
-					final BugConnection connection = (BugConnection) ((StructuredSelection) event.getSelection()).getFirstElement();
+					final BugConnection connection = 
+						(BugConnection) ((StructuredSelection) event.getSelection()).getFirstElement();
 					if(connection != null){
 						refreshServiceDefintions.setEnabled(true);
 						IJobManager manager = Job.getJobManager();
@@ -232,87 +223,9 @@ public class CodeGenerationPage extends WizardPage {
 		GridData gdButton = new GridData();
 		gdButton.verticalAlignment = SWT.TOP;
 		btnStartVBUG.setLayoutData(gdButton);
-		btnStartVBUG.addSelectionListener(new SelectionListener() {
-
-			ILaunch launch;
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public synchronized void widgetSelected(SelectionEvent e) {
-				btnStartVBUG.setEnabled(false);
-
-				launch = null;
-
-				btnStartVBUG.getDisplay().syncExec(new Runnable(){public void run() {try {
-					launch = new VirtualBugLaunchShortCut().launch(ILaunchManager.RUN_MODE);
-					IProcess[] processes = launch.getProcesses();
-					if(processes != null && processes.length > 0) {
-						processes[0].getStreamsProxy().getOutputStreamMonitor().addListener(new IStreamListener() {
-							int cnt = 0;
-
-							public void streamAppended(String text, IStreamMonitor monitor) {
-								if (text.indexOf(BUGLABS_EMULATOR_BUNDLE_NAME) != -1) {
-									cnt++;
-									if (cnt == 2) {
-										display.asyncExec(new Runnable() {
-											public void run() {
-												btnStartVBUG.setEnabled(true);
-											}
-
-										});
-									}
-								}
-							}
-
-						});
-					}
-				} catch (CoreException e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, 
-							DragonflyActivator.PLUGIN_ID, 
-							IStatus.OK, 
-							"Failure launching Virtual BUG", 
-							e));
-				}};});
-
-				btnStartVBUG.setEnabled(true);
-			}
-		});
+		btnStartVBUG.addSelectionListener(((SelectionListener) new StartVBUGSelectionListener()));
 
 		setPageMessage(root.getChildren().size());
-	}
-	
-	/**
-	 * Job that retrieves services for a connection
-	 * @author akravets
-	 *
-	 */
-	private class GetServicesJob extends Job{
-
-		private BugConnection connection;
-		private String family;
-
-		public GetServicesJob(String name, BugConnection connection, String family) {
-			super(name);
-			this.connection = connection;
-			this.family = family;
-		}
-
-		protected IStatus run(IProgressMonitor monitor) {
-			monitor.beginTask("Trying to connect to BUG", IProgressMonitor.UNKNOWN);
-			if(connection != null){
-				monitor.beginTask("Retrieving services for " + connection.getName(), IProgressMonitor.UNKNOWN);
-				populateServiceList(connection, monitor);
-				monitor.done();
-			}
-			return Status.OK_STATUS;
-		}	
-		
-		public boolean belongsTo(Object family) {
-			return this.family.equals(family);
-		}
 	}
 
 	private void setPageMessage(int size) {
@@ -597,4 +510,98 @@ public class CodeGenerationPage extends WizardPage {
 			btnGenerateThreadApp.setEnabled(false);
 		}
 	}
+	
+	
+	/**
+	 * Private inner class to handle clicking of "Lauch Virtual BUG" button
+	 * 
+	 * Broken out into private innner class (instead of anonymous class) to make
+	 * the code easier to read.
+	 * 
+	 * @author brian
+	 *
+	 */
+	private class StartVBUGSelectionListener implements SelectionListener {			
+		/**
+		 *  Empty
+		 */
+		public void widgetDefaultSelected(SelectionEvent e) {}
+
+		/**
+		 * Selected the Launch Virtual BUG button
+		 */
+		public synchronized void widgetSelected(SelectionEvent e) {
+			btnStartVBUG.setEnabled(false);
+			btnStartVBUG.getDisplay().syncExec( new Runnable(){
+				public void run() {
+					try {
+						// Reset this global flag - fixes defect 322
+						DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(false);
+
+						VirtualBugLaunchShortCut virtualBugLaunchShortcut = new VirtualBugLaunchShortCut();
+						IProcess[] processes = virtualBugLaunchShortcut
+							.launch(ILaunchManager.RUN_MODE).getProcesses();
+						if(processes != null && processes.length > 0) {
+							processes[0].getStreamsProxy()
+									.getOutputStreamMonitor().addListener( new IStreamListener() {
+								int cnt = 0;
+								public void streamAppended(String text, IStreamMonitor monitor) {
+									if (text.indexOf(BUGLABS_EMULATOR_BUNDLE_NAME) != -1) {
+										cnt++;
+										if (cnt == 2) {
+											display.asyncExec( new Runnable() {
+												public void run() {
+													btnStartVBUG.setEnabled(true);
+												}
+											});
+										}
+									}
+								}
+							});
+						}
+					} catch (CoreException e) {
+						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, 
+								DragonflyActivator.PLUGIN_ID, 
+								IStatus.OK, 
+								"Failure launching Virtual BUG", 
+								e));
+					}
+				};
+			});
+
+			btnStartVBUG.setEnabled(true);
+		}
+	
+	}
+	
+	/**
+	 * Job that retrieves services for a connection
+	 * @author akravets
+	 *
+	 */
+	private class GetServicesJob extends Job{
+
+		private BugConnection connection;
+		private String family;
+
+		public GetServicesJob(String name, BugConnection connection, String family) {
+			super(name);
+			this.connection = connection;
+			this.family = family;
+		}
+
+		protected IStatus run(IProgressMonitor monitor) {
+			monitor.beginTask("Trying to connect to BUG", IProgressMonitor.UNKNOWN);
+			if(connection != null){
+				monitor.beginTask("Retrieving services for " + connection.getName(), IProgressMonitor.UNKNOWN);
+				populateServiceList(connection, monitor);
+				monitor.done();
+			}
+			return Status.OK_STATUS;
+		}	
+		
+		public boolean belongsTo(Object family) {
+			return this.family.equals(family);
+		}
+	}	
 }
