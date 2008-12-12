@@ -15,6 +15,7 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import org.osgi.framework.Bundle;
 
 import com.buglabs.dragonfly.util.BugWSHelper;
@@ -131,6 +132,11 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 				if(name.equals("enabled") || (name.indexOf("Status Bar contribution") != -1)){
 					descriptor = new ComboBoxPropertyDescriptor(displayName,displayName,MODULE_STATE);
 				}
+				/* TODO
+				else if (name.indexOf("(editable)") != -1) {
+					descriptor = new TextPropertyDescriptor(displayName, displayName);
+				}
+				*/
 				else{
 					descriptor = new PropertyDescriptor(displayName,displayName);
 				}
