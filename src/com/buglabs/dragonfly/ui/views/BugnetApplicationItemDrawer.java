@@ -13,6 +13,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -61,6 +62,8 @@ import com.buglabs.dragonfly.util.URLUtils;
  * Draws a single application item
  * Keeps state to set background color and stuff like that
  * 
+ * You must call dispose to dispose fonts and colors when finished with object
+ * 
  * @author brian
  *
  */
@@ -74,9 +77,11 @@ public class BugnetApplicationItemDrawer {
 	private static final int 	RATING_HEIGHT_HINT 	= 15;
 	private static final int 	USERNAME_WIDTH_HINT = 150;
 	private static final int 	USERNAME_HEIGHT_HINT= 17;
+	private static final String DISPOSED_ERROR		= "The resource has been disposed.";
 
 	private List<Label> itemDescriptionLabels	= new ArrayList();
 	private List<String> itemDescriptions		= new ArrayList();
+	private boolean isDisposed = true;
 	
 	private Composite parent;
 	private FormToolkit toolkit;
@@ -106,16 +111,25 @@ public class BugnetApplicationItemDrawer {
 		initializeFonts();
 		parent.setBackground(lightGray2Color);
 		parent.addControlListener(new ResizeListener());
+		isDisposed = false;
 	}
 	
 	/**
 	 * Clean up colors and fonts
 	 */
 	public void dispose() {
+		isDisposed = true;
 		disposeColors();
 		disposeFonts();
 	}
 	
+	
+	public boolean checkDisposed() {
+		if (isDisposed) {
+			throw new SWTException(DISPOSED_ERROR);
+		}
+		return true;
+	}
 	
 	/**
 	 *  initialize all the colors used to draw an application item
@@ -272,7 +286,7 @@ public class BugnetApplicationItemDrawer {
 	 * @param item
 	 */
 	public synchronized void draw(BUGNetProgramReferenceNode item) {
-		// Setup the main composite
+		if (!checkDisposed()) return;
 		Composite comp = toolkit.createComposite(parent, SWT.NONE);
 		Color backgroundColor = getBackgroundColor();
 		comp.setBackground(backgroundColor);
@@ -314,7 +328,6 @@ public class BugnetApplicationItemDrawer {
 		setupDragSource(hyperlink);
 		
 		// Draw the rating
-		double rating = 3.5;
 		Rating r = new Rating(comp, SWT.NONE);
 		r.setBackground(backgroundColor);
 		String ratingVal = item.getRating();
@@ -343,6 +356,8 @@ public class BugnetApplicationItemDrawer {
 
 		if (!desc.equals("")) { //$NON-NLS-1$
 			Label descLabel = toolkit.createLabel(comp, desc, SWT.NONE);
+			// store the full description and the labels that hold 'em
+			// so that they can be resized when view is resized
 			itemDescriptionLabels.add(descLabel);
 			itemDescriptions.add(desc);
 			descLabel.setFont(descriptionFont);
