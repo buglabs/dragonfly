@@ -129,17 +129,9 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 
 				PropertyDescriptor descriptor = null;
 				
-				if(name.equals("enabled") || (name.indexOf("Status Bar contribution") != -1)){
-					descriptor = new ComboBoxPropertyDescriptor(displayName,displayName,MODULE_STATE);
-				}
-				/* TODO
-				else if (name.indexOf("(editable)") != -1) {
-					descriptor = new TextPropertyDescriptor(displayName, displayName);
-				}
-				*/
-				else{
-					descriptor = new PropertyDescriptor(displayName,displayName);
-				}
+				// make all properties editable
+				descriptor = new TextPropertyDescriptor(displayName,displayName);
+				
 				descriptor.setCategory(configurationName);
 
 				propertyMap.put(descriptor, property.getAttribute("value"));
