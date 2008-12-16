@@ -24,7 +24,7 @@ import com.buglabs.dragonfly.bugnet.BugnetResultManager;
  * @author brian
  *
  */
-public class BugnetView extends ViewPart implements IBUGnetAuthenticationListener {
+public class BugnetView2 extends ViewPart implements IBUGnetAuthenticationListener {
 	private Composite top;
 	private BugnetViewer bugnetViewer;
 	
