@@ -23,8 +23,8 @@ import com.buglabs.dragonfly.exception.BugnetException;
  * @author brian
  *
  */
-public class BugnetResultManager implements IPropertyChangeListener {
-	
+public class BugnetResultManager implements IPropertyChangeListener {    
+    private String category;
 	private String search;
 	private int count;
 	private int page;
@@ -75,6 +75,15 @@ public class BugnetResultManager implements IPropertyChangeListener {
 		this.page = page;
 	}	
 	
+	
+	public void setCategory(String category) {
+	    this.category = category;
+	}
+	
+	public String getCategory() {
+	    return category;
+	}
+	
 	/**
 	 * Set everything back to defaults
 	 */
@@ -82,6 +91,7 @@ public class BugnetResultManager implements IPropertyChangeListener {
 		this.search = null;
 		this.page = 1;
 		this.applications = null;
+		this.category = BugnetApplicationCategoryHelper.DEFAULT_CATEGORY;
 		resetCount();
 	}	
 	
@@ -93,10 +103,21 @@ public class BugnetResultManager implements IPropertyChangeListener {
 	 * @throws IOException
 	 */
 	public void doQuery() throws BugnetAuthenticationException, BugnetException, IOException {
-		applications = BugnetWSHelper.getProgramsByQuerystring(toQueryString());
+	    if (category == BugnetApplicationCategoryHelper.MY_APPLICATIONS) {
+	        applications = BugnetWSHelper.getProgramsForUser(getUsername(), toQueryString());
+	    } else if (category.startsWith(BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_PREFIX)) {
+	        applications = getApplicationsForBug(category);
+	    } else {
+	        applications = BugnetWSHelper.getPrograms(toQueryString());
+	    }
 	}
 	
-	public List getApplications() {
+	private List getApplicationsForBug(String connectionCategory) {
+        String connectionName = connectionCategory.split(": ")[1];
+	    return null;
+    }
+
+    public List getApplications() {
 		return applications;
 	}
 
@@ -109,6 +130,10 @@ public class BugnetResultManager implements IPropertyChangeListener {
 	
 	private void resetCount() {
 		this.count = BugnetStateProvider.getInstance().getDefaultApplicationCount();
+	}
+	
+	private String getUsername() {
+	    return DragonflyActivator.getDefault().getAuthenticationData().getUsername();
 	}
 	
 	private String toQueryString() {

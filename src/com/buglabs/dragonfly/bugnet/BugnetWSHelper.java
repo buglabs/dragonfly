@@ -222,11 +222,33 @@ public class BugnetWSHelper {
 	 * @throws BugnetException
 	 * @throws IOException
 	 */
-	public static List getProgramsByQuerystring(String querystring) 
+	public static List getPrograms(String querystring) 
 			throws BugnetAuthenticationException, BugnetException, IOException {
 		String url = getBugNetBaseURL() + BUGNET_WS_PATH_STRING 
 			+ BUGNET_PROGRAM_STRING + "?" + querystring;
 		return getProgramList(url);
+	}
+	
+	/**
+	 * New way to get programs for user w/ a querystring
+	 * 
+	 * @param user
+	 * @param querystring
+	 * @return
+	 * @throws BugnetAuthenticationException
+	 * @throws BugnetException
+	 * @throws IOException
+	 */
+	public static List getProgramsForUser(String user, String querystring) 
+	        throws BugnetAuthenticationException, BugnetException, IOException {
+        List apps = new ArrayList();
+        if (!user.trim().equals("")) {
+            // /users/' + testface.login + '/programs
+            String url = getBugNetBaseURL() + BUGNET_WS_PATH_STRING  + BUGNET_USERS_STRING + "/" 
+                + user + "/" + BUGNET_PROGRAM_STRING + "?" + querystring;
+            apps = getProgramList(url);
+        }
+        return apps;	    
 	}
 	
 	/**
@@ -389,7 +411,9 @@ public class BugnetWSHelper {
 		try {
 			HTTPRequest request = new HTTPRequest(new BugnetConnectionProvider());
 			HTTPResponse response = request.get(url);
-			XmlNode root = XmlParser.parse(response.getString());
+			String responseString = response.getString();
+			System.out.println(responseString + "\n-----------\n");
+			XmlNode root = XmlParser.parse(responseString);
 			apps = getProgramReferenceNodes(root);
 		} catch (HTTPException e) {
 			handleBugnetException(e);
