@@ -209,9 +209,9 @@
       <view
             allowMultiple="false"
             category="com.buglabs.dragonfly.ui.view.category.Dragonfly"
-            class="com.buglabs.dragonfly.ui.views.BUGNetView"
+            class="com.buglabs.dragonfly.ui.views.BugnetView2"
             icon="icons/color/bugnet.gif"
-            id="com.buglabs.dragonfly.ui.BUGNetView"
+            id="com.buglabs.dragonfly.ui.views.BugnetView2"
             name="BUGnet"/>
       <category
             id="com.buglabs.dragonfly.ui.view.category.Dragonfly"

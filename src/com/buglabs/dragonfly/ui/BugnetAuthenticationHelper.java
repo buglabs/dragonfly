@@ -34,7 +34,6 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class BugnetAuthenticationHelper {
 	
-	private static AuthenticationData authentication_data;
 	private static boolean saveAuthentication = false;
 	private static boolean canceled = false;
 	
@@ -45,16 +44,9 @@ public class BugnetAuthenticationHelper {
 	 * 
 	 */
 	public static boolean login() throws IOException {
-		authentication_data = 
-			BugnetStateProvider.getInstance().getAuthenticationData();
-		canceled = saveAuthentication = false;
+	    canceled = saveAuthentication = false;
 		
-		// prepare authentication data
-		// if there's something missing, try to get it from preferences
-		if (!authentication_data.hasData())
-			DragonflyActivator.getDefault().setAuthDataFromPrefs();
-		
-		boolean logged_in = BugnetWSHelper.verifyCurrentUser();
+		boolean logged_in = checkLogin();
 		// Loop shows prompt until user is logged in
 		while(!canceled && !logged_in) {
 			loginPrompt();
@@ -70,7 +62,8 @@ public class BugnetAuthenticationHelper {
 			// if we checked saveAuthentication, try 'n save it
 			if (saveAuthentication) {
 				DragonflyActivator.getDefault().saveAuthentication(
-						authentication_data.getUsername(), authentication_data.getPassword());
+				        BugnetStateProvider.getInstance().getAuthenticationData().getUsername(), 
+				        BugnetStateProvider.getInstance().getAuthenticationData().getPassword());
 			}	
 			// tell Authentication listeners that we're logged in
 			List listeners = DragonflyActivator.getDefault().getBUGnetAuthenticationLIsteners();
@@ -86,6 +79,33 @@ public class BugnetAuthenticationHelper {
 		}
 		return logged_in;
 	}
+	
+	/**
+	 * Checks login without throwing an error so you can do simple
+	 * so false means not logged in for whatever reason
+	 * 
+	 * @return
+	 */
+	public static boolean isLoggedIn() {
+	    boolean logged_in = false;
+	    try {
+	        logged_in = checkLogin();
+	    } catch (IOException e) {
+            UIUtils.handleVisualError(
+                    "Unable to verify log in, check the BUGnet URL in your preferences page.",e);	        
+	    }
+	    return logged_in;
+	}
+	
+	private static boolean checkLogin() throws IOException{
+        // prepare authentication data
+        // if there's something missing, try to get it from preferences
+        if (!BugnetStateProvider.getInstance().getAuthenticationData().hasData())
+            DragonflyActivator.getDefault().setAuthDataFromPrefs();
+        
+        return BugnetWSHelper.verifyCurrentUser();	    
+	}
+	
 	
 	/**
 	 *  helper function removes stored authentication data
@@ -157,8 +177,8 @@ public class BugnetAuthenticationHelper {
 					
 				// only other option is to try to login
 				} else {
-					authentication_data.setUsername(d.getUsername());
-					authentication_data.setPassword(d.getPwd());
+				    BugnetStateProvider.getInstance().getAuthenticationData().setUsername(d.getUsername());
+				    BugnetStateProvider.getInstance().getAuthenticationData().setPassword(d.getPwd());
 					if (d.getSaveAuthentication()) saveAuthentication = true;
 				}
 			}

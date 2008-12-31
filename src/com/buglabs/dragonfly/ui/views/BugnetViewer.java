@@ -8,19 +8,13 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
@@ -35,31 +29,28 @@ import com.buglabs.dragonfly.model.BUGNetProgramReferenceNode;
  *
  */
 public class BugnetViewer extends Viewer {
-
+    private static final String NO_APPLICATIONS_TEXT = "No applications found."; //$NON-NLS-1$
 	private Composite composite;
 	private ScrolledForm form;
 	private FormToolkit toolkit;
-	private List<BUGNetProgramReferenceNode> model;
+	private BugnetApplicationList model;
 	
-	public BugnetViewer(Composite parent) {
-		toolkit = new FormToolkit(parent.getDisplay());
-		// main form
-		form = toolkit.createScrolledForm(parent);
-		form.setExpandHorizontal(true);
-		GridData formGD = new GridData(GridData.FILL_BOTH);
-		formGD.grabExcessHorizontalSpace = true;
-		TableWrapLayout layout = new TableWrapLayout();
-		layout.numColumns = 1;
-		form.setLayoutData(formGD);
-		form.getBody().setLayout(layout);			
-		
-		// main child of form that contains all the stuff
-		composite = toolkit.createComposite(form.getBody());
-		composite.setLayout(new GridLayout(1, false));
-		TableWrapData td = new TableWrapData(TableWrapData.FILL_GRAB);
-		composite.setLayoutData(td);
+	
+	public BugnetViewer(ScrolledForm form) {
+        form.setExpandHorizontal(true);
+        GridData formGD = new GridData(GridData.FILL_BOTH);
+        formGD.grabExcessHorizontalSpace = true;
+        TableWrapLayout layout = new TableWrapLayout();
+        layout.numColumns = 1;
+        form.setLayoutData(formGD);
+        form.getBody().setLayout(layout);
+        
+        toolkit = new FormToolkit(form.getDisplay());
+        this.form = form;
+        
+	    createControl();
 	}
-	
+
 	@Override
 	public Control getControl() {
 		return composite;
@@ -85,8 +76,7 @@ public class BugnetViewer extends Viewer {
 
 	@Override
 	public void setInput(Object input) {
-		model = (List<BUGNetProgramReferenceNode>)input;
-		redraw();
+		model = (BugnetApplicationList)input;
 	}
 
 	@Override
@@ -96,27 +86,46 @@ public class BugnetViewer extends Viewer {
 	}
 	
 	/**
+	 * create main child of form that contains all the stuff
+	 */
+	private void createControl() {
+        // main child of form that contains all the stuff
+        composite = toolkit.createComposite(form.getBody());
+        composite.setLayout(new GridLayout(1, false));
+        TableWrapData td = new TableWrapData(TableWrapData.FILL_GRAB);
+        composite.setLayoutData(td);	    
+	}
+	
+	private void drawApplications() {
+        if (model == null) { drawNoApplications(); return; }
+        if (model.getApplications().size() == 0) { drawNoApplications(); return; }
+        
+        List<BUGNetProgramReferenceNode> applications = model.getApplications();
+        Iterator<BUGNetProgramReferenceNode> iterator = applications.iterator();
+        BugnetApplicationItemDrawer appItemDrawer 
+            = new BugnetApplicationItemDrawer(composite);
+        BUGNetProgramReferenceNode node;
+        while (iterator.hasNext()) {
+            node = iterator.next();
+            appItemDrawer.draw(node);
+        }
+	}
+	
+	private void drawNoApplications() {
+	    Label label = new Label(composite, SWT.LEFT);
+	    label.setText(NO_APPLICATIONS_TEXT);
+	}
+	
+	/**
 	 * Draw the thing using model
 	 */
 	private void redraw() {
-		Label label;
-		if (model==null || model.size() == 0) {
-			label = new Label(composite, SWT.LEFT);
-			label.setText("No BUG Apps Found.");
-			return;
-		}
-		Iterator<BUGNetProgramReferenceNode> iterator = model.iterator();
-		BugnetApplicationItemDrawer appItemDrawer 
-			= new BugnetApplicationItemDrawer(composite);
-		BUGNetProgramReferenceNode node;
-		while (iterator.hasNext()) {
-			node = iterator.next();
-			appItemDrawer.draw(node);
-		}
-		appItemDrawer.dispose();
+	    if (form == null) return;
+	    if (composite != null) composite.dispose();
+	    createControl();        
+		drawApplications();
 		// refresh the view
-		composite.layout();
-		form.reflow(true);
+	    form.reflow(true);
 	}
 
 }

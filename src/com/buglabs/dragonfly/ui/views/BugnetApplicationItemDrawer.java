@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -324,7 +325,7 @@ public class BugnetApplicationItemDrawer {
 		hyperlink.setLayoutData(hGD);
 		hyperlink.setBackgroundMode(SWT.INHERIT_NONE);
 		hyperlink.setData(hyperLinkData);
-		setHyperlinkBackgroundForMac(hyperlink);
+		//setHyperlinkBackgroundForMac(hyperlink);
 		setupDragSource(hyperlink);
 		
 		// Draw the rating
