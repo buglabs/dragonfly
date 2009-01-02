@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.bugnet;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.Preferences.IPropertyChangeListener;
@@ -26,6 +27,7 @@ import com.buglabs.dragonfly.exception.BugnetException;
 public class BugnetResultManager implements IPropertyChangeListener {    
     private String category;
 	private String search;
+	private List packages;
 	private int count;
 	private int page;
 	private List applications;
@@ -89,6 +91,7 @@ public class BugnetResultManager implements IPropertyChangeListener {
 	 */
 	public void reset() {
 		this.search = null;
+		this.packages = null;
 		this.page = 1;
 		this.applications = null;
 		this.category = BugnetApplicationCategoryHelper.DEFAULT_CATEGORY;
@@ -105,17 +108,11 @@ public class BugnetResultManager implements IPropertyChangeListener {
 	public void doQuery() throws BugnetAuthenticationException, BugnetException, IOException {
 	    if (category == BugnetApplicationCategoryHelper.MY_APPLICATIONS) {
 	        applications = BugnetWSHelper.getProgramsForUser(getUsername(), toQueryString());
-	    } else if (category.startsWith(BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_PREFIX)) {
-	        applications = getApplicationsForBug(category);
 	    } else {
 	        applications = BugnetWSHelper.getPrograms(toQueryString());
 	    }
 	}
-	
-	private List getApplicationsForBug(String connectionCategory) {
-        String connectionName = connectionCategory.split(": ")[1];
-	    return null;
-    }
+
 
     public List getApplications() {
 		return applications;
@@ -141,6 +138,10 @@ public class BugnetResultManager implements IPropertyChangeListener {
 		if (search!=null) querystring = addValue(querystring, "search", search);
 		if (count>0) querystring = addValue(querystring, "count", count + "");
 		if (page>0) querystring = addValue(querystring, "current_page", page + "");
+		if (category.startsWith(
+		        BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_PREFIX) && packages != null) {
+		    querystring = addValue(querystring, "packages", trimAndJoin(packages));
+		}
 		return querystring;
 	}
 	
@@ -159,6 +160,21 @@ public class BugnetResultManager implements IPropertyChangeListener {
 		}
 		return source;
 	}
+	
+	private String trimAndJoin(List list) {
+	    Iterator iter = list.iterator();
+	    String joined = "";
+	    String delim = "";
+	    while (iter.hasNext()) {
+	        joined += delim + ((String)iter.next()).trim();
+	        delim = ",";
+	    }
+	    return joined;
+	}
+	
+    public void setPackages(List packagesForSelection) {
+        packages = packagesForSelection;
+    }
 
 
 }

@@ -264,8 +264,9 @@ public class BugWSHelper extends WSHelper {
 			XmlNode node = (XmlNode) i.next();
 			
 			String packageName = node.getAttribute("name");
-			
-			packages.add(packageName);
+			if (packageName != null) {
+			    packages.add(packageName.trim());
+			}
 		}
 		
 		return packages;
