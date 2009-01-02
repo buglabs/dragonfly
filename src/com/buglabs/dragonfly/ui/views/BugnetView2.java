@@ -3,6 +3,8 @@ package com.buglabs.dragonfly.ui.views;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.lang.annotation.Inherited;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,6 +54,7 @@ import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
+import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
@@ -276,7 +279,8 @@ public class BugnetView2 extends ViewPart implements IModelChangeListener, IBUGn
      */
     private void resetCombo() {
         appCategoryHelper.resetCategories();
-        appCategoryHelper.addCategories(getBugConnections());
+        appCategoryHelper.addCategories(
+                getBugConnectionCategories(BugConnectionHelper.getBugConnections()));
         combo.setItems(appCategoryHelper.getCategories());
         combo.select(appCategoryHelper.getCategoryIndex(
                 BugnetResultManager.getInstance().getCategory()));
@@ -321,18 +325,14 @@ public class BugnetView2 extends ViewPart implements IModelChangeListener, IBUGn
      * 
      * @return
      */
-    private List getBugConnections() {
-        ITreeNode bugsRoot = Activator.getDefault().getBugsViewRoot();
-        List bugConnections = new ArrayList();
-        List bugs = (List) bugsRoot.getChildren();
-        Iterator iterator = bugs.iterator();
+    private List<String> getBugConnectionCategories(List<BugConnection> connections) {
+        List<String> connectionNames = new ArrayList<String>();
+        Iterator<BugConnection> iterator = connections.iterator();
         while (iterator.hasNext()) {
-            Object object = iterator.next();
-            BugConnection node = (BugConnection) object;
-            bugConnections.add(BugnetApplicationCategoryHelper.
-                    BUG_CONNECTION_CATEGORY_PREFIX + " " + node.getName());
+            connectionNames.add(BugnetApplicationCategoryHelper.
+                    BUG_CONNECTION_CATEGORY_PREFIX + " " + iterator.next().getName());
         }
-        return bugConnections;
+        return connectionNames;
     }
 
     
@@ -369,20 +369,51 @@ public class BugnetView2 extends ViewPart implements IModelChangeListener, IBUGn
             BugnetResultManager.getInstance().setSearch(search);
         }
         
+        // Deal with the combo selection
         int selected = combo.getSelectionIndex();
-        if (selected >= 0 && 
-                selected < appCategoryHelper.getCategories().length) {
+        if (selected >= 0 && selected < appCategoryHelper.getCategories().length) {
+            String selectedCategory = appCategoryHelper.getCategories()[selected];
             // make sure we're logged in if we need to be
-            verifyLoggedIn(appCategoryHelper.getCategories()[selected]);
-            // TODO - do some more work/parsing of category to set it up
-            BugnetResultManager.getInstance().setCategory(
-                    appCategoryHelper.getCategories()[selected]);
+            verifyLoggedIn(selectedCategory);
+            // set category
+            BugnetResultManager.getInstance().setCategory(selectedCategory);
+            // if it's a bug connection, need to get packages out
+            if (bugConnectionCategorySelected(selectedCategory)) {
+                BugConnection connection = getConnectionForSelection(selectedCategory);
+                if (connection != null) {
+                    BugnetResultManager.getInstance().setPackages(
+                            BugConnectionHelper.getPackagesForBugConnection(connection));
+                }
+            }
         }
         queryBugnetAndDrawApplications();
     }
 	
     
-    
+    /**
+     * check if selected category is a bug connection
+     * 
+     * @param selectedCategory
+     * @return
+     */
+    private boolean bugConnectionCategorySelected(String selectedCategory) {
+        return selectedCategory.startsWith(
+                BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_PREFIX);
+    }
+
+    /**
+     * 
+     * @param selection
+     * @return
+     */
+    private BugConnection getConnectionForSelection(String selection) {
+        String connectionName = selection.substring(
+                BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_PREFIX.length()).trim();
+        if (connectionName == null || connectionName.length() < 1) return null;
+        return BugConnectionHelper.getBugConnectionByName(connectionName);
+    }
+
+
     /**
      * Job for checking web server for logged in status
      * used asynchronously
