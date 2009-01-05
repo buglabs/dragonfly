@@ -1,4 +1,4 @@
-package com.buglabs.dragonfly.ui.views;
+package com.buglabs.dragonfly.ui.views.bugnet;
 
 import java.net.MalformedURLException;
 import java.net.URL;

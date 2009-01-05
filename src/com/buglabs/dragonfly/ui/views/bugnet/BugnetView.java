@@ -1,4 +1,4 @@
-package com.buglabs.dragonfly.ui.views;
+package com.buglabs.dragonfly.ui.views.bugnet;
 
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
@@ -65,7 +65,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author brian
  *
  */
-public class BugnetView2 extends ViewPart implements IModelChangeListener, IBUGnetAuthenticationListener {
+public class BugnetView extends ViewPart implements IModelChangeListener, IBUGnetAuthenticationListener {
     private static final int DEFAULT_CATEGORY_INDEX = 0;
     private Color backgroundColor;
     private BugnetApplicationCategoryHelper appCategoryHelper;
@@ -102,13 +102,7 @@ public class BugnetView2 extends ViewPart implements IModelChangeListener, IBUGn
         // layout the parts of the view
         drawLoginArea();
         // filterArea contains both search box and category combo
-        filterArea = toolkit.createComposite(top);
-        filterArea.setLayout(new GridLayout(3,false));
-        filterArea.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-        filterArea.setBackground(backgroundColor);
-        drawSearchBar();
-        drawCategoryChooser();
-        
+        drawFilterArea();
         // initialize the viewer
         createBugnetViewer();
 		// run job to query and draw
@@ -180,6 +174,19 @@ public class BugnetView2 extends ViewPart implements IModelChangeListener, IBUGn
         checkLoginJob.addJobChangeListener(new CheckLoginJobChangeListener());
         checkLoginJob.schedule();	    
 	}
+	
+	/**
+	 * Draw search bar and category chooser section
+	 */
+	private void drawFilterArea() {
+        filterArea = toolkit.createComposite(top);
+        filterArea.setLayout(new GridLayout(3,false));
+        filterArea.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+        filterArea.setBackground(backgroundColor);
+        drawSearchBar();
+        drawCategoryChooser();	    
+	}
+	
 	
 	/**
 	 * Draws logged in as or login link
