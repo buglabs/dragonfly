@@ -30,7 +30,7 @@ public class RefreshBugNetViewAction extends Action {
 
 	public void run() {
 		synchronized (this) {
-			view.refreshApplications();
+			view.refreshView();
 		}
 	}
 

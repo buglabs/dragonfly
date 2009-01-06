@@ -211,7 +211,7 @@
             category="com.buglabs.dragonfly.ui.view.category.Dragonfly"
             class="com.buglabs.dragonfly.ui.views.bugnet.BugnetView"
             icon="icons/color/bugnet.gif"
-            id="com.buglabs.dragonfly.ui.views.BugnetView2"
+            id="com.buglabs.dragonfly.ui.views.BugnetView"
             name="BUGnet"/>
       <category
             id="com.buglabs.dragonfly.ui.view.category.Dragonfly"

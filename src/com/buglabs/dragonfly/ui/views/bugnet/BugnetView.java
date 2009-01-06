@@ -71,6 +71,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class BugnetView extends ViewPart implements IModelChangeListener, IBUGnetAuthenticationListener {
     private static final int DEFAULT_CATEGORY_INDEX = 0;
+    public static final String VIEW_ID = "com.buglabs.dragonfly.ui.views.BugnetView"; //$NON-NLS-1$
     private Color backgroundColor;
     private BugnetApplicationCategoryHelper appCategoryHelper;
 	private Composite top;
@@ -148,13 +149,15 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
      * {@link IBUGnetAuthenticationListener}
      */
     public void listen() {
-        // update login area
-        checkLoginAndDrawInfo();
+        // update login area and
         // reset the apps view
-        refreshApplications();
+        refreshView();
     }   
 
-    public void refreshApplications() {
+    public void refreshView() {
+        // update login area
+        checkLoginAndDrawInfo();
+        // redo the bugnet search
         searchBugnet();
     }
     

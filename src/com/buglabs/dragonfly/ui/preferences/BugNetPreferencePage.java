@@ -33,6 +33,7 @@ import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.ui.actions.RefreshBugNetViewAction;
 import com.buglabs.dragonfly.ui.views.BUGNetView;
+import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
 
 public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -224,8 +225,8 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
 			public void run() {
-				BUGNetView bugNetView = (BUGNetView) DragonflyActivator.getDefault().getWorkbench().getActiveWorkbenchWindow()
-						.getActivePage().findView(BUGNetView.VIEW_ID);
+				BugnetView bugNetView = (BugnetView) DragonflyActivator.getDefault().getWorkbench().getActiveWorkbenchWindow()
+						.getActivePage().findView(BugnetView.VIEW_ID);
 				if (bugNetView != null) {
 					new RefreshBugNetViewAction(bugNetView).run();
 				}
