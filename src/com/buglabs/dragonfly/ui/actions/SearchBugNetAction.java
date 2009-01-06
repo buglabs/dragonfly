@@ -21,11 +21,8 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class SearchBugNetAction extends Action {
 
-	BUGNetView view;
-
-	public SearchBugNetAction(BUGNetView view) {
-		this.view = view;
-		setToolTipText("Search Applications");
+	public SearchBugNetAction() {
+		setToolTipText("Browse Applications");
 	}
 
 	public void run() {

@@ -291,12 +291,14 @@ public class BugnetApplicationItemDrawer {
 		Composite comp = toolkit.createComposite(parent, SWT.NONE);
 		Color backgroundColor = getBackgroundColor();
 		comp.setBackground(backgroundColor);
+		GridLayout compLayout = new GridLayout(3,false);
+		//compLayout.marginWidth = 0;
+		comp.setLayout(compLayout);
 		GridData compgd = GridDataFactory.fillDefaults().create();
-		compgd.grabExcessHorizontalSpace = true;
-		compgd.grabExcessVerticalSpace = true;
-		comp.setLayoutData(compgd);
-		comp.setLayout(new GridLayout(3, false));
-
+        compgd.grabExcessHorizontalSpace = true;
+        compgd.grabExcessVerticalSpace = true;
+        comp.setLayoutData(compgd);
+        
 		// Get get the thumbnail image
 		Image image = getThumbnailFor(item);
 		putImageInRegistry(image, item.getImageKey() + SCALED_IMAGE_SUFFIX);

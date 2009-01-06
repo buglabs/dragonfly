@@ -11,7 +11,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.views.BUGNetView;
+import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
 
 /**
  * Refresh contents of BugNetView
@@ -21,20 +21,21 @@ import com.buglabs.dragonfly.ui.views.BUGNetView;
  */
 public class RefreshBugNetViewAction extends Action {
 
-	BUGNetView view;
+    BugnetView view;
 
-	public RefreshBugNetViewAction(BUGNetView view) {
+	public RefreshBugNetViewAction(BugnetView view) {
 		this.view = view;
 		setToolTipText("Refresh BUGnet View");
 	}
 
 	public void run() {
 		synchronized (this) {
-			view.refresh();
+			view.refreshApplications();
 		}
 	}
 
 	public ImageDescriptor getImageDescriptor() {
-		return Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_CONNECTION_REFRESH);
+		return Activator.getDefault().
+		    getImageRegistry().getDescriptor(Activator.IMAGE_CONNECTION_REFRESH);
 	}
 }

@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -53,6 +55,8 @@ import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
+import com.buglabs.dragonfly.ui.actions.RefreshBugNetViewAction;
+import com.buglabs.dragonfly.ui.actions.SearchBugNetAction;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -90,14 +94,14 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
 	    backgroundColor = new Color(parent.getDisplay(), new RGB(255,255,255));
 	    top = new Composite(parent, SWT.None);
 	    top.setBackground(backgroundColor);
-		top.setLayout(new GridLayout(1,true));
+	    GridLayout topLayout = new GridLayout(1,true);
+	    topLayout.marginWidth = 2;
+	    top.setLayout(topLayout);
 		toolkit = new FormToolkit(top.getDisplay());
 		
         // More initial setup
 		appCategoryHelper = new BugnetApplicationCategoryHelper();
         applicationList   = new BugnetApplicationList();
-        DragonflyActivator.getDefault().addListener(this);
-        DragonflyActivator.getDefault().addBUGnetAuthenticationListener(this);
 		
         // layout the parts of the view
         drawLoginArea();
@@ -108,6 +112,15 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
 		// run job to query and draw
 		queryBugnetAndDrawApplications();
 	}
+
+    @Override
+    public void init(IViewSite site) throws PartInitException {
+        super.init(site);
+        site.getActionBars().getToolBarManager().add(new RefreshBugNetViewAction(this));
+        site.getActionBars().getToolBarManager().add(new SearchBugNetAction());
+        DragonflyActivator.getDefault().addListener(this);
+        DragonflyActivator.getDefault().addBUGnetAuthenticationListener(this);
+    }
 
     public void setFocus() {
 		top.setFocus();
@@ -137,10 +150,13 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
     public void listen() {
         // update login area
         checkLoginAndDrawInfo();
-        // update applications area
-        queryBugnetAndDrawApplications();
+        // reset the apps view
+        refreshApplications();
     }   
 
+    public void refreshApplications() {
+        searchBugnet();
+    }
     
 	/**
 	 * initializes the application list part of the view
@@ -265,6 +281,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
             return;
         }
         moreLink = toolkit.createHyperlink(top, "more...", SWT.NONE);
+
         moreLink.setToolTipText("more...");
         moreLink.addHyperlinkListener(new HyperlinkAdapter(){
             public void linkActivated(HyperlinkEvent e) {

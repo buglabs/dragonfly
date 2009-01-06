@@ -8,6 +8,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,6 +43,7 @@ public class BugnetViewer extends Viewer {
         GridData formGD = new GridData(GridData.FILL_BOTH);
         formGD.grabExcessHorizontalSpace = true;
         TableWrapLayout layout = new TableWrapLayout();
+        layout.leftMargin = layout.rightMargin = 0;
         layout.numColumns = 1;
         form.setLayoutData(formGD);
         form.getBody().setLayout(layout);
@@ -91,6 +94,8 @@ public class BugnetViewer extends Viewer {
 	private void createControl() {
         // main child of form that contains all the stuff
         composite = toolkit.createComposite(form.getBody());
+        GridLayout layout = new GridLayout(1, false);
+        layout.marginWidth = 0;
         composite.setLayout(new GridLayout(1, false));
         TableWrapData td = new TableWrapData(TableWrapData.FILL_GRAB);
         composite.setLayoutData(td);	    

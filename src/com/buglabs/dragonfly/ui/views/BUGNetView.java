@@ -220,8 +220,8 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 
 	public void init(IViewSite site) throws PartInitException {
 		setSite(site);
-		site.getActionBars().getToolBarManager().add(new RefreshBugNetViewAction(this));
-		site.getActionBars().getToolBarManager().add(new SearchBugNetAction(this));
+		//site.getActionBars().getToolBarManager().add(new RefreshBugNetViewAction(this));
+		//site.getActionBars().getToolBarManager().add(new SearchBugNetAction(this));
 
 		// set description font depending on OS
 		if(System.getProperty("os.name").startsWith("Mac")){
