@@ -8,8 +8,20 @@ import com.buglabs.dragonfly.model.BUGNetProgramReferenceNode;
 public class BugnetApplicationList {
     private List<BUGNetProgramReferenceNode> applications;
     
+    private static final String NO_APPS_DEFAULT_MESSAGE = "No applications found";
+    private String noAppsMsg = NO_APPS_DEFAULT_MESSAGE;
+    
     public BugnetApplicationList() {
         initApplicationList();
+        noAppsMsg = NO_APPS_DEFAULT_MESSAGE;
+    }
+    
+    public void setNoAppsMessage(String message) {
+    	noAppsMsg = message;
+    }
+    
+    public String getNoAppsMessage() {
+    	return noAppsMsg;
     }
     
     public void initApplicationList() {

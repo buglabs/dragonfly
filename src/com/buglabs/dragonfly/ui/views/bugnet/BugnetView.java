@@ -279,7 +279,8 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
      */
     private void drawMoreLink(){
         if (moreLink != null) moreLink.dispose();
-        if (BugnetResultManager.getInstance().getApplications().size() <
+        if (BugnetResultManager.getInstance().getApplications() == null ||
+        		BugnetResultManager.getInstance().getApplications().size() <
                 BugnetResultManager.getInstance().getCount()) {
             return;
         }
@@ -480,14 +481,17 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
 	    /**
 	     *  Just need to know when we're done querying BUGnet
 	     */
-	    public void done(IJobChangeEvent event) {
+	    public void done(final IJobChangeEvent event) {
 	        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 	            public void run() {
-	                if (bugnetViewer == null) return;
-	                applicationList.addApplications(
-	                        BugnetResultManager.getInstance().getApplications());
-	                // Set the model on the viewer - this will cause the viewer to draw
-	                bugnetViewer.refresh();
+	            	if (bugnetViewer == null) return;
+	            	if (event.getResult().isOK()) {
+		            	applicationList.addApplications(
+		                        BugnetResultManager.getInstance().getApplications());	            	
+	            	} else {
+	            		applicationList.setNoAppsMessage(event.getResult().getMessage());
+	            	}
+	            	bugnetViewer.refresh();
 	                drawMoreLink();
 	                top.layout();
 	            }

@@ -118,7 +118,7 @@ public class BugnetViewer extends Viewer {
 	
 	private void drawNoApplications() {
 	    Label label = new Label(composite, SWT.LEFT);
-	    label.setText(NO_APPLICATIONS_TEXT);
+	    label.setText(model.getNoAppsMessage());
 	}
 	
 	/**
