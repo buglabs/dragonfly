@@ -25,6 +25,7 @@
 	        		-DbuildDirectory=${tmp.dir} 
 	        		-DforceContextQualifier=${meta.project.version}
 	        		-DbasBuildDir=${base.build.dir}
+	        		-Dbuild.level=${build.level}
 	        		-Dbase=${base} 
 	        		-Did=${projectName} 
 	        		-buildfile ${eclipse.home}/plugins/org.eclipse.pde.build_${eclipse.version}/scripts/build.xml 

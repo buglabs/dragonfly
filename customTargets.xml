@@ -112,7 +112,7 @@
 		<property name="virtualBugJarTargetDir" value="${buildDirectory}/plugins/com.buglabs.dragonfly.bug.kernel/kernel/" />
 		<echo message="Copying emulator jars from directory: ${virtualBugJarTargetDir}"/>
 		<copy todir="${virtualBugJarTargetDir}">
-			<fileset dir="${basBuildDir}/artifacts/com.buglabs.bug.emulator/current/" />
+			<fileset dir="${basBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/" />
 		</copy>
 	</target>
 
