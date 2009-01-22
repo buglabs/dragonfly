@@ -318,6 +318,8 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 
 		return new ArrayList(0);
 	}
+	
+	/*
 
 	public synchronized void addBUGnetAuthenticationListener(IBUGnetAuthenticationListener listener) {
 		if (authenticationListeners == null) {
@@ -332,6 +334,8 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	public List getBUGnetAuthenticationLIsteners() {
 		return authenticationListeners;
 	}
+	
+	*/
 
 	/**
 	 * @return http port number defined in preferences

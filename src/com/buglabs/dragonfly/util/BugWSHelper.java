@@ -200,7 +200,7 @@ public class BugWSHelper extends WSHelper {
 		// conn.setConnectTimeout(TIMEOUT);
 
 		String response = get(conn,true);
-
+		
 		XmlNode root = parser.parse(new StringReader(response));
 
 		for (Iterator i = root.getChildren().iterator(); i.hasNext();) {
