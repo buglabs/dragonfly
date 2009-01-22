@@ -9,13 +9,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -28,6 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -40,10 +50,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
+import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.IBUGnetAuthenticationListener;
+import com.buglabs.dragonfly.IBugnetAuthenticationListener;
 import com.buglabs.dragonfly.bugnet.BugnetApplicationCategoryHelper;
 import com.buglabs.dragonfly.bugnet.BugnetResultManager;
 import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
@@ -55,11 +66,14 @@ import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
+import com.buglabs.dragonfly.ui.actions.ExportJarToBUGNetAction;
 import com.buglabs.dragonfly.ui.actions.RefreshBugNetViewAction;
 import com.buglabs.dragonfly.ui.actions.SearchBugNetAction;
+import com.buglabs.dragonfly.ui.jobs.BUGNetRefreshJob;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
+import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 /**
  * The BugnetView, not to be confused with the old BUGnetView
@@ -69,9 +83,9 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author brian
  *
  */
-public class BugnetView extends ViewPart implements IModelChangeListener, IBUGnetAuthenticationListener {
+public class BugnetView extends ViewPart implements IModelChangeListener, IBugnetAuthenticationListener {
     private static final int DEFAULT_CATEGORY_INDEX = 0;
-    public static final String VIEW_ID = "com.buglabs.dragonfly.ui.views.BugnetView"; //$NON-NLS-1$
+    public static final String VIEW_ID = "com.buglabs.dragonfly.ui.views.bugnet.BugnetView"; //$NON-NLS-1$
     private Color backgroundColor;
     private BugnetApplicationCategoryHelper appCategoryHelper;
 	private Composite top;
@@ -84,7 +98,6 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
 	private BugnetApplicationList applicationList;
 	private ScrolledForm form;
 	private FormToolkit toolkit;
-	private boolean loggedIn = false;
 	
 	/**
 	 * called from the framework
@@ -110,6 +123,8 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         drawFilterArea();
         // initialize the viewer
         createBugnetViewer();
+        // Set up this view as a drop target for uploading apps
+        setupDropTarget();
 		// run job to query and draw
 		queryBugnetAndDrawApplications();
 	}
@@ -120,7 +135,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         site.getActionBars().getToolBarManager().add(new RefreshBugNetViewAction(this));
         site.getActionBars().getToolBarManager().add(new SearchBugNetAction());
         DragonflyActivator.getDefault().addListener(this);
-        DragonflyActivator.getDefault().addBUGnetAuthenticationListener(this);
+        BugnetAuthenticationHelper.getInstance().addBugnetAuthenticationListener(this);
     }
 
     public void setFocus() {
@@ -146,20 +161,61 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
     
     /**
      * called when a user logs in
-     * {@link IBUGnetAuthenticationListener}
+     * {@link IBugnetAuthenticationListener}
      */
-    public void listen() {
-        // update login area and
-        // reset the apps view
-        refreshView();
+    public void loggedInEvent() {
+        // accessing UI elements - protect against invalid thread access
+        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+            public void run() {    	
+				refreshLoginArea(true);
+				// redo the bugnet search
+				searchBugnet();
+            }
+        });
     }   
 
-    public void refreshView() {
-        // update login area
-        checkLoginAndDrawInfo();
-        // redo the bugnet search
-        searchBugnet();
+    /**
+     * called when a user logs out
+     * {@link IBugnetAuthenticationListener}
+     */
+	public void loggedOutEvent() {
+        // accessing UI elements - protect against invalid thread access
+        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+            public void run() {		
+				refreshLoginArea(false);
+				// make sure "My Applications" isn't set in combo
+				defaultComboAfterLogout();
+				// redo the bugnet search
+				searchBugnet();
+            }
+        });
+	}      
+    
+	/*
+	 * Gets data from BUGnet and refreshes the whole view
+	 */
+    public void refresh() {
+        // accessing UI elements - protect against invalid thread access
+        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+            public void run() {	
+		        // call bugnet to check login and redraw login area
+		        checkLoginAndDrawInfo();
+		        // redo the bugnet search
+		        searchBugnet();
+            }
+        });
     }
+    
+    /**
+     * Helps set the combo to a default after logging out
+     */
+    private void defaultComboAfterLogout() {
+    	if (appCategoryHelper.getCategories()[combo.getSelectionIndex()] 
+    	                                      == appCategoryHelper.MY_APPLICATIONS) {
+    		combo.select(appCategoryHelper.DEFAULT_CATEGORY_INDEX);
+    	}
+    }
+    
     
 	/**
 	 * initializes the application list part of the view
@@ -202,8 +258,8 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         filterArea.setLayout(new GridLayout(3,false));
         filterArea.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         filterArea.setBackground(backgroundColor);
-        drawSearchBar();
         drawCategoryChooser();	    
+        drawSearchBar();
 	}
 	
 	
@@ -225,26 +281,12 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
 	 * Draws the area that lets you choose the category
 	 */
     private void drawCategoryChooser() {
-        Label label = toolkit.createLabel(filterArea, "in");
-        GridData gd = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
-        label.setLayoutData(gd);
-
         combo = new Combo(filterArea, SWT.READ_ONLY);
         combo.setBackground(backgroundColor);
-        gd = new GridData(GridData.FILL_HORIZONTAL);
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        gd.horizontalSpan = 3;
         combo.setLayoutData(gd);
         resetCombo();
-        
-        // submit button
-        Button button = toolkit.createButton(filterArea, "Go", SWT.NONE);
-        gd = new GridData(SWT.END, SWT.NONE, false, false);
-        button.setLayoutData(gd);
-        button.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-                searchBugnet();
-            }
-        });        
-            
     }	
 	
     
@@ -252,24 +294,40 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
      * Draws the search bar at the top of the page
      */
     private void drawSearchBar() {
-        Label label = toolkit.createLabel(filterArea, "Search");
-        GridData gd = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
-        label.setLayoutData(gd);
-        
+
         // Search Box
         searchText = toolkit.createText(filterArea, "", SWT.BORDER | SWT.SEARCH); //$NON-NLS-1$
         searchText.setBackground(backgroundColor);
-        gd = new GridData(GridData.FILL_HORIZONTAL);
-        gd.horizontalSpan = 2;
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         searchText.setLayoutData(gd);
         // prefill search textbox if it's there
         String search = BugnetResultManager.getInstance().getSearch();
         if (search != null) searchText.setText(search);
         searchText.addSelectionListener(new SelectionAdapter() {
             public void widgetDefaultSelected(SelectionEvent e) {
-                searchBugnet();
+            	checkLoginAndSearchBugnet();
             }
         });
+        
+        Button xbutton = toolkit.createButton(filterArea, "X", SWT.NONE);
+        gd = new GridData(SWT.END, SWT.NONE, false, false);
+        xbutton.setLayoutData(gd);
+        xbutton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                searchText.setText("");
+                searchText.setFocus();
+            }
+        });
+        
+        // submit button
+        Button button = toolkit.createButton(filterArea, "Search", SWT.NONE);
+        gd = new GridData(SWT.END, SWT.NONE, false, false);
+        button.setLayoutData(gd);
+        button.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                checkLoginAndSearchBugnet();
+            }
+        });           
                 
     }
     
@@ -300,6 +358,65 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         moreLink.setLayoutData(gd);             
     }        
     
+    /**
+     * 
+     * Set up this view as a drop target for dragging apps to BUGnet
+     * 
+     */
+	private void setupDropTarget() {
+		DropTarget dt = new DropTarget(top, DND.DROP_MOVE | DND.DROP_COPY);
+		dt.setTransfer(new Transfer[] { ResourceTransfer.getInstance() });
+		
+		dt.addDropListener(new DropTargetAdapter() {
+			public void dragEnter(DropTargetEvent event) {
+				if (!ResourceTransfer.
+						getInstance().isSupportedType(event.currentDataType)) {
+					event.detail = DND.DROP_NONE;
+				}
+			}
+
+			public void drop(DropTargetEvent event) {
+				Object obj = event.data;
+				// guard against dropping of the wrong type of thing
+				if (!(obj instanceof IResource[])) return;
+
+				// First make sure BUGnet is activated
+				if(!DragonflyActivator.getDefault().getPluginPreferences()
+						.getBoolean(DragonflyActivator.PREF_BUGNET_ENABLED)) {
+					// Show a Dialog with the message
+					MessageDialog.openInformation(new Shell(), "BUGnet not enabled.", 
+							"Unable to upload the application to BUGnet because BUGnet is disabled in preferences.  "
+							+ "Please enable BUGnet in preferences and try again.");
+					return;
+				}
+					
+				// now make sure the package is all legit
+				if (((IResource[]) obj).length > 0) {
+					IResource res = ((IResource[]) obj)[0];
+
+					if (res instanceof IProject) {
+						IProject proj = (IProject) res;
+						try {
+							if(ProjectUtils.existsProblems(proj)){
+								IStatus status = new Status(IStatus.ERROR, DragonflyActivator.PLUGIN_ID,
+										"Application '" + proj.getName() + "' contains errors. Please fix errors before uploading.",null);
+								throw new CoreException(status);
+							}
+						} catch (CoreException e) {
+							UIUtils.handleVisualError(e.getMessage(), e);
+							return;
+						}
+						ExportJarToBUGNetAction exportAction = 
+							new ExportJarToBUGNetAction(proj, new BUGNetRefreshJob());
+						exportAction.run();
+					}
+				} else {
+					MessageDialog.openInformation(new Shell(), "Wrong application format", 
+							"Unable to upload application to BUGnet. " + "It appears that the application is in the wrong format.");
+				}
+			}
+		});
+	}    
     
     /**
      * resets the data in the combo box using the applicationCategories
@@ -318,7 +435,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
     /**
      * refreshes the login area w/ login info or login link
      */
-    private void refreshLoginArea() {
+    private void refreshLoginArea(boolean isLoggedIn) {
         if (loginArea == null) return;
         
         // clear loginArea by disposing children
@@ -332,7 +449,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         
         // draw new info
         GridData gd = new GridData(SWT.END, SWT.CENTER, false, false);
-        if (!loggedIn) {
+        if (!isLoggedIn) {
             Hyperlink loginLink = toolkit.createHyperlink(loginArea, "login to BUGnet", SWT.NONE);
             loginLink.addHyperlinkListener(new LoginLinkListener());
             loginLink.setLayoutData(gd);
@@ -363,35 +480,51 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         return connectionNames;
     }
 
-    
     /**
-     * 
-     * @param selectedCategory
+     *  checks to see if we need to login
+     *   if we do and we're not, login and do search  w/ callback
+     *   otherwise just do the search
      */
-    private void verifyLoggedIn(String selectedCategory) {
-        if (selectedCategory == BugnetApplicationCategoryHelper.MY_APPLICATIONS) {
-            try {
-                if (!BugnetAuthenticationHelper.login()) {
-                    combo.select(appCategoryHelper.getCategoryIndex(
-                            BugnetResultManager.getInstance().getCategory()));
-                }
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-        }
+    private void checkLoginAndSearchBugnet() {
+    	if (loginRequired() 
+    			&& !BugnetAuthenticationHelper.getInstance().isLoggedIn()) {
+    		// This'll call the loggedInEvent() in this class once it's done;
+    		// which calls searchBugnet();
+    		try {
+				BugnetAuthenticationHelper.getInstance().login();
+			} catch (IOException e) {
+				UIUtils.handleNonvisualError("Unable to login to BUGnet", e);
+				searchBugnet();
+			}
+    	} else {
+    		searchBugnet();
+    	}
     }
-
+    
+    /*
+     *  Check to see if the query requires a login
+     */
+    private boolean loginRequired() {
+    	int selected = combo.getSelectionIndex();
+    	// guard against some weird selection
+    	if (selected < 0 || selected >= appCategoryHelper.getCategories().length) return false;
+    	// if it's MY APPLICATIONS, then login required
+    	if (appCategoryHelper.getCategories()[selected] == 
+    		BugnetApplicationCategoryHelper.MY_APPLICATIONS) return true;
+    	return false;
+    }
     
     /**
      * Called on search bar events to search Bugnet and return apps
+     *  The guy doesn't care if we're logged in or not and doesn't deal with
+     *  the login
      */
     private void searchBugnet(){
-        // reset model - will repopulate w/ results
+    	// reset model - will repopulate w/ results
         applicationList.initApplicationList();
         // reset found apps - these will be the new results
         BugnetResultManager.getInstance().reset();
-        
+
         String search = searchText.getText();
         if (search != null && search.length() > 0) {
             BugnetResultManager.getInstance().setSearch(search);
@@ -401,8 +534,6 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         int selected = combo.getSelectionIndex();
         if (selected >= 0 && selected < appCategoryHelper.getCategories().length) {
             String selectedCategory = appCategoryHelper.getCategories()[selected];
-            // make sure we're logged in if we need to be
-            verifyLoggedIn(selectedCategory);
             // set category
             BugnetResultManager.getInstance().setCategory(selectedCategory);
             // if it's a bug connection, need to get packages out
@@ -457,8 +588,10 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
 
         @Override
         protected IStatus run(IProgressMonitor monitor) {
-            loggedIn = BugnetAuthenticationHelper.isLoggedIn();
-            return Status.OK_STATUS;
+            IStatus status = Status.OK_STATUS;
+        	if (!BugnetAuthenticationHelper.getInstance().isLoggedIn()) 
+        		status = Status.CANCEL_STATUS;
+            return status;
         }
 
     }    
@@ -516,10 +649,10 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
         /**
          *  Just need to know when we're done querying BUGnet
          */
-        public void done(IJobChangeEvent event) {
+        public void done(final IJobChangeEvent event) {
             PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
                 public void run() {
-                    refreshLoginArea();
+                    refreshLoginArea(event.getResult().isOK());
                 }
             });
         }	    
@@ -541,13 +674,13 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBUGne
          */
         public void linkActivated(HyperlinkEvent event) {
             try {
-                BugnetAuthenticationHelper.login();
+                BugnetAuthenticationHelper.getInstance().processLogin();
             } catch (IOException e) {
                 UIUtils.handleVisualError(
                         "There was a problem connecting to BUGnet.  Please check your BUGnet preferences.", e);
             }
         }
 
-    }
+    }  
 	
 }

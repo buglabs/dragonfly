@@ -11,7 +11,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.views.BUGNetView;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**

@@ -3,7 +3,6 @@ package com.buglabs.dragonfly.ui.actions;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -16,22 +15,13 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
-import com.buglabs.dragonfly.ui.views.BUGNetView;
-import com.buglabs.dragonfly.bugnet.BugnetResultManager;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
-import com.buglabs.dragonfly.exception.BugnetException;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.dragonfly.util.URLUtils;
 import com.buglabs.dragonfly.validator.BUGApplicationProjectValidator;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
@@ -107,7 +97,7 @@ public class ExportJarToBUGNetAction extends Action {
 
 			try {
 				// make sure credentials are good
-				if (!BugnetAuthenticationHelper.login()) {
+				if (!BugnetAuthenticationHelper.getInstance().processLogin()) {
 					// if we didn't log in, means we canceled or clicked
 					// signup link.  Either way, let's get out of here
 					job.removeJobChangeListener(jobListener);

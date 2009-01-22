@@ -38,7 +38,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  * Deals with drawing the BUGnet view middle section
  * Handles the search event, does the search and draws the results
  *  
- * 
+ * TODO - delete this class when old BugNetView is deleted
  * 
  * @author brian
  *

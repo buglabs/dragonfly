@@ -6,10 +6,12 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import com.buglabs.dragonfly.ui.views.BUGNetView;
+import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
 
 public class BUGNetRefreshJob implements IJobChangeListener {
 
+	public BUGNetRefreshJob() {}
+	
 	public void aboutToRun(IJobChangeEvent event) {
 		// TODO Auto-generated method stub
 
@@ -32,8 +34,8 @@ public class BUGNetRefreshJob implements IJobChangeListener {
 		for (int i = 0; i < windows.length; ++i) {
 			IViewReference[] refs = windows[i].getActivePage().getViewReferences();
 			for (int j = 0; j < refs.length; ++j) {
-				if (refs[j].getId().equals(BUGNetView.VIEW_ID)) {
-					((BUGNetView) refs[j].getView(true)).refresh();
+				if (refs[j].getId().equals(BugnetView.VIEW_ID)) {
+					((BugnetView) refs[j].getView(true)).refresh();
 				}
 			}
 		}

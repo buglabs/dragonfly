@@ -16,7 +16,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
-import com.buglabs.dragonfly.ui.views.BUGNetView;
+import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 
 public class PerspectiveFactory implements IPerspectiveFactory {
@@ -68,7 +68,7 @@ public class PerspectiveFactory implements IPerspectiveFactory {
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 		
 		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, (float) .60, editorArea); //$NON-NLS-1$
-		right.addView(BUGNetView.VIEW_ID);
+		right.addView(BugnetView.VIEW_ID);
 		right.addView(MyBugsView.ID);
 	}
 

@@ -65,7 +65,6 @@ import com.buglabs.dragonfly.ui.draw2d.BugSelectableFigure;
 import com.buglabs.dragonfly.ui.draw2d.CenterLocator;
 import com.buglabs.dragonfly.ui.draw2d.XYFigureAnchor;
 import com.buglabs.dragonfly.ui.providers.BugLabelProvider;
-import com.buglabs.dragonfly.ui.views.BUGNetView;
 import com.buglabs.dragonfly.util.BugListener;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -196,6 +195,10 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	private class PhysicalEditorFocusListener implements FocusListener{
 
 		public void focusGained(FocusEvent e) {
+			/*  This code used to notify the BUGNetView of a physical editor change
+			 *  but the BugnetView works differently now, so, not being used.
+			 *  TODO - refactor this class and potententially remove this focus listener
+			 *  
 			// notify listeners that editor gained focus
 			ModelNodeChangeEvent event = new ModelNodeChangeEvent(this.getClass(),PhysicalEditor.EDITOR_FOCUS_GAINED, bug);
 			
@@ -203,20 +206,13 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			if(view != null){
 				view.propertyChange(event);
 			}
+			*/
 		}
 
 		public void focusLost(FocusEvent e) {
 			// remove listener
 			if(physicalEditorListener != null){
 				fc.removeFocusListener(physicalEditorListener);
-			}
-			
-			// notify listeners that editor lost focus
-			ModelNodeChangeEvent event = new ModelNodeChangeEvent(this.getClass(),PhysicalEditor.EDITOR_FOCUS_LOST, bug);
-			
-			BUGNetView view = BUGNetView.getView();
-			if(view != null){
-				view.propertyChange(event);
 			}
 		}
 		

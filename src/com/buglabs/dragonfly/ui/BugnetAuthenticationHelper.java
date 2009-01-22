@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,10 +16,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.IBUGnetAuthenticationListener;
+import com.buglabs.dragonfly.IBugnetAuthenticationListener;
 import com.buglabs.dragonfly.bugnet.BugnetStateProvider;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
-import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.ui.dialogs.AuthenticationDialog;
 import com.buglabs.dragonfly.ui.editors.GenericBrowserEditor;
 import com.buglabs.dragonfly.ui.editors.GenericBrowserInput;
@@ -34,8 +34,45 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class BugnetAuthenticationHelper {
 	
-	private static boolean saveAuthentication = false;
-	private static boolean canceled = false;
+	private boolean saveAuthentication = false;
+	private boolean canceled = false;
+	private List<IBugnetAuthenticationListener> authenticationListeners;
+	
+	private static BugnetAuthenticationHelper _instance;
+	
+	/**
+	 * Making this a singleton allows us to keep track 
+	 * better track of login information
+	 * 
+	 * @return
+	 */
+	public static BugnetAuthenticationHelper getInstance() {
+		if(_instance == null) {
+			synchronized(BugnetAuthenticationHelper.class) {
+				if(_instance == null) {
+					_instance = new BugnetAuthenticationHelper();
+				}
+			}
+		}
+		return _instance;
+	}
+	
+	private BugnetAuthenticationHelper() {}
+			
+	/*
+	 * Add an authentication listener
+	 */
+	public synchronized void addBugnetAuthenticationListener(
+									IBugnetAuthenticationListener listener) {
+		if (authenticationListeners == null) {
+			authenticationListeners = new ArrayList<IBugnetAuthenticationListener>();
+		}
+		
+		if (!authenticationListeners.contains(listener)) {
+			authenticationListeners.add(listener);
+		}
+	}	
+	
 	
 	/*
 	 * call this to try to login to bugnet with a prompt
@@ -43,10 +80,29 @@ public class BugnetAuthenticationHelper {
 	 * but if that doesn't work, query for it
 	 * 
 	 */
-	public static boolean login() throws IOException {
+	public synchronized boolean processLogin() throws IOException {
 	    canceled = saveAuthentication = false;
 		
 		boolean logged_in = checkLogin();
+		
+		// don't need to query for login or notifiy listeners
+		// because we're already logged in
+		if (logged_in) {
+			// make sure the authentication data is saved, tho
+			saveAuthentication();
+			return true;
+		}
+		
+		// not logged in so call regular login method
+		return login();
+	}
+	
+	/*
+	 * Assumed not logged in
+	 */
+	public synchronized boolean login() throws IOException {
+		boolean logged_in = false;
+		
 		// Loop shows prompt until user is logged in
 		while(!canceled && !logged_in) {
 			loginPrompt();
@@ -59,25 +115,10 @@ public class BugnetAuthenticationHelper {
 		
 		// Login was successful, do some other stuff
 		if (logged_in) {
-			// if we checked saveAuthentication, try 'n save it
-			if (saveAuthentication) {
-				DragonflyActivator.getDefault().saveAuthentication(
-				        BugnetStateProvider.getInstance().getAuthenticationData().getUsername(), 
-				        BugnetStateProvider.getInstance().getAuthenticationData().getPassword());
-			}	
-			// tell Authentication listeners that we're logged in
-			List listeners = DragonflyActivator.getDefault().getBUGnetAuthenticationLIsteners();
-			
-			// if there are no active listeners do not iterate through them
-			if(listeners != null && listeners.size() != 0){
-				Iterator iter = DragonflyActivator.getDefault().getBUGnetAuthenticationLIsteners().iterator();
-				while (iter.hasNext()) {
-					IBUGnetAuthenticationListener l = (IBUGnetAuthenticationListener) iter.next();
-					l.listen();
-				}
-			}
+			saveAuthentication();
+			notifyLoggedInEvent();
 		}
-		return logged_in;
+		return logged_in;		
 	}
 	
 	/**
@@ -86,7 +127,7 @@ public class BugnetAuthenticationHelper {
 	 * 
 	 * @return
 	 */
-	public static boolean isLoggedIn() {
+	public boolean isLoggedIn() {
 	    boolean logged_in = false;
 	    try {
 	        logged_in = checkLogin();
@@ -97,7 +138,7 @@ public class BugnetAuthenticationHelper {
 	    return logged_in;
 	}
 	
-	private static boolean checkLogin() throws IOException{
+	private boolean checkLogin() throws IOException{
         // prepare authentication data
         // if there's something missing, try to get it from preferences
         if (!BugnetStateProvider.getInstance().getAuthenticationData().hasData())
@@ -110,17 +151,53 @@ public class BugnetAuthenticationHelper {
 	/**
 	 *  helper function removes stored authentication data
 	 */
-	public static void clearAuthData() {
+	public synchronized void logout() {
 		DragonflyActivator.getDefault().getAuthenticationData().setUsername(null);
 		DragonflyActivator.getDefault().getAuthenticationData().setPassword(null);
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_USER, "");
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_PWD, "");
+		notifyLoggedOutEvent();
 	}	
+	
+	private void notifyLoggedInEvent() {
+		// if there are no active listeners do not iterate through them
+		if(authenticationListeners != null && authenticationListeners.size() != 0){
+			Iterator<IBugnetAuthenticationListener> iter = authenticationListeners.iterator();
+			while (iter.hasNext()) {
+				IBugnetAuthenticationListener l = iter.next();
+				l.loggedInEvent();
+			}
+		}
+	}
+	
+	private void notifyLoggedOutEvent() {
+		// if there are no active listeners do not iterate through them
+		if(authenticationListeners != null && authenticationListeners.size() != 0){
+			Iterator<IBugnetAuthenticationListener> iter = authenticationListeners.iterator();
+			while (iter.hasNext()) {
+				IBugnetAuthenticationListener l = iter.next();
+				l.loggedOutEvent();
+			}
+		}
+	}
+		
+	
+	/**
+	 * if we checked saveAuthentication, try 'n save it
+	 */
+	private void saveAuthentication() {
+		// if we checked saveAuthentication, try 'n save it
+		if (saveAuthentication) {
+			DragonflyActivator.getDefault().saveAuthentication(
+			        BugnetStateProvider.getInstance().getAuthenticationData().getUsername(), 
+			        BugnetStateProvider.getInstance().getAuthenticationData().getPassword());
+		}	
+	}
 	
 	/**
 	 * subroutine handles display of login window
 	 */
-	private static void loginPrompt() {
+	private void loginPrompt() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 			public void run() {
 				// pop up password dialog

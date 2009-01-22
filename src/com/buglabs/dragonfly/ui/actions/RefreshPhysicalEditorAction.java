@@ -5,7 +5,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
@@ -13,7 +12,6 @@ import org.eclipse.ui.IEditorPart;
 
 import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 import com.buglabs.dragonfly.ui.editors.PhysicalEditor;
-import com.buglabs.dragonfly.ui.views.BUGNetView;
 
 public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
 
@@ -61,12 +59,18 @@ public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.beginTask("Refreshing editor", IProgressMonitor.UNKNOWN);
 			((PhysicalEditor) editor).refresh();
+			
+			/* TODO - remove this code
+			 *  physical editor used to affect the Bugnet view, but it no longer does
+			 
 			ModelNodeChangeEvent event = new ModelNodeChangeEvent(this.getClass(),PhysicalEditor.REFRESH, ((PhysicalEditor)editor).getBug());
 			
 			BUGNetView view = BUGNetView.getView();
 			if(view != null){
 				view.propertyChange(event);
 			}
+			*/
+			
 			monitor.done();
 			return Status.OK_STATUS;
 		}

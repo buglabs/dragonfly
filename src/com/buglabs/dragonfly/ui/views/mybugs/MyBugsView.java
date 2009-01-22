@@ -35,7 +35,7 @@ import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.IBUGnetAuthenticationListener;
+import com.buglabs.dragonfly.IBugnetAuthenticationListener;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
@@ -58,7 +58,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author akravets
  * 
  */
-public class MyBugsView extends ViewPart implements ISelectionProvider, IBUGnetAuthenticationListener {
+public class MyBugsView extends ViewPart implements ISelectionProvider {
 
 	public static final String ID = "com.buglabs.dragonfly.ui.MyBugsView"; //$NON-NLS-1$
 
@@ -95,7 +95,6 @@ public class MyBugsView extends ViewPart implements ISelectionProvider, IBUGnetA
 	public void init(IViewSite site) throws PartInitException {
 		setSite(site);
 		root = (BaseTreeNode) Activator.getDefault().getBugsViewRoot();
-		DragonflyActivator.getDefault().addBUGnetAuthenticationListener(this);
 	}
 
 	public void dispose() {
@@ -283,10 +282,5 @@ public class MyBugsView extends ViewPart implements ISelectionProvider, IBUGnetA
 
 	public static TreeViewer getViewer() {
 		return viewer;
-	}
-
-	public void listen() {
-		// TODO Auto-generated method stub
-
 	}
 }

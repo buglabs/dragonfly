@@ -32,7 +32,6 @@ import org.eclipse.ui.PlatformUI;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.ui.actions.RefreshBugNetViewAction;
-import com.buglabs.dragonfly.ui.views.BUGNetView;
 import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
 
 public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
@@ -187,7 +186,7 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		clearAuthDataButton.setText("Clear Authentication Data");
 		clearAuthDataButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
-				BugnetAuthenticationHelper.clearAuthData();
+				BugnetAuthenticationHelper.getInstance().logout();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -243,11 +242,12 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 
 		// if serverName has changed clear authentication data
 		if(!originalServerName.equals(serverName)){
-			BugnetAuthenticationHelper.clearAuthData();
 			originalServerName = serverName;
+			BugnetAuthenticationHelper.getInstance().logout();
 		}
 	}
 
+	/*  NEVER CALLED AS FAR AS I CAN TELL SO COMMENTING OUT FOR NOW
 	protected void performDefaults() {
 		super.performDefaults();
 
@@ -262,6 +262,7 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		enableChk.setSelection(enabled);
 		enabledFields();
 	}
+	*/
 
 	public void init(IWorkbench workbench) {
 		initPreferences();

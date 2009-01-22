@@ -28,7 +28,6 @@ import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.views.BUGNetView;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.osgi.concierge.core.builder.ManifestConsistencyChecker;
@@ -111,9 +110,17 @@ public class ImportBundleFromStreamAction extends Action {
 						ProjectUtils.configureBuilder(jproj.getProject(), ManifestConsistencyChecker.ID);
 						
 						monitor.worked(10);
+						
+						/*
+						 * for the time being, not refreshing the BugnetView
+						 * Thing is... this code is cludgy.. this whole class is cludgy
+						 *  and the purpose of this refresh is just to update the dl count
+						 *  which isn't all that important.
+						 * 
 						BUGNetView bugNetView = BUGNetView.getView();
 						if (bugNetView != null)
 							bugNetView.refresh();
+						*/
 					}
 				} catch (IOException e) {
 					return createErrorStatus("Unable to download " + programName + " from BUG.", e);
@@ -184,7 +191,7 @@ public class ImportBundleFromStreamAction extends Action {
 
 		});
 	}
-
+	
 	private IStatus createErrorStatus(String message, Exception e) {
 		IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, message, e);
 		return errorStatus;

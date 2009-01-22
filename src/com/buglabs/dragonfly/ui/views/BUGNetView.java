@@ -90,7 +90,7 @@ import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.IBUGnetAuthenticationListener;
+import com.buglabs.dragonfly.IBugnetAuthenticationListener;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
 import com.buglabs.dragonfly.model.BUGNetProgramReferenceNode;
@@ -125,7 +125,7 @@ import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
  * @author ken
  * 
  */
-public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListener, IModelChangeListener {
+public class BUGNetView extends ViewPart implements  IModelChangeListener {
 
 	public static final String VIEW_ID = "com.buglabs.dragonfly.ui.BUGNetView"; //$NON-NLS-1$
 
@@ -234,7 +234,7 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 		initializeFonts();
 		initializeColors();
 
-		DragonflyActivator.getDefault().addBUGnetAuthenticationListener(this);
+		//DragonflyActivator.getDefault().addBUGnetAuthenticationListener(this);
 		DragonflyActivator.getDefault().addListener(this);
 
 		// try to create file name to store section properties
@@ -707,6 +707,7 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 	 * @param prog
 	 */
 	private void createContextMenu(final Composite comp, final BUGNetProgramReferenceNode prog) {
+		/*
 		MenuManager menuManager = new MenuManager();
 
 		final ImportFromBUGNetAction action = new ImportFromBUGNetAction();
@@ -722,6 +723,7 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 			final Control control = children[j];
 			control.addListener(SWT.MenuDetect, new MenuListener(control, action, prog, menu));
 		}
+		*/
 	}
 
 	/**
@@ -929,7 +931,7 @@ public class BUGNetView extends ViewPart implements IBUGnetAuthenticationListene
 				//was this line: 
 				// AuthenticationData data = BUGNetAuthenticationHelper.getAuthenticationData(true);
 				// now it's this line:
-				BugnetAuthenticationHelper.login();
+				BugnetAuthenticationHelper.getInstance().processLogin();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
