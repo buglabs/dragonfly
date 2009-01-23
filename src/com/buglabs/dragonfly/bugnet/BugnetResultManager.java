@@ -142,6 +142,9 @@ public class BugnetResultManager implements IPropertyChangeListener {
 		        BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_PREFIX) && packages != null) {
 		    querystring = addValue(querystring, "packages", trimAndJoin(packages));
 		}
+		// default sort is by date desc
+		querystring = addValue(querystring, "sort", "date");
+		querystring = addValue(querystring, "sort_order", "desc");
 		return querystring;
 	}
 	

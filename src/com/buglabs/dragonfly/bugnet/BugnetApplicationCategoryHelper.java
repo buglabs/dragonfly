@@ -9,7 +9,8 @@ public class BugnetApplicationCategoryHelper {
     public static final String MY_APPLICATIONS  = "My Applications";
     public static final String DEFAULT_CATEGORY = ALL_APPLICATIONS;
     public static final int DEFAULT_CATEGORY_INDEX = 0;
-    public static final String BUG_CONNECTION_CATEGORY_PREFIX = "BUG Connection:";
+    public static final String BUG_CONNECTION_CATEGORY_PREFIX = "My BUG: ";
+    public static final String BUG_CONNECTION_CATEGORY_SEPARATOR = "--Applications for My BUGs--";
     
     private List categories;
     
