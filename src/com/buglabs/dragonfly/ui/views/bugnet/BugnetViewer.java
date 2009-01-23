@@ -8,8 +8,6 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -118,6 +116,7 @@ public class BugnetViewer extends Viewer {
 	
 	private void drawNoApplications() {
 	    Label label = new Label(composite, SWT.LEFT);
+	    label.setBackground(composite.getBackground());
 	    label.setText(model.getNoAppsMessage());
 	}
 	

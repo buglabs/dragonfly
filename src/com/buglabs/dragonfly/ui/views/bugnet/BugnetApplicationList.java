@@ -13,7 +13,6 @@ public class BugnetApplicationList {
     
     public BugnetApplicationList() {
         initApplicationList();
-        noAppsMsg = NO_APPS_DEFAULT_MESSAGE;
     }
     
     public void setNoAppsMessage(String message) {
@@ -26,6 +25,7 @@ public class BugnetApplicationList {
     
     public void initApplicationList() {
         applications = new ArrayList<BUGNetProgramReferenceNode>();
+        noAppsMsg = NO_APPS_DEFAULT_MESSAGE;
     }
     
     public void setApplications(List<BUGNetProgramReferenceNode> applications) {
@@ -38,6 +38,11 @@ public class BugnetApplicationList {
     
     public List<BUGNetProgramReferenceNode> getApplications() {
         return applications;
+    }
+    
+    public int size() {
+    	if (applications == null) return 0;
+    	return applications.size();
     }
     
 }

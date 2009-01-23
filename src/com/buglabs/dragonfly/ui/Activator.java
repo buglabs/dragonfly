@@ -99,6 +99,8 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_COLOR_DFLY = "icons/color/dfly.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_DWNLD = "icons/color/dwnld.gif"; //$NON-NLS-1$
+	
+	public static final String IMAGE_COLOR_DWNLD_SDK = "icons/color/dwnld_to_sdk.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_CAMERA = "icons/color/cameraModule.gif"; //$NON-NLS-1$
 
@@ -159,6 +161,8 @@ public class Activator extends AbstractUIPlugin {
 	public static final String ICON_SLP_BUG = "/icons/color/new/slpBUG.gif";
 	
 	public static final String ICON_STATIC_BUG = "/icons/color/new/staticBUG.gif";
+	
+	
 	
 
 	private static Activator plugin;
@@ -363,6 +367,7 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_COLOR_BUNDLE, getImageDescriptor(IMAGE_COLOR_BUNDLE).createImage());
 		imageRegistry.put(IMAGE_COLOR_DFLY, getImageDescriptor(IMAGE_COLOR_DFLY).createImage());
 		imageRegistry.put(IMAGE_COLOR_DWNLD, getImageDescriptor(IMAGE_COLOR_DWNLD).createImage());
+		imageRegistry.put(IMAGE_COLOR_DWNLD_SDK, getImageDescriptor(IMAGE_COLOR_DWNLD_SDK).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_CAMERA, getImageDescriptor(IMAGE_COLOR_M_CAMERA).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_GPS, getImageDescriptor(IMAGE_COLOR_M_GPS).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_LCD, getImageDescriptor(IMAGE_COLOR_M_LCD).createImage());
