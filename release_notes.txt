@@ -1,10 +1,1 @@
-Release Notes
-~~~~~~~~~~~~~~
-ID  	 Sev  	 Pri  	 OS  	 Assignee  	 Status  	 Resolution  	 Summary
-296 	cri 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	Send to BUG: Can't send App to Physical BUG
-298 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	BUG connection wizard will not run
-299 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	BUG connection icon needs updating in the New Project wizard
-301 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	LCD Module: Isn't persistent in module config when VB is restarted
-302 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	LCD module not recognized in Virtual BUG
-303 	nor 	P3 	All 	alex@buglabs.net 	RESO 	FIXE 	Virtual BUG: joystick frequently becomes unresponsive
-294 	nor 	P3 	All 	brianc@buglabs.net 	RESO 	FIXE 	Help Contents: changes needed in Dragonfly SDK help guide 
+See - http://bugcommunity.com/wiki/index.php/Dragonfly_SDK_Release_Notes
