@@ -101,6 +101,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 	    initializeColors();
 	    top.setBackground(colorRegistry.get(BACKGROUNDCOLOR));
 	    GridLayout topLayout = new GridLayout(1,true);
+	    topLayout.verticalSpacing = topLayout.marginHeight = 0;
 	    topLayout.marginWidth = 2;
 	    top.setLayout(topLayout);
 		toolkit = new FormToolkit(top.getDisplay());
@@ -155,7 +156,18 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         if (combo != null && !combo.isDisposed()) {
             combo.getDisplay().syncExec(new Runnable() {
                 public void run() {
-                    resetCombo();
+                    refreshCombo();
+                    // if combo was changed to default in above
+                    // and it doesn't match the previous selected
+                    // do a search w/ the new selection
+                    // this is for the case, for example, when a bug connection was selected
+                    // but the connection was removed, kicking off this event
+                    if (combo.getSelectionIndex() == 
+                    		BugnetApplicationCategoryHelper.DEFAULT_CATEGORY_INDEX &&
+                    		BugnetResultManager.getInstance().getCategory() !=
+                    			BugnetApplicationCategoryHelper.DEFAULT_CATEGORY) {
+                    	searchBugnet();
+                    }
                 }
             });
         }
@@ -202,6 +214,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
             public void run() {	
 		        // call bugnet to check login and redraw login area
 		        checkLoginAndDrawInfo();
+				refreshCombo();
 		        // redo the bugnet search
 		        searchBugnet();
             }
@@ -270,9 +283,11 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 	 */
 	private void drawLoginArea() {
 	    loginArea = toolkit.createComposite(top);
-	    loginArea.setLayout(new GridLayout(1, false));
-        
-	    GridData gd = new GridData(SWT.END, SWT.CENTER, true, false);
+	    GridLayout layout = new GridLayout(1, false);
+	    layout.marginTop = layout.marginBottom = 0;
+	    layout.verticalSpacing = 0;
+	    loginArea.setLayout(layout);
+	    GridData gd = new GridData(SWT.END, SWT.CENTER, false, false);
 	    loginArea.setLayoutData(gd);	    
 	    
 	    // get login data and refresh the login area
@@ -289,7 +304,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         gd.horizontalSpan = 3;
         combo.setLayoutData(gd);
         combo.addSelectionListener(new FilterSelectionAdapter());
-        resetCombo();
+        refreshCombo();
     }	
     
     
@@ -441,7 +456,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
      * resets the data in the combo box using the applicationCategories
      * it takes the default categories and adds the bug connections
      */
-    private void resetCombo() {
+    private void refreshCombo() {
         appCategoryHelper.resetCategories();
         appCategoryHelper.addCategories(
                 getBugConnectionCategories(BugConnectionHelper.getBugConnections()));
@@ -461,11 +476,10 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         Control[] loginInfo = loginArea.getChildren();
         int len = loginInfo.length;
         for (int i=0; i<len; i++) {
-            if (loginInfo[i] != null) {
+            if (loginInfo[i] != null && !loginInfo[i].isDisposed()) {
                 loginInfo[i].dispose();
             }
         }
-        
         // draw new info
         GridData gd = new GridData(SWT.END, SWT.CENTER, false, false);
         if (!isLoggedIn) {

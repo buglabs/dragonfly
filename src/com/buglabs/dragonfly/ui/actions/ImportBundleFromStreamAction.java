@@ -45,14 +45,8 @@ public class ImportBundleFromStreamAction extends Action {
 	public ImportBundleFromStreamAction() {
 	}
 
-	public ImportBundleFromStreamAction(String userName, String programName) {
+	public ImportBundleFromStreamAction(String programName) {
 		this.programName = programName;
-		this.userName = userName;
-	}
-
-	public ImportBundleFromStreamAction(String userName, String programName, InputStream stream) {
-		this(programName, userName);
-		this.stream = stream;
 	}
 
 	public ImportBundleFromStreamAction(String programName, InputStream stream) {
@@ -85,7 +79,7 @@ public class ImportBundleFromStreamAction extends Action {
 
 					} else {
 						if (stream == null)
-							stream = BugnetWSHelper.getProgram(userName, programName);
+							stream = BugnetWSHelper.getProgram(programName);
 						jarFile = DragonflyActivator.getDefault().createFile(jarFileName(programName));
 						monitor.worked(5);
 						FileOutputStream fout = null;

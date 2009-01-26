@@ -104,8 +104,8 @@ public class BrowserEditor extends EditorPart implements IModelChangeListener {
 				try {
 					qs = urlToMap(myUrl);
 
-					if (qs != null && qs.containsKey("username") && qs.containsKey("title")) { //$NON-NLS-1$ //$NON-NLS-2$
-						downloadProgram((String) qs.get("username"), (String) qs.get("title")); //$NON-NLS-1$ //$NON-NLS-2$
+					if (qs != null && qs.containsKey("title")) { //$NON-NLS-1$ //$NON-NLS-2$
+						downloadProgram((String) qs.get("title")); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
@@ -179,14 +179,14 @@ public class BrowserEditor extends EditorPart implements IModelChangeListener {
 	}
 
 	/**
-	 * KEN, MAKE THIS WORK
+	 * downloads program
 	 * 
 	 * @param id
 	 * @throws TokenInvalidError
 	 * @throws IOException
 	 */
-	private void downloadProgram(String user, String project) throws IOException {
-			ImportBundleFromStreamAction action = new ImportBundleFromStreamAction(user, project);
+	private void downloadProgram(String project) throws IOException {
+			ImportBundleFromStreamAction action = new ImportBundleFromStreamAction(project);
 			action.run();
 	}
 

@@ -19,6 +19,9 @@ import com.buglabs.dragonfly.ui.actions.ImportBundleFromStreamAction;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 
 /**
+ * DON'T THINK THIS IS CURRENTLY BEING USED 
+ * 									- bballantine
+ * 
  * This job downloads a program from bugnet and places it in the My Library
  * section of the Bug explorer. This class intentionally references interal PDE
  * functionality.
@@ -28,13 +31,10 @@ import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
  */
 public class DownloadProgramJob extends Job {
 
-	private final String user;
-
 	private final String project;
 
-	public DownloadProgramJob(String user, String project) {
+	public DownloadProgramJob(String project) {
 		super(Messages.getString("DownloadProgramJob.0")); //$NON-NLS-1$
-		this.user = user;
 		this.project = project;
 	}
 
@@ -44,9 +44,9 @@ public class DownloadProgramJob extends Job {
 			InputStream jarContents = null;
 
 			try {
-				jarContents = BugnetWSHelper.getProgram(user, project);
+				jarContents = BugnetWSHelper.getProgram(project);
 
-				ImportBundleFromStreamAction importAction = new ImportBundleFromStreamAction(project, user, jarContents);
+				ImportBundleFromStreamAction importAction = new ImportBundleFromStreamAction(project, jarContents);
 				importAction.run();
 				jarContents.close();
 			} catch (Exception e1) {

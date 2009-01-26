@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -107,7 +108,7 @@ public class BugnetApplicationItemDrawer {
 	private static FontRegistry fontRegistry;
 	private static final String TITLEFONT 		= "TITLEFONT";
 	private static final String DESCRIPTIONFONT = "DESCRIPTIONFONT";
-	private static final String SDKBUTTON_TOOLTIP_TEXT = "Import to Dragonfly SDK";
+	private static final String DOWNLOADTOSDK_TOOLTIP_TEXT = "Import to Dragonfly SDK";
 	private static final String BUGBUTTON_TOOLTIP_TEXT = "Send to BUG";
 	
 	/**
@@ -383,7 +384,7 @@ public class BugnetApplicationItemDrawer {
 	private void drawDownloadButtons(Composite appbox, Color backgroundColor, final BUGNetProgramReferenceNode item) {
 		Composite comp = toolkit.createComposite(appbox, SWT.NONE);
 		comp.setBackground(new Color(appbox.getDisplay(), new RGB(255,255,255)));
-		GridLayout compLayout = new GridLayout(2,false);
+		GridLayout compLayout = new GridLayout(1,false);
 		compLayout.marginWidth = compLayout.marginHeight = 0;
 		compLayout.horizontalSpacing = compLayout.verticalSpacing = 0;
 		comp.setLayout(compLayout);
@@ -391,34 +392,23 @@ public class BugnetApplicationItemDrawer {
 		compgd.verticalSpan = 2;
         comp.setLayoutData(compgd);
                 
-        /*
-        Button downloadToSDKButton = toolkit.createButton(comp, "", SWT.NONE);
-        downloadToSDKButton.setImage(
-        		Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD_SDK));
-        downloadToSDKButton.setToolTipText(SDKBUTTON_TOOLTIP_TEXT);
+
+        ImageHyperlink h = toolkit.createImageHyperlink(comp, SWT.NONE);
+        h.setImage(Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD_SDK));
+        h.setToolTipText(DOWNLOADTOSDK_TOOLTIP_TEXT);
         GridData gd = new GridData(SWT.BEGINNING, SWT.NONE, false, false);
-        downloadToSDKButton.setLayoutData(gd);
-        downloadToSDKButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-            	
+        h.setLayoutData(gd);
+        h.addHyperlinkListener(new HyperlinkAdapter(){
+        	@Override
+			public void linkActivated(HyperlinkEvent e) {
             	// TODO - this is chunky.  Need to refactor and use a delegate or job
-            	
             	ImportFromBUGNetAction action = new ImportFromBUGNetAction();
         		action.setUserName(item.getUserName());
         		action.setProgramName(item.getLabel());
         		action.run(); // run actually calls a job thread
-            }
+			}
         });
-       */
         
-        //Hyperlink h1 = toolkit.createHyperlink(comp, text, style)
-        ImageHyperlink h = toolkit.createImageHyperlink(comp, SWT.NONE);
-        h.setImage(Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD_SDK));
-        //h.setText("Download");
-        //Ima h = toolkit.createHyperlink(comp, "Download", SWT.NONE);
-        GridData gd = new GridData(SWT.BEGINNING, SWT.NONE, false, false);
-        //h.setBackgroundImage(Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD_SDK));
-        h.setLayoutData(gd);
         
         /*
          *  TODO - make download to BUG work

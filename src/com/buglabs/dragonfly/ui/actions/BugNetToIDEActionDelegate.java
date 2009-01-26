@@ -29,7 +29,7 @@ public class BugNetToIDEActionDelegate implements IDropActionDelegate {
 
 							// InputStream jarContents =
 							// BugnetWSHelper.getProgram(userName, name);
-							ImportBundleFromStreamAction action = new ImportBundleFromStreamAction(userName, name);
+							ImportBundleFromStreamAction action = new ImportBundleFromStreamAction(name);
 							action.run();
 							// jarContents.close();
 

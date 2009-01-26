@@ -206,7 +206,14 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 
 	protected void performApply() {
 		setData();
-		refreshBUGnetView();
+		// if serverName has changed clear authentication data
+		// logout will cause an event that will refresh the BUGnet
+		if(!originalServerName.equals(serverName)){
+			originalServerName = serverName;
+			BugnetAuthenticationHelper.logout();
+		} else {
+			refreshBUGnetView();
+		}
 		applyPerformed  = true;
 	}
 
@@ -214,7 +221,14 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		// perform Ok only if apply wasn't performed
 		if(!applyPerformed){
 			setData();
-			refreshBUGnetView();
+			// if serverName has changed clear authentication data
+			// logout will cause an event that will refresh the BUGnet
+			if(!originalServerName.equals(serverName)){
+				originalServerName = serverName;
+				BugnetAuthenticationHelper.logout();
+			} else {
+				refreshBUGnetView();
+			}
 		}
 		applyPerformed = false;
 		return true;
@@ -239,12 +253,6 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_SERVER_NAME, serverName);
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_ENABLED, enabled);
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_NUM_OF_APPS, numofapps);
-
-		// if serverName has changed clear authentication data
-		if(!originalServerName.equals(serverName)){
-			originalServerName = serverName;
-			BugnetAuthenticationHelper.logout();
-		}
 	}
 
 	/*  NEVER CALLED AS FAR AS I CAN TELL SO COMMENTING OUT FOR NOW
