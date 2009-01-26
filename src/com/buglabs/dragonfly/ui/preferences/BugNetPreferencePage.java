@@ -186,7 +186,7 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		clearAuthDataButton.setText("Clear Authentication Data");
 		clearAuthDataButton.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
-				BugnetAuthenticationHelper.getInstance().logout();
+				BugnetAuthenticationHelper.logout();
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -243,7 +243,7 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		// if serverName has changed clear authentication data
 		if(!originalServerName.equals(serverName)){
 			originalServerName = serverName;
-			BugnetAuthenticationHelper.getInstance().logout();
+			BugnetAuthenticationHelper.logout();
 		}
 	}
 

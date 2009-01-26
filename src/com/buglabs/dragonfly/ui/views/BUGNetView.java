@@ -931,7 +931,7 @@ public class BUGNetView extends ViewPart implements  IModelChangeListener {
 				//was this line: 
 				// AuthenticationData data = BUGNetAuthenticationHelper.getAuthenticationData(true);
 				// now it's this line:
-				BugnetAuthenticationHelper.getInstance().processLogin();
+				BugnetAuthenticationHelper.processLogin();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

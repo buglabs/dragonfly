@@ -97,7 +97,7 @@ public class ExportJarToBUGNetAction extends Action {
 
 			try {
 				// make sure credentials are good
-				if (!BugnetAuthenticationHelper.getInstance().processLogin()) {
+				if (!BugnetAuthenticationHelper.processLogin()) {
 					// if we didn't log in, means we canceled or clicked
 					// signup link.  Either way, let's get out of here
 					job.removeJobChangeListener(jobListener);

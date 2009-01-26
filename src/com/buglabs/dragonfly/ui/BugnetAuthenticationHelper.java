@@ -34,36 +34,15 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class BugnetAuthenticationHelper {
 	
-	private boolean saveAuthentication = false;
-	private boolean canceled = false;
-	private List<IBugnetAuthenticationListener> authenticationListeners;
+	private static boolean saveAuthentication = false;
+	private static boolean canceled = false;
+	private static List<IBugnetAuthenticationListener> authenticationListeners;
 	
-	private static BugnetAuthenticationHelper _instance;
-	
-	/**
-	 * Making this a singleton allows us to keep track 
-	 * better track of login information
-	 * 
-	 * @return
-	 */
-	public static BugnetAuthenticationHelper getInstance() {
-		if(_instance == null) {
-			synchronized(BugnetAuthenticationHelper.class) {
-				if(_instance == null) {
-					_instance = new BugnetAuthenticationHelper();
-				}
-			}
-		}
-		return _instance;
-	}
-	
-	private BugnetAuthenticationHelper() {}
-			
 	/*
 	 * Add an authentication listener
 	 */
-	public synchronized void addBugnetAuthenticationListener(
-									IBugnetAuthenticationListener listener) {
+	public static synchronized void addBugnetAuthenticationListener(
+			IBugnetAuthenticationListener listener) {
 		if (authenticationListeners == null) {
 			authenticationListeners = new ArrayList<IBugnetAuthenticationListener>();
 		}
@@ -73,6 +52,22 @@ public class BugnetAuthenticationHelper {
 		}
 	}	
 	
+	/**
+	 * Checks login without throwing an error so you can do simple
+	 * so false means not logged in for whatever reason
+	 * 
+	 * @return
+	 */
+	public static boolean isLoggedIn() {
+	    boolean logged_in = false;
+	    try {
+	        logged_in = checkLogin();
+	    } catch (IOException e) {
+            UIUtils.handleVisualError(
+                    "Unable to verify log in, check the BUGnet URL in your preferences page.",e);	        
+	    }
+	    return logged_in;
+	}	
 	
 	/*
 	 * call this to try to login to bugnet with a prompt
@@ -80,10 +75,8 @@ public class BugnetAuthenticationHelper {
 	 * but if that doesn't work, query for it
 	 * 
 	 */
-	public synchronized boolean processLogin() throws IOException {
-	    canceled = saveAuthentication = false;
-		
-		boolean logged_in = checkLogin();
+	public static boolean processLogin() throws IOException {
+	    boolean logged_in = checkLogin();
 		
 		// don't need to query for login or notifiy listeners
 		// because we're already logged in
@@ -100,7 +93,8 @@ public class BugnetAuthenticationHelper {
 	/*
 	 * Assumed not logged in
 	 */
-	public synchronized boolean login() throws IOException {
+	public static boolean login() throws IOException {
+		canceled = saveAuthentication = false;
 		boolean logged_in = false;
 		
 		// Loop shows prompt until user is logged in
@@ -122,23 +116,18 @@ public class BugnetAuthenticationHelper {
 	}
 	
 	/**
-	 * Checks login without throwing an error so you can do simple
-	 * so false means not logged in for whatever reason
-	 * 
-	 * @return
+	 *  helper function removes stored authentication data
 	 */
-	public boolean isLoggedIn() {
-	    boolean logged_in = false;
-	    try {
-	        logged_in = checkLogin();
-	    } catch (IOException e) {
-            UIUtils.handleVisualError(
-                    "Unable to verify log in, check the BUGnet URL in your preferences page.",e);	        
-	    }
-	    return logged_in;
-	}
+	public static void logout() {
+		DragonflyActivator.getDefault().getAuthenticationData().setUsername(null);
+		DragonflyActivator.getDefault().getAuthenticationData().setPassword(null);
+		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_USER, "");
+		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_PWD, "");
+		notifyLoggedOutEvent();
+	}	
 	
-	private boolean checkLogin() throws IOException{
+	
+	private static boolean checkLogin() throws IOException{
         // prepare authentication data
         // if there's something missing, try to get it from preferences
         if (!BugnetStateProvider.getInstance().getAuthenticationData().hasData())
@@ -148,18 +137,7 @@ public class BugnetAuthenticationHelper {
 	}
 	
 	
-	/**
-	 *  helper function removes stored authentication data
-	 */
-	public synchronized void logout() {
-		DragonflyActivator.getDefault().getAuthenticationData().setUsername(null);
-		DragonflyActivator.getDefault().getAuthenticationData().setPassword(null);
-		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_USER, "");
-		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_PWD, "");
-		notifyLoggedOutEvent();
-	}	
-	
-	private void notifyLoggedInEvent() {
+	private static void notifyLoggedInEvent() {
 		// if there are no active listeners do not iterate through them
 		if(authenticationListeners != null && authenticationListeners.size() != 0){
 			Iterator<IBugnetAuthenticationListener> iter = authenticationListeners.iterator();
@@ -170,7 +148,7 @@ public class BugnetAuthenticationHelper {
 		}
 	}
 	
-	private void notifyLoggedOutEvent() {
+	private static void notifyLoggedOutEvent() {
 		// if there are no active listeners do not iterate through them
 		if(authenticationListeners != null && authenticationListeners.size() != 0){
 			Iterator<IBugnetAuthenticationListener> iter = authenticationListeners.iterator();
@@ -185,7 +163,7 @@ public class BugnetAuthenticationHelper {
 	/**
 	 * if we checked saveAuthentication, try 'n save it
 	 */
-	private void saveAuthentication() {
+	private static void saveAuthentication() {
 		// if we checked saveAuthentication, try 'n save it
 		if (saveAuthentication) {
 			DragonflyActivator.getDefault().saveAuthentication(
@@ -197,7 +175,7 @@ public class BugnetAuthenticationHelper {
 	/**
 	 * subroutine handles display of login window
 	 */
-	private void loginPrompt() {
+	private static void loginPrompt() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 			public void run() {
 				// pop up password dialog

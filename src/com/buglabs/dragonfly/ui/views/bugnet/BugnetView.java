@@ -110,6 +110,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         applicationList   = new BugnetApplicationList();
 		
         // layout the parts of the view
+        // login area is where it displays a login link or says "logged in as soandso"
         drawLoginArea();
         // filterArea contains both search box and category combo
         drawFilterArea();
@@ -127,7 +128,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         site.getActionBars().getToolBarManager().add(new RefreshBugNetViewAction(this));
         site.getActionBars().getToolBarManager().add(new SearchBugNetAction());
         DragonflyActivator.getDefault().addListener(this);
-        BugnetAuthenticationHelper.getInstance().addBugnetAuthenticationListener(this);
+        BugnetAuthenticationHelper.addBugnetAuthenticationListener(this);
     }
 
     public void setFocus() {
@@ -383,7 +384,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 			public void drop(DropTargetEvent event) {
 				
 				// First make sure BUGnet is activated
-				if (!verifyBugnetEnabled()) return;
+				if (!checkBugnetEnabledAndNotify()) return;
 				
 				Object obj = event.data;
 				// guard against dropping of the wrong type of thing
@@ -417,7 +418,12 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 		});
 	}    
     
-	private boolean verifyBugnetEnabled() {
+	
+	/*
+	 * Check if I have bugnet enabled and show a dialog if I don't
+	 * return weather or not bugnet is enabled
+	 */
+	private boolean checkBugnetEnabledAndNotify() {
 		// First make sure BUGnet is activated
 		if(!DragonflyActivator.getDefault().getPluginPreferences()
 				.getBoolean(DragonflyActivator.PREF_BUGNET_ENABLED)) {
@@ -573,7 +579,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         @Override
         protected IStatus run(IProgressMonitor monitor) {
             IStatus status = Status.OK_STATUS;
-        	if (!BugnetAuthenticationHelper.getInstance().isLoggedIn()) 
+        	if (!BugnetAuthenticationHelper.isLoggedIn()) 
         		status = Status.CANCEL_STATUS;
             return status;
         }
@@ -658,10 +664,10 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
          */
         public void linkActivated(HyperlinkEvent event) {
 			// First make sure BUGnet is activated
-			if (!verifyBugnetEnabled()) return;
+			if (!checkBugnetEnabledAndNotify()) return;
 			
             try {
-                BugnetAuthenticationHelper.getInstance().processLogin();
+                BugnetAuthenticationHelper.processLogin();
             } catch (IOException e) {
                 UIUtils.handleVisualError(
                         "There was a problem connecting to BUGnet.  Please check your BUGnet preferences.", e);
@@ -695,7 +701,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
          *   otherwise just do the search
          */
         private void checkLoginAndSearchBugnet() {
-        	if (!verifyBugnetEnabled()) return;
+        	if (!checkBugnetEnabledAndNotify()) return;
         	
         	// if we're the separator, just select the previous selection
         	// and return
@@ -706,11 +712,14 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         	}
         	
         	if (loginRequired() 
-        			&& !BugnetAuthenticationHelper.getInstance().isLoggedIn()) {
+        			&& !BugnetAuthenticationHelper.isLoggedIn()) {
         		try {
             		// This'll call the loggedInEvent() in this class once it's done;
-            		// which calls searchBugnet();        			
-    				BugnetAuthenticationHelper.getInstance().login();
+            		// which calls searchBugnet();        	
+    				if(!BugnetAuthenticationHelper.login()) {
+    	                combo.select(appCategoryHelper.getCategoryIndex(
+    	                        BugnetResultManager.getInstance().getCategory()));
+    				}
     			} catch (IOException e) {
     				UIUtils.handleNonvisualError("Unable to login to BUGnet", e);
     				searchBugnet();

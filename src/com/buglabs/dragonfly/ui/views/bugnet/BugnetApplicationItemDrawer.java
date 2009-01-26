@@ -45,6 +45,7 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
+import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.part.PluginTransfer;
 import org.eclipse.ui.part.PluginTransferData;
 
@@ -382,7 +383,7 @@ public class BugnetApplicationItemDrawer {
 	private void drawDownloadButtons(Composite appbox, Color backgroundColor, final BUGNetProgramReferenceNode item) {
 		Composite comp = toolkit.createComposite(appbox, SWT.NONE);
 		comp.setBackground(new Color(appbox.getDisplay(), new RGB(255,255,255)));
-		GridLayout compLayout = new GridLayout(1,true);
+		GridLayout compLayout = new GridLayout(2,false);
 		compLayout.marginWidth = compLayout.marginHeight = 0;
 		compLayout.horizontalSpacing = compLayout.verticalSpacing = 0;
 		comp.setLayout(compLayout);
@@ -390,6 +391,7 @@ public class BugnetApplicationItemDrawer {
 		compgd.verticalSpan = 2;
         comp.setLayoutData(compgd);
                 
+        /*
         Button downloadToSDKButton = toolkit.createButton(comp, "", SWT.NONE);
         downloadToSDKButton.setImage(
         		Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD_SDK));
@@ -398,15 +400,25 @@ public class BugnetApplicationItemDrawer {
         downloadToSDKButton.setLayoutData(gd);
         downloadToSDKButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
-            	/*
-            	 * TODO - this is chunky.  Need to refactor and use a delegate or job
-            	 */
+            	
+            	// TODO - this is chunky.  Need to refactor and use a delegate or job
+            	
             	ImportFromBUGNetAction action = new ImportFromBUGNetAction();
         		action.setUserName(item.getUserName());
         		action.setProgramName(item.getLabel());
         		action.run(); // run actually calls a job thread
             }
         });
+       */
+        
+        //Hyperlink h1 = toolkit.createHyperlink(comp, text, style)
+        ImageHyperlink h = toolkit.createImageHyperlink(comp, SWT.NONE);
+        h.setImage(Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD_SDK));
+        //h.setText("Download");
+        //Ima h = toolkit.createHyperlink(comp, "Download", SWT.NONE);
+        GridData gd = new GridData(SWT.BEGINNING, SWT.NONE, false, false);
+        //h.setBackgroundImage(Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD_SDK));
+        h.setLayoutData(gd);
         
         /*
          *  TODO - make download to BUG work
