@@ -58,19 +58,6 @@ public class BugnetWSHelper {
 	/**
 	 * Get a program (jar file) from BUGnet and return as an InputStream
 	 * 
-	 * @deprecated
-	 * @param username String name of owner of program
-	 * @param project  String name of the project to download
-	 * @return         InputStream representing program jar
-	 */
-	public static InputStream getProgram(String username, String project) 
-			throws BugnetAuthenticationException, BugnetException, IOException {
-		return getProgram(project);
-	}
-
-	/**
-	 * Get a program (jar file) from BUGnet and return as an InputStream
-	 * 
 	 * @param username String name of owner of program
 	 * @return         InputStream representing program jar
 	 * @throws BugnetException 
@@ -90,20 +77,6 @@ public class BugnetWSHelper {
 		}
 		return isout;
 	}	
-	
-	/**
-	 * Add a program.  This is deprecated to not require AuthenticationData
-	 * 
-	 * @deprecated
-	 * @param jarfile
-	 * @param name
-	 * @param not_used
-	 * @throws TokenInvalidError 
-	 */
-	public static void addProgram(File jarfile, String name, AuthenticationData not_used) 
-			throws BugnetAuthenticationException, BugnetException, IOException {
-		addProgram(jarfile, name);
-	}
 	
 	/**
 	 * Add a program to BUGnet
@@ -150,26 +123,6 @@ public class BugnetWSHelper {
 		return location;
 	}
 
-	/**
-	 * Get a token based on username and password.
-	 *  This method is depricated -- the password isn't even used here
-	 *  because it should be stored in the AuthenticationData
-	 *  which is set with the login prompt
-	 *  
-	 *  Call getToken() instead
-	 * 
-	 * @deprecated
-	 * @param username
-	 * @param not_used_was_pwd
-	 * @return a String token
-	 * @throws IOException
-	 * @throws TokenInvalidError 
-	 */
-	public static String getToken(String username, String not_used_was_pwd) 
-			throws BugnetAuthenticationException, BugnetException, IOException {
-		return getToken(username);
-	}
-	
 	/**
 	 * Use this one if you want a token as the proper thing to do is
 	 *  get the token for the current logged in user, which is persisted
@@ -265,6 +218,7 @@ public class BugnetWSHelper {
 	}
 
 	/**
+	 * 
 	 * @param user
 	 *            username
 	 * @param count
@@ -317,6 +271,8 @@ public class BugnetWSHelper {
 		
 	
 	/**
+	 * @deprecated - use getPrograms(querystring) and set package names in querystring
+	 * 
 	 * Given a list of package names returns XML representation of the programs in the form of 
 	 * a {@link List} of {@link BUGNetProgramReferenceNode}s
 	 * 
