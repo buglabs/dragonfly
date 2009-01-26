@@ -368,7 +368,6 @@ public class BugnetWSHelper {
 			HTTPRequest request = new HTTPRequest(new BugnetConnectionProvider());
 			HTTPResponse response = request.get(url);
 			String responseString = response.getString();
-			System.out.println(responseString + "\n-----------\n");
 			XmlNode root = XmlParser.parse(responseString);
 			apps = getProgramReferenceNodes(root);
 		} catch (HTTPException e) {
