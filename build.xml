@@ -4,7 +4,8 @@
 	<property name="base" location="../com.eclipse.sdk" />
 	<property name="builder" location="." />
 	<property name="tmp.dir" location="build" />
-	<property name="eclipse.version" value="3.3.2.v20071019" />
+	<!-- next thing was 3.3.2.v20071019 -->
+	<property name="eclipse.version" value="3.4.1.R34x_v20080805" />
 	<property name="projectName" value="com.buglabs.dragonfly.feature" />
 
 	<!-- =================================================================== -->
