@@ -248,9 +248,19 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 	 * Get data from bugnet and display it using the QueryBugnetJob
 	 */
 	private void queryBugnetAndDrawApplications() {
+		queryBugnetAndDrawApplications(false);
+	}
+	
+	/**
+	 * Get data from bugnet & display using QueryBugnetJob
+	 * this makes sure that we append the results to the existing model
+	 * 
+	 * @param appendResults
+	 */
+	private void queryBugnetAndDrawApplications(boolean appendResults) {
 		// query bugnet, when done, draw viewer
 		QueryBugnetJob queryBugnetJob = new QueryBugnetJob();
-		queryBugnetJob.addJobChangeListener(new QueryBugnetJobChangeListener());
+		queryBugnetJob.addJobChangeListener(new QueryBugnetJobChangeListener(appendResults));
 		queryBugnetJob.schedule();		
 	}
 	
@@ -371,7 +381,8 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
                 // set to the next page
                 BugnetResultManager.getInstance().setPage(
                         BugnetResultManager.getInstance().getPage()+1);
-                queryBugnetAndDrawApplications();
+                // append results to existing results
+                queryBugnetAndDrawApplications(true);
             }
         });
         moreLink.setForeground(colorRegistry.get(FOREGROUNDCOLOR));
@@ -523,9 +534,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
      *  The guy doesn't care if we're logged in or not and doesn't deal with
      *  the login
      */
-    private void searchBugnet(){
-    	// reset model - will repopulate w/ results
-        applicationList.initApplicationList();
+    private synchronized void searchBugnet(){
         // reset found apps - these will be the new results
         BugnetResultManager.getInstance().reset();
 
@@ -549,6 +558,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
                 }
             }
         }
+        // want to draw applications w/o appending the results
         queryBugnetAndDrawApplications();
     }
 	
@@ -608,7 +618,13 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 	 *
 	 */
 	private class QueryBugnetJobChangeListener implements IJobChangeListener {
-	    // Don't need these methods
+		private boolean appendResults = false;
+		
+	    public QueryBugnetJobChangeListener(boolean appendResults) {
+			this.appendResults = appendResults;
+		}
+	    
+		// Don't need these methods
 	    public void aboutToRun(IJobChangeEvent event) {}
 	    public void awake(IJobChangeEvent event) {}
 	    public void running(IJobChangeEvent event) {}
@@ -622,8 +638,9 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 	        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 	            public void run() {
 	            	if (bugnetViewer == null) return;
+	            	if (!appendResults) applicationList.initApplicationList();
 	            	if (event.getResult().isOK()) {
-		            	applicationList.addApplications(
+	            		applicationList.addApplications(
 		                        BugnetResultManager.getInstance().getApplications());	            	
 	            	} else {
 	            		applicationList.setNoAppsMessage(event.getResult().getMessage());

@@ -76,12 +76,12 @@ public class BugnetApplicationItemDrawer {
 	private static final int 	THUMBNAIL_WIDTH 		= 52;
 	private static final int 	THUMBNAIL_HEIGHT 		= 39;
 	private static final String SCALED_IMAGE_SUFFIX 	= "_scaled"; //$NON-NLS-1$
-	private static final int 	LABEL_LENGTH 			= 15;
+	private static final int 	LABEL_LENGTH 			= 16;
 	private static final int 	CHAR_HEIGHT 			= 8;
 	private static final int 	RATING_WIDTH_HINT 		= 50;
 	private static final int 	RATING_HEIGHT_HINT 		= 15;
 	private static final int 	DESCRIPTION_LENGTH		= 15;
-	private static final int	USERNAMES_LENGTH		= 20;
+	private static final int	USERNAMES_LENGTH		= 21;
 	private static final int 	LINE_WIDTH_HINT 		= 200;
 	private static final int 	LINE_HEIGHT_HINT		= 17;
 	private static final int 	DOWNLOAD_BUTTON_WIDTH	= 15;
