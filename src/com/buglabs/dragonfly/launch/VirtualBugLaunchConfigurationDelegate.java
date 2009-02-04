@@ -68,7 +68,9 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 
 	public static final String ATTR_VBUG_SYSTEM_PROPERTIES = "ATTR_VBUG_SYSTEM_PROPERTIES";
 
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
+	public void launch(ILaunchConfiguration configuration, String mode, 
+			ILaunch launch, IProgressMonitor monitor) throws CoreException {
+		
 		int port = getHttpPort(configuration);
 		ILaunchConfigurationType type = configuration.getType();
 
@@ -83,8 +85,12 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		}
 	}
 
-	public static String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
-		Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+	public static String getSystemProperty(
+			ILaunchConfiguration configuration, 
+			String prop, String defaultValue) throws CoreException {
+		
+		Map properties = configuration.getAttribute(
+				VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 		String val = (String) properties.get(prop);
 
 		if(val != null) {
