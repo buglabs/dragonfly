@@ -1,4 +1,4 @@
-package com.buglabs.dragonfly.ui.views.bugnet;
+package com.buglabs.dragonfly.ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
-import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 

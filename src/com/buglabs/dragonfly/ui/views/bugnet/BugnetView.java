@@ -53,6 +53,7 @@ import com.buglabs.dragonfly.bugnet.BugnetApplicationCategoryHelper;
 import com.buglabs.dragonfly.bugnet.BugnetResultManager;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.IModelChangeListener;
+import com.buglabs.dragonfly.ui.BugConnectionHelper;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.ui.actions.ExportJarToBUGNetAction;
 import com.buglabs.dragonfly.ui.actions.RefreshBugNetViewAction;

@@ -26,8 +26,11 @@ import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.IModelNode;
+import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
+import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.ui.BugConnectionHelper;
 import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.BugListener;
@@ -126,7 +129,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 	}
 
 	private void removeVBFromBugsView() {
-		Collection children = MyBugsView.getRoot().getChildren();
+		Collection children = BugConnectionHelper.getBugConnections();
 		Object[] array = children.toArray();
 		
 		for(int i = 0; i < array.length; i++){
@@ -135,7 +138,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 				DragonflyActivator activator = DragonflyActivator.getDefault();
 				if(activator != null){
 					activator.setVirtualBugRemovedByTerminate(true);
-					MyBugsView.getRoot().removeChild((IModelNode) bugConnection);
+					Activator.getDefault().getBugsViewRoot().removeChild((IModelNode) bugConnection);
 					activator.fireModelChangeEvent(new PropertyChangeEvent(this, BugListener.REMOVE_BUG, null, bugConnection));
 				}
 			}	
