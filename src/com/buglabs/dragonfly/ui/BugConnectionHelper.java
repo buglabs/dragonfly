@@ -18,11 +18,22 @@ public class BugConnectionHelper {
      * @return
      */
     public static List<BugConnection> getBugConnections() {
-        ITreeNode bugsRoot = Activator.getDefault().getBugsViewRoot();
+        ITreeNode bugsRoot = getBugConnectionsTree();
         return (List<BugConnection>) bugsRoot.getChildren();
     }
     
+    
     /**
+     * Gets the root of the bug connections tree via the Activator
+     * 
+     * @return
+     */
+    public static ITreeNode getBugConnectionsTree() {
+    	return Activator.getDefault().getBugsViewRoot();
+    }
+    
+    /**
+     * This gets out the 
      * 
      * @param connection
      * @return
@@ -37,6 +48,12 @@ public class BugConnectionHelper {
         return packages;
     }
     
+    /**
+     * 
+     * 
+     * @param connectionName
+     * @return
+     */
     public static BugConnection getBugConnectionByName(String connectionName) {
         // get out bug connection by matching against something in list
         BugConnection connection = null;
