@@ -255,14 +255,12 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_NUM_OF_APPS, numofapps);
 	}
 
-	/*  NEVER CALLED AS FAR AS I CAN TELL SO COMMENTING OUT FOR NOW
 	protected void performDefaults() {
 		super.performDefaults();
 
 		DragonflyActivator.getDefault().internalInitializeDefaultPluginPreferences();
 		setDefaults();
 
-		BugnetAuthenticationHelper.clearAuthData();
 		originalServerName = serverName;
 		
 		serverNameTextField.setText(protocol + serverName);
@@ -270,7 +268,6 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		enableChk.setSelection(enabled);
 		enabledFields();
 	}
-	*/
 
 	public void init(IWorkbench workbench) {
 		initPreferences();
