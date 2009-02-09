@@ -320,7 +320,7 @@ public class CodeGenerationPage extends WizardPage {
 			public void modifyText(ModifyEvent e) {
 				String filter = ((Text) e.widget).getText();
 				filter =filter.replaceAll("\\*", ".*");
-				serviceFilter.setPattern(".*" + filter + ".*", 
+				serviceFilter.setPattern("(?i).*" + filter + ".*", 
 						Arrays.asList(dependencyViewer.getCheckedElements()));
 				dependencyViewer.refresh();
 			}
