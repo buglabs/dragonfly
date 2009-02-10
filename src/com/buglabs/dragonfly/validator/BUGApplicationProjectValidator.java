@@ -1,5 +1,10 @@
 package com.buglabs.dragonfly.validator;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -62,6 +67,21 @@ public class BUGApplicationProjectValidator {
 		IFile manifest = project.getFile("META-INF/MANIFEST.MF");
 		if (!(manifest != null && manifest.exists())) {
 			showError("The file META-INF/MANIFEST.MF does not exist. Please create one before uploading to BUGnet");
+			return false;
+		}
+		
+		// ensure that the manifest starts w/ Manifest-Version:
+		InputStream is = manifest.getContents();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		try {
+			String line = reader.readLine();
+			if (line == null || line.length() == 0 || !line.startsWith("Manifest-Version")) {
+				showError("The file META-INF/MANIFEST.MF is missing the Manifest-Version. " + 
+						"Add 'Manifest-Version: 1.0' (without the quotes) as the first line of META-INF/MANIFEST.MF");
+				return false;
+			}
+		} catch (IOException e) {
+			showError("The file META-INF/MANIFEST.MF is corrupt or missing.  Please create one before uploading to BUGnet");
 			return false;
 		}
 
