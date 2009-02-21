@@ -144,22 +144,26 @@ public class WSHelper {
 	 */
 	protected static String post(URL url, InputStream stream) throws IOException {
 		URLConnection conn = url.openConnection();
-		// /conn.setRequestProperty("Content-Type", "application/java-archive");
 		conn.setDoOutput(true);
+		
+		OutputStream os = conn.getOutputStream();
+		InputStream is = conn.getInputStream();
+		
+		pipe(stream, os);
+	
+		os.flush();
+		os.close();
 
-		pipe(stream, new BufferedOutputStream(conn.getOutputStream()));
-
-		stream.close();
-		conn.getOutputStream().flush();
-		conn.getOutputStream().close();
-
-		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 		String line, resp = new String("");
+		System.out.println("is ready: " + rd.ready());
 		while ((line = rd.readLine()) != null) {
 			resp = resp + line + "\n";
 		}
 		rd.close();
-
+		is.close();
+		stream.close();
+		
 		return resp;
 	}
 
