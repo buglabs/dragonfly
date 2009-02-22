@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.buglabs.dragonfly.util;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,15 +31,14 @@ import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.eclipse.swt.graphics.ImageData;
 
-import com.buglabs.util.XmlNode;
-import com.buglabs.util.XmlParser;
-
 public class WSHelper {
 
 	/**
 	 * Gets data from {@link URLConnection}
+	 * 
 	 * @param conn
-	 * @param isBug specifies whether url refers to the BUG
+	 * @param isBug
+	 *            specifies whether url refers to the BUG
 	 * @return
 	 * @throws IOException
 	 */
@@ -79,18 +77,20 @@ public class WSHelper {
 
 	/**
 	 * Gets data from {@link URL}
+	 * 
 	 * @param url
-	 * @param isBug specifies whether url refers to the BUG
+	 * @param isBug
+	 *            specifies whether url refers to the BUG
 	 * @return
 	 * @throws IOException
 	 */
 	protected static String get(URL url, boolean isBug) throws IOException {
-		if(isBug){
+		if (isBug) {
 			return URLUtils.readFromStream(url.openStream());
 		}
 		// commented out line below because this method never calls BUGnet
-		//  and the token is being phased out -BB 8/21/08
-		//URL urlWithToken = URLUtils.appendTokenToURL(url.toString());
+		// and the token is being phased out -BB 8/21/08
+		// URL urlWithToken = URLUtils.appendTokenToURL(url.toString());
 		return SSLUtils.getData(url);
 	}
 
@@ -115,7 +115,7 @@ public class WSHelper {
 		}
 
 		SSLUtils.verifyHost();
-		
+
 		URLConnection conn = url.openConnection();
 		conn.setDoOutput(true);
 
@@ -142,30 +142,46 @@ public class WSHelper {
 	 * @return
 	 * @throws IOException
 	 */
-	protected static String post(URL url, InputStream stream) throws IOException {
-		URLConnection conn = url.openConnection();
-		conn.setDoOutput(true);
-		
-		OutputStream os = conn.getOutputStream();
-		InputStream is = conn.getInputStream();
-		
-		pipe(stream, os);
-	
-		os.flush();
-		os.close();
+	/**
+	 * @param url
+	 * @param inputStream
+	 * @return
+	 * @throws IOException
+	 */
+	protected static String post(URL url, InputStream inputStream) throws IOException {
+		URLConnection connection = url.openConnection();
+		connection.setDoInput( true );
+	    connection.setDoOutput( true );
 
-		BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+	    OutputStream stream = connection.getOutputStream();
+	    writeTo(stream, inputStream);
+	    stream.flush();
+	    stream.close();
+	    
+	    InputStream is = connection.getInputStream();
+	    BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 		String line, resp = new String("");
-		System.out.println("is ready: " + rd.ready());
 		while ((line = rd.readLine()) != null) {
 			resp = resp + line + "\n";
 		}
 		rd.close();
 		is.close();
-		stream.close();
-		
+
 		return resp;
 	}
+	
+	private static void writeTo(OutputStream outputStream, InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[8 * 1024];
+        int count = 0;
+        do {
+            outputStream.write( buffer, 0, count );
+            count = inputStream.read( buffer, 0, buffer.length );
+        } while (count != -1);
+
+        inputStream.close();
+    }
+	
+	
 
 	/**
 	 * Post contents of input stream to URL.
@@ -205,15 +221,13 @@ public class WSHelper {
 		int nread;
 		int total = 0;
 
-		synchronized (in) {
-			while ((nread = in.read(buf)) > 0) {
-				out.write(buf, 0, nread);
-				total += nread;
-			}
+		while ((nread = in.read(buf)) > 0) {
+			out.write(buf, 0, nread);
+			total += nread;
 		}
-		out.flush();
-		buf = null;
 
+		buf = null;
+		System.out.println("Wrote " + total + " to client");
 		return total;
 	}
 
@@ -299,7 +313,7 @@ public class WSHelper {
 
 		return m.getResponseBodyAsString();
 	}
-	
+
 	/**
 	 * @param url
 	 * @param payload
@@ -330,12 +344,12 @@ public class WSHelper {
 
 		return m.getResponseBodyAsString();
 	}
-	
-	protected static String delete(String url) throws HttpException, IOException{
+
+	protected static String delete(String url) throws HttpException, IOException {
 		HttpClient c = new HttpClient();
 		DeleteMethod delete = new DeleteMethod(url);
 		c.executeMethod(delete);
-		
+
 		return delete.getResponseBodyAsString();
 	}
 

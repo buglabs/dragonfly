@@ -370,7 +370,7 @@ public class BugWSHelper extends WSHelper {
 	}
 
 	public static String upsertBundle(File jarFile, URL url) throws IOException {
-		return postBase64(url, new FileInputStream(jarFile));
+		return post(url, new FileInputStream(jarFile));
 	}
 
 	public static List getAllServices(URL bugURL) throws Exception {
