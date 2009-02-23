@@ -53,16 +53,17 @@ public class SimpleHttpSever extends Thread {
 		} catch (IOException e1) {
 			handleException(e1);
 		}
+		
 		running = true;
-
+		Socket socket = null;
 		while (running) {
 			try {
-				Socket socket = serverSocket.accept();
+				socket = serverSocket.accept();
 
 				// Check to see if we got a poison pill. If so cleanup and exit.
-				if (this.isInterrupted()) {					
-					socket.close();
-					return;
+				if (this.isInterrupted()) {
+					running = false;
+					continue;
 				}
 
 				try {
@@ -85,11 +86,25 @@ public class SimpleHttpSever extends Thread {
 			}
 		}
 
+		if (!running) {
+			try {
+				if (serverSocket != null) serverSocket.close();
+				if (socket != null) socket.close();
+			} catch (IOException e) {
+				handleException(e);
+			}
+		}
 	}
 
 	private void handleException(Exception e) {
-		UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e);
 		running = false;
+		/*
+		 *  may have to use non bundle-dependent logging as below
+		 *  
+		Activator.getDefault().getLog().log(
+				new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem completing.", e));
+		*/
+		UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e);
 	}
 
 	/**

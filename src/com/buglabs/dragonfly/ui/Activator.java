@@ -238,11 +238,7 @@ public class Activator extends AbstractUIPlugin {
 		httpServiceThread = new SimpleHttpSever(DragonflyActivator.MODEL_CHANGE_EVENT_LISTEN_PORT);
 		httpServiceThread.start();
 
-		try {
-			forceLazyLoadingAndJSLPInit(context);
-		} catch (Exception e) {
-			UIUtils.handleNonvisualError("Unable to initialize jSLP.", e);
-		}		
+		forceLazyLoadingAndJSLPInit(context);
 
 		root = new BaseTreeNode("root"); //$NON-NLS-1$
 
@@ -284,17 +280,24 @@ public class Activator extends AbstractUIPlugin {
 	 * then is closed the jSLP service goes away even if the SDK depends on it.
 	 * 
 	 * @param context
-	 * @throws InvalidSyntaxException 
-	 * @throws ServiceLocationException 
 	 */
-	private void forceLazyLoadingAndJSLPInit(BundleContext context) throws ServiceLocationException, InvalidSyntaxException {
+	private void forceLazyLoadingAndJSLPInit(BundleContext context) {
 		ServiceType t = new ServiceType("foo");
 		t.isServiceURL();
 		
 		ServiceReference locRef = context.getServiceReference("ch.ethz.iks.slp.Locator");
 		if (locRef != null) {
-			Locator loc = (Locator) context.getService(locRef);
-			loc.findServices(new ServiceType("service:bug"), null, null);
+			final Locator loc = (Locator) context.getService(locRef);
+			// spawn a thread for this so that, if this blocks, it won't stop start-up
+			new Thread() {
+				public void run() {
+					try {
+						loc.findServices( new ServiceType("service:bug"), null, null);
+					} catch (Exception e) {
+						UIUtils.handleNonvisualError("Unable to initialize jSLP.", e);
+					}	
+				}
+			}.start();
 		}
 	}
 
