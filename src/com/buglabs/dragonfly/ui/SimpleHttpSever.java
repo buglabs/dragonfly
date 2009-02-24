@@ -23,7 +23,6 @@ import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 import com.buglabs.dragonfly.ui.actions.RefreshBugAction;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
-import com.buglabs.dragonfly.util.UIUtils;
 
 /**
  * A runnable that listens on a port and generates a ModelNodeChangeEvent when a
@@ -35,10 +34,10 @@ import com.buglabs.dragonfly.util.UIUtils;
 public class SimpleHttpSever extends Thread {
 
 	private final int port;
-
 	private boolean running;
-	
 	private static final Object lock = new Object();
+	private ServerSocket serverSocket;
+	private Socket socket;
 	
 	public SimpleHttpSever(int port) {
 		this.port = port;
@@ -47,7 +46,7 @@ public class SimpleHttpSever extends Thread {
 
 	public void run() {
 
-		ServerSocket serverSocket = null;
+		serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(port);
 		} catch (IOException e1) {
@@ -55,7 +54,7 @@ public class SimpleHttpSever extends Thread {
 		}
 		
 		running = true;
-		Socket socket = null;
+		socket = null;
 		while (running) {
 			try {
 				socket = serverSocket.accept();
@@ -63,7 +62,8 @@ public class SimpleHttpSever extends Thread {
 				// Check to see if we got a poison pill. If so cleanup and exit.
 				if (this.isInterrupted()) {
 					running = false;
-					continue;
+					resetSockets();					
+					return;
 				}
 
 				try {
@@ -87,24 +87,15 @@ public class SimpleHttpSever extends Thread {
 		}
 
 		if (!running) {
-			try {
-				if (serverSocket != null) serverSocket.close();
-				if (socket != null) socket.close();
-			} catch (IOException e) {
-				handleException(e);
-			}
+			resetSockets();
 		}
 	}
 
 	private void handleException(Exception e) {
-		running = false;
-		/*
-		 *  may have to use non bundle-dependent logging as below
-		 *  
 		Activator.getDefault().getLog().log(
-				new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem completing.", e));
-		*/
-		UIUtils.handleNonvisualError(Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e);
+				new Status(Status.WARNING, Activator.getDefault().PLUGIN_ID, Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e));
+		running = false;
+		resetSockets();
 	}
 
 	/**
@@ -126,6 +117,20 @@ public class SimpleHttpSever extends Thread {
 		}
 	}
 
+	private void resetSockets() {
+		try {
+			if (serverSocket != null) serverSocket.close();
+			if (socket != null) socket.close();
+		} catch (IOException e) {
+			Activator.getDefault().getLog().log(
+					new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem cleaning up SimpleHttpServer sockets", e));
+		} finally {
+			serverSocket = null;
+			socket = null;
+		}
+	}
+	
+	
 	public boolean isRunning() {
 		return running;
 	}
