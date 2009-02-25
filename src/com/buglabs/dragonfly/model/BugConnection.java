@@ -168,7 +168,14 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		else if(id.equals(PROP_NAME)){
 			return getName();
 		}
-		return getConfigurationValue(id);
+		
+		val = getConfigurationValue(id);
+		
+		if (val == null) {
+			val = new String("[null]");
+		}
+		
+		return val;
 	}
 
 	private Object getConfigurationValue(Object id) {
@@ -179,9 +186,9 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 			if(id.equals(key)){
 				if(((String)id).indexOf("enabled") != -1 || ((String)id).indexOf("Status Bar contribution") != -1){
 					if(value.equals("true")){
-						return new Integer(0);
+						return "0";
 					}
-					return new Integer(1);
+					return "1";
 				}
 				else if(((String)id).indexOf("app.state") != -1){
 					return appStateProperty;
