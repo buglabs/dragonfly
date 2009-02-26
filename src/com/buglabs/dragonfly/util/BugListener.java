@@ -33,6 +33,9 @@ public abstract class BugListener extends Thread {
 	private List knownBugList;
 	volatile private boolean terminated = false;
 	private int errorCount = 0;
+	// this helps keep a bunch of connection errors from ending up in the error log
+	// from test connection
+	private boolean erroredOnce = false; 
 
 	public BugListener(ITreeNode root, List knownBugList) {
 		this.root = root;
@@ -87,6 +90,7 @@ public abstract class BugListener extends Thread {
 
 								public void done(IJobChangeEvent event) {
 									if (event.getResult().isOK()){
+										erroredOnce = false;
 										try {
 											root.addChild(bug);
 											DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(this, ADD_BUG, null, bug));
@@ -189,7 +193,12 @@ public abstract class BugListener extends Thread {
 				monitor.worked(33);
 				monitor.done();
 			} catch (Exception e) {
-				return new Status(IStatus.WARNING, IRuntimeConstants.PI_RUNTIME, 1, "Trying to connect to " + address + " and got " + e.getMessage(), e); //$NON-NLS-1$
+				int severity = IStatus.CANCEL;
+				if (!erroredOnce) {
+					severity = IStatus.WARNING;
+					erroredOnce = true;
+				}
+				return new Status(severity, IRuntimeConstants.PI_RUNTIME, 1, "Trying to connect to " + address + " and got " + e.getMessage(), null); //$NON-NLS-1$
 			}
 			return Status.OK_STATUS;
 		}
