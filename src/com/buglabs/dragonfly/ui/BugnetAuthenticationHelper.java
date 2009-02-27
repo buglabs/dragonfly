@@ -37,6 +37,7 @@ public class BugnetAuthenticationHelper {
 	private static boolean saveAuthentication = false;
 	private static boolean canceled = false;
 	private static List<IBugnetAuthenticationListener> authenticationListeners;
+	private static final String BROWSER_TITLE = "BUGnet";
 	
 	/*
 	 * Add an authentication listener
@@ -212,8 +213,8 @@ public class BugnetAuthenticationHelper {
 								URL url = new URL(bugNetBaseURL + "helper/redirect?path=" + path);
 
 								GenericBrowserInput gbi = new GenericBrowserInput(url);
-								gbi.setName("Create new account");
-								gbi.setToolTip("Create new account");
+								gbi.setName(BROWSER_TITLE);
+								gbi.setToolTip(BROWSER_TITLE);
 
 								PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(gbi,
 										GenericBrowserEditor.ID);

@@ -86,7 +86,8 @@ public class BugnetApplicationItemDrawer {
 	private static final int 	LINE_HEIGHT_HINT		= 17;
 	private static final int 	DOWNLOAD_BUTTON_WIDTH	= 15;
 	private static final int 	DOWNLOAD_BUTTON_HEIGHT	= 15;
-	private static final String DISPOSED_ERROR		= "The resource has been disposed.";
+	private static final String DISPOSED_ERROR			= "The resource has been disposed.";
+	private static final String BUGNET_BROWSER_TITLE	= "BUGnet";
 
 	private List<Label> itemDescriptionLabels	= new ArrayList();
 	private List<String> itemDescriptions		= new ArrayList();
@@ -550,7 +551,7 @@ public class BugnetApplicationItemDrawer {
 				// couldn't get a url w/ token, just used naked url
 				if (url == null) url = new URL(n.getUrl());
 				
-				LaunchBrowserAction action = new LaunchBrowserAction(url, n.getLabel());
+				LaunchBrowserAction action = new LaunchBrowserAction(url, BUGNET_BROWSER_TITLE);
 				action.run();
 			} catch (MalformedURLException e1) {
 				UIUtils.handleVisualError("Invalid URL: " + n.getUrl(), e1); //$NON-NLS-1$
