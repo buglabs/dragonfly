@@ -17,6 +17,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
+import org.eclipse.ui.progress.IWorkbenchSiteProgressService;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BaseTreeNode;
@@ -71,6 +73,9 @@ public class UpsertToBugAction extends Action {
 
 		if (jarFile != null && jarFile.exists()) {
 			Job job = new ExportJarToBugJob(bugUrl);
+
+			job.setUser(true); // gives us a progress dialog
+			job.schedule();
 
 			if (jobListener != null) {
 				job.addJobChangeListener(jobListener);
@@ -157,6 +162,9 @@ public class UpsertToBugAction extends Action {
 	private class ExportJarToBugJob extends Job {
 
 		private String url;
+		private static final int TOTAL_WORK_UNITS = 100;
+		private static final int WORKED_25_PERCENT = 25;
+		private static final String JOB_TITLE = "Send Application to BUG";
 
 		/**
 		 * 
@@ -164,13 +172,15 @@ public class UpsertToBugAction extends Action {
 		 *            The URL of the Bug.
 		 */
 		public ExportJarToBugJob(String url) {
-			super("Export Jar To BUG");
+			super(JOB_TITLE);
 			this.url = url;
 		}
 
 		protected IStatus run(IProgressMonitor monitor) {
 			IStatus ret = new Status(IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "", null);
-
+			
+			// use the monitor to give us some feedback in the dialog
+			monitor.beginTask(JOB_TITLE, TOTAL_WORK_UNITS);
 			if (url == null) {
 				try {
 					url = findBug();
@@ -178,24 +188,33 @@ public class UpsertToBugAction extends Action {
 					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, Messages.getString("ExportJarAction.0"), e); //$NON-NLS-1$
 				}
 			}
+			monitor.worked(WORKED_25_PERCENT);
 
 			if (url != null) {
+				monitor.subTask("Packaging Application");
 				try {
 					if (bugName == null) {
 						bugName = bugConnection.getName();
 					}
-
+					
 					if(bugApplicationOverwrite){
 						BugWSHelper.deleteProgram(new URL(url + "/program/" + project.getName().replace(' ', '+')).toExternalForm());
 					}
-					BugWSHelper.upsertBundle(jarFile, new URL(url + "/program/" + project.getName().replace(' ', '+'))); //$NON-NLS-1$
-					ModelNodeChangeEvent event = new ModelNodeChangeEvent(this, new Bug(bugName, new URL(url)));
-					DragonflyActivator.getDefault().fireModelChangeEvent(event);
+					monitor.worked(WORKED_25_PERCENT);
+					if (!monitor.isCanceled()) {
+						monitor.subTask("Sending Application to BUG\nThis operation may take a while and cannot be cancelled");
+						BugWSHelper.upsertBundle(jarFile, new URL(url + "/program/" + project.getName().replace(' ', '+'))); //$NON-NLS-1$
+						monitor.worked(WORKED_25_PERCENT);
+						ModelNodeChangeEvent event = new ModelNodeChangeEvent(this, new Bug(bugName, new URL(url)));
+						DragonflyActivator.getDefault().fireModelChangeEvent(event);
+					}
 				} catch (Exception e) {
 					UIUtils.handleVisualError("Unable to upload jar file to BUG: " + url, e);
 					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, Messages.getString("ExportJarAction.0"), e); //$NON-NLS-1$
 				}
 			}
+			monitor.worked(WORKED_25_PERCENT);
+			monitor.worked(WORKED_25_PERCENT);
 			return ret;
 		}
 	}
