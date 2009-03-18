@@ -4,8 +4,9 @@
 	<property name="base" location="../com.eclipse.sdk" />
 	<property name="builder" location="." />
 	<property name="tmp.dir" location="build" />
-	<!-- to upgrade to eclipse 3.4, change eclipse.version to be 3.4.1.R34x_v20080805 -->
-	<property name="eclipse.version" value="3.3.2.v20071019" />
+	<!-- to build for eclipse 3.4, change eclipse.version to be 3.4.1.R34x_v20080805 -->
+	<!-- to build for eclipse 3.3, change eclipse.version to be 3.3.2.v20071019 -->
+	<property name="eclipse.version" value="3.4.1.R34x_v20080805" />
 	<property name="projectName" value="com.buglabs.dragonfly.feature" />
 
 	<!-- =================================================================== -->
@@ -18,10 +19,11 @@
 	<!-- =================================================================== -->
 	<!-- runpdebuild                                                         -->
 	<!-- =================================================================== -->
-	<!-- to upgrade to 3.4, change first arg line to have org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar -->
+	<!-- to build for 3.4, change first arg line to have org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar -->
+	<!-- to build for 3.3, change first arg line to have org.eclipse.equinox.launcher_1.0.1.R33x_v20080118.jar -->
 	 <target name="runpdebuild">
 	        <exec dir="." executable="java">
-	        	<arg line="-cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.1.R33x_v20080118.jar org.eclipse.equinox.launcher.Main 
+	        	<arg line="-cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar org.eclipse.equinox.launcher.Main 
 	        		-DbuildId=${meta.project.version}
 	        		-Dbuilder=${builder} 
 	        		-DbuildDirectory=${tmp.dir} 
