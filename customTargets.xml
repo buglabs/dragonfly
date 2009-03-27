@@ -12,30 +12,6 @@
 	<!-- Add on <ant> task for each top level element being built. -->
 	<!-- ===================================================================== -->
 	<target name="allElements">
-		<echo message="calling genericTargest target ${target} with id=${product}" />
-		<echo message="**************************************" />
-		<echo message="elements=${type}@${id} \n 
-        buildDirectory=${buildDirectory} \n
-        configInfo=${configs} \n
-        baseLocation=${baseLocation} \n
-        buildingOSGi=${buildingOSGi} \n
-        outputUpdateJars=${outputUpdateJars} \n
-        archivesFormat=${archivesFormat} \n
-        product=${product} \n
-        forceContextQualifier=${forceContextQualifier} \n
-        generateJnlp=${generateJnlp} \n
-        signJars=${signJars} \n
-        generateFeatureVersionSuffix=${generateFeatureVersionSuffix} \n
-        significantVersionDigits=${significantVersionDigits} \n
-        generatedVersionLength=${generatedVersionLength} \n
-        generateVersionsLists=${generateVersionsLists} \n
-        groupConfiguration=${groupConfigurations} \n
-        pluginPath=${pluginPath} \n
-        filteredDependencyCheck=${filteredDependencyCheck} \n
-        platformProperties=${platformProperties} \n
-        filterP2Base=${filterP2Base} \n " />
-
-		<echo message="**************************************" />
 		<ant antfile="${genericTargets}" target="${target}">
 			<property name="type" value="feature" />
 			<property name="id" value="${product}" />
