@@ -28,6 +28,7 @@ import org.eclipse.pde.internal.core.PDECore;
 import org.eclipse.pde.internal.core.exports.FeatureExportInfo;
 import org.eclipse.pde.internal.ui.PDEPluginImages;
 import org.eclipse.pde.internal.ui.build.PluginExportJob;
+import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.progress.IProgressConstants;
 
 import com.buglabs.dragonfly.BugNature;
@@ -43,7 +44,7 @@ import com.buglabs.dragonfly.util.BugWSHelper;
  * @author angel
  * 
  */
-public class ExportJarAction extends Action {
+public class ExportJarAction extends Action implements IWorkbenchAction {
 	IProject project;
 
 	String location;
@@ -148,7 +149,7 @@ public class ExportJarAction extends Action {
 					}
 
 					String response = BugWSHelper
-							.upsertBundle(jarfile, new URL(bugUrl + "/program/" + project.getName().replace(' ', '+'))); //$NON-NLS-1$
+							.upsertBundle(jarfile, new URL(bugUrl + "/program/" + project.getName().replace(' ', '+')), false); //$NON-NLS-1$
 					// TODO Check response and determine if error, probably
 					// should raise exception in upsertBundle() method and catch
 					// here.
@@ -205,5 +206,10 @@ public class ExportJarAction extends Action {
 			}
 			return null;
 		}
+	}
+
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -56,6 +56,8 @@ public class UpsertToBugAction extends Action {
 
 	protected boolean bugApplicationOverwrite = false;
 
+	private int bugVersion;
+
 	public UpsertToBugAction(String bugUrl, String bugName, IProject project, IJobChangeListener jobListener) {
 		this.bugUrl = bugUrl;
 		this.project = project;
@@ -126,6 +128,7 @@ public class UpsertToBugAction extends Action {
 				});
 				if (bugApplicationOverwrite) {
 					bugURL = bugConnection.getUrl().toExternalForm();
+					bugVersion = bugConnection.getVersion();
 				}
 			} else {
 				return bugConnection.getUrl().toExternalForm();
@@ -203,7 +206,7 @@ public class UpsertToBugAction extends Action {
 					monitor.worked(WORKED_25_PERCENT);
 					if (!monitor.isCanceled()) {
 						monitor.subTask("Sending Application to BUG\nThis operation may take a while and cannot be cancelled");
-						BugWSHelper.upsertBundle(jarFile, new URL(url + "/program/" + project.getName().replace(' ', '+'))); //$NON-NLS-1$
+						BugWSHelper.upsertBundle(jarFile, new URL(url + "/program/" + project.getName().replace(' ', '+')), bugVersion == Bug.BUG_PRE_R14); //$NON-NLS-1$
 						monitor.worked(WORKED_25_PERCENT);
 						ModelNodeChangeEvent event = new ModelNodeChangeEvent(this, new Bug(bugName, new URL(url)));
 						DragonflyActivator.getDefault().fireModelChangeEvent(event);
