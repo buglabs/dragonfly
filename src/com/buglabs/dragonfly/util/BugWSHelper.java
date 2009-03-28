@@ -186,7 +186,7 @@ public class BugWSHelper extends WSHelper {
 	 * 
 	 * @param programUrl
 	 * @param serializer
-	 * @return
+	 * @return List of type IPackage
 	 * @throws Exception
 	 */
 	public static List getPrograms(URL programUrl) throws Exception {
@@ -369,7 +369,19 @@ public class BugWSHelper extends WSHelper {
 		return true;
 	}
 
-	public static String upsertBundle(File jarFile, URL url) throws IOException {
+	/**
+	 * Insert or update a BUG application on BUG.
+	 * @param jarFile
+	 * @param url
+	 * @param encode if true, encode jar with base64
+	 * @return
+	 * @throws IOException
+	 */
+	public static String upsertBundle(File jarFile, URL url, boolean encode) throws IOException {
+		if (encode) {
+			return postBase64(url, new FileInputStream(jarFile));
+		} 
+		
 		return post(url, new FileInputStream(jarFile));
 	}
 

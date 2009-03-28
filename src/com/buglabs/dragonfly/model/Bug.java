@@ -10,7 +10,10 @@ package com.buglabs.dragonfly.model;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
+import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
@@ -21,6 +24,13 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class Bug extends BaseTreeNode {
 	private static final long serialVersionUID = -6726829616562590688L;
+	
+	/*
+	 * Contants for the BUG version.
+	 */
+	public final static int BUG_R14 = 1;
+	public final static int BUG_PRE_R14 = 2;
+	public final static int BUG_UNKNOWN = 0;
 
 	private URL baseUrl;
 
@@ -37,6 +47,8 @@ public class Bug extends BaseTreeNode {
 	private URL packageURL;
 
 	private URL configAdminUrl;
+	
+	private int version;
 
 	public Bug(String name, URL url) {
 		super(name);
@@ -53,7 +65,7 @@ public class Bug extends BaseTreeNode {
 				new ModuleFolderNode(this);
 				new ApplicationFolderNode(this);
 				new ServiceFolderNode(this);
-
+				version = getBUGVersion();
 			} catch (Exception e) {
 				UIUtils.handleNonvisualError("Unable to load BUG.", e);
 				return super.getChildren();
@@ -61,6 +73,27 @@ public class Bug extends BaseTreeNode {
 		}
 
 		return super.getChildren();
+	}
+
+	/**
+	 * Examine running bundles on BUG to determine version of rootfs.
+	 * @return An integer indicating the version of BUG rootfs software running on device.
+	 * @throws MalformedURLException
+	 * @throws Exception
+	 */
+	private int getBUGVersion() throws MalformedURLException, Exception {
+		List pkgs = BugWSHelper.getPrograms(this.getProgramURL());
+		
+		for (Iterator i = pkgs.iterator(); i.hasNext();) {
+			IPackage pkg = (IPackage) i.next();
+			
+			//Somewhat of a hack.  If we find the BUG Audio bundle, we assume it's R1.4
+			if (pkg.getName().toUpperCase().equals("BUG AUDIO")) {
+				return BUG_R14;
+			}
+		}
+		
+		return BUG_PRE_R14;
 	}
 
 	/**
@@ -83,7 +116,7 @@ public class Bug extends BaseTreeNode {
 	 */
 	public URL getProgramURL() throws MalformedURLException {
 		if (programUrl == null) {
-			// Make a URL to get the module list
+			// Make a URL to get the program list
 			String moduleurl = baseUrl.getProtocol() + "://" + baseUrl.getHost() + ":" + baseUrl.getPort() + baseUrl.getPath() + "/program";
 			programUrl = new URL(moduleurl);
 		}
@@ -165,25 +198,26 @@ public class Bug extends BaseTreeNode {
 		packageURL = null;
 		configAdminUrl = null;
 	}
+	
+	/**
+	 * @return Version of BUG.
+	 */
+	public int getVersion() {
+		return version;
+	}
 
 	public Object getEditableValue() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public boolean isPropertySet(Object id) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public void resetPropertyValue(Object id) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setPropertyValue(Object id, Object value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isConnected() {
