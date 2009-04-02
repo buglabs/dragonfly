@@ -115,7 +115,9 @@ public class UpsertToBugAction extends Action {
 		});
 
 		if (bugConnection != null) {
-			// if bug exists, ask user if bug should be updated
+			// save the version
+			bugVersion = bugConnection.getVersion();
+			// if app exists, ask user if bug should be updated
 			if (bugExists()) {
 				disp.syncExec(new Runnable() {
 
@@ -128,7 +130,6 @@ public class UpsertToBugAction extends Action {
 				});
 				if (bugApplicationOverwrite) {
 					bugURL = bugConnection.getUrl().toExternalForm();
-					bugVersion = bugConnection.getVersion();
 				}
 			} else {
 				return bugConnection.getUrl().toExternalForm();
