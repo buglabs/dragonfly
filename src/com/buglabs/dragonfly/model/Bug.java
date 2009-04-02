@@ -31,7 +31,8 @@ public class Bug extends BaseTreeNode {
 	public final static int BUG_R14 = 1;
 	public final static int BUG_PRE_R14 = 2;
 	public final static int BUG_UNKNOWN = 0;
-
+	private final static int UNSET_VERSION = -1;
+	
 	private URL baseUrl;
 
 	private URL moduleUrl;
@@ -48,13 +49,11 @@ public class Bug extends BaseTreeNode {
 
 	private URL configAdminUrl;
 	
-	private int version;
+	private int version = UNSET_VERSION;
 
 	public Bug(String name, URL url) {
 		super(name);
 		this.baseUrl = url;
-
-		// this.authData = new AuthenticationData(name);
 	}
 
 	public Collection getChildren() {
@@ -65,7 +64,6 @@ public class Bug extends BaseTreeNode {
 				new ModuleFolderNode(this);
 				new ApplicationFolderNode(this);
 				new ServiceFolderNode(this);
-				version = getBUGVersion();
 			} catch (Exception e) {
 				UIUtils.handleNonvisualError("Unable to load BUG.", e);
 				return super.getChildren();
@@ -200,9 +198,18 @@ public class Bug extends BaseTreeNode {
 	}
 	
 	/**
-	 * @return Version of BUG.
+	 * This may make a WS call to BUG if version is unknown.
+	 * @return Version of BUG.  
 	 */
 	public int getVersion() {
+		if (version == UNSET_VERSION) {
+			try {
+				version = getBUGVersion();
+			} catch (Exception e) {
+				version = BUG_UNKNOWN;
+			}
+		}
+		
 		return version;
 	}
 
