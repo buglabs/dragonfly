@@ -82,8 +82,11 @@ public class Bug extends BaseTreeNode {
 	private int getBUGVersion() throws MalformedURLException, Exception {
 		List pkgs = BugWSHelper.getPrograms(this.getProgramURL());
 		
+		ProgramNode node;
+		IPackage pkg;
 		for (Iterator i = pkgs.iterator(); i.hasNext();) {
-			IPackage pkg = (IPackage) i.next();
+			node = (ProgramNode) i.next();
+			pkg = node.getPackage();
 			
 			//Somewhat of a hack.  If we find the BUG Audio bundle, we assume it's R1.4
 			if (pkg.getName().toUpperCase().equals("BUG AUDIO")) {
