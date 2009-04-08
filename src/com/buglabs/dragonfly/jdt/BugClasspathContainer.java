@@ -44,7 +44,10 @@ public class BugClasspathContainer implements IClasspathContainer {
 	}
 
 	public int getKind() {
-		return IClasspathEntry.CPE_CONTAINER;
+		// in eclipse 3.4, returnint CPE_CONTAINER kept code complete
+		// from working, so now I return K_APPLICATION
+		//return IClasspathEntry.CPE_CONTAINER;
+		return K_APPLICATION;
 	}
 
 	public IPath getPath() {
