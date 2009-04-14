@@ -113,6 +113,8 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_COLOR_M_SOUND = "icons/color/soundModule.gif"; //$NON-NLS-1$
 	
 	public static final String IMAGE_COLOR_M_VH = "icons/color/vhModule.gif"; //$NON-NLS-1$
+	
+	public static final String IMAGE_COLOR_M_WIFI = "icons/color/wifibluetoothModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_MANIFEST = "icons/color/manifest.gif"; //$NON-NLS-1$
 
@@ -377,6 +379,7 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_COLOR_M_MOTION, getImageDescriptor(IMAGE_COLOR_M_MOTION).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_SOUND, getImageDescriptor(IMAGE_COLOR_M_SOUND).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_VH, getImageDescriptor(IMAGE_COLOR_M_VH).createImage());
+		imageRegistry.put(IMAGE_COLOR_M_WIFI, getImageDescriptor(IMAGE_COLOR_M_WIFI).createImage());
 		imageRegistry.put(IMAGE_COLOR_MANIFEST, getImageDescriptor(IMAGE_COLOR_MANIFEST).createImage());
 		imageRegistry.put(IMAGE_COLOR_MODULE, getImageDescriptor(IMAGE_COLOR_MODULE).createImage());
 		imageRegistry.put(IMAGE_COLOR_PROJECT, getImageDescriptor(IMAGE_COLOR_PROJECT).createImage());
