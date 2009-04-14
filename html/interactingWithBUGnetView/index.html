@@ -9,7 +9,7 @@
 <body bgcolor="#ffffff">
 <h1>Interacting with the BUGnet View</h1>
 The BUGnet view allows you to interact with the BUG community on <a href="http://www.buglabs.net/applications">BUGnet</a>. 
-You can browse, upload, or download applications via our Web Service interface that connects to: http://api.buglabs.net
+You can browse, upload, or download applications via our Web Service interface that connects to: https://api.buglabs.net
 
 <h2>You can:</h2>
 <ul>
@@ -19,8 +19,7 @@ You can browse, upload, or download applications via our Web Service interface t
 	<li>Click the refresh button <img src="../images/refresh.gif" border="0"/> to refresh the BUGnet view.
 	<li>Click the 'Search Applications' <img src="../images/app_search.gif" border="0"/> button to load the Community Applications page in a Physical Editor window. 
 	On this page you can use the full text application Search box, the 'Browse by Categories' or 'Maturity' drop downs, or the 'Search by Required Modules' function.</li>
-	<li>Do a full text search via the Search box under the My Apps section.</li>
-	<li>Right or left clicking on the title of any section will toggle the expansion/collapsing of that section.</li>
+	<li>Do a full text search for all applications, your applications, or applications for a connected BUG in the BUGnet view search box.</li>
 </ul><br>
 If you accidentally close this view you can go to Window > Show View > Other > Dragonfly > BUGnet to display it again.
 
@@ -32,8 +31,13 @@ A number of settings for the BUGnet view can be accessed via the Eclipse Prefere
 	<li>Number of Applications to display - Accepts 0 to 100. This changes the number of applications displayed in the My Apps and Top Apps sections.</li>
 	<li>Clear Authentication Data - Clears saved BUGnet Authentication and logs you out of your current session.</li>
 </ul>
-<h2>My Apps</h2>
-This section displays any applications you have uploaded to BUGnet or any that you are collaborating on with another BUGnet user.
+
+<h2>Using the BUGnet View</h2>
+The BUGnet view contains a login to BUGnet link, a search filter drop-down which defaults to All Applications, a search box, and a list of applications that can be downloaded to the SDK.
+
+<h3>Login to BUGnet</h3>
+Click the "login to BUGnet" link to open the BUGnet Authentication window.  After a successful login, the application list will refresh, showing both public applications and the private applications that you have permission to view. 
+	
 	<br><br>
 	Click the log-in link to bring up the BUGnet Authentication window.
 	<br><br>
@@ -42,11 +46,20 @@ This section displays any applications you have uploaded to BUGnet or any that y
 	You can enter an existing BUGnet Username and Password and click OK (Optional: check the 'save authentication' checkbox). 
 	If you don't have BUGnet account you can click the <a href="http://www.buglabs.net/signup">here</a> link to create one.
     
-<h2>Latest Apps</h2>
-This section displays the latest updated applications on BUGnet and has a Search box (queries application name, username, tags fields) to help you find applications.
-<h2>Applications by Modules</h2>
-This section displays when a Physical Editor is opened for any BUG Connection (see: <a href="../interactingWithMyBUGsView/index.html">MyBUGs view</a> for details). 
-It returns a list of applications based on the modules attached to BUG. When a user has multiple BUG Connections this section displays for the last active Physical Editor.
+
+<h3>Search Filter</h3>
+The Search Filter has the following choices:
+<ul>
+<li>All Applications: Shows all applications on BUGnet that match the search terms.  If the search box is empty, it will return all applications.</li>
+<li>My Applications: Shows all applications for which you are an administrator or collaborator.  If you select this filter prior to logging in, you will be presented with the BUGnet Authentication window and asked to log in.</li>
+<li>Applications for My BUGs: If you have a real or virtual BUG connected to the SDK, they will appear as a list here.  If you have no BUGs connected, then you will not see this filter.  This filter allows you to search only for applications that will run on the connected BUG chosen, based on the modules attached to the connected BUG.
+</ul>
+
+<h3>Search Box</h3>
+Entering a search term in the Search Box and clicking "Search" will return a list of applications based on that search term and the above filter.  The search terms can be cleared with the 'X' button.  Searching without a search term will return all results based on the above filter.
+
+<h3>Application List</h3>
+This list shows the search results based on the Search Box and Search Filter above.  The list returns a default number of results, which can be set in the BUGnet Preferences.  At the bottom of the list, the number of results shown is displayed.  If the number of results available is greater than the number of results shown, a link to "View more" is available.  Clicking this link will add more applications to the current results list.
 
 </body>
 </html>
