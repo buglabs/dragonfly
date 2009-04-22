@@ -44,6 +44,7 @@ import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.actions.BugAddConnectionAction;
 import com.buglabs.dragonfly.ui.actions.BugDeleteConnectionAction;
 import com.buglabs.dragonfly.ui.actions.MyBugRefreshAction;
+import com.buglabs.dragonfly.ui.actions.ShowBUGConsoleAction;
 import com.buglabs.dragonfly.ui.dnd.MyBugsViewProgramNodeTransfer;
 import com.buglabs.dragonfly.ui.dnd.ProgramToViewDropAdapter;
 import com.buglabs.dragonfly.ui.editors.PhysicalEditor;
@@ -74,6 +75,8 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 										// BugProjectNode nodes
 
 	private ProgramToViewDropAdapter dropAdapter;
+
+	private static ShowBUGConsoleAction showBugConsoleAction;
 
 	public static final String BUGS_TYPE = "bugs"; //$NON-NLS-1$
 
@@ -209,6 +212,9 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 
 		refreshBugAction = new MyBugRefreshAction(viewer);
 		refreshBugAction.setEnabled(false);
+		
+		showBugConsoleAction = new ShowBUGConsoleAction(viewer);
+		showBugConsoleAction.setEnabled(false);
 	}
 
 	private void createToolBar() {
@@ -241,14 +247,16 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		IEditorPart activeEditor = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
 		refreshBugAction.setEnabled(false);
+		showBugConsoleAction.setEnabled(false);
 
 		// enable refresh only if editor PhysicalEditor is present
 		if (activeEditor != null && activeEditor instanceof PhysicalEditor) {
 			refreshBugAction.setEnabled(true);
+			showBugConsoleAction.setEnabled(true);
 		}
 		manager.add(refreshBugAction);
 		manager.add(new Separator());
-
+		manager.add(showBugConsoleAction);
 	}
 
 	public void setFocus() {
