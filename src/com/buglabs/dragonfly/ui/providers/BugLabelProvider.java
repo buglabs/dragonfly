@@ -62,10 +62,13 @@ public class BugLabelProvider implements ILabelProvider {
 			else if (name.equals("wifi-bluetooth")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_WIFI);
 			}
+			else if (name.equals("bugbee")) {
+				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_BUGBEE);
+			}
 			
 			// return shared.getImage(ISharedImages.IMG_OBJ_ELEMENT);
 			// return generic modules icon instead of generic eclipse icon
-			Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_MODULE);
+			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_MODULE);
 		}
 
 		if (element instanceof ProgramNode) {
