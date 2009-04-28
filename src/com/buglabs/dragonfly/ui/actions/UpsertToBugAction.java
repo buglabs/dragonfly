@@ -76,14 +76,12 @@ public class UpsertToBugAction extends Action {
 		if (jarFile != null && jarFile.exists()) {
 			Job job = new ExportJarToBugJob(bugUrl);
 
-			job.setUser(true); // gives us a progress dialog
-			job.schedule();
-
 			if (jobListener != null) {
 				job.addJobChangeListener(jobListener);
 			}
 
-			job.schedule();
+			job.setUser(true); // gives us a progress dialog
+			job.schedule();			
 		}
 	}
 
@@ -205,6 +203,8 @@ public class UpsertToBugAction extends Action {
 						BugWSHelper.deleteProgram(new URL(url + "/program/" + project.getName().replace(' ', '+')).toExternalForm());
 					}
 					monitor.worked(WORKED_25_PERCENT);
+					monitor.worked(WORKED_25_PERCENT);
+					
 					if (!monitor.isCanceled()) {
 						monitor.subTask("Sending Application to BUG\nThis operation may take a while and cannot be cancelled");
 						BugWSHelper.upsertBundle(jarFile, new URL(url + "/program/" + project.getName().replace(' ', '+')), bugVersion == Bug.BUG_PRE_R14); //$NON-NLS-1$
@@ -217,7 +217,7 @@ public class UpsertToBugAction extends Action {
 					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, Messages.getString("ExportJarAction.0"), e); //$NON-NLS-1$
 				}
 			}
-			monitor.worked(WORKED_25_PERCENT);
+			
 			monitor.worked(WORKED_25_PERCENT);
 			return ret;
 		}
