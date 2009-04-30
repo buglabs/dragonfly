@@ -44,9 +44,12 @@ public class RemoveBundleActionDelegate implements IObjectActionDelegate{
 		IStructuredSelection viewerSelection = (IStructuredSelection)MyBugsView.getViewer().getSelection();
 		Object[] array = viewerSelection.toArray();
 		
+		String bundleType;
 		for(int i = 0; i < array.length; i++){
 			if(array[i] instanceof ProgramNode){
-				if(((ProgramNode)array[i]).getBundleType().equals(BugBundleConstants.BUG_BUNDLE_APPLICATION)){
+				bundleType = ((ProgramNode)array[i]).getBundleType(); 
+				if(bundleType.equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) ||
+						bundleType.equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)){
 					list.add(array[i]);
 				}
 			}
