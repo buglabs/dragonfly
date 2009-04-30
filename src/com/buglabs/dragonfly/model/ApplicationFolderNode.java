@@ -69,9 +69,12 @@ public class ApplicationFolderNode extends FolderNode {
 		
 		Iterator iterator = getChildren().iterator();
 		
+		String bundleType;
 		while(iterator.hasNext()){
 			ProgramNode bundle = (ProgramNode)iterator.next();
-			if(!bundle.getBundleType().equals(BugBundleConstants.BUG_BUNDLE_APPLICATION)){
+			bundleType = bundle.getBundleType();
+			if(!bundleType.equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) &&
+					!bundleType.equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)){
 				continue;
 			}
 			bugBundles.add(bundle);
