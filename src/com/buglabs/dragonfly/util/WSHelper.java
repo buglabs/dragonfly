@@ -227,23 +227,9 @@ public class WSHelper {
 		}
 
 		buf = null;
-		System.out.println("Wrote " + total + " to client");
+
 		return total;
 	}
-
-	/*
-	 * public byte[] getImage() { InputStream pic = getImageInputStream();
-	 * 
-	 * ByteArrayOutputStream os = new ByteArrayOutputStream();
-	 * 
-	 * int read = 0; byte[] buff = new byte[4096];
-	 * 
-	 * try { while((read = pic.read(buff)) > 0) { os.write(buff, 0, read); } }
-	 * catch (IOException e1) { // TODO Auto-generated catch block
-	 * e1.printStackTrace(); }
-	 * 
-	 * return os.toByteArray(); }
-	 */
 
 	public static byte[] streamToByteArray(InputStream in) throws IOException {
 
