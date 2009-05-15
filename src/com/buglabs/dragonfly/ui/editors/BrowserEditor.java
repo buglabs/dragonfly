@@ -93,6 +93,11 @@ public class BrowserEditor extends EditorPart implements IModelChangeListener {
 
 			public void completed(ProgressEvent event) {
 				String myUrl = browser.getUrl();
+				
+				if (myUrl == null) {
+					return;
+				}
+				
 				try {
 					myUrl = URLDecoder.decode(myUrl, "UTF-8");
 				} catch (UnsupportedEncodingException e1) {

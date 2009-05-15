@@ -38,4 +38,6 @@ Export-Package: com.buglabs.dragonfly.launch,
  com.buglabs.dragonfly.ui.jobs,
  com.buglabs.dragonfly.ui.launch,
  com.buglabs.dragonfly.ui.swt,
+ com.buglabs.dragonfly.ui.views.bugnet,
+ com.buglabs.dragonfly.ui.views.mybugs,
  com.buglabs.dragonfly.ui.wizards.bugProject
