@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -25,17 +26,16 @@ import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
- * This action is associated with a BUG connection.  The intent
- * is to present the OSGi console for the selected BUG to the user.
- * If the selected connection is a VirtualBUG, the existing console view
- * (which is created when the VB is launched automatically) will be shown.
- * If the selected connection is a real BUG, an existing view (if the action
- * has already been executed in the past for this particular connection) or a new 
- * view will be created for the BUG.  Basic socket I/O is used to connect to the 
- * BUG, similar to telnet.
+ * This action is associated with a BUG connection. The intent is to present the
+ * OSGi console for the selected BUG to the user. If the selected connection is
+ * a VirtualBUG, the existing console view (which is created when the VB is
+ * launched automatically) will be shown. If the selected connection is a real
+ * BUG, an existing view (if the action has already been executed in the past
+ * for this particular connection) or a new view will be created for the BUG.
+ * Basic socket I/O is used to connect to the BUG, similar to telnet.
  * 
  * @author kgilmer
- *
+ * 
  */
 public class ShowBUGConsoleAction extends Action {
 
@@ -58,11 +58,14 @@ public class ShowBUGConsoleAction extends Action {
 		bug = (Bug) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
 		try {
 			IConsole c = null;
-			
-			//If the action was selected on a Virtual BUG, simply show the pre-existing launch configuration.
-			//If there are multiple VBs running, this will show the first one found.
-			//If the address is not loopback, we assume a "real" bug and try to connect to the default
-			//OSGi console port.
+
+			// If the action was selected on a Virtual BUG, simply show the
+			// pre-existing launch configuration.
+			// If there are multiple VBs running, this will show the first one
+			// found.
+			// If the address is not loopback, we assume a "real" bug and try to
+			// connect to the default
+			// OSGi console port.
 			if (bug.getUrl().getHost().equals(LOOPBACK_ADDRESS)) {
 				// This is a virtual bug, look for that.
 				c = findConsole(VIRTUAL_BUG_CONSOLE_TITLE);
@@ -71,10 +74,10 @@ public class ShowBUGConsoleAction extends Action {
 			}
 
 			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			((IConsoleView)page.showView(IConsoleConstants.ID_CONSOLE_VIEW)).display(c);
+			((IConsoleView) page.showView(IConsoleConstants.ID_CONSOLE_VIEW)).display(c);
 		} catch (Exception e) {
 			UIUtils.handleVisualError("Unable to display BUG OSGi console.", e); //$NON-NLS-1$
-		} 
+		}
 	}
 
 	// http://wiki.eclipse.org/FAQ_How_do_I_write_to_the_console_from_a_plug-in%3F
@@ -104,14 +107,12 @@ public class ShowBUGConsoleAction extends Action {
 		// no console found, so create a new one
 		IOConsole myConsole = new IOConsole(name, null);
 
-		Socket s = new Socket();
-
-		// A limitation is that only consoles on default port can be displayed.
-		// Perhaps this should go into a preference setting.
-		s.connect(new InetSocketAddress(bug.getUrl().getHost(), DEFAULT_BUG_CONSOLE_PORT));
+		Socket s = new Socket(InetAddress.getByName(bug.getUrl().getHost()), DEFAULT_BUG_CONSOLE_PORT);
+		s.setKeepAlive(true);
+		s.setSoTimeout(1000);
 
 		ConsoleWriter cw = new ConsoleWriter(myConsole, conMan, s);
-		ConsoleReader cr = new ConsoleReader(myConsole, s);
+		ConsoleReader cr = new ConsoleReader(myConsole, conMan, s, cw);
 		cw.start();
 		cr.start();
 
@@ -131,14 +132,24 @@ public class ShowBUGConsoleAction extends Action {
 
 	/**
 	 * A thread for writing to the Eclipse console UI.
+	 * 
 	 * @author kgilmer
-	 *
+	 * 
 	 */
 	private class ConsoleWriter extends Thread {
 
 		private final IOConsole console;
 		private final IConsoleManager conMan;
 		private Socket socket;
+		private volatile boolean running = false;
+
+		public boolean isRunning() {
+			return running;
+		}
+
+		public void setRunning(boolean running) {
+			this.running = running;
+		}
 
 		public ConsoleWriter(IOConsole console, IConsoleManager conMan, Socket s) {
 			this.console = console;
@@ -149,20 +160,33 @@ public class ShowBUGConsoleAction extends Action {
 		@Override
 		public void run() {
 			OutputStream consoleOS = console.newOutputStream();
-
+			InputStream bugIS = null;
 			try {
-				InputStream bugIS = socket.getInputStream();
+				bugIS = socket.getInputStream();
 				byte[] response = new byte[1024 * 8];
-
-				while (true) {
-					int c = bugIS.read(response);
-					if (c > 0) {
-						consoleOS.write(response, 0, c);
-						conMan.warnOfContentChange(console);
+				running = true;
+				while (running) {
+					try {
+						int c = bugIS.read(response);
+						if (c > 0) {
+							consoleOS.write(response, 0, c);
+							conMan.warnOfContentChange(console);
+						}
+					} catch (SocketTimeoutException ste) {
 					}
 				}
 			} catch (Exception e) {
 				UIUtils.handleNonvisualWarning("Exception was generated during OSGi console I/O.", e); //$NON-NLS-1$
+			} finally {
+				try {
+					bugIS.close();
+					socket.close();
+				} catch (IOException e) {
+				}
+				if (console != null) {
+					console.destroy();
+					conMan.removeConsoles(new IConsole[] { console });
+				}
 			}
 		}
 
@@ -172,34 +196,62 @@ public class ShowBUGConsoleAction extends Action {
 	 * A thread for getting input from the user for OSGi console.
 	 * 
 	 * @author kgilmer
-	 *
+	 * 
 	 */
 	private class ConsoleReader extends Thread {
 
 		private final IOConsole console;
 		private Socket socket;
+		private final IConsoleManager conMan;
+		private final ConsoleWriter cw;
 
-		public ConsoleReader(IOConsole console, Socket s) {
+		public ConsoleReader(IOConsole console, IConsoleManager conMan, Socket s, ConsoleWriter cw) {
 			this.console = console;
+			this.conMan = conMan;
 			this.socket = s;
+			this.cw = cw;
 		}
 
 		@Override
 		public void run() {
 			InputStream is = console.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
+			OutputStream bugOS = null;
 			try {
-				OutputStream bugOS = socket.getOutputStream();
+				bugOS = socket.getOutputStream();
 				String line = new String();
+				boolean running = true;
 
-				while ((line = br.readLine()) != null) {
-					bugOS.write(line.toString().getBytes());
+				while (running && (line = br.readLine()) != null) {
+					bugOS.write(line.getBytes());
 					bugOS.write('\n');
+					if (isTerminateCommand(line)) {
+						running = false;
+					}
 				}
 			} catch (Exception e) {
 				UIUtils.handleNonvisualWarning("Exception was generated during OSGi console I/O.", e); //$NON-NLS-1$
+			} finally {
+				try {
+					bugOS.close();
+					socket.close();
+				} catch (IOException e) {
+				}
+				cw.setRunning(false);
+				if (console != null) {
+					console.destroy();
+					conMan.removeConsoles(new IConsole[] { console });
+				}
 			}
+		}
+
+		/**
+		 * @param line
+		 * @return true if parameter is a terminating command on OSGi console.
+		 */
+		private boolean isTerminateCommand(String line) {
+			return line.equals("disconnect") || line.equals("exit") || line.equals("quit"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
 }
+
