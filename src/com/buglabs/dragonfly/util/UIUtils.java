@@ -11,6 +11,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -727,7 +728,23 @@ public class UIUtils {
 	 * @param e1
 	 */
 	public static void handleNonvisualWarning(String message, Exception e) {
-		DragonflyActivator.getDefault().getLog().log(new Status(Status.WARNING, DragonflyActivator.PLUGIN_ID, 0, message, e));
+		DragonflyActivator da = DragonflyActivator.getDefault();
+		
+		if (da == null) {
+			System.err.println(message);
+			System.err.println(e.toString());
+			return;
+		}
+		
+		ILog log = da.getLog();
+		
+		if (log == null) {
+			System.err.println(message);
+			System.err.println(e.toString());
+			return;
+		}
+		
+		log.log(new Status(Status.WARNING, DragonflyActivator.PLUGIN_ID, 0, message, e));
 	}
 
 	synchronized public static void removeLoadingMessageBug(ITreeNode root, IProgressMonitor monitor) {
