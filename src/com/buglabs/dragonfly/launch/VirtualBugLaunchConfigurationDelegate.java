@@ -277,6 +277,6 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	}
 
 	private List getProjectNames(ILaunchConfiguration configuration) {
-		return BugProjectUtil.getProjectNames(BugProjectUtil.getWSBugProjects());
+		return BugProjectUtil.getProjectNames(BugProjectUtil.getSelectedWSProjects());
 	}
 }

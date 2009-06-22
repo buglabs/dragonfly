@@ -1,6 +1,7 @@
 package com.buglabs.dragonfly.ui.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -17,6 +18,7 @@ import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class BugProjectUtil extends ProjectUtils {
+
 
 	/**
 	 * Formats project name into valid form for use with PDE
@@ -51,6 +53,11 @@ public class BugProjectUtil extends ProjectUtils {
 		return temp;
 	}
 
+	public static List getSelectedWSProjects() {
+		return getWSBugProjects(
+				BugProjectSelectionManager.getInstance().getSelectedProjectNames());
+	}
+	
 	/**
 	 * Builds a list of Concierge Projects
 	 * 
@@ -59,32 +66,45 @@ public class BugProjectUtil extends ProjectUtils {
 	 * @throws CoreException
 	 */
 	public static List getWSBugProjects() {
-
+		return getWSBugProjects(null);
+	}
+	
+	/**
+	 * Gets the projects listed in projectNames,  If projectNames is null
+	 * it gets all the projects in the workspace
+	 * 
+	 * @param projectNames - if null, gets all in workspace
+	 * @return
+	 */
+	private static List getWSBugProjects(final String[] projectNames) {
 		final List projects = new Vector();
-
+		final List projectNameList;
+		if (projectNames != null) 
+			projectNameList = Arrays.asList(projectNames);
+		else 
+			projectNameList = null;
 		IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
 		try {
 			wsroot.accept(new IResourceVisitor() {
-
 				public boolean visit(IResource resource) throws CoreException {
-
 					if (resource.getType() == IResource.ROOT) {
 						return true;
 					} else if (resource.getType() == IResource.PROJECT) {
 						IProject project = (IProject) resource;
-						if (project.isOpen() && project.hasNature(BugApplicationNature.ID)) {
+						if (project.isOpen() 
+								&& project.hasNature(BugApplicationNature.ID)
+								&& (projectNameList == null 
+										|| projectNameList.contains(project.getName()))) {
 							projects.add(project);
 						}
 					}
-
 					return false;
 				}
 			});
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to retrieve Bug Projects", e);
 		}
-
-		return projects;
+		return projects;		
 	}
 
 	public static List getBugProjectNames() {
@@ -101,4 +121,6 @@ public class BugProjectUtil extends ProjectUtils {
 
 		return names;
 	}
+	
+	
 }

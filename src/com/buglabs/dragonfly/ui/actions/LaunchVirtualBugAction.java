@@ -31,6 +31,7 @@ import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugConnectionHelper;
+import com.buglabs.dragonfly.ui.dialogs.SelectWorkspaceProjectsDialog;
 import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.BugListener;
@@ -55,7 +56,20 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			// about to launch a Virtual BUG, disable action
 			ServerSocket socket = new ServerSocket(Integer.parseInt(DragonflyActivator.getDefault().getHttpPort()));
 			socket.close();
+			
+			IWorkbenchWindow win = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			Shell s;
 
+			if (win != null) {
+				s = win.getShell();
+			} else {
+				s = new Shell();
+			}
+			
+			SelectWorkspaceProjectsDialog dialog = new SelectWorkspaceProjectsDialog(s);
+			int retVal = dialog.open();
+			if (retVal == 1) return;
+			
 			VirtualBugLaunchShortCut launchSC = new VirtualBugLaunchShortCut();
 			ILaunch launch = launchSC.launch(ILaunchManager.DEBUG_MODE);
 			
