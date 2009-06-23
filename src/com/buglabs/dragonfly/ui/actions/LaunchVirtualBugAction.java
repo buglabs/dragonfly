@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
@@ -33,6 +34,7 @@ import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugConnectionHelper;
 import com.buglabs.dragonfly.ui.dialogs.SelectWorkspaceProjectsDialog;
 import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut;
+import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.BugListener;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -57,18 +59,8 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			ServerSocket socket = new ServerSocket(Integer.parseInt(DragonflyActivator.getDefault().getHttpPort()));
 			socket.close();
 			
-			IWorkbenchWindow win = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-			Shell s;
-
-			if (win != null) {
-				s = win.getShell();
-			} else {
-				s = new Shell();
-			}
-			
-			SelectWorkspaceProjectsDialog dialog = new SelectWorkspaceProjectsDialog(s);
-			int retVal = dialog.open();
-			if (retVal == 1) return;
+			// As user what apps to launch, 1 = canceled
+			if (openProjectSelectionDialog() == 1) return;
 			
 			VirtualBugLaunchShortCut launchSC = new VirtualBugLaunchShortCut();
 			ILaunch launch = launchSC.launch(ILaunchManager.DEBUG_MODE);
@@ -157,5 +149,22 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 				}
 			}	
 		}
+	}
+	
+	/**
+	 * Opens the dialog showing BUG Projects to load in vbug
+	 * if no projects listed, just continue
+	 * 
+	 * @return 0 to continue, 1 to cancel
+	 */
+	private int openProjectSelectionDialog() {
+		List projectNames = BugProjectUtil.getBugProjectNames();
+		if (projectNames == null || projectNames.size() < 1) return 0;
+		IWorkbenchWindow win = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		Shell s;
+		if (win != null) s = win.getShell();
+		else s = new Shell();
+		SelectWorkspaceProjectsDialog dialog = new SelectWorkspaceProjectsDialog(s);
+		return dialog.open();
 	}
 }

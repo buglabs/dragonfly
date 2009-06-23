@@ -1,14 +1,12 @@
 package com.buglabs.dragonfly.ui.dialogs;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -22,6 +20,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -30,62 +29,78 @@ import com.buglabs.dragonfly.ui.util.BugProjectSelectionManager;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 
 
-
+/**
+ * Dialog to select the workspace projects you'd like to load
+ * Modifies BugProjectSelectionManager's list of projects
+ * 
+ * @author brian
+ *
+ */
 public class SelectWorkspaceProjectsDialog extends Dialog {
 
-	private String[] bug_project_names;
-	CheckboxTableViewer viewer;
+	private String[] 	bug_project_names;
+	CheckboxTableViewer projects_viewer;
 	
 	public SelectWorkspaceProjectsDialog(Shell parentShell) {
 		super(parentShell);
-		bug_project_names = (String[])BugProjectUtil.getBugProjectNames().toArray(new String[0]);
+		List projectNames = BugProjectUtil.getBugProjectNames();
+		// initialize with all apps listed
+		bug_project_names = 
+			(String[]) projectNames.toArray(new String[projectNames.size()]);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		
-		Group projectsGroup = new Group(parent, SWT.NONE);
-		projectsGroup.setText("Select Applications to Run");
+		Composite projectsControl = new Composite(parent, SWT.NONE);
 		GridData gdProjects = new GridData(GridData.FILL_BOTH);
-		projectsGroup.setLayoutData(gdProjects);
-		projectsGroup.setLayout(new GridLayout(1, false));
+		projectsControl.setLayoutData(gdProjects);
+		projectsControl.setLayout(new GridLayout(1, false));
 		
+		Label label = new Label(projectsControl, SWT.TOP);
+		label.setText("Select Applications to Run");
 		
-		// table with list of services to choose from
-		Table modulesTable = new Table(projectsGroup ,SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
-		modulesTable.setHeaderVisible(false);
+		Table projectsTable = new Table(projectsControl ,SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
+		projectsTable.setHeaderVisible(false);
 
-		TableColumn col1 = new TableColumn(modulesTable, SWT.NONE);
+		TableColumn col1 = new TableColumn(projectsTable, SWT.NONE);
 		col1.setWidth(200);
-		col1.setText("Project Name");
 
 		TableLayout tableLayout = new TableLayout();
-		modulesTable.setLayout(tableLayout);
+		projectsTable.setLayout(tableLayout);
 
-		GridData viewerData = new GridData(GridData.FILL_BOTH);
+		GridData viewerData = new GridData(GridData.FILL_HORIZONTAL);
 		viewerData.horizontalSpan = 1;
 		viewerData.heightHint = 200;
 
-		viewer = new CheckboxTableViewer(modulesTable);
-		viewer.getControl().setLayoutData(viewerData);
-		viewer.setContentProvider(new ProjectsContentProvider());
-		viewer.setLabelProvider(new ProjectsLabelProvider());
-		viewer.setInput(bug_project_names);
+		// set up jface component
+		projects_viewer = new CheckboxTableViewer(projectsTable);
+		projects_viewer.getControl().setLayoutData(viewerData);
+		projects_viewer.setContentProvider(new ProjectsContentProvider());
+		projects_viewer.setLabelProvider(new ProjectsLabelProvider());
+		projects_viewer.setInput(bug_project_names);
 		
-		String[] selectedProjects = BugProjectSelectionManager.getInstance().getSelectedProjectNames();
+		// get the stored state of selected elements or select all
+		String[] selectedProjects = 
+			BugProjectSelectionManager.getInstance().getSelectedProjectNames();
 		if (selectedProjects == null)
-			viewer.setAllChecked(true);
+			projects_viewer.setAllChecked(true);
 		else 
-			viewer.setCheckedElements(selectedProjects);
+			projects_viewer.setCheckedElements(selectedProjects);
 		
-		viewer.addCheckStateListener(new ICheckStateListener() {
+		// update the selection manager when things checked/unchecked
+		projects_viewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				BugProjectSelectionManager.getInstance().setSelectedProjectNames(
-						Arrays.asList(viewer.getCheckedElements()).toArray(new String[0]));
+				Object[] elements = projects_viewer.getCheckedElements();
+				String[] names = new String[elements.length];
+				for (int i = 0; i < elements.length; i++) {
+					names[i] = (String) elements[i];
+				}
+				BugProjectSelectionManager.getInstance().setSelectedProjectNames(names);
 			}
 		});
 		
-		return projectsGroup;
+		return projectsControl;
 	}
 
 	class ProjectsContentProvider implements IStructuredContentProvider {
