@@ -98,17 +98,24 @@ public class UpsertToBugAction extends Action {
 
 				BaseTreeNode root = (BaseTreeNode) Activator.getDefault().getBugsViewRoot();
 				
+				/* 
+				 *  We had been just sending the app to the BUG if there was only
+				 *  one bug, but this lead to a lot of accidental sends, so
+				 *  now we're forcing the dialog.
+				 *  Code to skip the dialog is commented out
+				 *  
 				// don't show BUG selection if we have one BUG
 				if(root.getChildren().size() == 1){
 					bugConnection = (BugConnection)root.getChildren().iterator().next();
 				}
 				else{
-					BUGConnectionSelectionDialog conDialog = new BUGConnectionSelectionDialog(shell);
-					status = conDialog.open();
-					if (status == IStatus.OK) {
-						bugConnection = conDialog.getSelectedBugConnection();
-					}
+				*/
+				BUGConnectionSelectionDialog conDialog = new BUGConnectionSelectionDialog(shell);
+				status = conDialog.open();
+				if (status == IStatus.OK) {
+					bugConnection = conDialog.getSelectedBugConnection();
 				}
+				//}
 			}
 		});
 
