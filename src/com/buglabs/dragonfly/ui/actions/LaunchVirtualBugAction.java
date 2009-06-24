@@ -59,7 +59,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			ServerSocket socket = new ServerSocket(Integer.parseInt(DragonflyActivator.getDefault().getHttpPort()));
 			socket.close();
 			
-			// As user what apps to launch, 1 = canceled
+			// Ask user what apps to launch, 1 = canceled
 			if (openProjectSelectionDialog() == 1) return;
 			
 			VirtualBugLaunchShortCut launchSC = new VirtualBugLaunchShortCut();
@@ -161,9 +161,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 		List projectNames = BugProjectUtil.getBugProjectNames();
 		if (projectNames == null || projectNames.size() < 1) return 0;
 		IWorkbenchWindow win = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		Shell s;
-		if (win != null) s = win.getShell();
-		else s = new Shell();
+		Shell s = (win != null) ? win.getShell() : new Shell();
 		SelectWorkspaceProjectsDialog dialog = new SelectWorkspaceProjectsDialog(s);
 		return dialog.open();
 	}
