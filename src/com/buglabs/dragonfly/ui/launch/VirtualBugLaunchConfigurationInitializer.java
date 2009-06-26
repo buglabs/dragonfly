@@ -43,6 +43,7 @@ public class VirtualBugLaunchConfigurationInitializer {
 		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
 		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, "");
 		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, "");
+		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, "true");
 		
 		wc.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, bugprops);
 	}

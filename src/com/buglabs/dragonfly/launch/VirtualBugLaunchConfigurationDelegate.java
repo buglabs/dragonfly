@@ -35,38 +35,33 @@ import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.JarUtils;
 import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
 import com.buglabs.osgi.concierge.runtime.ConciergeRuntime;
+import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.util.BugBundleConstants;
 
 public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfiguration {
 
-	public static final String ID = "com.buglabs.dragonfly.launch.virtualBug";
-
-	public static final String ATTR_GPS_LOG = "GPS_LOG";
-
-	public static final String ATTR_IMAGES = "IMAGES";
-
-	public static final String ATTR_HTTP_PORT = "HTTP PORT";
-
-	public static final String ATTR_PROJECTS = "Bug Projects";
-
-	public static final String SHELL_BUNDLE = "com.buglabs.osgi.shell";
-
-	public static final String CG_SHELL_BUNDLE = "shell.jar";
-
-	public static final String PROP_HTTP_PORT = "org.osgi.service.http.port";
-	public static final String PROP_SERVICE_LISTENER_CHECK = "ch.ethz.iks.concierge.deepServiceListenerCheck";
-	public static final String PROP_LOG_ENABLED = "ch.ethz.iks.concierge.log.enabled";
-	public static final String PROP_LOG_LEVEL = "ch.ethz.iks.concierge.log.level";
-	public static final String PROP_VBUG = "com.buglabs.virtual.bug";
-	public static final String PROP_CAMERA_SNAPSHOTS = "com.buglabs.bug.emulator.module.camera.snapshots";
-	public static final String PROP_GPS_LOG = "com.buglabs.bug.emulator.module.gps.log";
-	public static final String PROP_ACC_LOG = "com.buglabs.bug.emulator.module.accelerometer.log";
-	public static final String PROP_SLP_MULTICAST_JOIN = "net.slp.multicastJoin";
-	public static final String PROP_CM_STORAGE = "com.buglabs.osgi.cm.storage";
-	public static final String PROP_VBUG_SCROLLSPEED = "com.buglabs.bug.emulator.scrollspeed";
-	public static final String PROP_VBUG_SCROLLDELAY = "com.buglabs.bug.emulator.scrolldelay";
-
-	public static final String ATTR_VBUG_SYSTEM_PROPERTIES = "ATTR_VBUG_SYSTEM_PROPERTIES";
+	public static final String ID 							= "com.buglabs.dragonfly.launch.virtualBug";
+	public static final String ATTR_GPS_LOG 				= "GPS_LOG";
+	public static final String ATTR_IMAGES 					= "IMAGES";
+	public static final String ATTR_HTTP_PORT 				= "HTTP PORT";
+	public static final String ATTR_LAUNCH_PROJECTS 		= "Bug Projects to Launch";
+	public static final String SHELL_BUNDLE 				= "com.buglabs.osgi.shell";
+	public static final String CG_SHELL_BUNDLE 				= "shell.jar";
+	public static final String PROP_LAUNCH_ALL 				= "com.buglabs.dragonfly.launch.launchAllProjects";
+	public static final String PROP_HTTP_PORT 				= "org.osgi.service.http.port";
+	public static final String PROP_SERVICE_LISTENER_CHECK 	= "ch.ethz.iks.concierge.deepServiceListenerCheck";
+	public static final String PROP_LOG_ENABLED 			= "ch.ethz.iks.concierge.log.enabled";
+	public static final String PROP_LOG_LEVEL 				= "ch.ethz.iks.concierge.log.level";
+	public static final String PROP_VBUG 					= "com.buglabs.virtual.bug";
+	public static final String PROP_CAMERA_SNAPSHOTS 		= "com.buglabs.bug.emulator.module.camera.snapshots";
+	public static final String PROP_GPS_LOG 				= "com.buglabs.bug.emulator.module.gps.log";
+	public static final String PROP_ACC_LOG 				= "com.buglabs.bug.emulator.module.accelerometer.log";
+	public static final String PROP_SLP_MULTICAST_JOIN 		= "net.slp.multicastJoin";
+	public static final String PROP_CM_STORAGE 			    = "com.buglabs.osgi.cm.storage";
+	public static final String PROP_VBUG_SCROLLSPEED 		= "com.buglabs.bug.emulator.scrollspeed";
+	public static final String PROP_VBUG_SCROLLDELAY 		= "com.buglabs.bug.emulator.scrolldelay";
+	public static final String ATTR_VBUG_SYSTEM_PROPERTIES 	= "ATTR_VBUG_SYSTEM_PROPERTIES";
+	public static final String DEFAULT_START_LEVEL			= "4";
 
 	public void launch(ILaunchConfiguration configuration, String mode, 
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
@@ -85,28 +80,11 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		}
 	}
 
-	public static String getSystemProperty(
-			ILaunchConfiguration configuration, 
-			String prop, String defaultValue) throws CoreException {
-		
-		Map properties = configuration.getAttribute(
-				VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
-		String val = (String) properties.get(prop);
-
-		if(val != null) {
-			return val;
-		}
-
-		return defaultValue;
-	}
-
-	private int getHttpPort(ILaunchConfiguration configuration) throws CoreException {
-
-		String val = getSystemProperty(configuration, PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
-
-		return Integer.parseInt((String) val);
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getSystemPropertiesContents(org.eclipse.debug.core.ILaunchConfiguration)
+	 */
+	@Override
 	protected StringBuffer getSystemPropertiesContents(ILaunchConfiguration configuration) throws CoreException {
 		
 		StringBuffer sb = super.getSystemPropertiesContents(configuration);
@@ -117,12 +95,22 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		return sb;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getVMArguments()
+	 */
+	@Override
 	protected List getVMArguments() {
 		ArrayList vmArgs = new ArrayList();
 		vmArgs.addAll(super.getVMArguments());
 		return vmArgs;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getClassPathEntries()
+	 */
+	@Override
 	protected IClasspathEntry[] getClassPathEntries() {
 		Vector cpes = new Vector();
 		cpes.addAll(Arrays.asList(super.getClassPathEntries()));
@@ -130,17 +118,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		return (IClasspathEntry[]) cpes.toArray(new IClasspathEntry[cpes.size()]);
 	}
 
-	private List getSWTClasspathEntries() {
-		List swtJars = SWTHelper.getSWTJars();
-		List cpes = new ArrayList();
-		Iterator jarsIter = swtJars.iterator();
-		while (jarsIter.hasNext()) {
-			File jar = (File) jarsIter.next();
-			cpes.add(JavaCore.newLibraryEntry(new Path(jar.getAbsolutePath()), new Path(jar.getAbsolutePath()), null));
-		}
-		return cpes;
-	}
-
+	@Override
 	protected List getBundleJars(ILaunchConfiguration configuration) throws CoreException {
 		Vector jars = new Vector();
 		Vector cgFilteredJars = new Vector();
@@ -163,37 +141,11 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		return jars;
 	}
 
-	/**
-	 * This method removes bundles that should not be started in the Virtual Bug
-	 * Service Discovery mode.
-	 * 
-	 * @param bugJars
+	/*
+	 * (non-Javadoc)
+	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getInstallBundles(org.eclipse.debug.core.ILaunchConfiguration)
 	 */
-	private void removeNonServiceDiscoveryBundles(List bugJars) {
-		List itemsToRemove = new ArrayList();
-
-		for (Iterator i = bugJars.iterator(); i.hasNext();) {
-			File bundle = (File) i.next();
-
-			if (bundle.getName().indexOf("com.buglabs.bug.slp") > -1) {
-				itemsToRemove.add(bundle);
-			} else if (bundle.getName().indexOf("ch.ethz.iks.slp") > -1) {
-				itemsToRemove.add(bundle);
-			} else if (bundle.getName().indexOf("com.buglabs.bug.event") > -1) {
-				itemsToRemove.add(bundle);
-			} else if (bundle.getName().indexOf("com.buglabs.osgi.shell") > -1) {
-				itemsToRemove.add(bundle);
-			} else if (bundle.getName().indexOf("com.buglabs.bug.emulator.jar") > -1) {
-				itemsToRemove.add(bundle);
-			}
-		}
-
-		for (Iterator i = itemsToRemove.iterator(); i.hasNext();) {
-			bugJars.remove(i.next());
-		}
-
-	}
-
+	@Override
 	protected List getInstallBundles(ILaunchConfiguration configuration) throws CoreException, IOException, URISyntaxException {
 		Vector installBundles = new Vector();
 
@@ -213,6 +165,11 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		return installBundles;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getStartLevelMap(org.eclipse.debug.core.ILaunchConfiguration)
+	 */
+	@Override
 	protected Map getStartLevelMap(ILaunchConfiguration configuration) throws CoreException {
 		Map startlevelmap = super.getStartLevelMap(configuration);
 
@@ -237,34 +194,50 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		return startlevelmap;
 	}
 
-	protected String getFrameworkStartLevel(ILaunchConfiguration configuration) throws CoreException {
-		return "4";
-	}
-
-	/**
-	 * Returns the a list of names of BugProjects
+	/*
+	 * (non-Javadoc)
+	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getFrameworkStartLevel(org.eclipse.debug.core.ILaunchConfiguration)
 	 */
-	protected List getWorkspaceBundles(ILaunchConfiguration configuration) throws CoreException {
-		List wsBundles = getProjectNames(configuration);
-		return wsBundles;
+	@Override
+	protected String getFrameworkStartLevel(
+			ILaunchConfiguration configuration) throws CoreException {
+		return DEFAULT_START_LEVEL;
 	}
-
-	private List getProjects(ILaunchConfiguration configuration) {
-		ArrayList projs = new ArrayList();
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-		Iterator iter = getProjectNames(configuration).iterator();
-		while (iter.hasNext()) {
-			String projName = (String) iter.next();
-			IProject proj = root.getProject(projName);
-			if (proj != null && proj.isOpen()) {
-				projs.add(proj);
-			}
-		}
-
-		return projs;
+	
+	/**
+	 * This one called from the parent on launching of virtual bugs says which
+	 * projects from the workspace to build.  It returns a list of strings of Project names.
+	 * 
+	 */
+	@Override
+	protected List<String> getWorkspaceBundles(ILaunchConfiguration configuration)
+			throws CoreException {
+		List selectedProjects = BugProjectUtil.getWSBugProjectNames();
+		String launchAll = getSystemProperty(configuration, PROP_LAUNCH_ALL, "true");
+		if (!launchAll.equals("true"))
+			selectedProjects = configuration.getAttribute(
+				ATTR_LAUNCH_PROJECTS, BugProjectUtil.getWSBugProjectNames());
+		return selectedProjects;
 	}
+	
+    private static String getSystemProperty(
+            ILaunchConfiguration configuration, 
+            String prop, String defaultValue) throws CoreException {
+    
+    	Map properties = configuration.getAttribute(
+    			VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+        String val = (String) properties.get(prop);
 
+        if(val != null) return val;
+        return defaultValue;
+    }
+
+    private int getHttpPort(ILaunchConfiguration configuration) throws CoreException {
+    	String val = getSystemProperty(configuration, 
+    			PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
+    	return Integer.parseInt((String) val);
+    }
+	
 	private List getJarNames(List jars) {
 		Vector names = new Vector();
 		Iterator jarsIter = jars.iterator();
@@ -276,7 +249,4 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		return names;
 	}
 
-	private List getProjectNames(ILaunchConfiguration configuration) {
-		return BugProjectUtil.getProjectNames(BugProjectUtil.getSelectedWSProjects());
-	}
 }

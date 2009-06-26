@@ -4,8 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
@@ -23,19 +21,12 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.IModelNode;
-import com.buglabs.dragonfly.model.ITreeNode;
-import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
-import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugConnectionHelper;
-import com.buglabs.dragonfly.ui.dialogs.SelectWorkspaceProjectsDialog;
 import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut;
-import com.buglabs.dragonfly.ui.util.BugProjectUtil;
-import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.BugListener;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -58,9 +49,6 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			// about to launch a Virtual BUG, disable action
 			ServerSocket socket = new ServerSocket(Integer.parseInt(DragonflyActivator.getDefault().getHttpPort()));
 			socket.close();
-			
-			// Ask user what apps to launch, 1 = canceled
-			if (openProjectSelectionDialog() == 1) return;
 			
 			VirtualBugLaunchShortCut launchSC = new VirtualBugLaunchShortCut();
 			ILaunch launch = launchSC.launch(ILaunchManager.DEBUG_MODE);
@@ -149,20 +137,5 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 				}
 			}	
 		}
-	}
-	
-	/**
-	 * Opens the dialog showing BUG Projects to load in vbug
-	 * if no projects listed, just continue
-	 * 
-	 * @return 0 to continue, 1 to cancel
-	 */
-	private int openProjectSelectionDialog() {
-		List projectNames = BugProjectUtil.getBugProjectNames();
-		if (projectNames == null || projectNames.size() < 1) return 0;
-		IWorkbenchWindow win = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		Shell s = (win != null) ? win.getShell() : new Shell();
-		SelectWorkspaceProjectsDialog dialog = new SelectWorkspaceProjectsDialog(s);
-		return dialog.open();
 	}
 }

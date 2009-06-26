@@ -53,11 +53,6 @@ public class BugProjectUtil extends ProjectUtils {
 		return temp;
 	}
 
-	public static List getSelectedWSProjects() {
-		return getWSBugProjects(
-				BugProjectSelectionManager.getInstance().getSelectedProjectNames());
-	}
-	
 	/**
 	 * Builds a list of Concierge Projects
 	 * 
@@ -68,6 +63,15 @@ public class BugProjectUtil extends ProjectUtils {
 	public static List getWSBugProjects() {
 		return getWSBugProjects(null);
 	}
+	
+	/**
+	 * Builds a list of the BUG project names currently in the workspace
+	 * 
+	 * @return
+	 */
+	public static List<String> getWSBugProjectNames() {
+		return getProjectNames(getWSBugProjects());
+	}	
 	
 	/**
 	 * Gets the projects listed in projectNames,  If projectNames is null
@@ -107,12 +111,8 @@ public class BugProjectUtil extends ProjectUtils {
 		return projects;		
 	}
 
-	public static List getBugProjectNames() {
-		return getProjectNames(getWSBugProjects());
-	}
-
-	public static List getProjectNames(List projects) {
-		ArrayList names = new ArrayList(projects.size());
+	private static List<String> getProjectNames(List projects) {
+		ArrayList<String> names = new ArrayList<String>(projects.size());
 		Iterator projIter = projects.iterator();
 
 		while (projIter.hasNext()) {
@@ -121,6 +121,5 @@ public class BugProjectUtil extends ProjectUtils {
 
 		return names;
 	}
-	
 	
 }

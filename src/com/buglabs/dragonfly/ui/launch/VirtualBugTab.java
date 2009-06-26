@@ -26,64 +26,57 @@ import org.eclipse.swt.widgets.Text;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
+import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchProjectsSectionDrawer.ILaunchProjectSelectionListener;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.UIUtils;
 
 public class VirtualBugTab extends AbstractLaunchConfigurationTab {
-	private List projects;
 
+	private final static String GPS_LOG_LABEL 	= "GPS Log: ";
+	private final static String ACC_LOG_LABEL 	= "Accelerometer Log: ";
+	private final static String HTTP_PORT_LABEL = "HTTP Port:";
+	private final static String TAB_NAME		= "Virtual BUG";
+	
 	private Text httpPort;
-
 	private String httpPortValue;
-
 	private Text txtGpsLog;
-	
 	private Text txtAccelerometerLog;
-
 	private Text txtImages;
+	private VirtualBugLaunchProjectsSectionDrawer projects_drawer;
+
+	public VirtualBugTab() {}
 	
-	private final static String GPS_LOG_LABEL = "GPS Log: ";
-	
-	private final static String ACC_LOG_LABEL = "Accelerometer Log: ";
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getName()
+	 */
+	public String getName() { return TAB_NAME; }
 
-	public VirtualBugTab() {
-
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#createControl(org.eclipse.swt.widgets.Composite)
+	 */
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 
 		Label lblHttpPort = new Label(composite, SWT.NONE);
-		lblHttpPort.setText("HTTP Port:");
+		lblHttpPort.setText(HTTP_PORT_LABEL);
 
 		httpPort = new Text(composite, SWT.BORDER);
 		GridData gData = new GridData();
 		gData.widthHint = 50;
 		gData.horizontalSpan = 2;
 		httpPort.setLayoutData(gData);
-
 		httpPort.setText(String.valueOf(httpPortValue));
-
 		httpPort.addKeyListener(new KeyListener() {
-
+			public void keyReleased(KeyEvent e) {}
 			public void keyPressed(KeyEvent e) {
-				if (!Character.isDigit(e.character)) {
-					if (e.character == SWT.BS) {
-						e.doit = true;
-						return;
-					}
-					e.doit = false;
-					return;
-				}
 				e.doit = true;
+				if (!Character.isDigit(e.character)) {
+					if (e.character != SWT.BS) e.doit = false;
+				}
 			}
-
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
 		});
 
 		httpPort.addModifyListener(new ModifyListener() {
@@ -105,7 +98,6 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 
 		GridData gdText = new GridData(GridData.FILL_HORIZONTAL);
 		gdText.grabExcessHorizontalSpace = true;
-
 		
 		GridData gdButton = new GridData();
 		gdButton.horizontalAlignment = SWT.BEGINNING;
@@ -113,45 +105,38 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		// create GPS field
 		Label gpsLabel = new Label(composite, SWT.NONE);
 		gpsLabel.setText(GPS_LOG_LABEL);
-		
 		txtGpsLog = new Text(composite, SWT.BORDER);
 		createLog(composite, gdText, txtGpsLog, gdButton);
 		
 		// create ACCELEROMETER field
 		Label accLabel = new Label(composite, SWT.NONE);
 		accLabel.setText(ACC_LOG_LABEL);
-		
 		txtAccelerometerLog = new Text(composite, SWT.BORDER);
 		createLog(composite, gdText, txtAccelerometerLog ,gdButton);
 		
 		// create IMAGE field
 		Label lblImages = new Label(composite, SWT.NONE);
 		lblImages.setText("Images: ");
-		
 		txtImages = new Text(composite, SWT.BORDER);
 		createLog(composite, gdText, txtImages ,gdButton);
 
-		setControl(composite);
-	}
-
-	private void createLog(Composite composite, GridData gdText, Text textField, GridData gdButton) {
-		
-		textField.setLayoutData(gdText);
-		textField.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-
+		projects_drawer = new VirtualBugLaunchProjectsSectionDrawer();
+		projects_drawer.draw(composite);
+		projects_drawer.addChangeListener(new ILaunchProjectSelectionListener(){
+			public void projectSelectionChanged() {
 				setDirty(true);
 				updateLaunchConfigurationDialog();
 			}
 		});
-
-		Button btnBrowse = new Button(composite, SWT.PUSH);
-		btnBrowse.setText("Browse...");
-		btnBrowse.setLayoutData(gdButton);
-		btnBrowse.addMouseListener(new BrowseMouseListener(textField));
+		
+		setControl(composite);
+		
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#isValid(org.eclipse.debug.core.ILaunchConfiguration)
+	 */
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		httpPortValue = httpPort.getText();
 		if (!httpPortValue.equals("")) {
@@ -161,6 +146,7 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 				return false;
 			}
 		}
+		
 		String gpsLogFile = txtGpsLog.getText();
 		if (gpsLogFile.length() > 0) {
 			File gpsLog = new File(gpsLogFile);
@@ -176,82 +162,53 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
-	public String getName() {
-		return "Virtual BUG";
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(org.eclipse.debug.core.ILaunchConfiguration)
+	 */
 	public void initializeFrom(ILaunchConfiguration configuration) {
-
+		
+		
+		// listen to the port as defined in SDK preferences
+		httpPortValue = DragonflyActivator.getDefault().getPluginPreferences().getString(
+				DragonflyActivator.PREF_DEFAULT_BUGPORT);
+		httpPort.setText(String.valueOf(httpPortValue));
+		
+		initializeProjectsDrawer(configuration);
+	
 		try {
-			// listen to the port as defined in SDK preferences
-			httpPortValue = DragonflyActivator.getDefault().getPluginPreferences().getString(DragonflyActivator.PREF_DEFAULT_BUGPORT);
-			//httpPortValue = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
-			httpPort.setText(String.valueOf(httpPortValue));
-			projects = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_PROJECTS, new ArrayList());
-		} catch (CoreException e) {
-			UIUtils.handleVisualError("Unable to initialize HTTP Port", e);
-			httpPortValue = DragonflyActivator.getDefault().getString("DEFAULT_PORT");
-		}
-
-		try {
-			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""); //$NON-NLS-1$
-			txtImages.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""));
+			String systemProperty = getSystemProperty(configuration, 
+					VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""); //$NON-NLS-1$
+			txtImages.setText(getSystemProperty(configuration, 
+					VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""));
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize images.", e);
 		}
 
 		try {
-			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""); //$NON-NLS-1$
-			txtGpsLog.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""));
+			String systemProperty = getSystemProperty(configuration, 
+					VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""); //$NON-NLS-1$
+			txtGpsLog.setText(getSystemProperty(configuration, 
+					VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""));
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize GPS log.", e);
 		}
 		
 		try {
-			txtAccelerometerLog.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, ""));
+			txtAccelerometerLog.setText(getSystemProperty(configuration, 
+					VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, ""));
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize Accelerometer log.", e);
 		}
 	}
 
-	private String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
-		Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
-		String val = (String) properties.get(prop);
-		
-		if(val != null) {
-			return val;
-		}
-		
-		return defaultValue;
-	}
-
-	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
-		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
-		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
-		setSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
-		
-		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_DEFAULT_BUGPORT, httpPortValue);
-		
-		configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_PROJECTS, projects);
-	}
-	
-	private void setSystemProperty(ILaunchConfigurationWorkingCopy configuration, String prop, String value) {
-		Map properties;
-		try {
-			properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
-			properties.put(prop, value);
-			configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, properties);
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		try {
 			VirtualBugLaunchConfigurationInitializer.initializeSystemProperties(configuration);
@@ -260,18 +217,110 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 			e1.printStackTrace();
 		}
 		
-		projects = new ArrayList();
+		configuration.setAttribute(
+				VirtualBugLaunchConfigurationDelegate.ATTR_LAUNCH_PROJECTS, 
+				BugProjectUtil.getWSBugProjectNames());
+	}	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+	 */
+	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
+		setSystemProperty(configuration, 
+				VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
+		setSystemProperty(configuration, 
+				VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
+		setSystemProperty(configuration, 
+				VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
+		setSystemProperty(configuration, 
+				VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
+		setSystemProperty(configuration,
+				VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, 
+				"" + projects_drawer.getLaunchAllProjectsFlag());
+		
+		DragonflyActivator.getDefault().getPluginPreferences().setValue(
+				DragonflyActivator.PREF_DEFAULT_BUGPORT, httpPortValue);
+		
+		configuration.setAttribute(
+				VirtualBugLaunchConfigurationDelegate.ATTR_LAUNCH_PROJECTS, 
+				projects_drawer.getSelectedProjects());
+	}	
+	
+	
+	private void initializeProjectsDrawer(ILaunchConfiguration configuration) {
+		// Get a list of the projects we want to launch from config
+		List launchProjects = null;
 		try {
-			projects.addAll(getBugProjectNames());
+			// if no config, default to all in workspace
+			launchProjects = configuration.getAttribute(
+					VirtualBugLaunchConfigurationDelegate.ATTR_LAUNCH_PROJECTS,  
+					BugProjectUtil.getWSBugProjectNames());
 		} catch (CoreException e) {
-			UIUtils.handleVisualError("Unable to retrieve projects for launch", e);
+			e.printStackTrace();
+		}
+		if (launchProjects == null)
+			launchProjects = BugProjectUtil.getWSBugProjectNames();
+		
+		projects_drawer.setSelectedProjects(launchProjects);
+		
+		// Get out config property that says if we should launch with all projects
+		// from list or not.  This affects whether or not the project table is grayed
+		String val = "true";
+		try {
+			val = getSystemProperty(configuration, 
+					VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, "true");
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 		
-		if (projects == null) {
-			projects = new ArrayList(0);
+		projects_drawer.setLaunchAllProjectsFlag(val.toLowerCase().equals("true"));
+				
+	}
+	
+	
+	private String getSystemProperty(
+			ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
+		Map properties = configuration.getAttribute(
+				VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+		String val = (String) properties.get(prop);
+		
+		if(val != null) {
+			return val;
 		}
 		
-		configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_PROJECTS, projects);
+		return defaultValue;
+	}
+	
+	private void createLog(Composite composite, 
+			GridData gdText, Text textField, GridData gdButton) {
+		textField.setLayoutData(gdText);
+		textField.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				setDirty(true);
+				updateLaunchConfigurationDialog();
+			}
+		});
+		Button btnBrowse = new Button(composite, SWT.PUSH);
+		btnBrowse.setText("Browse...");
+		btnBrowse.setLayoutData(gdButton);
+		btnBrowse.addMouseListener(new BrowseMouseListener(textField));
+	}	
+	
+	
+	private void setSystemProperty(
+			ILaunchConfigurationWorkingCopy configuration, String prop, String value) {
+		Map properties;
+		try {
+			properties = configuration.getAttribute(
+					VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+			properties.put(prop, value);
+			configuration.setAttribute(
+					VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, properties);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private List getBugProjectNames() throws CoreException {
@@ -284,4 +333,5 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		}
 		return names;
 	}
+	
 }

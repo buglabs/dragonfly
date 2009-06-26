@@ -1,34 +1,33 @@
-package com.buglabs.dragonfly.ui.dialogs;
+package com.buglabs.dragonfly.ui.launch;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.ColorRegistry;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
-import com.buglabs.dragonfly.ui.util.BugProjectSelectionManager;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 
 
@@ -39,23 +38,19 @@ import com.buglabs.dragonfly.ui.util.BugProjectUtil;
  * @author brian
  *
  */
-public class SelectWorkspaceProjectsDialog extends Dialog {
-
+public class VirtualBugLaunchProjectsSectionDrawer {
+	
 	private static final String HYPERLINKCOLOR 		= "HYPERLINKCOLOR";
-	private static final String DIALOG_TITLE_TXT	= "Select Applications to Run";
+	private static final String DIALOG_TITLE_TXT	= "Automatically launch with all workspace applications";
 	private static final String SELECT_ALL_TXT 		= "Select All";
 	private static final String SELECT_NONE_TXT		= "Select None";
-	private static ColorRegistry color_registry = null;
-	private String[] 			bug_project_names;
-	private CheckboxTableViewer projects_viewer;
-	
-	public SelectWorkspaceProjectsDialog(Shell parentShell) {
-		super(parentShell);
-		List projectNames = BugProjectUtil.getBugProjectNames();
-		// initialize with all apps listed
-		bug_project_names = 
-			(String[]) projectNames.toArray(new String[projectNames.size()]);
-	}
+	private static int VIEWER_HEIGHT_HINT			= 150;
+	private static ColorRegistry color_registry 	= null;
+	private Button				launch_all_button 	= null;
+	private CheckboxTableViewer projects_viewer		= null;
+	private Table 				projects_table 		= null;
+	private List<ILaunchProjectSelectionListener> 
+	selection_listeners = new ArrayList<ILaunchProjectSelectionListener>();
 
 	private void createColorRegistry(Composite parent) {
 		if (color_registry == null)
@@ -65,53 +60,49 @@ public class SelectWorkspaceProjectsDialog extends Dialog {
 			color_registry.put(HYPERLINKCOLOR, new RGB(98,83,125));
 	}
 	
-	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected void draw(Composite parent) {
 		createColorRegistry(parent);
 		
 		Composite projectsControl = new Composite(parent, SWT.NONE);
 		GridData gdProjects = new GridData(GridData.FILL_BOTH);
+		gdProjects.horizontalSpan = 2;
 		projectsControl.setLayoutData(gdProjects);
 		projectsControl.setLayout(new GridLayout(1, false));
 		
-		Label label = new Label(projectsControl, SWT.TOP);
-		label.setText(DIALOG_TITLE_TXT);
+		launch_all_button = new Button(projectsControl, SWT.CHECK);
+		launch_all_button.setText(DIALOG_TITLE_TXT);
+		launch_all_button.setSelection(true);
+		launch_all_button.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {}
+			public void widgetSelected(SelectionEvent e) {
+				updateProjectsTable();
+				notifyChangeListeners();
+			}
+		});
 		
-		Table projectsTable = new Table(projectsControl ,SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
-		projectsTable.setHeaderVisible(false);
+		projects_table = new Table(projectsControl ,SWT.CHECK | SWT.BORDER | SWT.V_SCROLL);
+		projects_table.setHeaderVisible(false);
 
-		TableColumn col1 = new TableColumn(projectsTable, SWT.NONE);
+		TableColumn col1 = new TableColumn(projects_table, SWT.NONE);
 		col1.setWidth(200);
 
 		TableLayout tableLayout = new TableLayout();
-		projectsTable.setLayout(tableLayout);
+		projects_table.setLayout(tableLayout);
 
 		GridData viewerData = new GridData(GridData.FILL_HORIZONTAL);
 		viewerData.horizontalSpan = 1;
-		viewerData.heightHint = 200;
+		viewerData.heightHint = VIEWER_HEIGHT_HINT;
 
 		// set up jface component
-		projects_viewer = new CheckboxTableViewer(projectsTable);
+		projects_viewer = new CheckboxTableViewer(projects_table);
 		projects_viewer.getControl().setLayoutData(viewerData);
 		projects_viewer.setContentProvider(new ProjectsContentProvider());
 		projects_viewer.setLabelProvider(new ProjectsLabelProvider());
-		projects_viewer.setInput(bug_project_names);
-		
-		// get the stored state of selected elements or select all
-		String[] selectedProjects = 
-			BugProjectSelectionManager.getInstance().getSelectedProjectNames();
-		if (selectedProjects == null) selectAll();
-		else projects_viewer.setCheckedElements(selectedProjects);
-		
-		// update the selection manager when things checked/unchecked
-		projects_viewer.addCheckStateListener(new ICheckStateListener() {
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				Object[] elements = projects_viewer.getCheckedElements();
-				String[] names = new String[elements.length];
-				for (int i = 0; i < elements.length; i++) {
-					names[i] = (String) elements[i];
-				}
-				BugProjectSelectionManager.getInstance().setSelectedProjectNames(names);
+		List<String> projectNames = BugProjectUtil.getWSBugProjectNames();
+		projects_viewer.setInput((String[]) projectNames.toArray(new String[projectNames.size()]));
+		projects_viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event) {
+				notifyChangeListeners();
 			}
 		});
 		
@@ -123,8 +114,8 @@ public class SelectWorkspaceProjectsDialog extends Dialog {
 	    layoutHL.verticalSpacing = 0;
 	    layoutHL.marginRight = 5;
 		hyperLinkHolder.setLayout(layoutHL);
-		GridData gdHL = new GridData(SWT.CENTER, SWT.CENTER, true, false);
-		gdHL.horizontalAlignment = SWT.FILL;
+		GridData gdHL = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+		gdHL.horizontalAlignment = SWT.LEFT;
 		hyperLinkHolder.setLayoutData(gdHL);	
 		
 		Hyperlink selectAllLink = new Hyperlink(hyperLinkHolder, SWT.LEFT);
@@ -134,41 +125,76 @@ public class SelectWorkspaceProjectsDialog extends Dialog {
 		selectAllLink.setForeground(color_registry.get(HYPERLINKCOLOR));
 		selectAllLink.addHyperlinkListener(new SelectionHyperlinkListener() {
 			public void linkActivated(HyperlinkEvent e) {
-				selectAll();
+				projects_viewer.setAllChecked(true);
+				notifyChangeListeners();
 			}
 		});
 
-		Hyperlink selectNoneLink = new Hyperlink(hyperLinkHolder, SWT.RIGHT);
+		Hyperlink selectNoneLink = new Hyperlink(hyperLinkHolder, SWT.LEFT);
 		selectNoneLink.setText(SELECT_NONE_TXT);
 		selectNoneLink.setToolTipText(SELECT_NONE_TXT);
 		selectNoneLink.setUnderlined(true);
 		selectNoneLink.setForeground(color_registry.get(HYPERLINKCOLOR));
-		selectNoneLink.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false));
+		selectNoneLink.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
 		selectNoneLink.addHyperlinkListener(new SelectionHyperlinkListener() {
 			public void linkActivated(HyperlinkEvent e) {
-				selectNone();
+				projects_viewer.setAllChecked(false);
+				notifyChangeListeners();
 			}
 		});
-		
-		return projectsControl;
-	}
-
-	private void selectAll() {
-		projects_viewer.setAllChecked(true);
-		BugProjectSelectionManager.getInstance().setSelectedProjectNames(bug_project_names);
+	
 	}
 	
-	private void selectNone() {
-		projects_viewer.setAllChecked(false);
-		BugProjectSelectionManager.getInstance().setSelectedProjectNames(new String[0]);
+	public void addChangeListener(ILaunchProjectSelectionListener listener) {
+		if (!selection_listeners.contains(listener))
+			selection_listeners.add(listener);
 	}
 	
+	public void setSelectedProjects(
+			List<String> selectedProjects) {
+		if (projects_viewer == null) return;
+		projects_viewer.setCheckedElements(selectedProjects.toArray());
+	}
 	
+	public List<String> getSelectedProjects() {
+		Object[] elements = projects_viewer.getCheckedElements();
+		String[] names = new String[elements.length];
+		for (int i = 0; i < elements.length; i++) {
+			names[i] = (String) elements[i];
+		}
+		return Arrays.asList(names);
+	}
+	
+	public void setLaunchAllProjectsFlag(boolean val) {
+		if (launch_all_button != null)
+			launch_all_button.setSelection(val);
+		updateProjectsTable();
+	}
+	
+	public boolean getLaunchAllProjectsFlag() {
+		if (launch_all_button == null) return false;
+		return launch_all_button.getSelection();
+	}
+	
+	private void notifyChangeListeners() {
+		for (ILaunchProjectSelectionListener listener : selection_listeners) {
+			listener.projectSelectionChanged();
+		}
+	}
+	
+	private void updateProjectsTable() {
+		if (projects_table != null && launch_all_button != null)
+			projects_table.setEnabled(!launch_all_button.getSelection());
+	}
+	
+	/**
+	 * abstract class to hide unimplemented methods and make in-line
+	 * listener creation less ugly
+	 */
 	abstract class SelectionHyperlinkListener implements IHyperlinkListener {
 		// not needed for this functionality
 		public void linkEntered(HyperlinkEvent e) {}
 		public void linkExited(HyperlinkEvent e) {}
-		
 	}
 	
 	class ProjectsContentProvider implements IStructuredContentProvider {
@@ -201,4 +227,7 @@ public class SelectWorkspaceProjectsDialog extends Dialog {
 		}
 	}
 	
+	interface ILaunchProjectSelectionListener {
+		public void projectSelectionChanged();
+	}
 }
