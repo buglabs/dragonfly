@@ -171,7 +171,6 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	 */
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		
-		
 		// listen to the port as defined in SDK preferences
 		httpPortValue = DragonflyActivator.getDefault().getPluginPreferences().getString(
 				DragonflyActivator.PREF_DEFAULT_BUGPORT);
@@ -213,8 +212,8 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		try {
 			VirtualBugLaunchConfigurationInitializer.initializeSystemProperties(configuration);
 		} catch (CoreException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			UIUtils.handleNonvisualError(e1.getMessage(), e1);			
 		}
 		
 		configuration.setAttribute(
@@ -227,18 +226,23 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
 	 */
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		setSystemProperty(configuration, 
-				VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
-		setSystemProperty(configuration, 
-				VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
-		setSystemProperty(configuration, 
-				VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
-		setSystemProperty(configuration, 
-				VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
-		setSystemProperty(configuration,
-				VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, 
-				"" + projects_drawer.getLaunchAllProjectsFlag());
 		
+		try {
+			// here make a new copy of the config hash and save the copy so revert button works
+			Map properties = configuration.getAttribute(
+					VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+			Map<String, String> propertiesCopy = new HashMap<String, String>(properties);
+			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
+			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
+			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
+			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
+			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, "" + projects_drawer.getLaunchAllProjectsFlag());
+			configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy); 
+		} catch (CoreException e) {
+			e.printStackTrace();
+			UIUtils.handleNonvisualError(e.getMessage(), e);			
+		}
+
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(
 				DragonflyActivator.PREF_DEFAULT_BUGPORT, httpPortValue);
 		
@@ -248,6 +252,12 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	}	
 	
 	
+	/**
+	 * projects_drawer is a helper that draws the Launch Projects Selection Section
+	 * This method initializes the data after projects_drawer has been drawn
+	 * 
+	 * @param configuration
+	 */
 	private void initializeProjectsDrawer(ILaunchConfiguration configuration) {
 		// Get a list of the projects we want to launch from config
 		List launchProjects = null;
@@ -258,6 +268,7 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 					BugProjectUtil.getWSBugProjectNames());
 		} catch (CoreException e) {
 			e.printStackTrace();
+			UIUtils.handleNonvisualError(e.getMessage(), e);
 		}
 		if (launchProjects == null)
 			launchProjects = BugProjectUtil.getWSBugProjectNames();
@@ -272,12 +283,12 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 					VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, "true");
 		} catch (CoreException e) {
 			e.printStackTrace();
+			UIUtils.handleNonvisualError(e.getMessage(), e);
 		}
 		
 		projects_drawer.setLaunchAllProjectsFlag(val.toLowerCase().equals("true"));
 				
 	}
-	
 	
 	private String getSystemProperty(
 			ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
@@ -305,22 +316,6 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		btnBrowse.setText("Browse...");
 		btnBrowse.setLayoutData(gdButton);
 		btnBrowse.addMouseListener(new BrowseMouseListener(textField));
-	}	
-	
-	
-	private void setSystemProperty(
-			ILaunchConfigurationWorkingCopy configuration, String prop, String value) {
-		Map properties;
-		try {
-			properties = configuration.getAttribute(
-					VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
-			properties.put(prop, value);
-			configuration.setAttribute(
-					VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, properties);
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private List getBugProjectNames() throws CoreException {

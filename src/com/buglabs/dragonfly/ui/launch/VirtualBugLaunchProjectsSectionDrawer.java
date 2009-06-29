@@ -44,7 +44,7 @@ public class VirtualBugLaunchProjectsSectionDrawer {
 	private static final String DIALOG_TITLE_TXT	= "Automatically launch with all workspace applications";
 	private static final String SELECT_ALL_TXT 		= "Select All";
 	private static final String SELECT_NONE_TXT		= "Select None";
-	private static int VIEWER_HEIGHT_HINT			= 150;
+	private static int VIEWER_HEIGHT_HINT			= 75;
 	private static ColorRegistry color_registry 	= null;
 	private Button				launch_all_button 	= null;
 	private CheckboxTableViewer projects_viewer		= null;
@@ -52,6 +52,11 @@ public class VirtualBugLaunchProjectsSectionDrawer {
 	private List<ILaunchProjectSelectionListener> 
 	selection_listeners = new ArrayList<ILaunchProjectSelectionListener>();
 
+	/**
+	 * Local method to handle the static color registry
+	 * 
+	 * @param parent
+	 */
 	private void createColorRegistry(Composite parent) {
 		if (color_registry == null)
 			color_registry = new ColorRegistry(parent.getDisplay());
@@ -60,6 +65,11 @@ public class VirtualBugLaunchProjectsSectionDrawer {
 			color_registry.put(HYPERLINKCOLOR, new RGB(98,83,125));
 	}
 	
+	/**
+	 * Call this to draw the Launch Projects Secion in the given Composite
+	 * 
+	 * @param parent
+	 */
 	protected void draw(Composite parent) {
 		createColorRegistry(parent);
 		
@@ -125,8 +135,10 @@ public class VirtualBugLaunchProjectsSectionDrawer {
 		selectAllLink.setForeground(color_registry.get(HYPERLINKCOLOR));
 		selectAllLink.addHyperlinkListener(new SelectionHyperlinkListener() {
 			public void linkActivated(HyperlinkEvent e) {
-				projects_viewer.setAllChecked(true);
-				notifyChangeListeners();
+				if (projects_table.isEnabled()) {
+					projects_viewer.setAllChecked(true);
+					notifyChangeListeners();
+				}
 			}
 		});
 
@@ -138,13 +150,21 @@ public class VirtualBugLaunchProjectsSectionDrawer {
 		selectNoneLink.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
 		selectNoneLink.addHyperlinkListener(new SelectionHyperlinkListener() {
 			public void linkActivated(HyperlinkEvent e) {
-				projects_viewer.setAllChecked(false);
-				notifyChangeListeners();
+				if (projects_table.isEnabled()) {
+					projects_viewer.setAllChecked(false);
+					notifyChangeListeners();
+				}
 			}
 		});
 	
 	}
 	
+	/**
+	 * Keep listeners who will respond to changes in 
+	 * the Launch-Projects Selection section
+	 * 
+	 * @param listener
+	 */
 	public void addChangeListener(ILaunchProjectSelectionListener listener) {
 		if (!selection_listeners.contains(listener))
 			selection_listeners.add(listener);
@@ -165,6 +185,13 @@ public class VirtualBugLaunchProjectsSectionDrawer {
 		return Arrays.asList(names);
 	}
 	
+	/**
+	 * When this flag is set, it means to launch the virtual bug
+	 * with all workspace projects selected
+	 * This is the default
+	 * 
+	 * @param val
+	 */
 	public void setLaunchAllProjectsFlag(boolean val) {
 		if (launch_all_button != null)
 			launch_all_button.setSelection(val);
