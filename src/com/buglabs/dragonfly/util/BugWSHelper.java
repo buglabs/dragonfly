@@ -31,6 +31,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -47,7 +48,9 @@ import com.buglabs.dragonfly.model.Module;
 import com.buglabs.dragonfly.model.PostServiceNode;
 import com.buglabs.dragonfly.model.ProgramNode;
 import com.buglabs.dragonfly.model.PutServiceNode;
+import com.buglabs.dragonfly.model.ServiceDetail;
 import com.buglabs.dragonfly.model.ServiceNode;
+import com.buglabs.dragonfly.model.ServiceProperty;
 import com.buglabs.util.XmlNode;
 import com.buglabs.util.XmlParser;
 
@@ -404,6 +407,80 @@ public class BugWSHelper extends WSHelper {
 		}
 
 		return services;
+	}
+	
+	/**
+	 * This gets an array of ServiceDetail objects
+	 * this function is much less smart than getAllServices
+	 * in that the array may contain service details for services
+	 * with the same name (but probably different properties)
+	 * 
+	 * This function just returns it all
+	 * 
+	 * @param bugURL
+	 * @return
+	 * @throws Exception 
+	 */
+	/*
+	public static ServiceDetail[] getAllServiceDetails2(URL bugURL) throws Exception {
+		List<ProgramNode> programs = getPrograms(bugURL);
+		List<ServiceDetail> details = new ArrayList<ServiceDetail>();
+		
+		Iterator<ProgramNode> progIter = programs.iterator();
+		ServiceDetail[] tempDetails;
+		while (progIter.hasNext()) {
+			tempDetails = progIter.next().getPackage().getServiceDetails();
+			if (tempDetails == null) continue;
+			for (int i = 0; i < tempDetails.length; i++) {
+				details.add(tempDetails[i]);
+			}
+		}		
+		return details.toArray(new ServiceDetail[details.size()]);
+	}
+	*/
+	
+	/**
+	 * Aggregates the properties for Services with the same name 
+	 * (but maybe from a different source) into one ServiceDetail object
+	 * keyed off of a String key in a Map.
+	 * 
+	 * This method also works out duplicates and properties with multiple values
+	 * 
+	 * @param bugURL
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<ServiceDetail> getAllServiceDetails(URL bugURL)
+			throws Exception {
+		// Get programs so we can get at there service details
+		List<ProgramNode> programs = getPrograms(bugURL);
+		
+		// use a hash to store service details so we can collapse properties around a service
+		// since different programs can provide the same services
+		Map<String, ServiceDetail> details = new HashMap<String, ServiceDetail>();
+		
+		ServiceDetail[] tempDetails;
+		String name;
+		// Get the service details for a program and collapse
+		// into the details hash so that service names are not repeated
+		for (ProgramNode programNode : programs) {
+			tempDetails = programNode.getPackage().getServiceDetails();
+			if (tempDetails == null) continue;
+			for (int i = 0; i < tempDetails.length; i++) {
+				name = tempDetails[i].getServiceName();
+				// if the service isn't in the list, add it
+				if (!details.containsKey(name))
+					details.put(name, new ServiceDetail(
+							name, new ArrayList<ServiceProperty>()));
+				// add the service properties to the service detail
+				// addServiceProperties ensures ServiceProperty objects with the same
+				// key have the values added so not to provide duplicate properties
+				details.get(name).addServiceProperties(
+						tempDetails[i].getServiceProperties());
+			}
+		}
+		
+		return new ArrayList<ServiceDetail>(details.values());
 	}
 
 	/**

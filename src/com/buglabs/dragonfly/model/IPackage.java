@@ -8,6 +8,7 @@
 package com.buglabs.dragonfly.model;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IPackage {
 
@@ -58,5 +59,9 @@ public interface IPackage {
 	public abstract String getId();
 
 	public abstract void setId(String id);
+	
+	public abstract ServiceDetail[] getServiceDetails();
+	
+	public abstract void setServiceDetails(ServiceDetail[] serviceDetails);
 
 }

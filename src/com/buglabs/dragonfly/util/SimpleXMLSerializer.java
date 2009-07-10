@@ -14,44 +14,40 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 import com.buglabs.dragonfly.model.IPackage;
 import com.buglabs.dragonfly.model.PackageImpl;
+import com.buglabs.dragonfly.model.ServiceDetail;
+import com.buglabs.dragonfly.model.ServiceProperty;
 import com.buglabs.util.SelfReferenceException;
 import com.buglabs.util.XmlNode;
 import com.buglabs.util.XmlParser;
 
 class SimpleXMLSerializer implements ISerializer {
 
-	private static final String NOTES = "notes";
-
-	private static final String PACKAGE = "program";
-
-	private static final String ITEM_ELEMENT = "item";
-
-	private static final String EVENT_TRIGGERS = "event_triggers";
-
-	private static final String PROGRAM_TYPE_ATTRIBUTE = "type";
-
-	private static final String BUNDLE_TYPE_ATTRIBUTE = "type";
-
-	private static final String PROGRAM_ID_ATTRIBUTE = "id";
-
-	private static final String PROGRAM = "code";
-
-	private static final String VERSION = "version";
-
-	private static final String DATE_CREATED = "date_created";
-
-	private static final String AUTHOR = "author";
-
-	private static final String TITLE = "title";
-
-	private static final String DATE_MODIFIED = "date_updated";
-
-	private static final String SERVICES = "services";
+	private static final String NOTES 					= "notes";
+	private static final String PACKAGE 				= "program";
+	private static final String ITEM_ELEMENT 			= "item";
+	private static final String EVENT_TRIGGERS 			= "event_triggers";
+	private static final String PROGRAM_TYPE_ATTRIBUTE 	= "type";
+	private static final String BUNDLE_TYPE_ATTRIBUTE 	= "type";
+	private static final String PROGRAM_ID_ATTRIBUTE 	= "id";
+	private static final String PROGRAM 				= "code";
+	private static final String VERSION 				= "version";
+	private static final String DATE_CREATED 			= "date_created";
+	private static final String AUTHOR 					= "author";
+	private static final String TITLE 					= "title";
+	private static final String DATE_MODIFIED 			= "date_updated";
+	private static final String SERVICES 				= "services";
+	private static final String SERVICES2 				= "services2";
+	private static final String SERVICE 				= "service";
+	private static final String NAME 					= "name";
+	private static final String VALUE					= "value";
 
 	public IPackage getDeserializedPackage(Object obj) throws Exception {
 		String fileXML = null;
@@ -79,7 +75,7 @@ class SimpleXMLSerializer implements ISerializer {
 		pkg.setNotes(root.getFirstElement(NOTES).getValue());
 		pkg.setId(root.getAttribute(PROGRAM_ID_ATTRIBUTE));
 		pkg.setBundleType(root.getAttribute(BUNDLE_TYPE_ATTRIBUTE));
-
+		
 		if (root.getAttribute(VERSION) != null) {
 			pkg.setVersion(root.getAttribute(VERSION));
 		}
@@ -97,6 +93,12 @@ class SimpleXMLSerializer implements ISerializer {
 		if (root.childExists(SERVICES)) {
 			pkg.setEventURIs(xmlToList(root.getFirstElement(SERVICES)));
 		}
+		
+		// this is for the list of services and properties
+		if (root.childExists(SERVICES2)) {
+			pkg.setServiceDetails(xmlToServiceDetails(root.getFirstElement(SERVICES2)));
+		}
+		
 		return pkg;
 	}
 
@@ -171,4 +173,73 @@ class SimpleXMLSerializer implements ISerializer {
 		return l;
 	}
 
+	/**
+	 * Given an xml node of service details return a list of ServiceDetail objects
+	 * 
+	 * @param servicesDetailsNode
+	 * @return
+	 */
+	private ServiceDetail[] xmlToServiceDetails(XmlNode servicesDetailsNode) {
+		// extra check to make sure we don't blow up if the incorrect node is passed
+		if (!SERVICES2.equals(servicesDetailsNode.getName())) {
+			return new ServiceDetail[0];
+		}
+		// fill list with Service Details
+		List<ServiceDetail> l = new ArrayList<ServiceDetail>();
+		List<XmlNode> servicesNodes = servicesDetailsNode.getChildren();
+		// make sure some children exist
+		if (servicesNodes == null || servicesNodes.size() < 1) {
+			return new ServiceDetail[0];
+		}
+		
+		Iterator<XmlNode> itr = servicesNodes.iterator();
+		ServiceDetail tmpDetail;
+		while (itr.hasNext()) {
+			tmpDetail = xmlToServiceDetail(itr.next());
+			if (tmpDetail != null) l.add(tmpDetail);
+		}
+		
+		return l.toArray(new ServiceDetail[l.size()]);
+	}
+
+	
+	/**
+	 * Creates a ServiceDetail object based on XML
+	 * Manages the ServiceProperty object so if a property that 
+	 *  we've seen before shows up, we add the value to the set of values
+	 *  for that same key.
+	 * 
+	 * @param detailNode
+	 * @return
+	 */
+	private ServiceDetail xmlToServiceDetail(XmlNode detailNode) {
+		// make sure we got sent the right type of xml node
+		if (!SERVICE.equals(detailNode.getName())) return null;
+		
+		// make sure serviceName exists
+		String serviceName = detailNode.getAttribute(NAME);
+		if (serviceName == null) return null;
+
+		// make sure the chillins exist
+		List<XmlNode> propertiesNodes = detailNode.getChildren();
+		if (propertiesNodes == null) {
+			return new ServiceDetail(serviceName, new ArrayList<ServiceProperty>());
+		}
+
+		String name;
+		Map<String, ServiceProperty> propBuilder =
+				new HashMap<String, ServiceProperty>();
+		for (XmlNode tmpNode : propertiesNodes) {
+			name = tmpNode.getAttribute(NAME);
+			if (name == null || name.length() < 1) continue;
+			if (!propBuilder.containsKey(name))
+				propBuilder.put(name, 
+						new ServiceProperty(name, new TreeSet<String>()));
+			propBuilder.get(name).addValue(tmpNode.getAttribute(VALUE));
+		}
+		
+		return new ServiceDetail(serviceName, 
+				new ArrayList<ServiceProperty>(propBuilder.values()));
+	}
+	
 }
