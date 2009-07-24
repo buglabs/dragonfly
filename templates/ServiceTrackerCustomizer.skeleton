@@ -1,7 +1,29 @@
 public class CLASS
  {
-   public String generate(List serviceNames, String appName, String packageName, String appPackageName, boolean genApp)
-   {
+    
+    /**
+    * Helper function to turn Map of string properties to array String[][] def
+    */
+    private String createServiceFilterArrayDefinition(Map properties) {
+          // we'll build our array definition
+          String serviceFilterArrayDef = "new String[][] {";
+          Iterator itr = properties.keySet().iterator();
+          String delim = "";
+          while (itr.hasNext()) {
+              String propKey = (String) itr.next();
+              serviceFilterArrayDef += delim + 
+                  "{\"" + propKey + "\", \"" + properties.get(propKey) + "\"}";
+              delim = ", ";
+          }
+          serviceFilterArrayDef += "}";
+          
+          return serviceFilterArrayDef;
+    }   
+ 
+    public String generate(List serviceNames, 
+            Map propertyMap, String appName, 
+            String packageName, String appPackageName, boolean genApp) {
+            
      return "";
    }
  }

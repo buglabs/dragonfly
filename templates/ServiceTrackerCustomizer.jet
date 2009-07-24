@@ -7,6 +7,7 @@ package <%=packageName%>;
 
 import org.osgi.framework.BundleContext;
 import com.buglabs.application.AbstractServiceTracker;
+
 <%if(genApp) {
 %>
 import <%=appPackageName%>.*;
@@ -96,9 +97,20 @@ if(genApp) {
 	Iterator si = serviceNames.iterator();
 	while(si.hasNext()) {
 		String name = (String) si.next();
-%>
-		getServices().add("<%=name%>");
-<%
+		
+		// build the service property arrays
+		String serviceFilterArrayDef = "new String[][] {}";
+		if (propertyMap.containsKey(name)) {
+
+		   serviceFilterArrayDef = 
+		      createServiceFilterArrayDefinition((Map) propertyMap.get(name));
+		  	  
+	    }
+%>		  
+	       addServiceFilters("<%=name%>",
+	           <%=serviceFilterArrayDef%>);
+<%	
+     
 	}
 }
 %>
@@ -120,5 +132,6 @@ if(genApp) {
 <%
 }	// end of if(genApp)
 %>
+
 }
 

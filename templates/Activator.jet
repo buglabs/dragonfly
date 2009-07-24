@@ -26,7 +26,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {		
 		//Create the service tracker and run it.
 		stc = new <%=appName%>ServiceTracker(context);
-		Filter f = context.createFilter(ServiceFilterGenerator.generateServiceFilter(stc.getServices()));
+		Filter f = context.createFilter(ServiceFilterGenerator.generateServiceFilter(stc.getServicePropertiesMap()));
 		st = new ServiceTracker(context, f, stc);
 		st.open();
 	}
