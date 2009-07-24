@@ -1,8 +1,10 @@
 package com.buglabs.dragonfly.ui.jobs;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
@@ -24,6 +26,7 @@ import com.buglabs.dragonfly.generators.jet.Application;
 import com.buglabs.dragonfly.generators.jet.ServiceTrackerCustomizer;
 import com.buglabs.dragonfly.jdt.BugClasspathContainerInitializer;
 import com.buglabs.dragonfly.ui.info.BugProjectInfo;
+import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.osgi.concierge.core.utils.ConciergeUtils;
 import com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject;
@@ -119,13 +122,18 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		StringBuffer sb = new StringBuffer();
 		BugProjectInfo pinfo = getBugProjectInfo();
 		String projectName = pinfo.getProjectName();
-		sb.append(new ServiceTrackerCustomizer().generate(pinfo.getServices(), BugProjectUtil.formatProjectNameAsClassName(projectName),
-				getServiceTrackerPackageName(projectName), BugProjectUtil.formatProjectNameAsPackage(projectName), pinfo
-						.isShouldGenerateApplicationLoop()));
+		
+		sb.append(new ServiceTrackerCustomizer().generate(
+					pinfo.getServices(),
+					convertHelperMapToMapofStrings(pinfo.getServicePropertyHelperMap()),
+					BugProjectUtil.formatProjectNameAsClassName(projectName),
+					getServiceTrackerPackageName(projectName), 
+					BugProjectUtil.formatProjectNameAsPackage(projectName), 
+					pinfo.isShouldGenerateApplicationLoop()));
 
 		return sb;
 	}
-
+	
 	protected void createActivator(IProgressMonitor monitor) throws CoreException {
 		String packageName = BugProjectUtil.formatProjectNameAsPackage(getBugProjectInfo().getProjectName());
 		String path = getPackageNamePath(packageName);
@@ -203,6 +211,21 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		return projName.toLowerCase().replaceAll(" ", "_");
 	}
 
+	private static Map<String, Map<String, String>> convertHelperMapToMapofStrings(
+			Map<String, List<ServicePropertyHelper>> helperMap) {
+		Map<String, Map<String, String>> output = new HashMap<String, Map<String, String>>();
+		for (String key : helperMap.keySet()) {
+			if (!output.containsKey(key))
+				output.put(key, new HashMap<String, String>());
+			List<ServicePropertyHelper> helperList = helperMap.get(key);
+			for (ServicePropertyHelper helper : helperList) {
+				output.get(key).put(
+						helper.getKey(), helper.getSelectedValue());
+			}
+		}
+		return output;
+	}
+	
 	public static String getClassName(String projName) {
 		return BugProjectUtil.formatProjectNameAsPackage(projName) + ".Activator";
 	}

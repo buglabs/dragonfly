@@ -23,7 +23,7 @@ public class BugProjectInfo extends ProjectInfo {
 		return services;
 	}
 
-	public Map<String, List<ServicePropertyHelper>> getServicePropertyHelpers() {
+	public Map<String, List<ServicePropertyHelper>> getServicePropertyHelperMap() {
 		return service_property_helpers;
 	}
 	

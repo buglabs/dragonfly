@@ -129,7 +129,12 @@ public class CodeGenerationPage extends WizardPage {
 	private Button refreshServiceDefintions;
 	
 	// instance vars to keep track of stuff
+	
+	// this is used as the input for the service property viewer
+	// it helps, keep track of the possible service properties as well as the selected ones
+	// for a given service (String hash key = service name)
 	private Map<String, List<ServicePropertyHelper>> servicePropertyHelperMap = new HashMap<String, List<ServicePropertyHelper>>();
+	
 	private ServiceFilter serviceFilter = new ServiceFilter();
 	private BugProjectInfo pinfo;
 	private String pageMessage = "";
@@ -411,7 +416,7 @@ public class CodeGenerationPage extends WizardPage {
 		labelData.horizontalSpan = 2;
 		servicePropertiesLabel.setLayoutData(labelData);
 		
-		// table with list of services to choose from
+		// table with list of properties to choose from
 		final Table propertiesTable = new Table(
 				compServices, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		propertiesTable.setHeaderVisible(true);
@@ -529,6 +534,18 @@ public class CodeGenerationPage extends WizardPage {
 		try {
 			List<ServiceDetail>  details = 
 				BugWSHelper.getAllServiceDetails(bugConnection.getProgramURL());
+			
+			// Older BUGs don't have service details XML
+			if (details == null || details.size() < 1) {
+				List<String> services = 
+					BugWSHelper.getAllServices(bugConnection.getProgramURL());
+				details = new ArrayList<ServiceDetail>();
+				for (String service : services) {
+					details.add(
+						new ServiceDetail(service, new ArrayList<ServiceProperty>()));
+				}
+			}
+			
 			List<ServiceProperty> properties;
 			for (ServiceDetail detail : details) {
 				properties = detail.getServiceProperties();
@@ -583,7 +600,7 @@ public class CodeGenerationPage extends WizardPage {
 		updateModel();
 		
 		// now store the checked properties in the model
-		Map<String, List<ServicePropertyHelper>> helpers = pinfo.getServicePropertyHelpers();
+		Map<String, List<ServicePropertyHelper>> helpers = pinfo.getServicePropertyHelperMap();
 		helpers.put(selectedService, checkedProperties);
 		
 	}
@@ -609,7 +626,7 @@ public class CodeGenerationPage extends WizardPage {
 			public void run() {
 				servicePropertiesViewer.setInput(servicePropertyHelperMap.get(serviceName));
 				servicePropertiesViewer.setAllChecked(false);
-				List<ServicePropertyHelper> helpers = pinfo.getServicePropertyHelpers().get(serviceName); 
+				List<ServicePropertyHelper> helpers = pinfo.getServicePropertyHelperMap().get(serviceName); 
 				if (helpers != null)
 					servicePropertiesViewer.setCheckedElements(helpers.toArray());
 			}

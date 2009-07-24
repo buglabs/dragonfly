@@ -34,7 +34,6 @@ public class ServicePropertyHelper {
 		return helper;
 	}
 	
-	
 	public ServicePropertyHelper(String propkey, List<String> values) {
 		this.propkey = propkey;
 		this.values = values;
