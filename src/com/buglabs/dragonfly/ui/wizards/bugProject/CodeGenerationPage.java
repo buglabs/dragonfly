@@ -24,12 +24,14 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -40,7 +42,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardPage;
@@ -58,6 +59,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -95,11 +97,8 @@ public class CodeGenerationPage extends WizardPage {
 	private static final String START_VIRTUAL_BUG_TOOLTIP 	= "Start Virtual BUG and start consuming its services";
 	private static final String REQUIRED_SERVICES_TITLE 	= "Required Services";
 	
-	private static final String SERVICE_PROPERTIES_LABEL 	= "Add Properties to Filter";
 	private static final String NAME_LABEL 					= "Name";
 	private static final String PACKAGE_LABEL 				= "Package";
-	private static final String KEY_LABEL 					= "Key";
-	private static final String VALUE_LABEL 				= "Value";
 	
 	private static final String SELECT_ALL_LABEL 			= "&Select All";
 	private static final String SELECT_ALL_TOOLTIP 			= "Select all services";
@@ -113,11 +112,10 @@ public class CodeGenerationPage extends WizardPage {
 	private static final String SELECT_BUG_MESSAGE 	= "Select a BUG from Target BUG List to choose services that this project will consume.";
 	
 	private static final int BUGS_VIEWER_HEIGHT_HINT 		= 100;
-	private static final int SERVICES_GROUP_HEIGHT_HINT 	= 400;
+	private static final int SERVICES_GROUP_HEIGHT_HINT 	= 350;
 	private static final int SERVICES_GROUP_WIDTH_HINT 		= 550;
 	private static final int DEPENDENCY_VIEWER_HEIGHT_HINT 	= 200;
-	private static final int SERVICE_DESCRIPTION_AREA_HEIGHT= 180;
-	private static final int SERVICE_PROPERTIES_HEIGHT_HINT = 150;
+	private static final int SERVICE_DESCRIPTION_AREA_HEIGHT= 100;
 
 	// UI elements
 	private TableViewer bugsViewer;
@@ -131,10 +129,10 @@ public class CodeGenerationPage extends WizardPage {
 	// instance vars to keep track of stuff
 	
 	// this is used as the input for the service property viewer
-	// it helps, keep track of the possible service properties as well as the selected ones
+	// it helps, keep track of the possible service properties values
 	// for a given service (String hash key = service name)
-	private Map<String, List<ServicePropertyHelper>> servicePropertyHelperMap = new HashMap<String, List<ServicePropertyHelper>>();
-	
+	private Map<String, List<ServicePropertyHelper>> 
+		servicePropertyOptionsMap = new HashMap<String, List<ServicePropertyHelper>>();
 	private ServiceFilter serviceFilter = new ServiceFilter();
 	private BugProjectInfo pinfo;
 	private String pageMessage = "";
@@ -209,6 +207,14 @@ public class CodeGenerationPage extends WizardPage {
 				
 				// prepare to launch refresh services job
 				refreshServiceDefintions.setEnabled(true);
+				
+				// clear the map before adding stuff
+				servicePropertyOptionsMap.clear();
+				// clear pinfo's selections
+				pinfo.getServicePropertyHelperMap().clear();
+				pinfo.getServices().clear();
+				dependencyViewer.setAllChecked(false);
+								
 				launchRefreshServicesJob(connection);			
 			}
 		});
@@ -260,7 +266,7 @@ public class CodeGenerationPage extends WizardPage {
 	 * 
 	 * @param mainComposite
 	 */
-	private void createServicesSection(Composite mainComposite) {
+	private void createServicesSection(final Composite mainComposite) {
 		// set up
 		Composite servicesComposite = new Composite(mainComposite, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
@@ -319,9 +325,34 @@ public class CodeGenerationPage extends WizardPage {
 		dependencyViewer.setSorter(new ViewerSorter());
 		dependencyViewer.addFilter(serviceFilter);
 		
+		dependencyViewer.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				// return if null event
+				if (event == null) return;
+				ISelection selection = event.getSelection();
+				
+				// return if not IStructuredSelection
+				if (!(selection instanceof IStructuredSelection)) return;
+				String selectedService = 
+					(String) ((IStructuredSelection) selection).getFirstElement();
+				
+				openServicePropertySelectorDialog(
+						mainComposite.getShell(), selectedService, false);			
+			}
+		});
+		
 		dependencyViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
+				if (event == null) return;
+				String selectedService = (String) event.getElement();
+				if (selectedService == null) return;
+				
+				// update the services list w/ new checked item
 				updateModel();
+				
+				if (event.getChecked()) 
+					openServicePropertySelectorDialog(
+							mainComposite.getShell(), selectedService, true);	
 			}
 		});
 		
@@ -341,7 +372,6 @@ public class CodeGenerationPage extends WizardPage {
 				
 				String descr = Activator.getServiceDescription(selectedService.trim());
 				serviceDescriptionArea.setText(descr);
-				setInputForPropsViewer(selectedService.trim());
 			}
 		});
 		
@@ -399,74 +429,17 @@ public class CodeGenerationPage extends WizardPage {
 		});
 
 		// set up service description area
-		serviceDescriptionArea = new Text(buttonComposite, 
+		serviceDescriptionArea = new Text(compServices, 
 				SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL );
-		RowData rowdata = new RowData();
-		rowdata.height = SERVICE_DESCRIPTION_AREA_HEIGHT;
-		serviceDescriptionArea.setLayoutData(rowdata);
+		GridData descData = new GridData(GridData.FILL_BOTH);
+		descData.heightHint = SERVICE_DESCRIPTION_AREA_HEIGHT;
+		descData.horizontalSpan = 2;
+		serviceDescriptionArea.setLayoutData(descData);
 		serviceDescriptionArea.setEditable(false);
 		serviceDescriptionArea.setForeground(
-				buttonComposite.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+				compServices.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 		serviceDescriptionArea.setText(SERVICE_DESCRIPTION_LABEL);
-		
-		// label for services properties
-		Label servicePropertiesLabel = new Label(compServices, SWT.NONE);
-		servicePropertiesLabel.setText(SERVICE_PROPERTIES_LABEL);
-		GridData labelData = new GridData(GridData.FILL_HORIZONTAL);
-		labelData.horizontalSpan = 2;
-		servicePropertiesLabel.setLayoutData(labelData);
-		
-		// table with list of properties to choose from
-		final Table propertiesTable = new Table(
-				compServices, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		propertiesTable.setHeaderVisible(true);
-		propertiesTable.setLinesVisible(true);
 
-		TableLayout propTableLayout = new TableLayout();
-		propTableLayout.addColumnData(new ColumnWeightData(90));
-		propTableLayout.addColumnData(new ColumnWeightData(120));
-		propertiesTable.setLayout(propTableLayout);
-		
-		GridData pViewerData = new GridData(GridData.FILL_BOTH);
-		pViewerData.horizontalSpan = layout.numColumns;
-		pViewerData.heightHint = SERVICE_PROPERTIES_HEIGHT_HINT;
-		propertiesTable.setLayoutData(pViewerData);
-		
-		// viewer for services list
-		servicePropertiesViewer = new CheckboxTableViewer(propertiesTable);
-		servicePropertiesViewer.setContentProvider(new ServicePropsContentProvider());
-		
-		servicePropertiesViewer.addCheckStateListener(new ICheckStateListener() {
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				IStructuredSelection selection = 
-					(IStructuredSelection) dependencyViewer.getSelection();
-				updateModelFromProperties((String)selection.getFirstElement());
-			}
-		});
-		
-		// col0 is taken care of by checkboxtableviewer
-		TableViewerColumn col0viewer = 
-			new TableViewerColumn(servicePropertiesViewer, SWT.FULL_SELECTION, 0);
-		col0viewer.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				return ((ServicePropertyHelper) element).getKey();
-			}
-		});
-		col0viewer.getColumn().setText(KEY_LABEL);
-
-		// col1 has custom cell editors defined in EditingSupport below
-		TableViewerColumn col1viewer = 
-			new TableViewerColumn(servicePropertiesViewer, SWT.FULL_SELECTION, 1);
-		col1viewer.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				return ((ServicePropertyHelper) element).getSelectedValue();
-			}
-		});
-		col1viewer.getColumn().setText(VALUE_LABEL);
-		col1viewer.setEditingSupport(
-				new PropertyValueEditingSupport(col1viewer.getViewer()));
 	}	
 
 	/**
@@ -494,6 +467,24 @@ public class CodeGenerationPage extends WizardPage {
 	/* HELPER METHODS */
 	
 	/**
+	 * Opens the selector dialog that lets us choose service properties for filtering
+	 * 
+	 */
+	private void openServicePropertySelectorDialog(
+			Shell shell, String selectedService, boolean clearCheckedOnCancel) {
+		if (servicePropertyOptionsMap.containsKey(selectedService)
+				&& servicePropertyOptionsMap.get(selectedService) != null
+				&& servicePropertyOptionsMap.get(selectedService).size() > 0) {
+			Dialog d = new ServicePropertySelectorDialog(shell, selectedService, 
+					(List<ServicePropertyHelper>) servicePropertyOptionsMap.get(selectedService), pinfo);
+			if (d.open() == Dialog.CANCEL && clearCheckedOnCancel) {
+				dependencyViewer.setChecked(selectedService, false);
+			}
+		}
+	}
+	
+	
+	/**
 	 * Sets up and kicks off a job to list services provided by connected BUG
 	 */
 	private void launchRefreshServicesJob(BugConnection connection) {
@@ -501,8 +492,7 @@ public class CodeGenerationPage extends WizardPage {
 		String jobFamily = "family-" + connection.getName(); //$NON-NLS-1$
 		Job[] jobs = manager.find(jobFamily);
 		
-		servicePropertyHelperMap.clear();
-		setInputForDepndencyViewer();
+		// TODO servicePropertyOptionsMap.clear();
 		
 		// start a job only if a job within this family has not been started already.
 		if(jobs.length == 0) {
@@ -550,17 +540,46 @@ public class CodeGenerationPage extends WizardPage {
 			for (ServiceDetail detail : details) {
 				properties = detail.getServiceProperties();
 				Collections.sort(properties);
-				if (!servicePropertyHelperMap.containsKey(detail.getServiceName()))
-					servicePropertyHelperMap.put(
+				if (!servicePropertyOptionsMap.containsKey(detail.getServiceName()))
+					servicePropertyOptionsMap.put(
 							detail.getServiceName(), 
 							ServicePropertyHelper.createHelperList(properties));
 				else
-					servicePropertyHelperMap.get(detail.getServiceName()).addAll(
+					servicePropertyOptionsMap.get(detail.getServiceName()).addAll(
 							ServicePropertyHelper.createHelperList(properties));
 			}
+			
+			// This was an attempt to splice the pinfo (current selection) into the new list
+			// but it didn't work because the ServicePropertyHelper objects are different
+			// even if they have the same properties
+			// current solution is just to clear everything before refreshing the list
+			/*
+			Map<String, List<ServicePropertyHelper>> pinfoMap = pinfo.getServicePropertyHelperMap();
+			for (String key : pinfoMap.keySet()) {
+				if (servicePropertyOptionsMap.containsKey(key)) {
+					for (ServicePropertyHelper phelper : pinfoMap.get(key)) {
+						boolean pfound = false;
+						for (ServicePropertyHelper ohelper : servicePropertyOptionsMap.get(key)) {
+							if (ohelper.getKey().equals(phelper.getKey())) {
+								ohelper.setSelectedValue(phelper.getSelectedValue());
+								pinfoMap.get(key).remove(phelper);
+								pinfoMap.get(key).add(ohelper);
+								pfound = true;
+							}
+						}
+						if (!pfound)
+							servicePropertyOptionsMap.get(key).add(phelper);
+					}
+				} else {
+					servicePropertyOptionsMap.put(key, pinfoMap.get(key));
+				}
+			}
+			*/
+			
 			setInputForDepndencyViewer();
 		} catch (Exception e1) {
-			servicePropertyHelperMap.clear();
+			e1.printStackTrace();
+			servicePropertyOptionsMap.clear();
 			setInputForDepndencyViewer();
 		}
 	}
@@ -578,33 +597,7 @@ public class CodeGenerationPage extends WizardPage {
 		else{
 			btnGenerateThreadApp.setEnabled(false);
 		}
-	}	
-	
-	/**
-	 * Freshen the model based on the properties viewer
-	 * 
-	 * @param selectedService
-	 */
-	private void updateModelFromProperties(String selectedService) {
-		
-		List<ServicePropertyHelper> checkedProperties = new ArrayList<ServicePropertyHelper>();
-		for (Object element : servicePropertiesViewer.getCheckedElements()) {
-			checkedProperties.add((ServicePropertyHelper) element);
-		}
-		
-		if (checkedProperties.size() > 0) {
-			// first make sure the dependencyViewer has the proper parent checked
-			dependencyViewer.setChecked(selectedService, true);
-		}
-		// this updates the model w/ the service selectionserviceDetails
-		updateModel();
-		
-		// now store the checked properties in the model
-		Map<String, List<ServicePropertyHelper>> helpers = pinfo.getServicePropertyHelperMap();
-		helpers.put(selectedService, checkedProperties);
-		
 	}
-	
 	
 	/**
 	 * Called to set the input for the dependencyViewer component
@@ -612,75 +605,12 @@ public class CodeGenerationPage extends WizardPage {
 	private void setInputForDepndencyViewer() {
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable(){
 			public void run() {
-				dependencyViewer.setInput(servicePropertyHelperMap);
+				dependencyViewer.setInput(servicePropertyOptionsMap);
 			}
 		});
 	}
-
-	/**
-	 * Called to set the input for the servicePropertiesViewer component
-	 * @param serviceName
-	 */
-	private void setInputForPropsViewer(final String serviceName) {
-		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable(){
-			public void run() {
-				servicePropertiesViewer.setInput(servicePropertyHelperMap.get(serviceName));
-				servicePropertiesViewer.setAllChecked(false);
-				List<ServicePropertyHelper> helpers = pinfo.getServicePropertyHelperMap().get(serviceName); 
-				if (helpers != null)
-					servicePropertiesViewer.setCheckedElements(helpers.toArray());
-			}
-		});
-	}	
-	
 
 	/* INNER CLASSES */
-	
-	/**
-	 * Content provider for Service Properties viewer
-	 * 
-	 * @author brian
-	 *
-	 */
-	class ServicePropsContentProvider implements IStructuredContentProvider {
-		public Object[] getElements(Object input) {
-			if (input instanceof List)
-				return ((List) input).toArray();
-			return null;
-		}
-
-		public void dispose() {/* unused */}
-
-		public void inputChanged(
-				Viewer viewer, Object oldInput, Object newInput) {
-			/* unused */
-		}
-	}
-	
-	/**
-	 * Label Provider for Service Properties viewer
-	 * 
-	 * @author brian
-	 *
-	 */
-	class ServicePropsLabelProvider extends LabelProvider implements ITableLabelProvider {
-		public Image getColumnImage(Object element, int columnIndex) {
-			return null;
-		}
-
-		public String getColumnText(Object element, int columnIndex) {
-			if (!(element instanceof ServicePropertyHelper))
-				return "";
-			ServicePropertyHelper propertyHelper = (ServicePropertyHelper) element;
-			switch (columnIndex) {
-				case 0:
-					return propertyHelper.getKey();
-				case 1:
-					return propertyHelper.getSelectedValue();
-			}
-			return "";
-		}
-	}
 
 	class ModulesContentProvider implements IStructuredContentProvider {
 		public Object[] getElements(Object input) {

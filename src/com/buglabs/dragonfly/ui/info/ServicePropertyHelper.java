@@ -48,7 +48,6 @@ public class ServicePropertyHelper {
 		return propkey;
 	}
 
-
 	public String getSelectedValue() {
 		if (selected_value == null && values.size() > 0)
 			return values.get(0);
@@ -57,7 +56,6 @@ public class ServicePropertyHelper {
 		else
 			return selected_value;
 	}
-
 
 	public List<String> getValues() {
 		return values;
@@ -73,16 +71,15 @@ public class ServicePropertyHelper {
 		return null;
 	}
 
-
 	public int getSelectedIndex() {
 		int index = values.indexOf(selected_value);
 		if (index < 0) index = 0;
 		return index;
 	}
 
-
 	public String[] getValuesAsArray() {
 		return values.toArray(new String[values.size()]);
 	}
+
 	
 }
