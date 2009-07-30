@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
@@ -25,7 +26,11 @@ import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -108,6 +113,9 @@ public class CodeGenerationPage extends WizardPage {
 	private static final String REFRESH_SERVICES_TOOLTIP 	= "Refreshes services definitions provided by the target BUG";
 	private static final String SERVICE_DESCRIPTION_LABEL 	= "Service Description";
 	
+	private static final String RELOAD_LIST_WARN_TITLE		= "Reloading Services List";
+	private static final String RELOAD_LIST_WARN_MESSAGE	= "Any selections you've made will be lost.  Would you like to continue?";
+	
 	private static final String LAUNCH_VBUG_MESSAGE = "Launch Virtual BUG to select services that this project will consume.";
 	private static final String SELECT_BUG_MESSAGE 	= "Select a BUG from Target BUG List to choose services that this project will consume.";
 	
@@ -135,6 +143,7 @@ public class CodeGenerationPage extends WizardPage {
 		servicePropertyOptionsMap = new HashMap<String, List<ServicePropertyHelper>>();
 	private ServiceFilter serviceFilter = new ServiceFilter();
 	private BugProjectInfo pinfo;
+	private ISelection currentBugSelection = null;
 	private String pageMessage = "";
 	
 	protected CodeGenerationPage(BugProjectInfo pinfo) {
@@ -171,7 +180,7 @@ public class CodeGenerationPage extends WizardPage {
 	 * 
 	 * @param composite
 	 */
-	private void createTargetArea(Composite parent) {
+	private void createTargetArea(final Composite parent) {
 		Group composite = new Group(parent, SWT.NONE);
 		composite.setText(TARGET_BUG_TITLE);
 		composite.setLayout(new GridLayout(2, false));
@@ -197,26 +206,36 @@ public class CodeGenerationPage extends WizardPage {
 		// set up change listener
 		bugsViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(final SelectionChangedEvent event) {
-				
 				// not sure why this would be the case, but return if nothing there
 				if (((BaseTreeNode)bugsViewer.getInput()).getChildren().size() == 0) return;
 				
+				// don't do anything if it's the same as the previous selection
+				ISelection selection = event.getSelection();
+				if (currentBugSelection != null && currentBugSelection.equals(selection)) return;
+				
+				if (!reloadListDialog(parent.getShell())) {
+					if (currentBugSelection != null)
+						event.getSelectionProvider().setSelection(currentBugSelection);
+					return;
+				}
+				
+				// Make sure we can connect to the given BUG
 				final BugConnection connection = 
 					(BugConnection) ((StructuredSelection) event.getSelection()).getFirstElement();
 				if (connection == null) return;
 				
+				// set the saved currentBugSelection to the selection
+				currentBugSelection = selection;
+				
 				// prepare to launch refresh services job
 				refreshServiceDefintions.setEnabled(true);
 				
-				// clear the map before adding stuff
-				servicePropertyOptionsMap.clear();
-				// clear pinfo's selections
-				pinfo.getServicePropertyHelperMap().clear();
-				pinfo.getServices().clear();
-				dependencyViewer.setAllChecked(false);
+				// clear selections
+				clearSelections();
 								
 				launchRefreshServicesJob(connection);			
 			}
+			
 		});
 		
 		bugsViewer.setContentProvider(new MyBugsViewContentProvider() {
@@ -423,6 +442,12 @@ public class CodeGenerationPage extends WizardPage {
 					return;
 				}
 				
+				// warn user things are going to get cleared
+				if (!reloadListDialog(mainComposite.getShell())) return;
+				
+				// clear pinfo's selections
+				clearSelections();
+				
 				// must be connection, kick off job
 				launchRefreshServicesJob(connection);	
 			}
@@ -465,6 +490,32 @@ public class CodeGenerationPage extends WizardPage {
 	
 	
 	/* HELPER METHODS */
+	
+	/**
+	 * Clear stuff in pinfo and stuff in dependencyViewer
+	 */
+	private void clearSelections() {
+		// clear pinfo's selections
+		pinfo.getServicePropertyHelperMap().clear();
+		pinfo.getServices().clear();
+		dependencyViewer.setAllChecked(false);
+	}
+	
+	/**
+	 * Warn the user that current selections will be cleared
+	 * 
+	 * @param shell
+	 * @return
+	 */
+	private boolean reloadListDialog(Shell shell) {
+		// if we switch to another bug, our settings will be lost!
+		if (pinfo.getServices() == null || pinfo.getServices().size() < 1)
+			return true;
+		
+		return MessageDialog.openConfirm(
+				shell, RELOAD_LIST_WARN_TITLE, RELOAD_LIST_WARN_MESSAGE);
+	}	
+	
 	
 	/**
 	 * Opens the selector dialog that lets us choose service properties for filtering
@@ -536,6 +587,9 @@ public class CodeGenerationPage extends WizardPage {
 				}
 			}
 			
+			// clear the map before adding stuff
+			servicePropertyOptionsMap.clear();
+			
 			List<ServiceProperty> properties;
 			for (ServiceDetail detail : details) {
 				properties = detail.getServiceProperties();
@@ -548,33 +602,6 @@ public class CodeGenerationPage extends WizardPage {
 					servicePropertyOptionsMap.get(detail.getServiceName()).addAll(
 							ServicePropertyHelper.createHelperList(properties));
 			}
-			
-			// This was an attempt to splice the pinfo (current selection) into the new list
-			// but it didn't work because the ServicePropertyHelper objects are different
-			// even if they have the same properties
-			// current solution is just to clear everything before refreshing the list
-			/*
-			Map<String, List<ServicePropertyHelper>> pinfoMap = pinfo.getServicePropertyHelperMap();
-			for (String key : pinfoMap.keySet()) {
-				if (servicePropertyOptionsMap.containsKey(key)) {
-					for (ServicePropertyHelper phelper : pinfoMap.get(key)) {
-						boolean pfound = false;
-						for (ServicePropertyHelper ohelper : servicePropertyOptionsMap.get(key)) {
-							if (ohelper.getKey().equals(phelper.getKey())) {
-								ohelper.setSelectedValue(phelper.getSelectedValue());
-								pinfoMap.get(key).remove(phelper);
-								pinfoMap.get(key).add(ohelper);
-								pfound = true;
-							}
-						}
-						if (!pfound)
-							servicePropertyOptionsMap.get(key).add(phelper);
-					}
-				} else {
-					servicePropertyOptionsMap.put(key, pinfoMap.get(key));
-				}
-			}
-			*/
 			
 			setInputForDepndencyViewer();
 		} catch (Exception e1) {

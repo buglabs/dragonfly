@@ -2,35 +2,25 @@ package com.buglabs.dragonfly.ui.wizards.bugProject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.ui.info.BugProjectInfo;
 import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
@@ -47,7 +37,6 @@ public class ServicePropertySelectorDialog extends Dialog {
 	private static final String WINDOW_TITLE				= "Service Properties";
 	private static final String KEY_LABEL 					= "Key";
 	private static final String VALUE_LABEL 				= "Value";
-	private static final String IGNORE_PROPS_BUTTON_LABEL	= "Ignore properties when creating filter.";
 	private static final char DELIM							= '.';
 	
 	private static final int SERVICES_GROUP_HEIGHT_HINT 	= 300;
@@ -102,7 +91,7 @@ public class ServicePropertySelectorDialog extends Dialog {
 		super.configureShell(newShell);
 		newShell.setText(WINDOW_TITLE);
 	}
-
+	
 	@Override
 	protected void okPressed() {
 		// commit changes in editing_support
@@ -130,24 +119,6 @@ public class ServicePropertySelectorDialog extends Dialog {
 		GridLayout propsLayout = new GridLayout(1, false);
 		propsLayout.marginWidth = propsLayout.marginHeight = SERVICES_GROUP_MARGIN;
 		serviceProps.setLayout(propsLayout);
-		
-		// when checkbox is clicked, grays out and resets all properties
-		// basically saying to not include the service properties in the filter
-		final Button ignorePropsButton = new Button(serviceProps, SWT.CHECK);
-		ignorePropsButton.setText(IGNORE_PROPS_BUTTON_LABEL);
-		ignorePropsButton.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {/* not used */}
-
-			public void widgetSelected(SelectionEvent e) {
-				if (ignorePropsButton.getSelection()) {
-					service_properties_viewer.setAllChecked(false);
-					service_properties_viewer.getTable().setEnabled(false);
-				} else {
-					service_properties_viewer.getTable().setEnabled(true);
-				}
-				updateSelectedServiceProperties();
-			}
-		});
 
 		// table with list of properties to choose from
 		final Table propertiesTable = new Table(
@@ -203,13 +174,7 @@ public class ServicePropertySelectorDialog extends Dialog {
 		service_properties_viewer.setInput(service_property_options);
 		
 		// set the checked elements
-		service_properties_viewer.setCheckedElements(selected_service_properties.toArray());		
-		
-		// Now determine if the thing should be greyed out or what
-		if (selected_service_properties.size() < 1) {
-			ignorePropsButton.setSelection(true);
-			service_properties_viewer.getTable().setEnabled(false);
-		}
+		service_properties_viewer.setCheckedElements(selected_service_properties.toArray());
 		
 		return serviceProps;
 	}
