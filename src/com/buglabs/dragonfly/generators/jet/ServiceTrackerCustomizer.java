@@ -2,7 +2,7 @@ package com.buglabs.dragonfly.generators.jet;
 
 import java.util.*;
 
-public class ServiceTrackerCustomizer
+ public class ServiceTrackerCustomizer
  {
     
   protected static String nl;
@@ -33,17 +33,19 @@ public class ServiceTrackerCustomizer
   protected final String TEXT_16 = NL + "\t\tgetApplication().tearDown();";
   protected final String TEXT_17 = NL + "\t\tSystem.out.println(\"";
   protected final String TEXT_18 = "ServiceTracker: stop\");";
-  protected final String TEXT_19 = NL + NL + "\t}" + NL + "" + NL + "\t/**" + NL + "\t * Allows the user to set the service dependencies by" + NL + "     * adding them to services list returned by getServices()." + NL + "     * i.e.nl getServices().add(MyService.class.getName());" + NL + "\t */" + NL + "\tpublic void initServices() {";
+  protected final String TEXT_19 = NL + "\t}" + NL + "" + NL + "\t/**" + NL + "\t * Allows the user to set the service dependencies by" + NL + "     * adding them to services list returned by getServices()." + NL + "     * i.e.nl getServices().add(MyService.class.getName());" + NL + "\t */" + NL + "\tpublic void initServices() {";
   protected final String TEXT_20 = NL + "\t\tgetServices().addAll(getApplication().getServices());";
-  protected final String TEXT_21 = "\t\t  " + NL + "\t       addServiceFilters(\"";
+  protected final String TEXT_21 = NL + "\t       addServiceFilters(\"";
   protected final String TEXT_22 = "\"," + NL + "\t           ";
   protected final String TEXT_23 = ");";
-  protected final String TEXT_24 = NL + "\t}" + NL + "\t";
-  protected final String TEXT_25 = NL + "\t/**" + NL + "\t * Returns the application thread." + NL + "\t */" + NL + "\tpublic ";
-  protected final String TEXT_26 = "Application getApplication() {" + NL + "\t\tif(application == null) {" + NL + "\t\t\tapplication = new ";
-  protected final String TEXT_27 = "Application(this);" + NL + "\t\t}" + NL + "\t\t" + NL + "\t\treturn application;" + NL + "\t}";
-  protected final String TEXT_28 = NL + NL + "}" + NL;
-  protected final String TEXT_29 = NL;
+  protected final String TEXT_24 = NL + "            getServices().add(\"";
+  protected final String TEXT_25 = "\");";
+  protected final String TEXT_26 = NL + "\t}" + NL + "\t";
+  protected final String TEXT_27 = NL + "\t/**" + NL + "\t * Returns the application thread." + NL + "\t */" + NL + "\tpublic ";
+  protected final String TEXT_28 = "Application getApplication() {" + NL + "\t\tif(application == null) {" + NL + "\t\t\tapplication = new ";
+  protected final String TEXT_29 = "Application(this);" + NL + "\t\t}" + NL + "\t\t" + NL + "\t\treturn application;" + NL + "\t}";
+  protected final String TEXT_30 = NL + NL + "}" + NL;
+  protected final String TEXT_31 = NL;
 
     /**
     * Helper function to turn Map of string properties to array String[][] def
@@ -62,17 +64,22 @@ public class ServiceTrackerCustomizer
           serviceFilterArrayDef += "}";
           
           return serviceFilterArrayDef;
-    }   
+    }
  
     public String generate(List serviceNames, 
-            Map propertyMap, String appName, 
-            String packageName, String appPackageName, boolean genApp)
+                            Map propertyMap, 
+                            String appName, 
+                            String packageName, 
+                            String appPackageName, 
+                            boolean genApp,
+                            boolean usesPropertyFilters)
   {
     final StringBuffer stringBuffer = new StringBuffer();
     stringBuffer.append(TEXT_1);
     stringBuffer.append(packageName);
     stringBuffer.append(TEXT_2);
-    if(genApp) {
+    
+if(genApp) {
 
     stringBuffer.append(TEXT_3);
     stringBuffer.append(appPackageName);
@@ -126,11 +133,13 @@ if(genApp) {
 
     stringBuffer.append(TEXT_19);
     
-if(genApp) {
+
+if(genApp && !usesPropertyFilters) {
 
     stringBuffer.append(TEXT_20);
     
 } else {
+    
 	Iterator si = serviceNames.iterator();
 	while(si.hasNext()) {
 		String name = (String) si.next();
@@ -138,36 +147,38 @@ if(genApp) {
 		// build the service property arrays
 		String serviceFilterArrayDef = "new String[][] {}";
 		if (propertyMap.containsKey(name)) {
-
 		   serviceFilterArrayDef = 
 		      createServiceFilterArrayDefinition((Map) propertyMap.get(name));
-		  	  
 	    }
-
+	    
+	    if (usesPropertyFilters) { 
     stringBuffer.append(TEXT_21);
     stringBuffer.append(name);
     stringBuffer.append(TEXT_22);
     stringBuffer.append(serviceFilterArrayDef);
     stringBuffer.append(TEXT_23);
-    	
-     
-	}
+     } else { 
+    stringBuffer.append(TEXT_24);
+    stringBuffer.append(name);
+    stringBuffer.append(TEXT_25);
+     }
+    }        
 }
 
-    stringBuffer.append(TEXT_24);
+    stringBuffer.append(TEXT_26);
     
 if(genApp) {
 
-    stringBuffer.append(TEXT_25);
-    stringBuffer.append(appName);
-    stringBuffer.append(TEXT_26);
-    stringBuffer.append(appName);
     stringBuffer.append(TEXT_27);
+    stringBuffer.append(appName);
+    stringBuffer.append(TEXT_28);
+    stringBuffer.append(appName);
+    stringBuffer.append(TEXT_29);
     
 }	// end of if(genApp)
 
-    stringBuffer.append(TEXT_28);
-    stringBuffer.append(TEXT_29);
+    stringBuffer.append(TEXT_30);
+    stringBuffer.append(TEXT_31);
     return stringBuffer.toString();
   }
 }

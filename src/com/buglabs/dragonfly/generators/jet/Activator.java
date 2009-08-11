@@ -17,10 +17,13 @@ public class Activator
   protected final String TEXT_3 = ".*;" + NL + "import com.buglabs.util.ServiceFilterGenerator;" + NL + "import org.osgi.framework.BundleActivator;" + NL + "import org.osgi.framework.BundleContext;" + NL + "import org.osgi.framework.Filter;" + NL + "import org.osgi.util.tracker.ServiceTracker;" + NL + "" + NL + "/**" + NL + " * BundleActivator for ";
   protected final String TEXT_4 = "." + NL + " *" + NL + " */" + NL + "public class Activator implements BundleActivator {" + NL + "\tprivate ";
   protected final String TEXT_5 = "ServiceTracker stc;" + NL + "\tprivate ServiceTracker st;" + NL + "\t/*" + NL + "\t * (non-Javadoc)" + NL + "\t * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)" + NL + "\t */" + NL + "\tpublic void start(BundleContext context) throws Exception {\t\t" + NL + "\t\t//Create the service tracker and run it." + NL + "\t\tstc = new ";
-  protected final String TEXT_6 = "ServiceTracker(context);" + NL + "\t\tFilter f = context.createFilter(ServiceFilterGenerator.generateServiceFilter(stc.getServicePropertiesMap()));" + NL + "\t\tst = new ServiceTracker(context, f, stc);" + NL + "\t\tst.open();" + NL + "\t}" + NL + "" + NL + "\t/*" + NL + "\t * (non-Javadoc)" + NL + "\t * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)" + NL + "\t */" + NL + "\tpublic void stop(BundleContext context) throws Exception {" + NL + "\t\tstc.stop();" + NL + "\t\tst.close();" + NL + "\t}" + NL + "}";
-  protected final String TEXT_7 = NL;
+  protected final String TEXT_6 = "ServiceTracker(context);";
+  protected final String TEXT_7 = "\t\t" + NL + "\t\tFilter f = context.createFilter(ServiceFilterGenerator.generateServiceFilter(stc.getServicePropertiesMap()));";
+  protected final String TEXT_8 = NL + "        Filter f = context.createFilter(ServiceFilterGenerator.generateServiceFilter(stc.getServices()));";
+  protected final String TEXT_9 = NL + "\t\tst = new ServiceTracker(context, f, stc);" + NL + "\t\tst.open();" + NL + "\t}" + NL + "" + NL + "\t/*" + NL + "\t * (non-Javadoc)" + NL + "\t * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)" + NL + "\t */" + NL + "\tpublic void stop(BundleContext context) throws Exception {" + NL + "\t\tstc.stop();" + NL + "\t\tst.close();" + NL + "\t}" + NL + "}";
+  protected final String TEXT_10 = NL;
 
-   public String generate(String appName, String packageName, String moduleTrackerPackageName)
+   public String generate(String appName, String packageName, String moduleTrackerPackageName, boolean usesPropertyFilters)
   {
     final StringBuffer stringBuffer = new StringBuffer();
     stringBuffer.append(TEXT_1);
@@ -34,7 +37,13 @@ public class Activator
     stringBuffer.append(TEXT_5);
     stringBuffer.append(appName);
     stringBuffer.append(TEXT_6);
+     if (usesPropertyFilters) { 
     stringBuffer.append(TEXT_7);
+     } else { 
+    stringBuffer.append(TEXT_8);
+     } 
+    stringBuffer.append(TEXT_9);
+    stringBuffer.append(TEXT_10);
     return stringBuffer.toString();
   }
 }

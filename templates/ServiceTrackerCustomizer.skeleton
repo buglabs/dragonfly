@@ -1,4 +1,4 @@
-public class CLASS
+ public class CLASS
  {
     
     /**
@@ -18,11 +18,15 @@ public class CLASS
           serviceFilterArrayDef += "}";
           
           return serviceFilterArrayDef;
-    }   
+    }
  
     public String generate(List serviceNames, 
-            Map propertyMap, String appName, 
-            String packageName, String appPackageName, boolean genApp) {
+                            Map propertyMap, 
+                            String appName, 
+                            String packageName, 
+                            String appPackageName, 
+                            boolean genApp,
+                            boolean usesPropertyFilters) {
             
      return "";
    }
