@@ -129,7 +129,8 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 					BugProjectUtil.formatProjectNameAsClassName(projectName),
 					getServiceTrackerPackageName(projectName), 
 					BugProjectUtil.formatProjectNameAsPackage(projectName), 
-					pinfo.isShouldGenerateApplicationLoop()));
+					pinfo.isShouldGenerateApplicationLoop(),
+					usePropertyFilters(pinfo.getServicePropertyHelperMap())));
 
 		return sb;
 	}
@@ -155,8 +156,11 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 
 			StringBuffer sb = new StringBuffer();
 			String projectName = getBugProjectInfo().getProjectName();
-			sb.append(new Activator().generate(BugProjectUtil.formatProjectNameAsClassName(projectName), BugProjectUtil
-					.formatProjectNameAsPackage(projectName), getServiceTrackerPackageName(projectName)));
+			sb.append(new Activator().generate(
+					BugProjectUtil.formatProjectNameAsClassName(projectName), 
+					BugProjectUtil.formatProjectNameAsPackage(projectName), 
+					getServiceTrackerPackageName(projectName),
+					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
 			return sb;
 		}
 
@@ -225,6 +229,20 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		}
 		return output;
 	}
+	
+	/**
+    * Helper function to look at our property map and determine
+    * if we're actually using property filters, which affects the way the code is
+    * generated
+    */
+    private static boolean usePropertyFilters(Map<String, List<ServicePropertyHelper>> helperMap) {
+    	for (String key: helperMap.keySet()) {
+    		if (helperMap.get(key) != null && 
+    				helperMap.get(key).size() > 0)
+    			return true;
+    	}
+        return false;
+    }		
 	
 	public static String getClassName(String projName) {
 		return BugProjectUtil.formatProjectNameAsPackage(projName) + ".Activator";
