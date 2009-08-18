@@ -123,6 +123,9 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		BugProjectInfo pinfo = getBugProjectInfo();
 		String projectName = pinfo.getProjectName();
 		
+		// TODO, replace last parameter with: 
+		// usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
+		// for v1.5 of SDK (which will be built against R1.4.3 or greater of BUG)		
 		sb.append(new ServiceTrackerCustomizer().generate(
 					pinfo.getServices(),
 					convertHelperMapToMapofStrings(pinfo.getServicePropertyHelperMap()),
@@ -130,7 +133,7 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 					getServiceTrackerPackageName(projectName), 
 					BugProjectUtil.formatProjectNameAsPackage(projectName), 
 					pinfo.isShouldGenerateApplicationLoop(),
-					usePropertyFilters(pinfo.getServicePropertyHelperMap())));
+					false));
 
 		return sb;
 	}
@@ -156,11 +159,15 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 
 			StringBuffer sb = new StringBuffer();
 			String projectName = getBugProjectInfo().getProjectName();
+			
+			// TODO, replace last parameter with: 
+			// usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
+			// for v1.5 of SDK (which will be built against R1.4.3 or greater of BUG)
 			sb.append(new Activator().generate(
 					BugProjectUtil.formatProjectNameAsClassName(projectName), 
 					BugProjectUtil.formatProjectNameAsPackage(projectName), 
 					getServiceTrackerPackageName(projectName),
-					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
+					false));
 			return sb;
 		}
 

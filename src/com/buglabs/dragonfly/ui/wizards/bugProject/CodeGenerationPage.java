@@ -523,6 +523,12 @@ public class CodeGenerationPage extends WizardPage {
 	 */
 	private void openServicePropertySelectorDialog(
 			Shell shell, String selectedService, boolean clearCheckedOnCancel) {
+		
+		// TODO - uncomment this out of for v 1.5 of the SDK which will include
+		// support for service property filters.  For the current release,
+		// this is turned off
+		
+		/*
 		if (servicePropertyOptionsMap.containsKey(selectedService)
 				&& servicePropertyOptionsMap.get(selectedService) != null
 				&& servicePropertyOptionsMap.get(selectedService).size() > 0) {
@@ -532,6 +538,7 @@ public class CodeGenerationPage extends WizardPage {
 				dependencyViewer.setChecked(selectedService, false);
 			}
 		}
+		*/
 	}
 	
 	
