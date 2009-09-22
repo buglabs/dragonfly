@@ -26,8 +26,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.internal.core.PDECore;
 import org.eclipse.pde.internal.core.exports.FeatureExportInfo;
+import org.eclipse.pde.internal.core.exports.PluginExportOperation;
 import org.eclipse.pde.internal.ui.PDEPluginImages;
-import org.eclipse.pde.internal.ui.build.PluginExportJob;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.progress.IProgressConstants;
 
@@ -105,10 +105,11 @@ public class ExportJarAction extends Action implements IWorkbenchAction {
 		}
 	}
 
-	private class BugBundleExportJob extends PluginExportJob {
-
+	private class BugBundleExportJob extends PluginExportOperation {
+		private static final String TITLE = "Bundle Export Job";
+		
 		public BugBundleExportJob(FeatureExportInfo info) {
-			super(info);
+			super(info, TITLE);
 		}
 
 		protected IStatus run(IProgressMonitor monitor) {

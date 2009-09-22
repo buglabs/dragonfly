@@ -1,7 +1,6 @@
 package com.buglabs.dragonfly.ui.actions;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.pde.internal.ui.wizards.imports.PluginImportOperation.IImportQuery;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -15,7 +14,7 @@ import org.eclipse.ui.PlatformUI;
  * 
  */
 public class BugImportQuery implements IImportQuery {
-
+		
 	private Shell shell;
 
 	private String message;
