@@ -1,13 +1,11 @@
 package com.buglabs.dragonfly.util;
 
 import java.beans.PropertyChangeEvent;
-import java.net.ServerSocket;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.core.internal.runtime.IRuntimeConstants;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,6 +23,7 @@ public abstract class BugListener extends Thread {
 	/**
 	 * the interval between scans of service providers.
 	 */
+	private static final String PLUGIN_RUNTIME_ID = "org.eclipse.core.runtime";
 	private int BUG_SCAN_INTERVAL_MILLIS;
 	public static final String REMOVE_BUG = "remove_bug";
 	public static final String ADD_BUG = "add_bug";
@@ -198,7 +197,7 @@ public abstract class BugListener extends Thread {
 					severity = IStatus.WARNING;
 					erroredOnce = true;
 				}
-				return new Status(severity, IRuntimeConstants.PI_RUNTIME, 1, "Trying to connect to " + address + " and got " + e.getMessage(), null); //$NON-NLS-1$
+				return new Status(severity, PLUGIN_RUNTIME_ID, 1, "Trying to connect to " + address + " and got " + e.getMessage(), null); //$NON-NLS-1$
 			}
 			return Status.OK_STATUS;
 		}
