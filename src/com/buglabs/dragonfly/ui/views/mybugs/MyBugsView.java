@@ -3,12 +3,16 @@ package com.buglabs.dragonfly.ui.views.mybugs;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -17,7 +21,6 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.pde.internal.ui.editor.actions.CollapseAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
@@ -26,6 +29,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
@@ -34,8 +38,6 @@ import org.eclipse.ui.part.PluginTransfer;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
-import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.IBugnetAuthenticationListener;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
@@ -220,7 +222,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	private void createToolBar() {
 		IToolBarManager manager = getViewSite().getActionBars().getToolBarManager();
 		manager.add(addConectionAction);
-		manager.add(new CollapseAction(viewer,"Collapse All")); // collapses all nodes in the view
+		manager.add(new CollapseAllAction(viewer,"Collapse All")); // collapses all nodes in the view
 	}
 
 	private void createContextMenu() {
@@ -291,4 +293,37 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	public static TreeViewer getViewer() {
 		return viewer;
 	}
+	
+	/**
+	 * Functionality taken from pde internal class,
+	 * 	org.eclipse.pde.internal.ui.editor.actions.CollapseAction
+	 * 	and modified to suit the purpose of the MyBugs view to collapse all
+	 * 
+	 * @author brian
+	 *
+	 */
+	public class CollapseAllAction extends Action {
+
+		private AbstractTreeViewer tree_viewer;
+
+		public CollapseAllAction(AbstractTreeViewer viewer, String tooltipText) {
+			super(tooltipText, IAction.AS_PUSH_BUTTON);
+			setToolTipText(tooltipText);
+			setImageDescriptor(
+					ImageDescriptor.createFromImage(
+							PlatformUI.getWorkbench().getSharedImages().getImage(
+									ISharedImages.IMG_ELCL_COLLAPSEALL)));
+			tree_viewer = viewer;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.action.Action#run()
+		 */
+		public void run() {
+			if (tree_viewer == null) return;
+			else tree_viewer.collapseAll();
+		}
+
+	}
+
 }

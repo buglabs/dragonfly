@@ -1,22 +1,15 @@
 package com.buglabs.dragonfly.ui.wizards.bug;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.eclipse.core.internal.runtime.IRuntimeConstants;
-import org.eclipse.core.internal.runtime.LocalizationUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -31,14 +24,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.jobs.TestConnectionJob;
-import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.dragonfly.util.WSHelper;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 /**

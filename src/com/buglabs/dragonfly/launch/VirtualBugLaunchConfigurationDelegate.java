@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.swt.SWTHelper;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.JarUtils;
 import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
