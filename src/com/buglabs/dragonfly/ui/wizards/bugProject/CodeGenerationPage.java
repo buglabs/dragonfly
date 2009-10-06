@@ -524,11 +524,7 @@ public class CodeGenerationPage extends WizardPage {
 	private void openServicePropertySelectorDialog(
 			Shell shell, String selectedService, boolean clearCheckedOnCancel) {
 		
-		// TODO - uncomment this out of for v 1.5 of the SDK which will include
-		// support for service property filters.  For the current release,
-		// this is turned off
-		
-		/*
+		/* TODO - Make sure this works, this is for 1.5 SDK, R1.4.3 of BUG */
 		if (servicePropertyOptionsMap.containsKey(selectedService)
 				&& servicePropertyOptionsMap.get(selectedService) != null
 				&& servicePropertyOptionsMap.get(selectedService).size() > 0) {
@@ -538,7 +534,7 @@ public class CodeGenerationPage extends WizardPage {
 				dependencyViewer.setChecked(selectedService, false);
 			}
 		}
-		*/
+		
 	}
 	
 	
@@ -550,7 +546,8 @@ public class CodeGenerationPage extends WizardPage {
 		String jobFamily = "family-" + connection.getName(); //$NON-NLS-1$
 		Job[] jobs = manager.find(jobFamily);
 		
-		// TODO servicePropertyOptionsMap.clear();
+		// TODO - this was commented out, dunno why
+		servicePropertyOptionsMap.clear();
 		
 		// start a job only if a job within this family has not been started already.
 		if(jobs.length == 0) {
