@@ -1,5 +1,0 @@
-instructions.configure=\
-(type:0,location:http${#58}//buglabs.net/sdk/production/current/updatesite,name:Dragonfly SDK Update Site,enabled:true);\
-addRepository(type:1,location:http${#58}//buglabs.net/sdk/production/current/updatesite,name:Dragonfly SDK Update Site,enabled:true);
-
-
