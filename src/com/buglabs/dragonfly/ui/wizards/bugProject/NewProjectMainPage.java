@@ -8,70 +8,57 @@
 
 package com.buglabs.dragonfly.ui.wizards.bugProject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
+import org.eclipse.jdt.core.JavaCore;
+
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
+
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.filters.ServiceFilter;
 import com.buglabs.dragonfly.ui.info.BugProjectInfo;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class NewProjectMainPage extends WizardPage {
 
-	public static final String PAGE_NAME = "NewProjectMainPage"; //$NON-NLS-1$
-
-	public static final String PAGE_TITLE = Messages.getString("NewProjectMainPage.1"); //$NON-NLS-1$
-
+	public static final String PAGE_NAME 				= "NewProjectMainPage"; //$NON-NLS-1$
+	public static final String PAGE_TITLE 				= Messages.getString("NewProjectMainPage.1"); //$NON-NLS-1$
+	private static final String JRE_GROUP_TITLE 		= Messages.getString("NewProjectMainPage.JRE_GROUP_TITLE"); //$NON-NLS-1$
+	private static final String PHONEME_RADIO_TEXT 		= Messages.getString("NewProjectMainPage.PHONEME_RADIO_TEXT"); //$NON-NLS-1$
+	private static final String JRE_RADIO_TEXT 			= String.format(
+															Messages.getString("NewProjectMainPage.JRE_RADIO_TEXT"), 
+															JavaCore.VERSION_1_6);	//$NON-NLS-1$											
+	private static final String JAVA_1_6_EXECUTION_ENV	= "JavaSE-1.6";	//$NON-NLS-1$
+	
 	private Text txtName;
-
-	private CheckboxTreeViewer dependencyViewer;
-
-	private Text txtBugURL;
-
-	private Button chkUseVB;
-
-	private ServiceFilter serviceFilter = new ServiceFilter();
-
-	boolean genApp = false;
-
-	List services = new ArrayList();
-
-	BugProjectInfo pinfo;
-
-	private Text serviceDescriptionArea;
-
+	private Text txtAuthorName;
+	private BugProjectInfo pinfo;
 	private int projectNameSize;
 
-	private Text txtAuthorName;
-
 	public NewProjectMainPage(BugProjectInfo pinfo) {
-		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
+		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry()
+				.getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
 		setMessage(Messages.getString("NewProjectMainPage.5")); //$NON-NLS-1$
 		this.pinfo = pinfo;
 		try {
@@ -183,9 +170,99 @@ public class NewProjectMainPage extends WizardPage {
 		}
 
 		txtName.setFocus();
+		
+		// Draw the JRE group if we have Java 1.6
+		if (hasJava_1_6()) {
+			Control jreControl = (new JREGroup(pinfo)).createControl(top);
+			jreControl.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		}
+		
 		setControl(top);
 	}
 
+	/**
+	 * Does this system have a java 1.6 execution environment?
+	 *
+	 * this method of getting the EE is used by eclipse,
+	 * see: org.eclipse.jdt.ui.wizards.NewJavaProjectWizardPageOne
+	 * 		
+	 * @return
+	 */
+	private boolean hasJava_1_6() {
+		IExecutionEnvironment[] executionEnvs = 
+			JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
+
+		for (int i= 0; i < executionEnvs.length; i++) {
+			// This is how eclipse does it, by matching EE's Id string to find compliance
+			if (executionEnvs[i].getId().indexOf(JavaCore.VERSION_1_6) != -1)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * This helper class is for creating the JRE Group which allows the user
+	 * to select the execution environment for their BUG App
+	 * 
+	 * @author brian
+	 *
+	 */
+	private final class JREGroup {
+	
+		private Group group;
+		private Button phoneme_radio;
+		private Button jre_radio;
+		private BugProjectInfo pinfo;
+
+		public JREGroup(BugProjectInfo pinfo) {
+			this.pinfo = pinfo;
+		}
+		
+		public Control createControl(Composite composite) {
+			group = new Group(composite, SWT.NONE);
+			group.setLayout(new GridLayout(2, false));
+			group.setFont(composite.getFont());
+			group.setText(JRE_GROUP_TITLE);
+			
+			phoneme_radio = new Button(group, SWT.RADIO);
+			phoneme_radio.setText(PHONEME_RADIO_TEXT);
+			phoneme_radio.setSelection(true);
+			GridData gdSpan = new GridData(SWT.LEFT);
+			gdSpan.horizontalSpan = 2;
+			phoneme_radio.setLayoutData(gdSpan);
+			phoneme_radio.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					jre_radio.setSelection(false);
+					phoneme_radio.setSelection(true);
+					pinfo.setExecutionEnvironment("");
+				}
+				
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {/* not used */}
+			});
+			
+			jre_radio = new Button(group, SWT.RADIO);
+			jre_radio.setText(JRE_RADIO_TEXT);
+			jre_radio.setLayoutData(new GridData(SWT.LEFT));
+			jre_radio.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					phoneme_radio.setSelection(false);
+					jre_radio.setSelection(true);
+					pinfo.setExecutionEnvironment(JAVA_1_6_EXECUTION_ENV);
+				}
+				
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {/* not used */}
+			});
+						
+			return group;
+		}
+	}
+	
+	
+/*
 	private void setUpViewerListener() {
 		dependencyViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -216,13 +293,16 @@ public class NewProjectMainPage extends WizardPage {
 			spacer.setLayoutData(gd);
 		}
 	}
+*/	
 
 	/**
 	 * Freshen the model based on the viewer.
 	 */
-	private void updateModel() {
+/*	private void updateModel() {
 		List checkedServices = Arrays.asList(dependencyViewer.getCheckedElements());
 		pinfo.getServices().clear();
 		pinfo.getServices().addAll(checkedServices);
-	}
+	}	
+*/
+	
 }
