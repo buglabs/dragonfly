@@ -204,7 +204,7 @@ public class NewProjectMainPage extends WizardPage {
 	 * This helper class is for creating the JRE Group which allows the user
 	 * to select the execution environment for their BUG App
 	 * 
-	 * @author brian
+	 * @author bbballantine
 	 *
 	 */
 	private final class JREGroup {
@@ -231,14 +231,13 @@ public class NewProjectMainPage extends WizardPage {
 			gdSpan.horizontalSpan = 2;
 			phoneme_radio.setLayoutData(gdSpan);
 			phoneme_radio.addSelectionListener(new SelectionListener() {
-				@Override
+
 				public void widgetSelected(SelectionEvent e) {
 					jre_radio.setSelection(false);
 					phoneme_radio.setSelection(true);
 					pinfo.setExecutionEnvironment("");
 				}
 				
-				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {/* not used */}
 			});
 			
@@ -246,63 +245,18 @@ public class NewProjectMainPage extends WizardPage {
 			jre_radio.setText(JRE_RADIO_TEXT);
 			jre_radio.setLayoutData(new GridData(SWT.LEFT));
 			jre_radio.addSelectionListener(new SelectionListener() {
-				@Override
+				
 				public void widgetSelected(SelectionEvent e) {
 					phoneme_radio.setSelection(false);
 					jre_radio.setSelection(true);
 					pinfo.setExecutionEnvironment(JAVA_1_6_EXECUTION_ENV);
 				}
 				
-				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {/* not used */}
 			});
 						
 			return group;
 		}
 	}
-	
-	
-/*
-	private void setUpViewerListener() {
-		dependencyViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event != null) {
-					ISelection selection = event.getSelection();
-					if (selection instanceof IStructuredSelection) {
-						String selectedService = (String) ((IStructuredSelection) selection).getFirstElement();
-						if (selectedService != null) {
-							String descr = Activator.getServiceDescription(selectedService.trim());
-							serviceDescriptionArea.setText(descr);
-						}
-					}
-				}
-			}
-
-		});
-	}
-
-	private void createSpacer(Composite comp) {
-
-		Layout layout = comp.getLayout();
-
-		if (layout instanceof GridLayout) {
-			Label spacer = new Label(comp, SWT.NONE);
-			GridData gd = new GridData();
-			gd.horizontalSpan = ((GridLayout) layout).numColumns;
-			spacer.setLayoutData(gd);
-		}
-	}
-*/	
-
-	/**
-	 * Freshen the model based on the viewer.
-	 */
-/*	private void updateModel() {
-		List checkedServices = Arrays.asList(dependencyViewer.getCheckedElements());
-		pinfo.getServices().clear();
-		pinfo.getServices().addAll(checkedServices);
-	}	
-*/
 	
 }
