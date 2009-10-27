@@ -31,7 +31,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -86,6 +85,7 @@ public class BugWSHelper extends WSHelper {
 		return props;
 	}
 
+	@Deprecated //not being used?  Marked as depricated
 	public static List getModulePropertyDescriptors(Module module) throws IOException {
 		XmlParser parser = new XmlParser();
 		List props = new ArrayList();
@@ -141,6 +141,7 @@ public class BugWSHelper extends WSHelper {
 		return modules;
 	}
 	
+	@Deprecated // not being used?
 	public static List getRawModules(URL url) throws IOException{
 		XmlParser parser = new XmlParser();
 		List modules = new ArrayList();
@@ -160,6 +161,7 @@ public class BugWSHelper extends WSHelper {
 
 		return modules;
 	}
+	
 
 	public static void updateProperty(Module module, BugProperty property, Object value) throws IOException {
 
@@ -274,7 +276,23 @@ public class BugWSHelper extends WSHelper {
 		
 		return packages;
 	}
+	
+	/**
+	 * Returns an XML node representing the xml returned from a call
+	 *  to the bug support web service
+	 * 
+	 * @param supportURL
+	 * @return
+	 * @throws IOException
+	 */
+	public static XmlNode getBUGSupportInfo(URL supportURL) throws IOException {
+		XmlParser parser = new XmlParser();
+		URLConnection conn = supportURL.openConnection();
+		String response = get(conn, true);
+		return parser.parse(new StringReader(response));
+	}
 
+	
 	public static String updatePackage(ProgramNode pkn, ISerializer serializer) throws Exception {
 		if (!pkn.isBUGNetPackage()) {
 			throw new Exception("This package did not originate on BUGnet.");

@@ -10,10 +10,7 @@ package com.buglabs.dragonfly.model;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
-import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
@@ -24,14 +21,6 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class Bug extends BaseTreeNode {
 	private static final long serialVersionUID = -6726829616562590688L;
-	
-	/*
-	 * Contants for the BUG version.
-	 */
-	public final static int BUG_R14 = 1;
-	public final static int BUG_PRE_R14 = 2;
-	public final static int BUG_UNKNOWN = 0;
-	private final static int UNSET_VERSION = -1;
 	
 	private URL baseUrl;
 
@@ -49,8 +38,8 @@ public class Bug extends BaseTreeNode {
 
 	private URL configAdminUrl;
 	
-	private int version = UNSET_VERSION;
-
+	private URL supportInfoUrl;
+	
 	public Bug(String name, URL url) {
 		super(name);
 		this.baseUrl = url;
@@ -73,29 +62,6 @@ public class Bug extends BaseTreeNode {
 		return super.getChildren();
 	}
 
-	/**
-	 * Examine running bundles on BUG to determine version of rootfs.
-	 * @return An integer indicating the version of BUG rootfs software running on device.
-	 * @throws MalformedURLException
-	 * @throws Exception
-	 */
-	private int getBUGVersion() throws MalformedURLException, Exception {
-		List pkgs = BugWSHelper.getPrograms(this.getProgramURL());
-		
-		ProgramNode node;
-		IPackage pkg;
-		for (Iterator i = pkgs.iterator(); i.hasNext();) {
-			node = (ProgramNode) i.next();
-			pkg = node.getPackage();
-			
-			//Somewhat of a hack.  If we find the BUG Audio bundle, we assume it's R1.4
-			if (pkg.getName().toUpperCase().equals("BUG AUDIO")) {
-				return BUG_R14;
-			}
-		}
-		
-		return BUG_PRE_R14;
-	}
 
 	/**
 	 * @return A URL for the module ws api.
@@ -177,6 +143,20 @@ public class Bug extends BaseTreeNode {
 		return configAdminUrl;
 	}
 
+	/**
+	 * @return supportInfoUrl url
+	 * @throws MalformedURLException
+	 */
+	public URL getSupportURL() throws MalformedURLException{
+		if (supportInfoUrl == null) {
+			String surl = baseUrl.getProtocol() + "://" + baseUrl.getHost() + ":" + baseUrl.getPort() + baseUrl.getPath() + "/support";
+
+			supportInfoUrl = new URL(surl);
+		}
+
+		return supportInfoUrl;
+	}	
+	
 	public void disconnect() {
 		connected = false;
 		moduleUrl = null;
@@ -198,22 +178,6 @@ public class Bug extends BaseTreeNode {
 		serviceUrl = null;
 		packageURL = null;
 		configAdminUrl = null;
-	}
-	
-	/**
-	 * This may make a WS call to BUG if version is unknown.
-	 * @return Version of BUG.  
-	 */
-	public int getVersion() {
-		if (version == UNSET_VERSION) {
-			try {
-				version = getBUGVersion();
-			} catch (Exception e) {
-				version = BUG_UNKNOWN;
-			}
-		}
-		
-		return version;
 	}
 
 	public Object getEditableValue() {

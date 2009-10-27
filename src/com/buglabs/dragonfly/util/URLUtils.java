@@ -18,10 +18,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.util.Enumeration;
-
-import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.model.AuthenticationData;
-
 /**
  * A set of static helper classes to create BUGNet URLS. All URL creating should
  * be defined in this class.
@@ -118,6 +114,10 @@ public class URLUtils {
 	
 	/**
 	 * Reads data from specified stream
+	 * 
+	 *  bb - I added a "newline" character  (\n) on the append because, for some reason,
+	 *  	it was reading in line by line but not appending together the lines w/ a newline
+	 * 
 	 * @param stream - Stream from which data should be read
 	 * @return Result from server response
 	 * @throws IOException
@@ -131,7 +131,7 @@ public class URLUtils {
 		String line;
 		sb = new StringBuffer();
 		while ((line = in.readLine()) != null) {
-			sb.append(line);
+			sb.append(line + "\n");
 		}
 		
 		in.close();
