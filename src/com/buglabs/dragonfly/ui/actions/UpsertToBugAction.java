@@ -1,9 +1,9 @@
 package com.buglabs.dragonfly.ui.actions;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -14,20 +14,18 @@ import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.IProgressService;
-import org.eclipse.ui.progress.IWorkbenchSiteProgressService;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.model.BaseTreeNode;
+import com.buglabs.dragonfly.model.BUGSupportInfoManager;
 import com.buglabs.dragonfly.model.Bug;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
-import com.buglabs.dragonfly.model.ProgramNode;
+import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.dialogs.BUGConnectionSelectionDialog;
+import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -40,25 +38,17 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class UpsertToBugAction extends Action {
 
-	String bugUrl;
-
+	private String bugUrl;
 	private IProject project;
-
 	private File jarFile;
-
 	private IJobChangeListener jobListener;
-
-	private int status;
-
-	private BugConnection bugConnection;
-
 	private String bugName;
-
+	
 	protected boolean bugApplicationOverwrite = false;
 
-	private int bugVersion;
 
-	public UpsertToBugAction(String bugUrl, String bugName, IProject project, IJobChangeListener jobListener) {
+	public UpsertToBugAction(String bugUrl, String bugName, 
+			IProject project, IJobChangeListener jobListener) {
 		this.bugUrl = bugUrl;
 		this.project = project;
 		this.jobListener = jobListener;
@@ -69,8 +59,8 @@ public class UpsertToBugAction extends Action {
 		try {
 			jarFile = Activator.getDefault().exportToJar(project);
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			UIUtils.handleVisualError(
+					Messages.getString("ExportJarToBugJob.UNABLE_TO_UPLOAD_JAR"), e); //$NON-NLS-1$
 		}
 
 		if (jarFile != null && jarFile.exists()) {
@@ -84,96 +74,20 @@ public class UpsertToBugAction extends Action {
 			job.schedule();			
 		}
 	}
-
-	private String findBug() throws CoreException {
-		final Display disp = PlatformUI.getWorkbench().getDisplay();
-		bugConnection = null;
-		status = -1;
-		String bugURL = null;
-
-		disp.syncExec(new Runnable() {
-
-			public void run() {
-				Shell shell = new Shell(disp);
-
-				BaseTreeNode root = (BaseTreeNode) Activator.getDefault().getBugsViewRoot();
-				
-				/* 
-				 *  We had been just sending the app to the BUG if there was only
-				 *  one bug, but this lead to a lot of accidental sends, so
-				 *  now we're forcing the dialog.
-				 *  Code to skip the dialog is commented out
-				 *  
-				// don't show BUG selection if we have one BUG
-				if(root.getChildren().size() == 1){
-					bugConnection = (BugConnection)root.getChildren().iterator().next();
-				}
-				else{
-				*/
-				BUGConnectionSelectionDialog conDialog = new BUGConnectionSelectionDialog(shell);
-				status = conDialog.open();
-				if (status == IStatus.OK) {
-					bugConnection = conDialog.getSelectedBugConnection();
-				}
-				//}
-			}
-		});
-
-		if (bugConnection != null) {
-			// save the version
-			bugVersion = bugConnection.getVersion();
-			// if app exists, ask user if bug should be updated
-			if (bugExists()) {
-				disp.syncExec(new Runnable() {
-
-					public void run() {
-						bugApplicationOverwrite = MessageDialog.openQuestion(PlatformUI.getWorkbench().getDisplay().getActiveShell(),
-								"Export BUG", "BUG Application '" + project.getName() + "' already exists in BUG '"
-										+ bugConnection.getName() + "'\nAre you sure you want overwrite?");
-					}
-
-				});
-				if (bugApplicationOverwrite) {
-					bugURL = bugConnection.getUrl().toExternalForm();
-				}
-			} else {
-				return bugConnection.getUrl().toExternalForm();
-			}
-		}
-
-		return bugURL;
-	}
-
+	
 	/**
-	 * @return Returns true if bug exists, false otherwise
+	 * 
+	 * @author each and every one of us
+	 *
 	 */
-	private boolean bugExists() {
-		List list = null;
-		try {
-			list = BugWSHelper.getPrograms(bugConnection.getProgramURL());
-			if (list != null) {
-				Iterator iterator = list.iterator();
-
-				while (iterator.hasNext()) {
-					ProgramNode node = (ProgramNode) iterator.next();
-					if (node.getName().equals(project.getName())) {
-						return true;
-					}
-				}
-			}
-		} catch (Exception e) {
-			UIUtils.handleVisualError("Unable connect to " + bugConnection.getName(), e);
-			return false;
-		}
-		return false;
-	}
-
 	private class ExportJarToBugJob extends Job {
 
 		private String url;
-		private static final int TOTAL_WORK_UNITS = 100;
-		private static final int WORKED_25_PERCENT = 25;
-		private static final String JOB_TITLE = "Send Application to BUG";
+		private BugConnection selectedBugConnection;
+		private static final int TOTAL_WORK_UNITS 					= 100;
+		private static final int WORKED_25_PERCENT 					= 25;
+		private static final String JOB_TITLE 						= "Send Application to BUG"; //$NON-NLS-1$
+		private static final String EXECUTION_ENVIRONMENT_KEY 		= "Bundle-RequiredExecutionEnvironment"; //$NON-NLS-1$
 
 		/**
 		 * 
@@ -184,49 +98,156 @@ public class UpsertToBugAction extends Action {
 			super(JOB_TITLE);
 			this.url = url;
 		}
-
+		
+		/**
+		 * Do all the work to get pump the application up to the BUG
+		 */
 		protected IStatus run(IProgressMonitor monitor) {
-			IStatus ret = new Status(IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "", null);
-			
-			// use the monitor to give us some feedback in the dialog
+			// use the monitor to give us some feedback in the dialog //
 			monitor.beginTask(JOB_TITLE, TOTAL_WORK_UNITS);
-			if (url == null) {
-				try {
-					url = findBug();
-				} catch (CoreException e) {
-					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, Messages.getString("ExportJarAction.0"), e); //$NON-NLS-1$
-				}
+			
+			// Get a bug connection either by passed url or dialog //
+			final BugConnection bug = getBugConnection(url);
+			if (bug == null) {
+				return new Status(IStatus.WARNING, Activator.PLUGIN_ID, 0,
+					Messages.getString("ExportJarToBugJob.UNABLE_TO_LOCATE_BUG"), null); //$NON-NLS-1$
 			}
+			url =  bug.getUrl().toExternalForm();
+			
+			// Makes a webservice call to the load info from support xml on BUG //
+			BUGSupportInfoManager info = BUGSupportInfoManager.load(bug);
 			monitor.worked(WORKED_25_PERCENT);
-
-			if (url != null) {
-				monitor.subTask("Packaging Application");
-				try {
-					if (bugName == null) {
-						bugName = bugConnection.getName();
+			if (info == null) {
+				return new Status(IStatus.WARNING, Activator.PLUGIN_ID, 0,
+					Messages.getString("ExportJarToBugJob.UNABLE_TO_LOCATE_BUG"), null); //$NON-NLS-1$
+			}
+			
+			// Check Execution Environment //
+			if (!checkExecutionEnvironment(project, info)) {
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, String.format(
+					Messages.getString("ExportJarToBugJob.EXECUTION_ENVIRONMENT_NO_MATCHY"),  //$NON-NLS-1$
+					project.getName(), bug.getName(), info.getExecutionEnvironment()), null);				
+			}
+			
+			// see if the App is already there //
+			if (info.getBundleList().contains(project.getName())) {
+				PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+					public void run() {
+						bugApplicationOverwrite = MessageDialog.openQuestion(
+							PlatformUI.getWorkbench().getDisplay().getActiveShell(),
+								Messages.getString("ExportJarToBugJob.UPLOAD_TO_BUG"), String.format( //$NON-NLS-1$
+									Messages.getString("ExportJarToBugJob.ARE_YOU_SURE_OVERWRITE"),  //$NON-NLS-1$
+									project.getName(), bug.getName()));
 					}
-					
-					if(bugApplicationOverwrite){
-						BugWSHelper.deleteProgram(new URL(url + "/program/" + project.getName().replace(' ', '+')).toExternalForm());
-					}
-					monitor.worked(WORKED_25_PERCENT);
-					monitor.worked(WORKED_25_PERCENT);
-					
-					if (!monitor.isCanceled()) {
-						monitor.subTask("Sending Application to BUG\nThis operation may take a while and cannot be cancelled");
-						BugWSHelper.upsertBundle(jarFile, new URL(url + "/program/" + project.getName().replace(' ', '+')), bugVersion == Bug.BUG_PRE_R14); //$NON-NLS-1$
-						monitor.worked(WORKED_25_PERCENT);
-						ModelNodeChangeEvent event = new ModelNodeChangeEvent(this, new Bug(bugName, new URL(url)));
-						DragonflyActivator.getDefault().fireModelChangeEvent(event);
-					}
-				} catch (Exception e) {
-					UIUtils.handleVisualError("Unable to upload jar file to BUG: " + url, e);
-					return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0, Messages.getString("ExportJarAction.0"), e); //$NON-NLS-1$
+				});				
+			}
+			
+			try {
+				// Delete the application if user asked for overwrite //
+				if(bugApplicationOverwrite){
+					BugWSHelper.deleteProgram(new URL(
+						url + "/program/" + project.getName().replace(' ', '+')).toExternalForm()); //$NON-NLS-1$
 				}
+				
+				monitor.worked(WORKED_25_PERCENT);
+				monitor.worked(WORKED_25_PERCENT);
+				
+				// Actually do the upload //
+				if (!monitor.isCanceled()) {
+					monitor.subTask(Messages.getString("ExportJarToBugJob.SENDING_APPLICATION_MSG")); //$NON-NLS-1$
+					BugWSHelper.upsertBundle(jarFile, 
+						new URL(url + "/program/" + project.getName().replace(' ', '+')),  //$NON-NLS-1$
+						info.getVersion().equals(BUGSupportInfoManager.BUG_VERSION_PRE_R14));
+					ModelNodeChangeEvent event = 
+						new ModelNodeChangeEvent(this, new Bug(bug.getName(), new URL(url)));
+					DragonflyActivator.getDefault().fireModelChangeEvent(event);
+				}
+				
+			} catch (Exception e) {
+				UIUtils.handleVisualError(Messages.getString("ExportJarToBugJob.UNABLE_TO_UPLOAD_JAR") + ": " + url, e); //$NON-NLS-1$
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 
+					0, Messages.getString("ExportJarToBugJob.UNABLE_TO_UPLOAD_JAR"), e); //$NON-NLS-1$
 			}
 			
 			monitor.worked(WORKED_25_PERCENT);
-			return ret;
+			return new Status(IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "", null);
 		}
+
+		
+		/**
+		 * Return true if the app's execution environment matches one supplied by the BUG
+		 * 
+		 * @param project
+		 * @param info
+		 * @return
+		 */
+		private boolean checkExecutionEnvironment(IProject project, BUGSupportInfoManager info) {
+			String ee = null;
+			try {
+				ee = BugProjectUtil.getManifestEntry(project, EXECUTION_ENVIRONMENT_KEY);
+			} catch (CoreException e1) {
+				UIUtils.handleNonvisualWarning(
+						"Unable to read Execution Environment for project " + project.getName(), e1); //$NON-NLS-1$
+			} catch (IOException e1) {
+				UIUtils.handleNonvisualWarning(
+						"Unable to read Execution Environment for project " + project.getName(), e1); //$NON-NLS-1$
+			}
+			// No EE in App, assumed to be PhoneME
+			if (ee == null || ee.length() == 0)
+				ee = BUGSupportInfoManager.PHONEME_EXECUTION_ENV;
+					
+			return info.getExecutionEnvironment().contains(ee);
+		}
+
+
+		/**
+		 * Helper to get a connection to a BUG to upload to either
+		 *  by using the passed url or by calling findBUG() - which displays a selector
+		 * 
+		 * @param url
+		 * @return
+		 */
+		private BugConnection getBugConnection(String url) {
+			BugConnection connection = null;
+			if (url == null) {
+				connection = findBug();
+			} else {
+				try {
+					if (bugName == null) bugName = "default"; //$NON-NLS-1$
+					connection = new StaticBugConnection(bugName, new URL(url));
+				} catch (MalformedURLException e) {
+					UIUtils.handleNonvisualWarning(
+							Messages.getString("ExportJarToBugJob.UNABLE_TO_LOCATE_BUG"), e); //$NON-NLS-1$
+				}
+			}
+			return connection;		
+		}
+		
+		
+		/**
+		 * Displays a UI that allows a user to select a bug to upload to
+		 * 
+		 * @return
+		 */
+		private BugConnection findBug() {
+			selectedBugConnection = null;
+			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+				public void run() {
+					/* 
+					 *  We had been just sending the app to the BUG if there was only
+					 *  one bug, but this lead to a lot of accidental sends, so
+					 *  now we're forcing the dialog.
+					 *  Code to skip the dialog is commented out
+					 *  To see the old code, see SVN History before 10/19/2009
+					 */
+					BUGConnectionSelectionDialog conDialog = 
+						new BUGConnectionSelectionDialog(new Shell(PlatformUI.getWorkbench().getDisplay()));
+					if (conDialog.open() == IStatus.OK) {
+						selectedBugConnection = conDialog.getSelectedBugConnection();
+					}
+				}
+			});
+			return selectedBugConnection;
+		}		
 	}
 }

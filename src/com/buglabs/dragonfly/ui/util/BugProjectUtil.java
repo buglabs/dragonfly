@@ -1,11 +1,17 @@
 package com.buglabs.dragonfly.ui.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
@@ -53,6 +59,37 @@ public class BugProjectUtil extends ProjectUtils {
 		return temp;
 	}
 
+	
+	/**
+	 * Returns an entry for the IProject's manifest file
+	 * 	or null if it can't be found or something goes wrong
+	 * 
+	 * @param project
+	 * @param name
+	 * @return
+	 * @throws CoreException
+	 * @throws IOException
+	 */
+	public static String getManifestEntry(
+			IProject project, String name) throws CoreException, IOException {
+		IFile file = ProjectUtils.getManifestFile(project);
+		if (file == null) return null;
+		
+		InputStream in = file.getContents();
+		if (in == null) return null;
+		
+		Attributes attr = null;
+		try {
+			Manifest manifest = new Manifest(in);
+			attr = manifest.getMainAttributes();
+		} finally {
+			in.close();
+		}
+		if (attr == null) return null;
+		return attr.getValue(name);
+	}
+	
+	
 	/**
 	 * Builds a list of Concierge Projects
 	 * 

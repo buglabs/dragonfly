@@ -14,17 +14,12 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.jar.JarFile;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
@@ -34,7 +29,6 @@ import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.JarUtils;
 import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
 import com.buglabs.osgi.concierge.runtime.ConciergeRuntime;
-import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.util.BugBundleConstants;
 
 public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfiguration {
