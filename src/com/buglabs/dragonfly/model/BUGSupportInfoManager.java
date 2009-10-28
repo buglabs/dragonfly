@@ -21,11 +21,24 @@ import com.buglabs.util.XmlNode;
  */
 public class BUGSupportInfoManager {
 	
+	/**
+	 * Tells us that BUG is 1.2 or 1.3.  This is important because in 1.4.x and on, a
+	 * 	different method of uploading apps is used.
+	 */
 	public static final String BUG_VERSION_PRE_R14 		= "Pre-1.4";
-	public static final String PHONEME_EXECUTION_ENV	= "JRE-1.1";	
+	// Currently don't need these to be public, but they could be made public if needed
+	// if BUG is 1.4.3 and above, it info will have the exact version (gets it from /support)
+	private static final String BUG_VERSION_R14			= "R1.4";
 	private static final String BUG_VERSION_NOT_KNOWN 	= "UNKNOWN";
 	private static final String VIRTUAL_BUG 			= "VIRTUAL BUG";
-	private static final String BUG_VERSION_R14			= "R1.4";
+	
+	/**
+	 * Concierge reports JRE-1.1 as it's execution environment when running
+	 * 	PhoneME.
+	 */
+	public static final String PHONEME_EXECUTION_ENV	= "JRE-1.1";	
+
+	// keys used for parsing xml
 	private static final String ROOTFS_VERSION_NODE_NAME= "rootfs_version";
 	private static final String JVM_PROPERTIES_NODE_NAME= "jvm_properties";
 	private static final String JVM_PROPERTY_KEY 		= "key";
