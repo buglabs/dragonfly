@@ -82,13 +82,16 @@ public class UpsertToBugAction extends Action {
 	 */
 	private class ExportJarToBugJob extends Job {
 
+		// these are for the monitor progress bar
+		private static final int TOTAL_WORK_UNITS 				= 100;
+		private static final int WORKED_25_PERCENT 				= 25;
+		
+		private static final String JOB_TITLE 					= "Send Application to BUG"; //$NON-NLS-1$
+		private static final String EXECUTION_ENVIRONMENT_KEY 	= "Bundle-RequiredExecutionEnvironment"; //$NON-NLS-1$		
+		
 		private String url;
 		private BugConnection selectedBugConnection;
-		private static final int TOTAL_WORK_UNITS 					= 100;
-		private static final int WORKED_25_PERCENT 					= 25;
-		private static final String JOB_TITLE 						= "Send Application to BUG"; //$NON-NLS-1$
-		private static final String EXECUTION_ENVIRONMENT_KEY 		= "Bundle-RequiredExecutionEnvironment"; //$NON-NLS-1$
-
+		
 		/**
 		 * 
 		 * @param url
@@ -133,6 +136,7 @@ public class UpsertToBugAction extends Action {
 			if (info.getBundleList().contains(project.getName())) {
 				PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 					public void run() {
+						// app is already there so open dialog to query user //
 						bugApplicationOverwrite = MessageDialog.openQuestion(
 							PlatformUI.getWorkbench().getDisplay().getActiveShell(),
 								Messages.getString("ExportJarToBugJob.UPLOAD_TO_BUG"), String.format( //$NON-NLS-1$
@@ -155,6 +159,7 @@ public class UpsertToBugAction extends Action {
 				// Actually do the upload //
 				if (!monitor.isCanceled()) {
 					monitor.subTask(Messages.getString("ExportJarToBugJob.SENDING_APPLICATION_MSG")); //$NON-NLS-1$
+					// upload bundle - check version to determine upload method //
 					BugWSHelper.upsertBundle(jarFile, 
 						new URL(url + "/program/" + project.getName().replace(' ', '+')),  //$NON-NLS-1$
 						info.getVersion().equals(BUGSupportInfoManager.BUG_VERSION_PRE_R14));
