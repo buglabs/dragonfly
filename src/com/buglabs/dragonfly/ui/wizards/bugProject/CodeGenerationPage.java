@@ -116,14 +116,15 @@ public class CodeGenerationPage extends WizardPage {
 	private static final String RELOAD_LIST_WARN_TITLE		= "Reloading Services List";
 	private static final String RELOAD_LIST_WARN_MESSAGE	= "Any selections you've made will be lost.  Would you like to continue?";
 	
-	private static final String LAUNCH_VBUG_MESSAGE = "Launch Virtual BUG to select services that this project will consume.";
-	private static final String SELECT_BUG_MESSAGE 	= "Select a BUG from Target BUG List to choose services that this project will consume.";
-	
+	private static final String LAUNCH_VBUG_MESSAGE 		= "Launch Virtual BUG to select services that this project will consume.";
+	private static final String SELECT_BUG_MESSAGE 			= "Select a BUG from Target BUG List to choose services that this project will consume.";
+	private static final String SVCS_INSTRUCTIONS_TEXT		= "Selecting a service will add it to the list of services required to run your project.  Double click the service to add required properties.";	
 	private static final int BUGS_VIEWER_HEIGHT_HINT 		= 100;
 	private static final int SERVICES_GROUP_HEIGHT_HINT 	= 350;
 	private static final int SERVICES_GROUP_WIDTH_HINT 		= 550;
 	private static final int DEPENDENCY_VIEWER_HEIGHT_HINT 	= 200;
 	private static final int SERVICE_DESCRIPTION_AREA_HEIGHT= 100;
+
 
 	// UI elements
 	private TableViewer bugsViewer;
@@ -302,12 +303,17 @@ public class CodeGenerationPage extends WizardPage {
 		compServices.setLayoutData(gdServices);
 		compServices.setLayout(new GridLayout(3, false));
 
-		// text box for services filtering
-		Text txtFilter = new Text(compServices, SWT.BORDER);
 		GridData gdFillH = new GridData(GridData.FILL_HORIZONTAL);
 		servicesComposite.setLayoutData(gdFillH);
-		GridData gdFillBoth = GridDataFactory.createFrom(gdFillH).create();
+		GridData gdFillBoth = GridDataFactory.createFrom(gdFillH).create();		
 		gdFillBoth.horizontalSpan = layout.numColumns;
+		
+		Label instructionsLabel = new Label(compServices, SWT.WRAP);
+		instructionsLabel.setLayoutData(gdFillBoth);
+		instructionsLabel.setText(SVCS_INSTRUCTIONS_TEXT);
+		
+		// text box for services filtering
+		Text txtFilter = new Text(compServices, SWT.BORDER);
 		txtFilter.setLayoutData(gdFillBoth);
 		txtFilter.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -368,10 +374,6 @@ public class CodeGenerationPage extends WizardPage {
 				
 				// update the services list w/ new checked item
 				updateModel();
-				
-				if (event.getChecked()) 
-					openServicePropertySelectorDialog(
-							mainComposite.getShell(), selectedService, true);	
 			}
 		});
 		
