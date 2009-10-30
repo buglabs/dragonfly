@@ -44,9 +44,6 @@
 	<!-- =================================================================== -->
 	<target name="bundles.all">
 		<antcall target="runpdebuild">
-		</antcall>
-		<manifest file="META-INF/MANIFEST.MF" mode="update">
-			<attribute name="BUG-API-Version" value="${bug.version}" />
-		</manifest>		
+		</antcall>	
 	</target>
 </project>
