@@ -432,7 +432,14 @@ public class BugnetWSHelper {
 		if (img == null) {
 			try {
 				HTTPRequest request = new HTTPRequest(new BugnetConnectionProvider());
-				HTTPResponse response = request.get(location);
+				HTTPResponse response;
+				
+				// TODO - fix hack -- a server-side solution prolly
+				// Hack to make png's work (for some reason icon and thumb coming from bugnet are jacked)
+				if (location.endsWith("thumb.png")) 
+					response = request.get(location.replace("thumb.png", "small.png"));
+				else
+					response = request.get(location);
 				ImageData imagedata = response.getImage();
 				img = new Image(null, imagedata);
 				if (BugnetStateProvider.getInstance().getImageFromRegistry(location) == null) {
