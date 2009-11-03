@@ -336,13 +336,17 @@ public class BugnetApplicationItemDrawer {
 		lblUserName.setBackground(backgroundColor);
 		lblUserName.setForeground(colorRegistry.get(USERNAMECOLOR));
 
-		// Draw the download count
+		// Draw the download count & version number
 		//GridData downloadsGD = GridDataFactory.fillDefaults().create();
 		gd = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
 		gd.horizontalSpan = 2;
 		Label lblDownloads = new Label(comp, SWT.NONE);
-		lblDownloads.setText(item.getDownload_count() + " downloads");
+		String apiStr = "";
+		if (item.getAPIVersion() != null && item.getAPIVersion().length() > 0)
+			apiStr = "API " + item.getAPIVersion() + " - ";
+		lblDownloads.setText(apiStr + item.getDownload_count() + " downloads");
 		lblDownloads.setLayoutData(gd);
+		lblDownloads.setFont(fontRegistry.get(DESCRIPTIONFONT));
 		lblDownloads.setBackground(backgroundColor);
 		lblDownloads.setForeground(colorRegistry.get(USERNAMECOLOR));
 

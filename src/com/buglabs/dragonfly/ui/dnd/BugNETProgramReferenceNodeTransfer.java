@@ -104,7 +104,7 @@ public class BugNETProgramReferenceNodeTransfer extends ByteArrayTransfer {
 			for (int i = 0; i < numberofprogs; ++i) {
 				String label = in.readUTF();
 				String userName = in.readUTF();
-				BUGNetProgramReferenceNode node = new BUGNetProgramReferenceNode(null, label, userName, null, null, null, null, null);
+				BUGNetProgramReferenceNode node = new BUGNetProgramReferenceNode(null, label, userName, null, null, null, null, null, null);
 				programs.add(node);
 			}
 		} catch (IOException e) {
