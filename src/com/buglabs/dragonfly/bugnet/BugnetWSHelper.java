@@ -395,6 +395,7 @@ public class BugnetWSHelper {
 			String bugNetUrl = XpathQuery.getNode("/program/homepage", n).getAttribute("url");
 			String description = XpathQuery.getNode("/program/description/", n).getValue();
 			String imageUrl = XpathQuery.getNode("/program/thumbnail", n).getAttribute("url");
+			String apiVersion = XpathQuery.getNode("/program/api_version", n).getValue();
 			String imageKey;
 
 			try {
@@ -409,7 +410,7 @@ public class BugnetWSHelper {
 
 				BUGNetProgramReferenceNode node = 
 					new BUGNetProgramReferenceNode(webid, name, username, bugNetUrl, 
-						description, imageKey, download_count, rating);
+						description, imageKey, download_count, rating, apiVersion);
 
 				apps.add(node);
 			}

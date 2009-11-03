@@ -8,7 +8,7 @@ public class APIVersionManager {
 	 * This will only be set on some sort of error.  
 	 * This is the first version to contain this functionality
 	 */
-	private static final String DEFAULT_API_VERSION = "1.4.1";
+	private static final String DEFAULT_API_VERSION = "1.4.3";
 	private static String sdk_api_version = null;
 	
 	public static String getSDKAPIVersion() {
@@ -30,8 +30,5 @@ public class APIVersionManager {
 		return (String) DragonflyActivator.getDefault()
 				.getBundle().getHeaders().get(BUG_API_VERSION_MANIFEST_KEY);
 	}
-	
-	
-
 	
 }
