@@ -22,6 +22,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 
+import com.buglabs.dragonfly.APIVersionManager;
 import com.buglabs.dragonfly.BugApplicationNature;
 import com.buglabs.dragonfly.generators.jet.Activator;
 import com.buglabs.dragonfly.generators.jet.Application;
@@ -90,7 +91,13 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	 */
 	protected StringBuffer getManifestContents() {
 		StringBuffer manifestContents = super.getManifestContents();
-		manifestContents.append(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER + ": " + BugBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
+		manifestContents.append(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER 
+				+ ": " + BugBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
+		
+		// add API Version
+		manifestContents.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY 
+				+ ": " + APIVersionManager.getSDKAPIVersion() + "\n");
+		
 		BugProjectInfo pinfo = getBugProjectInfo();
 		List services = pinfo.getServices();
 

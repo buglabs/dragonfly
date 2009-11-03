@@ -1,11 +1,15 @@
 package com.buglabs.dragonfly.ui.actions;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -17,6 +21,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
 
+import com.buglabs.dragonfly.APIVersionManager;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
@@ -24,6 +29,7 @@ import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
 import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.dragonfly.validator.BUGApplicationProjectValidator;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 public class ExportJarToBUGNetAction extends Action {
 
@@ -46,10 +52,15 @@ public class ExportJarToBUGNetAction extends Action {
 	}
 
 	public void run() {
-
+		
+		try {
+			setAPIVersion(project, APIVersionManager.getSDKAPIVersion());
+		} catch (Exception e2) {
+			UIUtils.handleNonvisualError("Unable to set API Version", e2);
+		}
+		
 		try {
 			boolean valid = BUGApplicationProjectValidator.validate(project, true);
-
 			if (!valid) {
 				return;
 			}
@@ -80,6 +91,31 @@ public class ExportJarToBUGNetAction extends Action {
 			
 			job.schedule();
 		}
+	}
+
+	private void setAPIVersion(
+			IProject projekt, String apiVersion) throws CoreException, IOException {
+		IFile manfile = projekt.getFile("META-INF/MANIFEST.MF");
+		if (manfile == null || !manfile.exists()) return;
+		BufferedReader reader = 
+			new BufferedReader(new InputStreamReader(manfile.getContents()));
+		StringBuffer result = new StringBuffer();
+		
+		// remove old BUG-API-Version line;
+		String line;
+		while ((line = reader.readLine()) != null) {
+			if (line.startsWith(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY))
+				continue;
+			result.append(line + "\n");
+		}
+		
+		// add BUG-API-Version
+		result.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY 
+				+ ": " + APIVersionManager.getSDKAPIVersion() + "\n");		
+		
+		// write out the new contents
+		manfile.setContents(new ByteArrayInputStream(
+				result.toString().getBytes()), true, false, null);
 	}
 
 	private class UploadJarToBUGNetJob extends Job {
