@@ -746,6 +746,20 @@ public class UIUtils {
 		
 		log.log(new Status(Status.WARNING, DragonflyActivator.PLUGIN_ID, 0, message, e));
 	}
+	
+	/**
+	 * A simple abstraction of logging for use in the plug-in
+	 * 
+	 * @param status
+	 */
+	public static void log(Status status) {
+		DragonflyActivator da = DragonflyActivator.getDefault();
+		if (da == null || da.getLog() == null) {
+			System.out.println("[Log Message]" + status.toString());
+			return;
+		}
+		da.getLog().log(status);
+	}
 
 	synchronized public static void removeLoadingMessageBug(ITreeNode root, IProgressMonitor monitor) {
 		Object[] objects = root.getChildren().toArray();

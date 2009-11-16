@@ -7,7 +7,7 @@ import java.net.URL;
  * @author akravets
  *
  */
-public class VirtualBUGConnection extends SLPBugConnection {
+public class VirtualBUGConnection extends BugConnection {
 	private static final long serialVersionUID = 2960878830723100719L;
 	
 	public VirtualBUGConnection(String name, URL url) {
