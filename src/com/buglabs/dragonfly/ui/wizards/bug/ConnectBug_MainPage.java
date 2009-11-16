@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.ui.Activator;
@@ -61,7 +62,7 @@ public class ConnectBug_MainPage extends WizardPage {
 	}
 
 	public void createControl(Composite parent) {
-		root = Activator.getDefault().getBugsViewRoot();
+		root = BugConnectionManager.getInstance().getBugConnectionsRoot();
 		Composite top = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(3, false);
 		top.setLayout(layout);

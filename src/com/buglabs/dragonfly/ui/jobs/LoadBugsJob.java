@@ -1,6 +1,5 @@
 package com.buglabs.dragonfly.ui.jobs;
 
-import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,29 +15,21 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.XMLMemento;
 
-import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.exception.NodeNotUniqueException;
-import com.buglabs.dragonfly.model.BugConnection;
-import com.buglabs.dragonfly.model.ITreeNode;
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.actions.Messages;
-import com.buglabs.dragonfly.util.SLPListener;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
- * Job that will load BUGs from persisted location as well as all connected BUGs
+ * Job that will load BUGs from persisted location
  * 
  * @author akravets
  * 
  */
 public class LoadBugsJob extends Job {
 
-	private ITreeNode root;
-
 	private File bugsFileName;
-
-	private SLPListener slpListener;
 
 	private IProgressMonitor jobMonitor;
 
@@ -50,11 +41,9 @@ public class LoadBugsJob extends Job {
 
 	public static final String BUG_URL = "url"; //$NON-NLS-1$	
 
-	public LoadBugsJob(File bugsFileName, ITreeNode root, SLPListener slpListener) {
+	public LoadBugsJob(File bugsFileName) {
 		super("Loading BUGs");
-		this.root = root;
 		this.bugsFileName = bugsFileName;
-		this.slpListener = slpListener;
 	}
 
 	protected IStatus run(IProgressMonitor monitor) {
@@ -63,9 +52,6 @@ public class LoadBugsJob extends Job {
 		jobMonitor.worked(10);
 
 		try {
-			// slpListener = new SLPListener(context, root, discoveredBugs);
-			slpListener.start();
-
 			monitor.worked(10);
 			loadSavedBugs(monitor);
 		} catch (WorkbenchException e) {
@@ -81,9 +67,6 @@ public class LoadBugsJob extends Job {
 		return new Status(IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "", null);
 	}
 
-	public SLPListener getSLPListener() {
-		return slpListener;
-	}
 
 	private void loadSavedBugs(IProgressMonitor monitor) throws WorkbenchException, IOException {
 		FileReader reader = new FileReader(bugsFileName);
@@ -95,23 +78,19 @@ public class LoadBugsJob extends Job {
 
 			for (int i = 0; i < bugs.length; i++) {
 				String bugName = bugs[i].getString(BUG_NAME);
-				if (root.getChildren(bugName).size() == 0) {
-					URL url;
+				if (!BugConnectionManager.getInstance().isConnected(bugName)) {
+					URL url = null;
 					try {
 						url = new URL(bugs[i].getString(BUG_URL));
 					} catch (MalformedURLException e) {
-						url = new URL("http://localhost:" + DragonflyActivator.getDefault().getHttpPort());
+						UIUtils.handleNonvisualError(
+								"URL is bad for BUG " + bugName + " url: " + bugs[i].getString(BUG_URL), e);
 					}
-					try {
-						BugConnection bug = new StaticBugConnection(bugName, url);
-						// UIUtils.removeLoadingMessageBug(root, jobMonitor);
-						root.addChild(bug);
-						DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(this, "Root", null, root));
-						monitor.worked(i);
-					} catch (NodeNotUniqueException e) {
-						Activator.getDefault().setBugsLoaded(true);
-						UIUtils.handleNonvisualError("Duplicate bugs detected!", e);
-					}
+					if (url == null) continue;
+					
+					BugConnectionManager.getInstance().addBugConnection(
+										new StaticBugConnection(bugName, url));
+					monitor.worked(i);
 				}
 			}
 			Activator.getDefault().setBugsLoaded(true);

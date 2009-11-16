@@ -9,20 +9,13 @@ package com.buglabs.dragonfly.ui;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
+import com.buglabs.dragonfly.BugConnectionManager;
 
-import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.model.BugConnection;
-import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
-import com.buglabs.dragonfly.ui.actions.RefreshBugAction;
-import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 
 /**
  * A runnable that listens on a port and generates a ModelNodeChangeEvent when a
@@ -35,7 +28,6 @@ public class SimpleHttpSever extends Thread {
 
 	private final int port;
 	private boolean running;
-	private static final Object lock = new Object();
 	private ServerSocket serverSocket;
 	private Socket socket;
 	
@@ -76,10 +68,8 @@ public class SimpleHttpSever extends Thread {
 					Activator.getDefault().getLog().log(
 							new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem completing.", e));
 				}
-				refreshBugs();	
+				BugConnectionManager.getInstance().refreshBugConnections();
 			} catch (IOException e) {
-				handleException(e);
-			} catch (CoreException e) {
 				handleException(e);
 			} catch(NullPointerException e) {
 				handleException(e);
@@ -98,24 +88,6 @@ public class SimpleHttpSever extends Thread {
 		resetSockets();
 	}
 
-	/**
-	 * Iterate through all the Bugs in the model and run a refresh action.
-	 * 
-	 * @throws CoreException
-	 * @throws MalformedURLException
-	 */
-	private void refreshBugs() throws CoreException, MalformedURLException {
-		List children = (List) MyBugsView.getRoot().getChildren();
-		Iterator iterator = children.iterator();
-
-		while (iterator.hasNext()) {
-			synchronized (lock) {
-				BugConnection bug = ((BugConnection) iterator.next());
-				ModelNodeChangeEvent event = new ModelNodeChangeEvent(this.getClass(), RefreshBugAction.REFRESH_BUG, bug);
-				DragonflyActivator.getDefault().fireModelChangeEvent(event);
-			}
-		}
-	}
 
 	private void resetSockets() {
 		try {

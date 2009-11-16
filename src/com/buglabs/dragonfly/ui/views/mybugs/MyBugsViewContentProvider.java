@@ -2,8 +2,6 @@ package com.buglabs.dragonfly.ui.views.mybugs;
 
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,18 +17,18 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.model.Bug;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.IModelChangeListener;
 import com.buglabs.dragonfly.model.ITreeNode;
+import com.buglabs.dragonfly.model.Module;
+import com.buglabs.dragonfly.model.ProgramNode;
+import com.buglabs.dragonfly.model.ServiceNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.actions.RefreshBugAction;
 import com.buglabs.dragonfly.ui.jobs.ConnectBugJob;
 import com.buglabs.dragonfly.ui.jobs.LaunchPhysicalEditorJob;
 import com.buglabs.dragonfly.ui.jobs.RegisterEventListenerJob;
-import com.buglabs.dragonfly.ui.providers.Messages;
-import com.buglabs.dragonfly.util.BugListener;
+import com.buglabs.dragonfly.ui.jobs.Messages;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -42,34 +40,34 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 
 	private Viewer viewer;
 
-	private List noConnectList;
-
 	public MyBugsViewContentProvider() {
 		DragonflyActivator.getDefault().addListener(this);
-		noConnectList = Activator.getDefault().getNoConnectList();
 	}
 
 	public Object[] getChildren(Object parentElement) {
-		//viewer.refresh();
 		// try to connect to bug when bug is selected
-		if (parentElement instanceof BugConnection && !((BugConnection) parentElement).isConnected()) {
-			if (!noConnectList.contains((Bug) parentElement))
+		if (parentElement instanceof BugConnection 
+				&& !((BugConnection) parentElement).isConnected()) {
 				connectToBug((BugConnection) parentElement);
 		} 
 		else if (parentElement instanceof ITreeNode) {
 			if(parentElement instanceof StaticBugConnection){
 				try {
-					BugWSHelper.getModuleList((StaticBugConnection)parentElement, ((StaticBugConnection)parentElement).getModuleURL());
+					BugWSHelper.getModuleList(
+							(StaticBugConnection) parentElement, 
+							((StaticBugConnection)parentElement).getModuleURL());
 				} 
 				catch (IOException e) {
-					UIUtils.giveNonVisualInformation("BUG connection associated with '" + ((StaticBugConnection)parentElement).getName() + "' is unreachable"); //$NON-NLS-1$ //$NON-NLS-2$
+					UIUtils.giveNonVisualInformation(
+							"BUG connection associated with '" + 
+							((StaticBugConnection)parentElement).getName() + "' is unreachable"); //$NON-NLS-1$ //$NON-NLS-2$
 					((StaticBugConnection)parentElement).setConnected(false);
 					viewer.refresh();
 					return null;
 				}
 			}
 			Collection children = ((ITreeNode) parentElement).getChildren();
-			if (children == null && children.size() != 0) {
+			if (children == null) {
 				UIUtils.handleVisualError(Messages.getString("BugContentProvider.5"), null); //$NON-NLS-1$
 				return null;
 			}
@@ -86,12 +84,10 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 	}
 
 	public boolean hasChildren(Object element) {
-		// node doesn't have any children if it failed to connect
-		if (element instanceof Bug) {
-			if (noConnectList.contains((Bug) element)) {
-				return false;
-			}
-		}
+		if (element instanceof ProgramNode 
+				|| element instanceof Module 
+				|| element instanceof ServiceNode)
+			return false;
 		return true;
 	}
 
@@ -122,7 +118,7 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 	private void connectToBug(final BugConnection bug) {
 		List elements = new ArrayList();
 		try {
-			ConnectBugJob bugConnectJob = new ConnectBugJob(noConnectList, bug);
+			ConnectBugJob bugConnectJob = new ConnectBugJob(bug);
 
 			// get job manager and check if there is this job is already
 			// running, if so don't start another one

@@ -9,13 +9,8 @@
 package com.buglabs.dragonfly.ui.wizards.bug;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -29,10 +24,10 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.exception.NodeNotUniqueException;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.PerspectiveFactory;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 
@@ -58,7 +53,7 @@ public class NewBugConnectionWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		try {
 			BugConnection bug = new StaticBugConnection(mainpage.getProjectName(), mainpage.getBugURL());
-			Activator.getDefault().getBugsViewRoot().addChild(bug);
+			BugConnectionManager.getInstance().getBugConnectionsRoot().addChild(bug);
 			if (MyBugsView.getViewer() != null) {
 				MyBugsView.getViewer().refresh();
 			}

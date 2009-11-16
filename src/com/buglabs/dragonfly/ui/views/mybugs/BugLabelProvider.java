@@ -6,7 +6,7 @@
  * http://www.buglabs.net/legal/epl_license.html
  *******************************************************************************/
 
-package com.buglabs.dragonfly.ui.providers;
+package com.buglabs.dragonfly.ui.views.mybugs;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -14,12 +14,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import com.buglabs.dragonfly.model.Bug;
+import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.FolderNode;
 import com.buglabs.dragonfly.model.IModelNode;
 import com.buglabs.dragonfly.model.Module;
 import com.buglabs.dragonfly.model.ProgramNode;
-import com.buglabs.dragonfly.model.SLPBugConnection;
 import com.buglabs.dragonfly.model.ServiceNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
@@ -83,8 +82,8 @@ public class BugLabelProvider implements ILabelProvider {
 		else if(element instanceof StaticBugConnection){
 			return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
 		}
-		else if(element instanceof SLPBugConnection){
-			return Activator.getDefault().getImageRegistry().get(Activator.ICON_SLP_BUG);
+		else if(element instanceof DiscoveredBugConnection){
+			return Activator.getDefault().getImageRegistry().get(Activator.ICON_DISCOVERED_BUG);
 		}
 
 		return null;

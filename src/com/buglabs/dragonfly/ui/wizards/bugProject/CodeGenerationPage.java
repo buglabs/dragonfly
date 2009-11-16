@@ -70,6 +70,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
@@ -265,7 +266,8 @@ public class CodeGenerationPage extends WizardPage {
 			}
 		});
 
-		BaseTreeNode root = (BaseTreeNode) Activator.getDefault().getBugsViewRoot();
+		BaseTreeNode root = 
+			(BaseTreeNode) BugConnectionManager.getInstance().getBugConnectionsRoot();
 		bugsViewer.setInput(root);
 
 		btnStartVBUG = new Button(composite, SWT.PUSH);

@@ -20,9 +20,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
-import com.buglabs.dragonfly.model.SLPBugConnection;
+import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
 import com.buglabs.dragonfly.ui.Activator;
@@ -134,14 +135,15 @@ public class BUGConnectionSelectionDialog extends Dialog {
 				else if(element instanceof StaticBugConnection){
 					return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
 				}
-				else if(element instanceof SLPBugConnection){
-					return Activator.getDefault().getImageRegistry().get(Activator.ICON_SLP_BUG);
+				else if(element instanceof DiscoveredBugConnection){
+					return Activator.getDefault().getImageRegistry().get(Activator.ICON_DISCOVERED_BUG);
 				}
 				return super.getImage(element);
 			}
 		});
 
-		BaseTreeNode root = (BaseTreeNode) Activator.getDefault().getBugsViewRoot();
+		BaseTreeNode root = 
+			(BaseTreeNode) BugConnectionManager.getInstance().getBugConnectionsRoot();
 		viewer.setInput(root);
 		return top;
 	}

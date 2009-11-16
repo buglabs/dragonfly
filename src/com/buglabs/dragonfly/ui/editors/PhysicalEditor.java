@@ -50,22 +50,20 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.Bug;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.BugProperty;
 import com.buglabs.dragonfly.model.IModelChangeListener;
-import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 import com.buglabs.dragonfly.model.Module;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.actions.RefreshBugAction;
 import com.buglabs.dragonfly.ui.borders.RoundedLineBorder;
 import com.buglabs.dragonfly.ui.draw2d.BugSelectableFigure;
 import com.buglabs.dragonfly.ui.draw2d.CenterLocator;
 import com.buglabs.dragonfly.ui.draw2d.XYFigureAnchor;
-import com.buglabs.dragonfly.ui.providers.BugLabelProvider;
-import com.buglabs.dragonfly.util.BugListener;
+import com.buglabs.dragonfly.ui.views.mybugs.BugLabelProvider;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -437,7 +435,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		if(event != null){
 			String property = event.getPropertyName();
 			if(property != null){
-				if(property.equals(BugListener.REMOVE_BUG)){
+				if(property.equals(BugConnectionManager.REMOVE_BUG)){
 					editorBug = bug.getUrl();
 					eventBug = ((BugConnection)event.getNewValue()).getUrl();
 					// update physical editor of the BUG that was disconnected
@@ -447,7 +445,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 						redrawEditor();
 					}
 				}
-				else if(property.equals(BugListener.ADD_BUG)){
+				else if(property.equals(BugConnectionManager.ADD_BUG)){
 					editorBug = bug.getUrl();
 					eventBug = ((BugConnection)event.getNewValue()).getUrl();
 					if(editorBug.toString().equals(eventBug.toString())){
@@ -455,7 +453,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 						job.schedule();
 					}
 				}
-				else if(property.equals(RefreshBugAction.REFRESH_BUG)){
+				else if(property.equals(BugConnectionManager.REFRESH_BUG)){
 					if(bug != null){
 						editorBug = bug.getUrl();
 						eventBug = ((BugConnection)event.getNewValue()).getUrl();

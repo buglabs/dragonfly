@@ -38,9 +38,8 @@ import org.eclipse.ui.part.PluginTransfer;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
-import com.buglabs.dragonfly.model.BaseTreeNode;
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.model.BugConnection;
-import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.actions.BugAddConnectionAction;
@@ -52,7 +51,6 @@ import com.buglabs.dragonfly.ui.dnd.ProgramToViewDropAdapter;
 import com.buglabs.dragonfly.ui.editors.PhysicalEditor;
 import com.buglabs.dragonfly.ui.filters.ApplicationFilter;
 import com.buglabs.dragonfly.ui.jobs.LaunchPhysicalEditorJob;
-import com.buglabs.dragonfly.ui.providers.BugLabelProvider;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
@@ -73,9 +71,6 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 
 	private static MyBugRefreshAction refreshBugAction;
 
-	private static BaseTreeNode root; // root node that contains
-										// BugProjectNode nodes
-
 	private ProgramToViewDropAdapter dropAdapter;
 
 	private static ShowBUGConsoleAction showBugConsoleAction;
@@ -93,13 +88,8 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	 * the view which contains a snapshot of the views state from a previous
 	 * session.
 	 */
-	public void init() {
-		root = (BaseTreeNode) Activator.getDefault().getBugsViewRoot();		
-	}
-
 	public void init(IViewSite site) throws PartInitException {
 		setSite(site);
-		root = (BaseTreeNode) Activator.getDefault().getBugsViewRoot();
 	}
 
 	public void dispose() {
@@ -114,7 +104,6 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	}
 
 	public void createPartControl(Composite parent) {
-		// init();
 		viewer = new TreeViewer(parent, SWT.MULTI);
 		viewer.setContentProvider(new MyBugsViewContentProvider());
 		viewer.setLabelProvider(new BugLabelProvider());
@@ -184,7 +173,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 
 		});
 
-		viewer.setInput(root);
+		viewer.setInput(BugConnectionManager.getInstance().getBugConnectionsRoot());
 	}
 
 	/*
@@ -284,10 +273,6 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	public void setSelection(ISelection selection) {
 		// TODO Auto-generated method stub
 
-	}
-
-	public static ITreeNode getRoot() {
-		return root;
 	}
 
 	public static TreeViewer getViewer() {

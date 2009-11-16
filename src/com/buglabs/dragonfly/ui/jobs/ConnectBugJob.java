@@ -2,7 +2,6 @@ package com.buglabs.dragonfly.ui.jobs;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -11,20 +10,16 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
-import com.buglabs.dragonfly.ui.providers.Messages;
 import com.buglabs.dragonfly.util.BugWSHelper;
 
 public class ConnectBugJob extends Job {
-
-	private List list;
 
 	private BugConnection bug;
 
 	IStatus result = Status.OK_STATUS;
 
-	public ConnectBugJob(List noConnectList, BugConnection bug) {
+	public ConnectBugJob(BugConnection bug) {
 		super("BUG Connection");
-		list = noConnectList;
 		this.bug = bug;
 	}
 
@@ -58,10 +53,6 @@ public class ConnectBugJob extends Job {
 	}
 
 	private IStatus handleException(Exception e) {
-		if (!list.contains(bug)) {
-			list.add(bug);
-		}
-		
 		return new Status(IStatus.ERROR, com.buglabs.dragonfly.ui.Activator.PLUGIN_ID, IStatus.ERROR, "Unable to connect to "
 				+ bug.getName(), new Throwable(e.toString()));
 	}

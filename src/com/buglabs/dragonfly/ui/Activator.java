@@ -8,7 +8,6 @@ import java.io.Writer;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -22,25 +21,17 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 
-import ch.ethz.iks.slp.Locator;
-import ch.ethz.iks.slp.ServiceLocationException;
-import ch.ethz.iks.slp.ServiceType;
-
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
-import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
+
 import com.buglabs.dragonfly.ui.actions.LaunchWelcomeEditorAction;
 import com.buglabs.dragonfly.ui.jobs.LoadBugsJob;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
-import com.buglabs.dragonfly.util.SLPListener;
 import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
@@ -166,7 +157,7 @@ public class Activator extends AbstractUIPlugin {
 	
 	public static final String ICON_STATIC_BUG = "/icons/color/new/staticBUG.gif";
 	
-	
+	public static final String ICON_DISCOVERED_BUG = "/icons/color/new/slpBUG.gif";
 	
 
 	private static Activator plugin;
@@ -177,11 +168,7 @@ public class Activator extends AbstractUIPlugin {
 
 	private ResourceBundle resourceBundle;
 
-	private ITreeNode root;
-
 	private File bugsFileName = null; // file name where bugs are persisted
-
-	private SLPListener slpListener;
 
 	private boolean isBugsLoaded = false;
 
@@ -189,13 +176,8 @@ public class Activator extends AbstractUIPlugin {
 
 	private boolean isConnectionAvaiable = true;
 
-	private List noConnectList; // a list of nodes that should not be connected
-
-	// to
-
 	public Activator() {
 		plugin = this;
-		noConnectList = new ArrayList();
 		try {
 			resourceBundle = ResourceBundle.getBundle("com.buglabs.dragonfly.ui.messages"); //$NON-NLS-1$
 		} catch (MissingResourceException e) {
@@ -242,25 +224,14 @@ public class Activator extends AbstractUIPlugin {
 		httpServiceThread = new SimpleHttpSever(DragonflyActivator.MODEL_CHANGE_EVENT_LISTEN_PORT);
 		httpServiceThread.start();
 
-		forceLazyLoadingAndJSLPInit(context);
-
-		root = new BaseTreeNode("root"); //$NON-NLS-1$
-
+		// Load bug connections from persistent storage location
 		bugsFileName = Activator.getDefault().getStateLocation().append(saveFileName).toFile();
-
 		if (!bugsFileName.exists()) {
 			bugsFileName.createNewFile();
 		}
-
-		// list of discovered bugs
-		List discoveredBugs = Collections.synchronizedList(new ArrayList());
-		
-		
-		slpListener = new SLPListener(context, root, discoveredBugs);
-		LoadBugsJob loadBugs = new LoadBugsJob(bugsFileName, root, slpListener);
+		LoadBugsJob loadBugs = new LoadBugsJob(bugsFileName);
 		loadBugs.setPriority(Job.SHORT);
 		loadBugs.schedule();
-		slpListener = loadBugs.getSLPListener();
 	}
 
 	private void launchWelcomeEditor() {
@@ -278,33 +249,6 @@ public class Activator extends AbstractUIPlugin {
 		return bugsFileName;
 	}
 
-	/**
-	 * This method automatically starts jSLP. This prevents the Virtual BUG from
-	 * being the starter. An issue is that if the Virtual BUG starts jSLP and
-	 * then is closed the jSLP service goes away even if the SDK depends on it.
-	 * 
-	 * @param context
-	 */
-	private void forceLazyLoadingAndJSLPInit(BundleContext context) {
-		ServiceType t = new ServiceType("foo");
-		t.isServiceURL();
-		
-		ServiceReference locRef = context.getServiceReference("ch.ethz.iks.slp.Locator");
-		if (locRef != null) {
-			final Locator loc = (Locator) context.getService(locRef);
-			// spawn a thread for this so that, if this blocks, it won't stop start-up
-			new Thread() {
-				public void run() {
-					try {
-						loc.findServices( new ServiceType("service:bug"), null, null);
-					} catch (Exception e) {
-						UIUtils.handleNonvisualError("Unable to initialize jSLP.", e);
-					}	
-				}
-			}.start();
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -314,7 +258,6 @@ public class Activator extends AbstractUIPlugin {
 		httpServiceThread.setRunning(false);
 		httpServiceThread.interrupt();
 		sendPoisonPill();
-		slpListener.terminate();
 		saveBugs();
 
 		plugin = null;
@@ -457,24 +400,22 @@ public class Activator extends AbstractUIPlugin {
 		return resourceBundle;
 	}
 
-	public ITreeNode getBugsViewRoot() {
-		return root;
-	}
-
 	public void saveBugs() throws IOException {
 		XMLMemento xmlMemento = XMLMemento.createWriteRoot(MyBugsView.BUGS_TYPE);
-		List bugs = (List) root.getChildren();
-		Iterator iterator = bugs.iterator();
-		while (iterator.hasNext()) {
-			Object object = iterator.next();
-			// if(!(object instanceof LoadingBugNode)){
-			BugConnection node = (BugConnection) object;
-			if (node instanceof StaticBugConnection) {
-				IMemento bug = xmlMemento.createChild(MyBugsView.BUG_TYPE);
-				bug.putString(MyBugsView.BUG_NAME, node.getName());
-				bug.putString(MyBugsView.BUG_URL, node.getUrl().toExternalForm());
+		synchronized (BugConnectionManager.getInstance()) {
+			List bugs = (List) BugConnectionManager.getInstance().getBugConnections();
+			Iterator iterator = bugs.iterator();
+			while (iterator.hasNext()) {
+				Object object = iterator.next();
+				// if(!(object instanceof LoadingBugNode)){
+				BugConnection node = (BugConnection) object;
+				if (node instanceof StaticBugConnection) {
+					IMemento bug = xmlMemento.createChild(MyBugsView.BUG_TYPE);
+					bug.putString(MyBugsView.BUG_NAME, node.getName());
+					bug.putString(MyBugsView.BUG_URL, node.getUrl().toExternalForm());
+				}
+				// }
 			}
-			// }
 		}
 
 		Writer writer = new FileWriter(bugsFileName);
@@ -503,9 +444,5 @@ public class Activator extends AbstractUIPlugin {
 
 	public boolean isConnectionAvailable() {
 		return isConnectionAvaiable;
-	}
-
-	public List getNoConnectList() {
-		return noConnectList;
 	}
 }

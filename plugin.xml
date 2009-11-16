@@ -248,50 +248,6 @@
    </extension>
 
    <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
-            activeByDefault="true"
-            contentProvider="com.buglabs.dragonfly.ui.providers.BugContentProvider"
-            icon="icons/color/dfly.gif"
-            id="com.buglabs.navigatorContent"
-            labelProvider="com.buglabs.dragonfly.ui.providers.BugLabelProvider"
-            name="BUG Content"
-            priority="normal">
-         <triggerPoints>
-            <or>
-               <instanceof value="org.eclipse.core.resources.IProject"/>
-               <instanceof value="com.buglabs.dragonfly.model.ITreeNode"/>
-               <instanceof value="com.buglabs.dragonfly.model.IModelNode"/>
-               <instanceof value="org.eclipse.core.resources.IWorkspaceRoot"/>
-            </or>
-         </triggerPoints>
-         <possibleChildren>
-            <or>
-               <instanceof value="com.buglabs.dragonfly.model.ITreeNode"/>
-               <instanceof value="com.buglabs.dragonfly.model.IModelNode"/>
-               <adapt type="org.eclipse.core.resources.IProject"/>
-            </or>
-         </possibleChildren>
-         <dropAssistant
-               class="com.buglabs.dragonfly.ui.dnd.ProgramDropAdapter"
-               id="com.buglabs.dragonfly.ui.dnd.ProgramDropAdapter">
-            <possibleDropTargets>
-               <or>
-                  <instanceof value="com.buglabs.dragonfly.model.ITreeNode"/>
-                  <instanceof value="org.eclipse.core.resources.IWorkspaceRoot"/>
-               </or>
-            </possibleDropTargets>
-         </dropAssistant>
-      </navigatorContent>
-      <commonFilter
-            activeByDefault="true"
-            class="com.buglabs.dragonfly.ui.filters.ApplicationFilter"
-            description="Filters non Application Bundles"
-            id="com.buglabs.dragonfly.ui.filters.ApplicationFilter"
-            name="Non-BUG Bundles"/>
-   </extension>
-
-   <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
          <view

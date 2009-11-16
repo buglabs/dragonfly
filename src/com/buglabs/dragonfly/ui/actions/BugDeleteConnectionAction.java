@@ -9,12 +9,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.PlatformUI;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
-import com.buglabs.dragonfly.util.BugListener;
 
 public class BugDeleteConnectionAction extends Action {
 
@@ -40,24 +39,12 @@ public class BugDeleteConnectionAction extends Action {
 			message = "Are you sure you want to delete BUG Connection '" + element.getName() + "'?";
 		}
 		
-		/**
-		 *  TODO - I don't like this - don't like calling DragonflyActivator...
-		 *  	need one class that handles this model, but shoehorning this in for now
-		 */
 		if (MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title, message)) {
 			if (selection.size() > 1) {
-				Activator.getDefault().getNoConnectList().removeAll(selection.toList());
-				Activator.getDefault().getBugsViewRoot().getChildren().removeAll(selection.toList());
-				Iterator itr = selection.toList().iterator();
-				while (itr.hasNext()) {
-					BugConnection connection = (BugConnection) itr.next();
-					DragonflyActivator.getDefault().fireModelChangeEvent(
-							new PropertyChangeEvent(this, BugListener.REMOVE_BUG, null, connection));
-				}
+				//Activator.getDefault().getNoConnectList().removeAll(selection.toList());\
+				BugConnectionManager.getInstance().removeBugConnections(selection.toList());
 			} else {
-				Activator.getDefault().getBugsViewRoot().getChildren().remove(element);
-				DragonflyActivator.getDefault().fireModelChangeEvent(
-						new PropertyChangeEvent(this, BugListener.REMOVE_BUG, null, element));
+				BugConnectionManager.getInstance().removeBugConnection(element);
 			}
 		}
 	}

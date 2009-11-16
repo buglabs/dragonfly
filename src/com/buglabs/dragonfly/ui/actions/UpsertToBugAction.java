@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
@@ -112,8 +113,10 @@ public class UpsertToBugAction extends Action {
 			// Get a bug connection either by passed url or dialog //
 			final BugConnection bug = getBugConnection(url);
 			if (bug == null) {
-				return new Status(IStatus.WARNING, Activator.PLUGIN_ID, 0,
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0,
 					Messages.getString("ExportJarToBugJob.UNABLE_TO_LOCATE_BUG"), null); //$NON-NLS-1$
+			} else if (bug instanceof CancelBugConnection) {
+				return new Status(IStatus.CANCEL, Activator.PLUGIN_ID, 0, "", null);
 			}
 			url =  bug.getUrl().toExternalForm();
 			
@@ -121,7 +124,7 @@ public class UpsertToBugAction extends Action {
 			BUGSupportInfoManager info = BUGSupportInfoManager.load(bug);
 			monitor.worked(WORKED_25_PERCENT);
 			if (info == null) {
-				return new Status(IStatus.WARNING, Activator.PLUGIN_ID, 0,
+				return new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0,
 					Messages.getString("ExportJarToBugJob.UNABLE_TO_LOCATE_BUG"), null); //$NON-NLS-1$
 			}
 			
@@ -143,10 +146,13 @@ public class UpsertToBugAction extends Action {
 									Messages.getString("ExportJarToBugJob.ARE_YOU_SURE_OVERWRITE"),  //$NON-NLS-1$
 									project.getName(), bug.getName()));
 					}
-				});				
+				});
+				if (!bugApplicationOverwrite)
+					return new Status(IStatus.CANCEL, Activator.PLUGIN_ID, IStatus.OK, "", null);
 			}
 			
 			try {
+				
 				// Delete the application if user asked for overwrite //
 				if(bugApplicationOverwrite){
 					BugWSHelper.deleteProgram(new URL(
@@ -247,12 +253,28 @@ public class UpsertToBugAction extends Action {
 					 */
 					BUGConnectionSelectionDialog conDialog = 
 						new BUGConnectionSelectionDialog(new Shell(PlatformUI.getWorkbench().getDisplay()));
-					if (conDialog.open() == IStatus.OK) {
+					int status = conDialog.open();
+					if (status == Window.OK) {
 						selectedBugConnection = conDialog.getSelectedBugConnection();
+					} else if (status == Window.CANCEL) {
+						selectedBugConnection = new CancelBugConnection();
 					}
 				}
 			});
 			return selectedBugConnection;
 		}		
+	}
+	
+	/**
+	 * Little hacky CancelBugConnection to detect if we chose to
+	 * cancel the bug connection in the dialog
+	 * 
+	 * See findBug() method
+	 */
+	private class CancelBugConnection extends BugConnection {
+		private static final long serialVersionUID = 1L;
+		public CancelBugConnection() {
+			super(null, null);
+		}
 	}
 }

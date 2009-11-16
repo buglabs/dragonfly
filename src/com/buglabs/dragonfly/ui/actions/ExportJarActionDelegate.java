@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
@@ -44,7 +45,9 @@ public class ExportJarActionDelegate implements IObjectActionDelegate {
 			
 			// disable sending to BUG if project has errors or there are no active BUGs
 			try {
-				if(ProjectUtils.existsProblems(project) || (((BaseTreeNode) Activator.getDefault().getBugsViewRoot()).getChildren().size() == 0)){
+				if(ProjectUtils.existsProblems(project) || 
+						(BugConnectionManager.getInstance().
+								getBugConnections().size() == 0)){
 					action.setEnabled(false);
 				}
 			} catch (CoreException e) {

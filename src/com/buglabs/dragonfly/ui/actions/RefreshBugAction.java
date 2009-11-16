@@ -10,13 +10,11 @@ package com.buglabs.dragonfly.ui.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
 
-import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.model.Bug;
-import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 
 public class RefreshBugAction extends Action {
 	private Bug bug;
-	public static final String REFRESH_BUG = "refresh_bug";
 
 	public RefreshBugAction(Bug bug) {
 		this.bug = bug;
@@ -37,10 +35,7 @@ public class RefreshBugAction extends Action {
 	public void run() {
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				//if(bug.isConnected()){
-					ModelNodeChangeEvent event = new ModelNodeChangeEvent(this.getClass(),REFRESH_BUG, bug);
-					DragonflyActivator.getDefault().fireModelChangeEvent(event);
-				//}
+				BugConnectionManager.getInstance().fireBugRefreshEvent(this.getClass(), bug);
 			}
 		});
 

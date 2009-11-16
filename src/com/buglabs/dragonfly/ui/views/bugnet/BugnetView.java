@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.ui.views.bugnet;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,18 +48,20 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.IBugnetAuthenticationListener;
 import com.buglabs.dragonfly.bugnet.BugnetApplicationCategoryHelper;
 import com.buglabs.dragonfly.bugnet.BugnetResultManager;
-import com.buglabs.dragonfly.model.BugConnection;
+import com.buglabs.dragonfly.model.Bug;
 import com.buglabs.dragonfly.model.IModelChangeListener;
-import com.buglabs.dragonfly.ui.BugConnectionHelper;
+import com.buglabs.dragonfly.model.IModelNode;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.ui.actions.ExportJarToBUGNetAction;
 import com.buglabs.dragonfly.ui.actions.RefreshBugNetViewAction;
 import com.buglabs.dragonfly.ui.actions.SearchBugNetAction;
 import com.buglabs.dragonfly.ui.jobs.BUGNetRefreshJob;
+import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
@@ -471,7 +474,8 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
     private void refreshCombo() {
         appCategoryHelper.resetCategories();
         appCategoryHelper.addCategories(
-                getBugConnectionCategories(BugConnectionHelper.getBugConnections()));
+                getBugConnectionCategories(BugConnectionManager.
+                		getInstance().getBugConnections()));
         combo.setItems(appCategoryHelper.getCategories());
         combo.select(appCategoryHelper.getCategoryIndex(
                 BugnetResultManager.getInstance().getCategory()));
@@ -515,14 +519,14 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
      * 
      * @return
      */
-    private List<String> getBugConnectionCategories(List<BugConnection> connections) {
+    private List<String> getBugConnectionCategories(Collection<IModelNode> bugs) {
         List<String> connectionNames = new ArrayList<String>();
         // add the separator
-        if (connections.size() > 0) {
+        if (bugs.size() > 0) {
         	connectionNames.add(BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_SEPARATOR);
         }
         // add the connections
-        Iterator<BugConnection> iterator = connections.iterator();
+        Iterator<IModelNode> iterator = bugs.iterator();
         while (iterator.hasNext()) {
             connectionNames.add(BugnetApplicationCategoryHelper.
                     BUG_CONNECTION_CATEGORY_PREFIX + " " + iterator.next().getName());
@@ -552,10 +556,10 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
             BugnetResultManager.getInstance().setCategory(selectedCategory);
             // if it's a bug connection, need to get packages out
             if (bugConnectionCategorySelected(selectedCategory)) {
-                BugConnection connection = getConnectionForSelection(selectedCategory);
+                Bug connection = getConnectionForSelection(selectedCategory);
                 if (connection != null) {
                     BugnetResultManager.getInstance().setPackages(
-                            BugConnectionHelper.getPackagesForBugConnection(connection));
+                           getPackagesForBugConnection(connection));
                 }
             }
         }
@@ -563,6 +567,22 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
         queryBugnetAndDrawApplications();
     }
 	
+    
+    /**
+     * This gets out the 
+     * 
+     * @param connection
+     * @return
+     */
+    private List<String> getPackagesForBugConnection(Bug connection) {
+        List<String> packages = new ArrayList<String>();
+        try {
+            packages = BugWSHelper.getPackages(connection.getPackageURL());
+        } catch (IOException e) {
+            UIUtils.handleNonvisualError("Unable to connect to BUG to get packages", e);
+        }
+        return packages;
+    }    
     
     /**
      * check if selected category is a bug connection
@@ -580,11 +600,11 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
      * @param selection
      * @return
      */
-    private BugConnection getConnectionForSelection(String selection) {
+    private Bug getConnectionForSelection(String selection) {
         String connectionName = selection.substring(
                 BugnetApplicationCategoryHelper.BUG_CONNECTION_CATEGORY_PREFIX.length()).trim();
         if (connectionName == null || connectionName.length() < 1) return null;
-        return BugConnectionHelper.getBugConnectionByName(connectionName);
+        return BugConnectionManager.getInstance().getBugConnection(selection);
     }
 
 
