@@ -26,12 +26,16 @@ public class VirtualBugLaunchConfigurationInitializer {
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG, "true"); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_SLP_MULTICAST_JOIN, "false"); //$NON-NLS-1$
 		
+		
 		String bundleVersion = (String) Activator.getDefault().getContext().getBundle().getHeaders().get("Bundle-Version"); //$NON-NLS-1$
 		String storageDirectory = "bug-configuration"; //$NON-NLS-1$
 		if(bundleVersion.indexOf("qualifier") == -1){ //$NON-NLS-1$
 			storageDirectory = bundleVersion + File.separator + "bug-configuration"; //$NON-NLS-1$
 		}
 		
+		String appDirectory = "apps"; //$NON-NLS-1$
+		
+		properties.put(VirtualBugLaunchConfigurationDelegate.APP_DIR, appDirectory); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_CM_STORAGE, storageDirectory);
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG_SCROLLDELAY, "1000"); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG_SCROLLSPEED, "15"); //$NON-NLS-1$

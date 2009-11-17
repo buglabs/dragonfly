@@ -55,6 +55,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	public static final String PROP_VBUG_SCROLLDELAY 		= "com.buglabs.bug.emulator.scrolldelay";
 	public static final String ATTR_VBUG_SYSTEM_PROPERTIES 	= "ATTR_VBUG_SYSTEM_PROPERTIES";
 	public static final String DEFAULT_START_LEVEL			= "4";
+	public static final String APP_DIR						= "app.bundle.path";
 
 	public void launch(ILaunchConfiguration configuration, String mode, 
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
