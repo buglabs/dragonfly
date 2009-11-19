@@ -334,8 +334,11 @@ public class WSHelper {
 	protected static String delete(String url) throws HttpException, IOException {
 		HttpClient c = new HttpClient();
 		DeleteMethod delete = new DeleteMethod(url);
-		c.executeMethod(delete);
-
+		int response = c.executeMethod(delete);
+		
+		if (response >= 400)
+			throw new HttpException("Unable to complete delete operation with HTTP error code " + response + ".");
+		
 		return delete.getResponseBodyAsString();
 	}
 
