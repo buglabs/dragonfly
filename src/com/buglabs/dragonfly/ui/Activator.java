@@ -30,6 +30,7 @@ import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 
 import com.buglabs.dragonfly.ui.actions.LaunchWelcomeEditorAction;
+import com.buglabs.dragonfly.ui.jobs.ConnectBugHelper;
 import com.buglabs.dragonfly.ui.jobs.LoadBugsJob;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.UIUtils;

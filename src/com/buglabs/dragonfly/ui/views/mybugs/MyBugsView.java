@@ -13,6 +13,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -21,6 +22,8 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
@@ -28,7 +31,6 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -44,11 +46,10 @@ import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.actions.BugAddConnectionAction;
 import com.buglabs.dragonfly.ui.actions.BugDeleteConnectionAction;
-import com.buglabs.dragonfly.ui.actions.MyBugRefreshAction;
+import com.buglabs.dragonfly.ui.actions.ConnectAndRefreshBugAction;
 import com.buglabs.dragonfly.ui.actions.ShowBUGConsoleAction;
 import com.buglabs.dragonfly.ui.dnd.MyBugsViewProgramNodeTransfer;
 import com.buglabs.dragonfly.ui.dnd.ProgramToViewDropAdapter;
-import com.buglabs.dragonfly.ui.editors.PhysicalEditor;
 import com.buglabs.dragonfly.ui.filters.ApplicationFilter;
 import com.buglabs.dragonfly.ui.jobs.LaunchPhysicalEditorJob;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -69,7 +70,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 
 	private BugDeleteConnectionAction deleteConnectionAction;
 
-	private static MyBugRefreshAction refreshBugAction;
+	private ConnectAndRefreshBugAction refreshBugAction;
 
 	private ProgramToViewDropAdapter dropAdapter;
 
@@ -106,9 +107,14 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI);
 		viewer.setContentProvider(new MyBugsViewContentProvider());
-		viewer.setLabelProvider(new BugLabelProvider());
 		viewer.addFilter(new ApplicationFilter());
-		viewer.setComparator(new MyBugsViewComparator());		
+		viewer.setComparator(new MyBugsViewComparator());
+		
+		// use columnlabelprovider so we can have a tooltip
+		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
+		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.NONE);
+		column.setLabelProvider(new BugLabelProvider());
+		column.getColumn().setWidth(100);
 
 		addDropSupport();
 		addDragSupport();
@@ -118,7 +124,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		createToolBar();
 
 		getSite().setSelectionProvider(viewer);
-
+		
 		// open com.buglabs.dragonfly.ui.physicalEditor
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -145,6 +151,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 
 			public void selectionChanged(final SelectionChangedEvent selection) {
 				deleteConnectionAction.setEnabled(false);
+				refreshBugAction.setEnabled(false);
 				ISelection selected = selection.getSelection();
 				if (selected instanceof IStructuredSelection) {
 					Object firstElement = ((IStructuredSelection) selected).getFirstElement();
@@ -153,6 +160,13 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 					} else {
 						deleteConnectionAction.setEnabled(false);
 					}
+					
+					if (firstElement instanceof BugConnection) {
+						refreshBugAction.setEnabled(true);						
+					} else {
+						refreshBugAction.setEnabled(false);						
+					}
+
 				}
 			}
 
@@ -201,7 +215,8 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		deleteConnectionAction = new BugDeleteConnectionAction(viewer);
 		deleteConnectionAction.setEnabled(false);
 
-		refreshBugAction = new MyBugRefreshAction(viewer);
+		//refreshBugAction = new MyBugRefreshAction(viewer);
+		refreshBugAction = new ConnectAndRefreshBugAction(viewer);
 		refreshBugAction.setEnabled(false);
 		
 		showBugConsoleAction = new ShowBUGConsoleAction(viewer);
@@ -234,17 +249,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		manager.add(addConectionAction);
 		manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(deleteConnectionAction);
-
-		IEditorPart activeEditor = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-
-		refreshBugAction.setEnabled(false);
-		showBugConsoleAction.setEnabled(false);
-
-		// enable refresh only if editor PhysicalEditor is present
-		if (activeEditor != null && activeEditor instanceof PhysicalEditor) {
-			refreshBugAction.setEnabled(true);
-			showBugConsoleAction.setEnabled(true);
-		}
+		
 		manager.add(refreshBugAction);
 		manager.add(new Separator());
 		manager.add(showBugConsoleAction);

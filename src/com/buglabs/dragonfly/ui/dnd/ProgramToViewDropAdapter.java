@@ -32,15 +32,20 @@ public class ProgramToViewDropAdapter extends ViewerDropAdapter {
 		Object[] dropData = (Object[]) data;
 		if (dropData[0] instanceof IProject) {
 			IProject proj = (IProject) dropData[0];
-			ApplicationFolderNode node = (ApplicationFolderNode) fnode;
-			if (bugExists(node, proj)) {
-				boolean bugApplicationOverwrite = MessageDialog.openQuestion(PlatformUI.getWorkbench().getDisplay().getActiveShell(),
-						"Export BUG", "BUG Application '" + ((IProject) dropData[0]).getName() + "' already exists in BUG '"
-								+ node.getParent().getName() + "'\nAre you sure you want overwrite?");
-				if (!bugApplicationOverwrite) {
-					return false;
-				}
-			}
+			
+			// The following checks the bug to see if the app exists, but the UpsertToBugAction already does this, so commented out
+			//
+			//ApplicationFolderNode node = (ApplicationFolderNode) fnode;
+			//if (bugExists(node, proj)) {
+			//	boolean bugApplicationOverwrite = MessageDialog.openQuestion(PlatformUI.getWorkbench().getDisplay().getActiveShell(),
+			//			"Export BUG", "BUG Application '" + ((IProject) dropData[0]).getName() + "' already exists in BUG '"
+			//					+ node.getParent().getName() + "'\nAre you sure you want overwrite?");
+			//	if (!bugApplicationOverwrite) {
+			//		return false;
+			//	}
+			//}
+			//
+			
 			if (proj != null) {
 				try {
 					if(ProjectUtils.existsProblems(proj)){

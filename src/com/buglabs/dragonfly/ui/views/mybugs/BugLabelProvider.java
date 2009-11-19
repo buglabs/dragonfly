@@ -8,9 +8,10 @@
 
 package com.buglabs.dragonfly.ui.views.mybugs;
 
-import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
@@ -23,8 +24,9 @@ import com.buglabs.dragonfly.model.ServiceNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
 import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.ui.views.Messages;
 
-public class BugLabelProvider implements ILabelProvider {
+public class BugLabelProvider extends ColumnLabelProvider  {
 
 	private ISharedImages shared;
 
@@ -96,6 +98,25 @@ public class BugLabelProvider implements ILabelProvider {
 		return ""; //$NON-NLS-1$
 	}
 
+
+	/* tooltip support */
+	public String getToolTipText(Object element) {
+		return Messages.getString("BugLabelProvider.TOOLTIP_TEXT");
+	}
+	
+	public Point getToolTipShift(Object object) {
+		return new Point(5, 5);
+	}
+	
+	public int getToolTipDisplayDelayTime(Object object) {
+		return 500;
+	}
+
+	public int getToolTipTimeDisplayed(Object object) {
+		return 5000;
+	}
+		
+	
 	public void addListener(ILabelProviderListener listener) {
 		// TODO Auto-generated method stub
 

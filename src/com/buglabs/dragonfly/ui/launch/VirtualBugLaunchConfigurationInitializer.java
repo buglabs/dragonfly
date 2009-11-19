@@ -11,6 +11,7 @@ import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
+import com.buglabs.osgi.concierge.runtime.ConciergeRuntime;
 
 /**
  * This class defines the default launch configuration of the Virtual BUG.
@@ -33,7 +34,11 @@ public class VirtualBugLaunchConfigurationInitializer {
 			storageDirectory = bundleVersion + File.separator + "bug-configuration"; //$NON-NLS-1$
 		}
 		
-		String appDirectory = "apps"; //$NON-NLS-1$
+		String appDirectory = ConciergeRuntime.getDefault().getStateLocation() + File.separator + "apps";
+		File f = new File(appDirectory);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
 		
 		properties.put(VirtualBugLaunchConfigurationDelegate.APP_DIR, appDirectory); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_CM_STORAGE, storageDirectory);

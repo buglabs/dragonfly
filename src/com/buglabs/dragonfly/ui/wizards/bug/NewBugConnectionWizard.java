@@ -25,11 +25,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 
 import com.buglabs.dragonfly.BugConnectionManager;
-import com.buglabs.dragonfly.exception.NodeNotUniqueException;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.PerspectiveFactory;
-import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 
 /**
  * Wizard for new BUG connection
@@ -53,16 +51,10 @@ public class NewBugConnectionWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		try {
 			BugConnection bug = new StaticBugConnection(mainpage.getProjectName(), mainpage.getBugURL());
-			BugConnectionManager.getInstance().getBugConnectionsRoot().addChild(bug);
-			if (MyBugsView.getViewer() != null) {
-				MyBugsView.getViewer().refresh();
-			}
+			BugConnectionManager.getInstance().addBugConnection(bug);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			return false;
-		} catch (NodeNotUniqueException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		try {

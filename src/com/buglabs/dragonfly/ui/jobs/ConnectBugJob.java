@@ -14,34 +14,46 @@ import com.buglabs.dragonfly.util.BugWSHelper;
 
 public class ConnectBugJob extends Job {
 
+	private static final String MODULES_NODE_NAME 		= "Modules";
+	private static final String APPLICATIONS_NODE_NAME 	= "Applications";
+	private static final String SERVICES_NODE_NAME 		= "Services";
+	
 	private BugConnection bug;
+	private boolean quiet;
 
 	IStatus result = Status.OK_STATUS;
 
 	public ConnectBugJob(BugConnection bug) {
-		super("BUG Connection");
-		this.bug = bug;
+		this(bug, false);
 	}
 
+	public ConnectBugJob(BugConnection bug, boolean quiet) {
+		super("BUG Connection");
+		this.bug = bug;
+		this.quiet = quiet;
+	}
+
+	
 	protected IStatus run(IProgressMonitor monitor) {
 		try {
 			monitor.beginTask("Connecting to BUG " + bug.getName(), 100);
 
 			bug.getChildren();
-			ITreeNode modulesNode = (ITreeNode) bug.getChildren(Messages.getString("BugContentProvider.3")).iterator().next();
+			ITreeNode modulesNode = (ITreeNode) bug.getChildren(MODULES_NODE_NAME).iterator().next();
 			modulesNode.setChildren(BugWSHelper.getModuleList(modulesNode, bug.getModuleURL()));
 			monitor.worked(50);
 
-			ITreeNode programNode = (ITreeNode) bug.getChildren(Messages.getString("BugContentProvider.4")).iterator().next();
+			ITreeNode programNode = (ITreeNode) bug.getChildren(APPLICATIONS_NODE_NAME).iterator().next();
 			programNode.setChildren(BugWSHelper.getPrograms(bug.getProgramURL()));
 			monitor.worked(50);
 
-			ITreeNode serviceNode = (ITreeNode) bug.getChildren(Messages.getString("BugContentProvider.6")).iterator().next();
+			ITreeNode serviceNode = (ITreeNode) bug.getChildren(SERVICES_NODE_NAME).iterator().next();
 			serviceNode.setChildren(BugWSHelper.getServices(bug.getServiceURL()));
 			monitor.worked(50);
 
 			bug.setConnected(true);
 			monitor.done();
+			
 		} catch (MalformedURLException e) {
 			result = handleException(e);
 		} catch (IOException e) {
@@ -53,7 +65,9 @@ public class ConnectBugJob extends Job {
 	}
 
 	private IStatus handleException(Exception e) {
-		return new Status(IStatus.ERROR, com.buglabs.dragonfly.ui.Activator.PLUGIN_ID, IStatus.ERROR, "Unable to connect to "
+		int status = IStatus.ERROR;
+		if (quiet) status = IStatus.WARNING;
+		return new Status(status, com.buglabs.dragonfly.ui.Activator.PLUGIN_ID, status, "Unable to connect to "
 				+ bug.getName(), new Throwable(e.toString()));
 	}
 
