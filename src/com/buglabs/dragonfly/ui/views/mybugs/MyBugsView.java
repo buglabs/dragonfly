@@ -29,6 +29,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
@@ -299,10 +300,10 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		public CollapseAllAction(AbstractTreeViewer viewer, String tooltipText) {
 			super(tooltipText, IAction.AS_PUSH_BUTTON);
 			setToolTipText(tooltipText);
-			setImageDescriptor(
-					ImageDescriptor.createFromImage(
-							PlatformUI.getWorkbench().getSharedImages().getImage(
-									ISharedImages.IMG_ELCL_COLLAPSEALL)));
+			Image img = PlatformUI.getWorkbench().
+				getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL);
+			if (img != null)
+				setImageDescriptor(ImageDescriptor.createFromImage(img));
 			tree_viewer = viewer;
 		}
 
