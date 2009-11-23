@@ -113,9 +113,9 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		
 		// use columnlabelprovider so we can have a tooltip
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
-		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.NONE);
+		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.LEFT);
 		column.setLabelProvider(new BugLabelProvider());
-		column.getColumn().setWidth(100);
+		column.getColumn().pack();
 
 		addDropSupport();
 		addDragSupport();
@@ -300,6 +300,8 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		public CollapseAllAction(AbstractTreeViewer viewer, String tooltipText) {
 			super(tooltipText, IAction.AS_PUSH_BUTTON);
 			setToolTipText(tooltipText);
+			// in ganymede and before, it won't find this image, so won't set an image
+			// 	 instead it will display "Collapse All" text on button
 			Image img = PlatformUI.getWorkbench().
 				getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL);
 			if (img != null)

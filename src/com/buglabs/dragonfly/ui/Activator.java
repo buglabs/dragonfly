@@ -110,6 +110,8 @@ public class Activator extends AbstractUIPlugin {
 	
 	public static final String IMAGE_COLOR_M_BUGBEE = "icons/color/bugbeeModule.gif"; //$NON-NLS-1$	
 
+	public static final String IMAGE_COLOR_M_SENSOR = "icons/color/sensorModule.gif";
+	
 	public static final String IMAGE_COLOR_MANIFEST = "icons/color/manifest.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_MODULE = "icons/color/module.gif"; //$NON-NLS-1$
@@ -326,7 +328,8 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_COLOR_M_SOUND, getImageDescriptor(IMAGE_COLOR_M_SOUND).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_VH, getImageDescriptor(IMAGE_COLOR_M_VH).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_WIFI, getImageDescriptor(IMAGE_COLOR_M_WIFI).createImage());
-		imageRegistry.put(IMAGE_COLOR_M_BUGBEE, getImageDescriptor(IMAGE_COLOR_M_BUGBEE).createImage());		
+		imageRegistry.put(IMAGE_COLOR_M_BUGBEE, getImageDescriptor(IMAGE_COLOR_M_BUGBEE).createImage());
+		imageRegistry.put(IMAGE_COLOR_M_SENSOR, getImageDescriptor(IMAGE_COLOR_M_SENSOR).createImage());
 		imageRegistry.put(IMAGE_COLOR_MANIFEST, getImageDescriptor(IMAGE_COLOR_MANIFEST).createImage());
 		imageRegistry.put(IMAGE_COLOR_MODULE, getImageDescriptor(IMAGE_COLOR_MODULE).createImage());
 		imageRegistry.put(IMAGE_COLOR_PROJECT, getImageDescriptor(IMAGE_COLOR_PROJECT).createImage());

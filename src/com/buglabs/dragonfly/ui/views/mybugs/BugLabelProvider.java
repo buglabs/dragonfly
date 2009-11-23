@@ -65,6 +65,9 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 			}
 			else if (name.equals("bugbee")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_BUGBEE);
+			} 
+			else if (name.equals("sensor")) {
+				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_SENSOR);
 			}
 			
 			// return shared.getImage(ISharedImages.IMG_OBJ_ELEMENT);
@@ -109,7 +112,7 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 	}
 	
 	public int getToolTipDisplayDelayTime(Object object) {
-		return 500;
+		return 100;
 	}
 
 	public int getToolTipTimeDisplayed(Object object) {
