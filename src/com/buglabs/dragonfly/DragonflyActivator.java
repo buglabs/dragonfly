@@ -155,6 +155,7 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		BugConnectionManager.getInstance().destroy();
 		super.stop(context);
 	}
 

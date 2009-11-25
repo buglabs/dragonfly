@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 
 import org.eclipse.core.runtime.CoreException;
@@ -20,7 +21,9 @@ import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.IModelNode;
 import com.buglabs.dragonfly.model.ITreeNode;
+import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
+import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
@@ -37,8 +40,10 @@ import com.buglabs.dragonfly.util.UIUtils;
  *  BugConnectionS, is not thread safe.  All access should be synchronized against
  *  the singleton object.
  *  
- *  In nearly every case the logic of modifying bug_connections_root has been implemented
- *  in a synchronized method in this class, so use those synchronized methods
+ *  NOTE: In nearly every case the logic of modifying bug_connections_root has been implemented
+ *  in a synchronized method in this class, so use those synchronized methods. If you make
+ *  modifications to this class be careful of the synchronized methods -- don't call synchronized
+ *  methods from other synchronized methods in this class
  * 
  * @author bballantine
  *
@@ -49,6 +54,8 @@ public class BugConnectionManager {
 	private static final String SERVICE_TYPE 	= "_bugdevice._tcp.local.";
 	private static final String PROTOCOL 		= "http://";
 	private static final String VIRTUAL_BUG_URL = PROTOCOL + "localhost";
+	private static final String USB_BUG_NAME	= "USB BUG";
+	private static final String USB_BUG_IP		= "10.10.10.10";
 	
 	public static final String REFRESH_BUG 		= "refresh_bug";
 	public static final String REMOVE_BUG 		= "remove_bug";
@@ -87,6 +94,7 @@ public class BugConnectionManager {
 	 * initializes the the jmdns object which helps manage avahi services
 	 */
 	private BugConnectionManager() {
+		// jmdns is our main connection
 		try {
 			jmdns = JmDNS.create();
 		} catch (IOException e) {
@@ -94,6 +102,24 @@ public class BugConnectionManager {
 		}
 		if (jmdns == null) return;
 		jmdns.addServiceListener(SERVICE_TYPE, new BugDeviceServiceListener());
+		
+		// try to get USB BUG
+		new Thread() {
+			public void run() {
+				StaticBugConnection usbBug = null;
+				List<Object> programs = null;
+				try {
+					usbBug = new StaticBugConnection(
+							USB_BUG_NAME, new URL(PROTOCOL + USB_BUG_IP));
+					programs = BugWSHelper.getPrograms(usbBug.getProgramURL());
+				} catch (Exception e) {
+					UIUtils.handleNonvisualError("Unable to connect to USB BUG.",e);
+					return;
+				}
+				if (programs == null) return;
+				addBugConnection(usbBug);
+			};
+		}.start();
 	}
 	
 	
@@ -129,7 +155,7 @@ public class BugConnectionManager {
 	* @param connectionName
 	* @return
 	*/
-	public BugConnection getBugConnection(String name) {
+	public synchronized BugConnection getBugConnection(String name) {
 		Collection<IModelNode> chillins = getBugConnections();
 		for (IModelNode child : chillins) {
 			if (child.getName().equals(name))
@@ -138,6 +164,22 @@ public class BugConnectionManager {
 		return null;
 	}
 	 
+	/**
+	* Returns a specific bug connection based on its name
+	* 
+	* @param connectionName
+	* @return
+	*/
+	public synchronized BugConnection getBugConnectionByIP(String ipaddress) {
+		Collection<IModelNode> chillins = getBugConnections();
+		for (IModelNode child : chillins) {
+			if (child instanceof BugConnection && 
+					((BugConnection) child).getUrl().getHost().equals(ipaddress))
+				return (BugConnection) child;
+		}
+		return null;
+	}	
+	
 	/**
 	 * Adds a new bug connection to the tracked bugs and fires a
 	 *  bug connection change event
@@ -203,6 +245,21 @@ public class BugConnectionManager {
 	}
 	
 	/**
+	 * 
+	 * @param event
+	 * @return
+	 */
+	public boolean isConnected(ServiceInfo info) {
+		if (info == null) return false;
+		// special case of USB BUG
+		if (info.getAddress().getHostAddress().equals(USB_BUG_IP)) {
+			return (getBugConnectionByIP(USB_BUG_IP) != null);
+		} else {
+			return isConnected(info.getName());
+		}
+	}
+	
+	/**
 	 * Special method to handle adding a new virtual BUG 
 	 */
 	public void addNewVirtualBugConnection() {
@@ -265,7 +322,14 @@ public class BugConnectionManager {
 		getBugConnections().remove(connection);
 		fireBugRemovedEvent(this, connection);
 	}
-		
+	
+	/**
+	 *  call this from plugin shutdown
+	 */
+	public synchronized void destroy() {
+		jmdns.close();
+		bug_connections_root.getChildren().clear();
+	}
 	
 	/**
 	 * This listens for mDNS events and handles the adding and removal
@@ -317,7 +381,7 @@ public class BugConnectionManager {
 			} catch (MalformedURLException e) {
 				UIUtils.handleNonvisualWarning("Unable to get url of connected BUG.", e);
 			}
-        	if (!isConnected(event.getName())) {
+        	if (event.getInfo() != null && !isConnected(event.getInfo())) {
         		IModelNode bug = new DiscoveredBugConnection(event.getName(), bugUrl);
         		addBugConnection((BugConnection) bug);
         	}			
