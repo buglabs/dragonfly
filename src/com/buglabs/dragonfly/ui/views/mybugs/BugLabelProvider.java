@@ -15,6 +15,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.FolderNode;
 import com.buglabs.dragonfly.model.IModelNode;
@@ -95,10 +96,14 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 	}
 
 	public String getText(Object element) {
+		String text = "";
 		if (element instanceof IModelNode) {
-			return ((IModelNode) element).getName();
+			text = ((IModelNode) element).getName();
 		}
-		return ""; //$NON-NLS-1$
+		if (element instanceof BugConnection) {
+			text += " [" + ((BugConnection) element).getUrl().getHost() + "]";
+		}
+		return text; //$NON-NLS-1$
 	}
 
 
