@@ -229,20 +229,19 @@ public class BugConnectionManager {
 		if (DragonflyActivator.getDefault() == null) return;
 		DragonflyActivator.getDefault().fireModelChangeEvent(
 				new PropertyChangeEvent(source, REFRESH_BUG, null, element));
-	}	
+	}
 	
 	/**
-	 * is a bug with this connection name connected?
 	 * 
 	 * @param name
 	 * @return
 	 */
-	public boolean isConnected(String name) {
+	public boolean sameNameConnected(String name) {
     	if (getBugConnection(name) == null)
     			return false;
     	else
     		return true;
-	}
+	}	
 	
 	/**
 	 * 
@@ -251,12 +250,8 @@ public class BugConnectionManager {
 	 */
 	public boolean isConnected(ServiceInfo info) {
 		if (info == null) return false;
-		// special case of USB BUG
-		if (info.getAddress().getHostAddress().equals(USB_BUG_IP)) {
-			return (getBugConnectionByIP(USB_BUG_IP) != null);
-		} else {
-			return isConnected(info.getName());
-		}
+		return (getBugConnectionByIP(
+				info.getAddress().getHostAddress()) != null);
 	}
 	
 	/**
@@ -371,20 +366,52 @@ public class BugConnectionManager {
         
         /**
          *  The service is resolved, add to list and send event
+         *  
+         *  TODO - remove some of logging
          */
         public void serviceResolved(final ServiceEvent event) {
+        	if (event.getInfo() == null) return;
+        	
         	UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
         			"Bug Device Resolved - " + event.getName() + " " + event.getInfo().getHostAddress()));
+        	
         	URL bugUrl = null;
 			try {
 				bugUrl = new URL(PROTOCOL + event.getInfo().getAddress().getHostAddress());
 			} catch (MalformedURLException e) {
 				UIUtils.handleNonvisualWarning("Unable to get url of connected BUG.", e);
 			}
-        	if (event.getInfo() != null && !isConnected(event.getInfo())) {
-        		IModelNode bug = new DiscoveredBugConnection(event.getName(), bugUrl);
-        		addBugConnection((BugConnection) bug);
-        	}			
+			if (bugUrl == null) return;
+			
+			BugConnection bug = null;
+			// if bug w/ same IP address get it
+			if (isConnected(event.getInfo())) {
+				bug = getBugConnectionByIP(bugUrl.getHost());
+				// if it's a discovered bug set the name to the new name
+				if (bug instanceof DiscoveredBugConnection) {
+					bug.setName(event.getName());
+				}
+				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
+						"Bug w/ same ip as " + event.getName() + " exists: " + bug.getName()));
+			}
+			// else if bug w/ same name get it and set IP address
+			else if (sameNameConnected(event.getName())) {
+				bug = getBugConnection(event.getName());
+				// set IP address
+				bug.setUrl(bugUrl);
+				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
+						"Bug w/ same name as " + event.getName() + " exists, ip: " + bugUrl.getHost()));				
+			}
+			// finally it's brand new so create it and add it
+			else {
+				bug = new DiscoveredBugConnection(event.getName(), bugUrl);
+				getBugConnections().add(bug);
+			}
+
+			// fire bug added event so view is updated, etc.
+			if (bug != null)
+				fireBugAddedEvent(this, bug);
+
         }        
 	}
 }
