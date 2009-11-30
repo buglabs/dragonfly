@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.ui.views.mybugs;
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -35,6 +36,9 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 		if (parentElement instanceof BugConnection 
 				&& !((BugConnection) parentElement).isConnected()) {
 			ConnectBugHelper.connectToBug((BugConnection) parentElement, false);
+			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
+					"Trying to connect w/ the BUG because getChildren was called in tree node: " 
+					+ ((BugConnection) parentElement).getName() ));
 		} 
 		
 		else if (parentElement instanceof ITreeNode) {

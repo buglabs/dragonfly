@@ -78,7 +78,7 @@ public class LoadBugsJob extends Job {
 
 			for (int i = 0; i < bugs.length; i++) {
 				String bugName = bugs[i].getString(BUG_NAME);
-				if (!BugConnectionManager.getInstance().isConnected(bugName)) {
+				if (!BugConnectionManager.getInstance().sameNameConnected(bugName)) {
 					URL url = null;
 					try {
 						url = new URL(bugs[i].getString(BUG_URL));
