@@ -116,8 +116,9 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.LEFT);
 		column.setLabelProvider(new BugLabelProvider());
+		// You have to set width for the mac
 		column.getColumn().setWidth(1000);
-		column.getColumn().pack();
+		//column.getColumn().pack();
 
 		addDropSupport();
 		addDragSupport();
