@@ -110,11 +110,13 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		viewer.setContentProvider(new MyBugsViewContentProvider());
 		viewer.addFilter(new ApplicationFilter());
 		viewer.setComparator(new MyBugsViewComparator());
+		//viewer.setLabelProvider(new BugLabelProvider());
 		
 		// use columnlabelprovider so we can have a tooltip
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.LEFT);
 		column.setLabelProvider(new BugLabelProvider());
+		column.getColumn().setWidth(1000);
 		column.getColumn().pack();
 
 		addDropSupport();

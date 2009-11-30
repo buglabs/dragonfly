@@ -9,6 +9,7 @@
 package com.buglabs.dragonfly.ui.views.mybugs;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -28,6 +29,7 @@ import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.views.Messages;
 
 public class BugLabelProvider extends ColumnLabelProvider  {
+//public class BugLabelProvider implements ILabelProvider  {
 
 	private ISharedImages shared;
 
