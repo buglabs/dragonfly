@@ -105,7 +105,8 @@ public class ExportJarToBUGNetAction extends Action {
 		while ((line = reader.readLine()) != null) {
 			if (line.startsWith(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY))
 				continue;
-			result.append(line + "\n");
+			if (line.trim().length() > 0)
+				result.append(line + "\n");
 		}
 		
 		// add BUG-API-Version
