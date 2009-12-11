@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -27,6 +28,7 @@ import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.model.VirtualBUGConnection;
 import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.ui.views.mybugs.MyBugsViewComparator;
 
 /**
  * Queries the workspace for existing BUG Connection projects and requests from
@@ -122,7 +124,8 @@ public class BUGConnectionSelectionDialog extends Dialog {
 		viewer.setLabelProvider(new LabelProvider() {
 			public String getText(Object element) {
 				if (element instanceof BugConnection) {
-					return ((BugConnection) element).getName();
+					return ((BugConnection) element).getName() + 
+						" [" + ((BugConnection) element).getUrl().getHost() + "]";
 				} else {
 					return super.getText(element);
 				}
@@ -141,6 +144,8 @@ public class BUGConnectionSelectionDialog extends Dialog {
 				return super.getImage(element);
 			}
 		});
+		
+		viewer.setComparator(new MyBugsViewComparator());
 
 		BaseTreeNode root = 
 			(BaseTreeNode) BugConnectionManager.getInstance().getBugConnectionsRoot();

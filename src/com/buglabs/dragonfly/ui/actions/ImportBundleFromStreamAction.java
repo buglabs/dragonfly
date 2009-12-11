@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -35,14 +33,13 @@ import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class ImportBundleFromStreamAction extends Action {
 	String programName;
-
 	InputStream stream;
-
 	String userName;
-
 	private File jarFile;
-
+	private boolean overwriteApp;
+	
 	public ImportBundleFromStreamAction() {
+		overwriteApp = false;
 	}
 
 	public ImportBundleFromStreamAction(String programName) {
@@ -63,21 +60,26 @@ public class ImportBundleFromStreamAction extends Action {
 					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 					programName = URLDecoder.decode(programName, "UTF-8");
 					IProject proj = root.getProject(programName);
+					overwriteApp = false;
 					if (proj.exists()) {
 						PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+							
 							public void run() {
 								IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 								Shell shell = new Shell();
 								if (window != null) {
 									shell = window.getShell();
 								}
-								MessageDialog.openWarning(shell, "Import Warning",
-										"Unable to import project because it already exists in the current workspace");
+								overwriteApp = MessageDialog.openQuestion(
+										shell, "Import Warning",  "A project with the same name already exists in" +
+													"the current workspace.  Would you like to overwrite?");								
 								return;
 							}
 						});
 
-					} else {
+					} 
+
+					if (!proj.exists() || overwriteApp){
 						if (stream == null)
 							stream = BugnetWSHelper.getProgram(programName);
 						jarFile = DragonflyActivator.getDefault().createFile(jarFileName(programName));

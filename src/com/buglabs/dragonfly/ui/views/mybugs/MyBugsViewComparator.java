@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.ui.views.mybugs;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
+import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.Module;
 
 /**
@@ -20,6 +21,12 @@ public class MyBugsViewComparator extends ViewerComparator {
 			
 			return m1.getIndex() - m2.getIndex();
 		}
+		
+		else if (e1 instanceof BugConnection && e2 instanceof BugConnection) {
+			return ((BugConnection) e1).getName().toLowerCase().compareTo(
+					((BugConnection) e2).getName().toLowerCase());
+		}
+		
 		return super.compare(viewer, e1, e2);
 	}
 	

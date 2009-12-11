@@ -231,8 +231,9 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 
 	private void createToolBar() {
 		IToolBarManager manager = getViewSite().getActionBars().getToolBarManager();
-		manager.add(addConectionAction);
 		manager.add(new CollapseAllAction(viewer,"Collapse All")); // collapses all nodes in the view
+		manager.add(new RefreshBugConnectionsAction());
+		manager.add(addConectionAction);
 	}
 
 	private void createContextMenu() {
@@ -295,7 +296,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	 * 	org.eclipse.pde.internal.ui.editor.actions.CollapseAction
 	 * 	and modified to suit the purpose of the MyBugs view to collapse all
 	 * 
-	 * @author brian
+	 * @author bballantine
 	 *
 	 */
 	public class CollapseAllAction extends Action {
@@ -322,6 +323,27 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 			else tree_viewer.collapseAll();
 		}
 
+	}
+	
+	/**
+	 * Completely refreshes the MyBUGs view
+	 * 
+	 * @author bballantine
+	 *
+	 */
+	public class RefreshBugConnectionsAction extends Action {
+		private static final String TOOLTIP = "Refresh Discovered BUGs";
+		public RefreshBugConnectionsAction() {
+			super(TOOLTIP, IAction.AS_PUSH_BUTTON);
+			setToolTipText(TOOLTIP);
+			setImageDescriptor(Activator.getDefault().
+				    getImageRegistry().getDescriptor(Activator.IMAGE_CONNECTION_REFRESH));
+		}
+		
+		@Override
+		public void run() {
+			BugConnectionManager.getInstance().reset();
+		}
 	}
 
 }
