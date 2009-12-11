@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -66,6 +67,7 @@ public class BugConnectionManager {
 	// used in getBugConnectionsRoot()
 	private Object root_creation_lock = new Object();
 	private JmDNS jmdns;
+	private ServiceListener listener;
 	
 	/**
 	 *  keep track of singleton instance
@@ -94,6 +96,14 @@ public class BugConnectionManager {
 	 * initializes the the jmdns object which helps manage avahi services
 	 */
 	private BugConnectionManager() {
+		initialize();
+	}
+
+	/**
+	 * Do all the work to create the jmdns object and add
+	 * the service listener
+	 */
+	private void initialize() {
 		// jmdns is our main connection
 		try {
 			jmdns = JmDNS.create();
@@ -101,7 +111,8 @@ public class BugConnectionManager {
 			UIUtils.handleNonvisualWarning("Unable to create JmDNS instance.", e);
 		}
 		if (jmdns == null) return;
-		jmdns.addServiceListener(SERVICE_TYPE, new BugDeviceServiceListener());
+		listener = new BugDeviceServiceListener();
+		jmdns.addServiceListener(SERVICE_TYPE, listener);
 		
 		// try to get USB BUG
 		new Thread() {
@@ -119,9 +130,43 @@ public class BugConnectionManager {
 				if (programs == null) return;
 				addBugConnection(usbBug);
 			};
-		}.start();
+		}.start();		
+	}	
+	
+	/**
+	 * completely reset the BugConnectionManager by
+	 * 	removing the service listener, removing the discovered
+	 * 	bugs and then re-creating everything.
+	 */
+	public void reset() {
+		if (jmdns == null) return;
+		if (listener != null)
+			jmdns.removeServiceListener(SERVICE_TYPE, listener);
+		// store all non-discovered bugs
+		List<IModelNode> staticBugs = getStaticBugConnections();
+		clearAllBugConnections();
+		initialize();
+		// add the non-discoverd bugs back
+		for (IModelNode bug : staticBugs) {
+			addBugConnection((BugConnection)bug);
+		}
 	}
 	
+	/**
+	 * Get's the static bug connections, 
+	 * 	i.e. all connections except discovered connections
+	 * 
+	 * @return
+	 */
+	private synchronized List<IModelNode> getStaticBugConnections() {
+		Collection<IModelNode> chillins = getBugConnections();
+		List<IModelNode> staticBugs = new ArrayList<IModelNode>();
+		for (IModelNode child : chillins) {
+			if (!(child instanceof DiscoveredBugConnection))
+				staticBugs.add(child);
+		}
+		return staticBugs;
+	}
 	
 	/**
 	 * Return current connections as the root ITreeNode
@@ -307,7 +352,7 @@ public class BugConnectionManager {
 			fireBugRemovedEvent(this, connection);
 		}
 	}
-
+	
 	/**
 	 * remove a bug connection
 	 * 
@@ -316,6 +361,13 @@ public class BugConnectionManager {
 	public synchronized void removeBugConnection(BugConnection connection) {
 		getBugConnections().remove(connection);
 		fireBugRemovedEvent(this, connection);
+	}
+	
+	/**
+	 * remove all the existing bug connections
+	 */
+	public synchronized void clearAllBugConnections() {
+		getBugConnections().clear();
 	}
 	
 	/**
