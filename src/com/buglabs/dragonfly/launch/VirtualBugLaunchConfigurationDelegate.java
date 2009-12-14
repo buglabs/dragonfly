@@ -49,7 +49,6 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	public static final String PROP_CAMERA_SNAPSHOTS 		= "com.buglabs.bug.emulator.module.camera.snapshots";
 	public static final String PROP_GPS_LOG 				= "com.buglabs.bug.emulator.module.gps.log";
 	public static final String PROP_ACC_LOG 				= "com.buglabs.bug.emulator.module.accelerometer.log";
-	public static final String PROP_SLP_MULTICAST_JOIN 		= "net.slp.multicastJoin";
 	public static final String PROP_CM_STORAGE 			    = "com.buglabs.osgi.cm.storage";
 	public static final String PROP_VBUG_SCROLLSPEED 		= "com.buglabs.bug.emulator.scrollspeed";
 	public static final String PROP_VBUG_SCROLLDELAY 		= "com.buglabs.bug.emulator.scrolldelay";

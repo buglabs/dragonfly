@@ -25,7 +25,6 @@ public class VirtualBugLaunchConfigurationInitializer {
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_LOG_ENABLED, "true"); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_LOG_LEVEL, "4"); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG, "true"); //$NON-NLS-1$
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_SLP_MULTICAST_JOIN, "false"); //$NON-NLS-1$
 		
 		
 		String bundleVersion = (String) Activator.getDefault().getContext().getBundle().getHeaders().get("Bundle-Version"); //$NON-NLS-1$
