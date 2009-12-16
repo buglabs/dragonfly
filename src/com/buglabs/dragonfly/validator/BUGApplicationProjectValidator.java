@@ -48,8 +48,9 @@ public class BUGApplicationProjectValidator {
 
 		IJavaProject jproj = JavaCore.create(project);
 		String targetPlatform = jproj.getOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, true);
-		if (!targetPlatform.equals(JavaCore.VERSION_1_2)) {
-			showError("Compiler target platform is not 1.4");
+		if (!targetPlatform.equals(JavaCore.VERSION_1_2) && !targetPlatform.equals(JavaCore.VERSION_1_6)) {
+			showError("Compiler target platform must be 1.4 for a PhoneME BUG or 1.6 for an OpenJDK BUG.  " +
+					"Please modify your project's execution environment settings.");
 			return false;
 		}
 
