@@ -254,7 +254,17 @@ public class NewProjectMainPage extends WizardPage {
 				
 				public void widgetDefaultSelected(SelectionEvent e) {/* not used */}
 			});
-						
+			
+			boolean has1_6 = false;
+			IExecutionEnvironment[] executionEnvs = 
+				JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
+			for (int i= 0; i < executionEnvs.length; i++) {
+				if (executionEnvs[i].getId().indexOf(JavaCore.VERSION_1_6) != -1) {
+					has1_6 = true;
+				}
+			}	
+			jre_radio.setEnabled(has1_6);
+			
 			return group;
 		}
 	}

@@ -71,7 +71,7 @@ public class ImportBundleFromStreamAction extends Action {
 									shell = window.getShell();
 								}
 								overwriteApp = MessageDialog.openQuestion(
-										shell, "Import Warning",  "A project with the same name already exists in" +
+										shell, "Import Warning",  "A project with the same name already exists in " +
 													"the current workspace.  Would you like to overwrite?");								
 								return;
 							}
@@ -97,9 +97,14 @@ public class ImportBundleFromStreamAction extends Action {
 						ProjectUtils.importProjectIntoWorkspace(proj, jarFile);
 						IJavaProject jproj = JavaCore.create(proj);
 
+						/* TODO - verify removing this was a good idea...
+						 * if this is in here, apps downloaded from BUGnet get set to 1.4 compliance
+						 * but currently we're allowing 1.6 apps to be on bugnet
+						 * 
 						jproj.setOption(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_4);
 						jproj.setOption(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_3);
 						jproj.setOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_2);
+						*/
 						jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 						jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
 						
