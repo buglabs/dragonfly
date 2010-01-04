@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -716,7 +718,16 @@ public class CodeGenerationPage extends WizardPage {
 					if (processes == null || processes.length < 1) return;
 					
 					processes[0].getStreamsProxy().
-						getOutputStreamMonitor().addListener(new ProcessStreamListener());			
+						getOutputStreamMonitor().addListener(new ProcessStreamListener());
+					
+					// if we got to here w/o throwing an exception, the assumption is the
+					// virtual bug is launching, however, it takes a few seconds, so delay
+					// creation of connection for 3 seconds
+					new Timer().schedule(new TimerTask() {
+						public void run() {
+							BugConnectionManager.getInstance().addNewVirtualBugConnection();
+						}
+					}, 3000);					
 				}
 			});
 
