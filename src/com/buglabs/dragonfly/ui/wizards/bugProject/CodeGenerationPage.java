@@ -23,10 +23,13 @@ import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
+import org.eclipse.debug.core.model.RuntimeProcess;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -93,7 +96,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author akravets and then... bballantine!
  *
  */
-public class CodeGenerationPage extends WizardPage {
+public class CodeGenerationPage extends WizardPage implements IDebugEventSetListener {
 
 	// titles, labels, tooltips, etc
 	private static final String BUGLABS_EMULATOR_BUNDLE_NAME= "com.buglabs.bug.emulator";
@@ -690,6 +693,9 @@ public class CodeGenerationPage extends WizardPage {
 	 *
 	 */
 	private class StartVBUGSelectionListener implements SelectionListener {			
+		public static final String TYPE 		= "type";
+		public static final String VIRTUAL_BUG = "VIRTUAL_BUG";
+		
 		/**
 		 *  Empty
 		 */
@@ -717,6 +723,7 @@ public class CodeGenerationPage extends WizardPage {
 					}
 					if (processes == null || processes.length < 1) return;
 					
+					processes[0].setAttribute(TYPE, VIRTUAL_BUG);
 					processes[0].getStreamsProxy().
 						getOutputStreamMonitor().addListener(new ProcessStreamListener());
 					
@@ -787,6 +794,46 @@ public class CodeGenerationPage extends WizardPage {
 			return this.family.equals(family);
 		}
 	}
+
 	
+	/* 
+	 * The next two methods handle removing a Virtual Bug launched from the code generation page, 
+	 * This code was hastily copied from LaunchVirtualBugAction -- Couldn't figure out a quick way to keep DRY.
+	 * 
+	 * First method satisfies implementation of IDebugEventSetListener
+	 */
+	
+	/**
+	 * 
+	 * Pick up a virtual bug debug event
+	 */
+	public void handleDebugEvents(DebugEvent[] events) {
+		for(int i = 0; i < events.length; i++){
+			if(events[i].getSource() instanceof RuntimeProcess) {
+				String type = 
+					((RuntimeProcess) events[i].getSource()).getAttribute(StartVBUGSelectionListener.TYPE);
+				if(type != null && type.equals(StartVBUGSelectionListener.VIRTUAL_BUG)){
+					handleVirtualBugEvent(events[i]);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Handle the virtual bug event.
+	 * right now just removing the vbug connection on TERMINATE event
+	 * 
+	 * @param event
+	 */
+	private void handleVirtualBugEvent(DebugEvent event) {
+		if (event.getKind() == DebugEvent.TERMINATE) {
+			if (BugConnectionManager.getInstance().removeVirtualBugConnection()) {
+				DragonflyActivator activator = DragonflyActivator.getDefault();
+				if(activator != null) {
+					activator.setVirtualBugRemovedByTerminate(true);
+				}
+			}
+		}
+	}
 	
 }
