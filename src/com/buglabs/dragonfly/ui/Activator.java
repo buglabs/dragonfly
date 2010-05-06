@@ -97,6 +97,8 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_COLOR_M_CAMERA = "icons/color/cameraModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_GPS = "icons/color/gpsModule.gif"; //$NON-NLS-1$
+	
+	public static final String IMAGE_COLOR_M_GSM = "icons/color/gsmModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_LCD = "icons/color/lcdModule.gif"; //$NON-NLS-1$
 
@@ -323,6 +325,7 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_COLOR_DWNLD_SDK, getImageDescriptor(IMAGE_COLOR_DWNLD_SDK).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_CAMERA, getImageDescriptor(IMAGE_COLOR_M_CAMERA).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_GPS, getImageDescriptor(IMAGE_COLOR_M_GPS).createImage());
+		imageRegistry.put(IMAGE_COLOR_M_GSM, getImageDescriptor(IMAGE_COLOR_M_GSM).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_LCD, getImageDescriptor(IMAGE_COLOR_M_LCD).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_MOTION, getImageDescriptor(IMAGE_COLOR_M_MOTION).createImage());
 		imageRegistry.put(IMAGE_COLOR_M_SOUND, getImageDescriptor(IMAGE_COLOR_M_SOUND).createImage());

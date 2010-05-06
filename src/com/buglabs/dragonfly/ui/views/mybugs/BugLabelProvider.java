@@ -51,6 +51,9 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 			else if (name.equals("gps")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_GPS);
 			} 
+			else if (name.equals("gsm")) {
+				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_GSM);
+			} 
 			else if (name.equals("lcd")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_LCD);
 			}
