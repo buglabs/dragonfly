@@ -60,7 +60,7 @@ import com.buglabs.util.XmlParser;
  * 
  */
 public class BugWSHelper extends WSHelper {
-	
+
 	public static Map getModulePropertyDescriptorMap(Module module) throws IOException {
 		// TODO: refactor this code to take advantage of XPath query.
 		XmlParser parser = new XmlParser();
@@ -68,7 +68,7 @@ public class BugWSHelper extends WSHelper {
 
 		URLConnection conn = module.getUrl().openConnection();
 
-		String response = get(conn,true);
+		String response = get(conn, true);
 
 		XmlNode root = parser.parse(new StringReader(response));
 
@@ -85,14 +85,15 @@ public class BugWSHelper extends WSHelper {
 		return props;
 	}
 
-	@Deprecated //not being used?  Marked as depricated
+	@Deprecated
+	//not being used?  Marked as depricated
 	public static List getModulePropertyDescriptors(Module module) throws IOException {
 		XmlParser parser = new XmlParser();
 		List props = new ArrayList();
 
 		URLConnection conn = module.getUrl().openConnection();
 
-		String response = get(conn,true);
+		String response = get(conn, true);
 
 		XmlNode root = parser.parse(new StringReader(response));
 
@@ -126,7 +127,7 @@ public class BugWSHelper extends WSHelper {
 
 		// conn.setConnectTimeout(TIMEOUT);
 
-		String response = get(conn,true);
+		String response = get(conn, true);
 
 		XmlNode root = parser.parse(new StringReader(response));
 
@@ -140,9 +141,10 @@ public class BugWSHelper extends WSHelper {
 
 		return modules;
 	}
-	
-	@Deprecated // not being used?
-	public static List getRawModules(URL url) throws IOException{
+
+	@Deprecated
+	// not being used?
+	public static List getRawModules(URL url) throws IOException {
 		XmlParser parser = new XmlParser();
 		List modules = new ArrayList();
 
@@ -150,7 +152,7 @@ public class BugWSHelper extends WSHelper {
 
 		// conn.setConnectTimeout(TIMEOUT);
 
-		String response = get(conn,true);
+		String response = get(conn, true);
 
 		XmlNode root = parser.parse(new StringReader(response));
 
@@ -161,7 +163,6 @@ public class BugWSHelper extends WSHelper {
 
 		return modules;
 	}
-	
 
 	public static void updateProperty(Module module, BugProperty property, Object value) throws IOException {
 
@@ -204,8 +205,8 @@ public class BugWSHelper extends WSHelper {
 
 		// conn.setConnectTimeout(TIMEOUT);
 
-		String response = get(conn,true);
-		
+		String response = get(conn, true);
+
 		XmlNode root = parser.parse(new StringReader(response));
 
 		for (Iterator i = root.getChildren().iterator(); i.hasNext();) {
@@ -226,7 +227,7 @@ public class BugWSHelper extends WSHelper {
 
 		URLConnection conn = serviceURL.openConnection();
 
-		String response = get(conn,true);
+		String response = get(conn, true);
 
 		XmlNode root = parser.parse(new StringReader(response));
 
@@ -253,33 +254,33 @@ public class BugWSHelper extends WSHelper {
 		}
 		return services;
 	}
-	
-	public static List getPackages(URL packageURL) throws IOException{
+
+	public static List getPackages(URL packageURL) throws IOException {
 		XmlParser parser = new XmlParser();
-		
+
 		List packages = new ArrayList();
 
 		URLConnection conn = packageURL.openConnection();
 
-		String response = get(conn,true);
-		
+		String response = get(conn, true);
+
 		XmlNode root = parser.parse(new StringReader(response));
-		
+
 		for (Iterator i = root.getChildren().iterator(); i.hasNext();) {
 			XmlNode node = (XmlNode) i.next();
-			
+
 			String packageName = node.getAttribute("name");
 			if (packageName != null) {
-			    packages.add(packageName.trim());
+				packages.add(packageName.trim());
 			}
 		}
-		
+
 		return packages;
 	}
-	
+
 	/**
-	 * Returns an XML node representing the xml returned from a call
-	 *  to the bug support web service
+	 * Returns an XML node representing the xml returned from a call to the bug
+	 * support web service
 	 * 
 	 * @param supportURL
 	 * @return
@@ -292,7 +293,6 @@ public class BugWSHelper extends WSHelper {
 		return parser.parse(new StringReader(response));
 	}
 
-	
 	public static String updatePackage(ProgramNode pkn, ISerializer serializer) throws Exception {
 		if (!pkn.isBUGNetPackage()) {
 			throw new Exception("This package did not originate on BUGnet.");
@@ -392,17 +392,19 @@ public class BugWSHelper extends WSHelper {
 
 	/**
 	 * Insert or update a BUG application on BUG.
+	 * 
 	 * @param jarFile
 	 * @param url
-	 * @param encode if true, encode jar with base64
+	 * @param encode
+	 *            if true, encode jar with base64
 	 * @return
 	 * @throws IOException
 	 */
 	public static String upsertBundle(File jarFile, URL url, boolean encode) throws IOException {
 		if (encode) {
 			return postBase64(url, new FileInputStream(jarFile));
-		} 
-		
+		}
+
 		return post(url, new FileInputStream(jarFile));
 	}
 
@@ -426,18 +428,17 @@ public class BugWSHelper extends WSHelper {
 
 		return services;
 	}
-	
+
 	/**
-	 * This gets an array of ServiceDetail objects
-	 * this function is much less smart than getAllServices
-	 * in that the array may contain service details for services
-	 * with the same name (but probably different properties)
+	 * This gets an array of ServiceDetail objects this function is much less
+	 * smart than getAllServices in that the array may contain service details
+	 * for services with the same name (but probably different properties)
 	 * 
 	 * This function just returns it all
 	 * 
 	 * @param bugURL
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	/*
 	public static ServiceDetail[] getAllServiceDetails2(URL bugURL) throws Exception {
@@ -456,11 +457,11 @@ public class BugWSHelper extends WSHelper {
 		return details.toArray(new ServiceDetail[details.size()]);
 	}
 	*/
-	
+
 	/**
-	 * Aggregates the properties for Services with the same name 
-	 * (but maybe from a different source) into one ServiceDetail object
-	 * keyed off of a String key in a Map.
+	 * Aggregates the properties for Services with the same name (but maybe from
+	 * a different source) into one ServiceDetail object keyed off of a String
+	 * key in a Map.
 	 * 
 	 * This method also works out duplicates and properties with multiple values
 	 * 
@@ -468,36 +469,34 @@ public class BugWSHelper extends WSHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<ServiceDetail> getAllServiceDetails(URL bugURL)
-			throws Exception {
+	public static List<ServiceDetail> getAllServiceDetails(URL bugURL) throws Exception {
 		// Get programs so we can get at there service details
 		List<ProgramNode> programs = getPrograms(bugURL);
-		
+
 		// use a hash to store service details so we can collapse properties around a service
 		// since different programs can provide the same services
 		Map<String, ServiceDetail> details = new HashMap<String, ServiceDetail>();
-		
+
 		ServiceDetail[] tempDetails;
 		String name;
 		// Get the service details for a program and collapse
 		// into the details hash so that service names are not repeated
 		for (ProgramNode programNode : programs) {
 			tempDetails = programNode.getPackage().getServiceDetails();
-			if (tempDetails == null) continue;
+			if (tempDetails == null)
+				continue;
 			for (int i = 0; i < tempDetails.length; i++) {
 				name = tempDetails[i].getServiceName();
 				// if the service isn't in the list, add it
 				if (!details.containsKey(name))
-					details.put(name, new ServiceDetail(
-							name, new ArrayList<ServiceProperty>()));
+					details.put(name, new ServiceDetail(name, new ArrayList<ServiceProperty>()));
 				// add the service properties to the service detail
 				// addServiceProperties ensures ServiceProperty objects with the same
 				// key have the values added so not to provide duplicate properties
-				details.get(name).addServiceProperties(
-						tempDetails[i].getServiceProperties());
+				details.get(name).addServiceProperties(tempDetails[i].getServiceProperties());
 			}
 		}
-		
+
 		return new ArrayList<ServiceDetail>(details.values());
 	}
 
@@ -534,32 +533,37 @@ public class BugWSHelper extends WSHelper {
 		monitor.done();
 		return services;
 	}
-	
-	public static String deleteProgram(String url) throws Exception{
+
+	public static String deleteProgram(String url) throws Exception {
 		return delete(url);
 	}
-	
+
 	/**
 	 * 
-	 * @param url {@link URL} pointing to BUG's /configAdmin
+	 * @param url
+	 *            {@link URL} pointing to BUG's /configAdmin
 	 * @return XML representing BUG's current state
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static String getConfigurationProprtiesAsXml(URL url) throws MalformedURLException, IOException{
+	public static String getConfigurationProprtiesAsXml(URL url) throws MalformedURLException, IOException {
 		URLConnection conn = url.openConnection();
-		return get(conn,true);
+		return get(conn, true);
 	}
-	
+
 	/**
 	 * Updates BUG's configuration
-	 * @param url {@link URL} of BUG's /configAdmin
-	 * @param key key to be updated
-	 * @param value new value for the key
+	 * 
+	 * @param url
+	 *            {@link URL} of BUG's /configAdmin
+	 * @param key
+	 *            key to be updated
+	 * @param value
+	 *            new value for the key
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static void setConfigurationProperty(URL url, String payload) throws MalformedURLException, IOException{
-		 put(url.toString(), payload);
+	public static void setConfigurationProperty(URL url, String payload) throws MalformedURLException, IOException {
+		put(url.toString(), payload);
 	}
 }

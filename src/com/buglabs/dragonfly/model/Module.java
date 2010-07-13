@@ -28,9 +28,9 @@ public class Module extends BaseTreeNode {
 		setParent(p);
 		this.url = u;
 	}
-	
-	public Module(ITreeNode p, URL u, String name, int index){
-		this(p,u,name);
+
+	public Module(ITreeNode p, URL u, String name, int index) {
+		this(p, u, name);
 		this.index = index;
 	}
 
@@ -51,12 +51,12 @@ public class Module extends BaseTreeNode {
 			UIUtils.handleNonvisualError("An error occurred while uploading application.", e);
 		}
 
-		if(propertyMap != null){
+		if (propertyMap != null) {
 			for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
 				String name = (String) i.next();
-	
+
 				BugProperty bp = (BugProperty) propertyMap.get(name);
-	
+
 				if (bp.isMutable()) {
 					props.add(new TextPropertyDescriptor(name, name));
 				} else {

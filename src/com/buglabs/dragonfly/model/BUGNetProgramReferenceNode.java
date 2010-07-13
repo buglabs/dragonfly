@@ -31,7 +31,7 @@ public class BUGNetProgramReferenceNode extends BaseNode implements ILinkableMod
 	private String download_count;
 
 	private String rating;
-	
+
 	private String api_version;
 
 	public BUGNetProgramReferenceNode(String id, String name, String url) {
@@ -43,8 +43,8 @@ public class BUGNetProgramReferenceNode extends BaseNode implements ILinkableMod
 		this.api_version = "";
 	}
 
-	public BUGNetProgramReferenceNode(String id, String name, String username, String url, String description, String imageKey,
-			String download_count, String rating, String apiVersion) {
+	public BUGNetProgramReferenceNode(String id, String name, String username, String url, String description, String imageKey, String download_count, String rating,
+			String apiVersion) {
 		super(id);
 		this.programName = name;
 		this.url = url + "?context=IDE";
@@ -95,11 +95,11 @@ public class BUGNetProgramReferenceNode extends BaseNode implements ILinkableMod
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
-	
+
 	public String getAPIVersion() {
 		return api_version;
 	}
-	
+
 	public void setAPIVersion(String apiVersion) {
 		this.api_version = apiVersion;
 	}

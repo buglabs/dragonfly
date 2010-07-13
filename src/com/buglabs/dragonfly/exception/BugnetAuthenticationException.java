@@ -11,11 +11,12 @@ package com.buglabs.dragonfly.exception;
  * Exception if unable to connect to bugnet
  * 
  * @author Brian
- *
+ * 
  */
 public class BugnetAuthenticationException extends BugnetException {
 	private static final long serialVersionUID = -6733260897691716798L;
+
 	public BugnetAuthenticationException(String error) {
 		super(error);
-	}	
+	}
 }

@@ -29,17 +29,19 @@ import com.buglabs.dragonfly.DragonflyActivator;
 
 /**
  * A set of static helper classes to connect to HTTPS server
+ * 
  * @author akravets
  */
 public class SSLUtils {
 	/**
 	 * Returns data from the server with a give <code>URL</code>
+	 * 
 	 * @param url
 	 * @return data from the server
-	 * @throws IOException 
-	 * @throws IOException 
-	 * @throws IOException 
-	 * @throws IOException 
+	 * @throws IOException
+	 * @throws IOException
+	 * @throws IOException
+	 * @throws IOException
 	 */
 	public static String getData(URL url) throws IOException {
 		String data = null;
@@ -48,7 +50,7 @@ public class SSLUtils {
 			data = URLUtils.readFromStream(url.openStream());
 		} catch (IOException e) {
 			// unable to read from the stream, check if url is https, if so handle the case. Otherwise give up.
-			if(url.toString().startsWith(DragonflyActivator.HTTPS)) {
+			if (url.toString().startsWith(DragonflyActivator.HTTPS)) {
 				return SSLUtils.handleException(url);
 			}
 			throw e;
@@ -58,6 +60,7 @@ public class SSLUtils {
 
 	/**
 	 * Returns data from the server
+	 * 
 	 * @param conn
 	 * @return Returns <code>InputStream</code>
 	 * @throws MalformedURLException
@@ -79,40 +82,41 @@ public class SSLUtils {
 		return URLUtils.readFromStream(getDataAsStream(conn));
 	}
 
-
 	private static String handleException(URL url) throws IOException, MalformedURLException {
 		//DragonflyActivator.getDefault().setProtocol(DragonflyActivator.HTTP);
-		
+
 		// connect with new url
 		return URLUtils.getDataFromServer(convertToHTTP(url));
 	}
 
-
 	/**
 	 * Given <code>URL</code> of type "https://" will convert to "http://"
+	 * 
 	 * @param url
 	 * @return Newly constructed <code>URL</code>
 	 * @throws MalformedURLException
 	 */
 	public static URL convertToHTTP(URL url) throws MalformedURLException {
-		return new URL(DragonflyActivator.HTTP + url.getHost() +  url.getFile());
+		return new URL(DragonflyActivator.HTTP + url.getHost() + url.getFile());
 	}
 
 	/**
 	 * Constructs secure socket
-	 * @param host name of the host to connect to
+	 * 
+	 * @param host
+	 *            name of the host to connect to
 	 * @return Secure <code>Socket</code>
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
 	public static SSLSocket getSecureSocket(String host) throws UnknownHostException, IOException {
-		SocketFactory factory = SSLSocketFactory.getDefault(); 
+		SocketFactory factory = SSLSocketFactory.getDefault();
 		return (SSLSocket) factory.createSocket(host, DragonflyActivator.HTTPS_PORT);
 	}
 
 	/**
 	 * Verifies host's identity using <code>HostnameVerifier</code>
-	 *
+	 * 
 	 */
 	public static void verifyHost() {
 		HostnameVerifier hv = new HostnameVerifier() {
@@ -121,7 +125,7 @@ public class SSLUtils {
 					return java.net.InetAddress.getByName(urlHostName).equals(java.net.InetAddress.getByName(session.getPeerHost()));
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
-					throw new RuntimeException( "UnknownHostException Exception encountered", e);
+					throw new RuntimeException("UnknownHostException Exception encountered", e);
 				}
 			}
 		};

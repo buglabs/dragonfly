@@ -37,8 +37,7 @@ public class GetServiceNode extends ServiceNode {
 
 			propertyAdded = true;
 		}
-		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList
-				.size()]);
+		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList.size()]);
 
 		return ipd;
 	}

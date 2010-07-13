@@ -6,11 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -19,7 +16,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.BugApplicationNature;
-import com.buglabs.dragonfly.builder.IncrementalProjectBuilder;
 
 /**
  * 
@@ -35,8 +31,8 @@ public class BUGApplicationProjectValidator {
 	 *            Project that needs to be validated
 	 * @param showError
 	 *            Flag to show errors
-	 * @return Returns <code>true</code> if project is valid,
-	 *         <code>false</code> otherwise.
+	 * @return Returns <code>true</code> if project is valid, <code>false</code>
+	 *         otherwise.
 	 * @throws CoreException
 	 */
 	public static boolean validate(IProject project, boolean showError) throws CoreException {
@@ -49,8 +45,7 @@ public class BUGApplicationProjectValidator {
 		IJavaProject jproj = JavaCore.create(project);
 		String targetPlatform = jproj.getOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, true);
 		if (!targetPlatform.equals(JavaCore.VERSION_1_2) && !targetPlatform.equals(JavaCore.VERSION_1_6)) {
-			showError("Compiler target platform must be 1.4 for a PhoneME BUG or 1.6 for an OpenJDK BUG.  " +
-					"Please modify your project's execution environment settings.");
+			showError("Compiler target platform must be 1.4 for a PhoneME BUG or 1.6 for an OpenJDK BUG.  " + "Please modify your project's execution environment settings.");
 			return false;
 		}
 
@@ -70,15 +65,15 @@ public class BUGApplicationProjectValidator {
 			showError("The file META-INF/MANIFEST.MF does not exist. Please create one before uploading to BUGnet");
 			return false;
 		}
-		
+
 		// ensure that the manifest starts w/ Manifest-Version:
 		InputStream is = manifest.getContents();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		try {
 			String line = reader.readLine();
 			if (line == null || line.length() == 0 || !line.startsWith("Manifest-Version")) {
-				showError("The file META-INF/MANIFEST.MF is missing the Manifest-Version. " + 
-						"Add 'Manifest-Version: 1.0' (without the quotes) as the first line of META-INF/MANIFEST.MF");
+				showError("The file META-INF/MANIFEST.MF is missing the Manifest-Version. "
+						+ "Add 'Manifest-Version: 1.0' (without the quotes) as the first line of META-INF/MANIFEST.MF");
 				return false;
 			}
 		} catch (IOException e) {

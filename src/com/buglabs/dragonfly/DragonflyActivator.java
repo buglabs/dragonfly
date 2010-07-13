@@ -34,12 +34,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import com.buglabs.dragonfly.bug.kernel.BugKernel;
 import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.model.Bug;
 import com.buglabs.dragonfly.model.IModelChangeListener;
 import com.buglabs.dragonfly.model.IModelContainer;
 import com.buglabs.dragonfly.model.MyLibraryNode;
+import com.buglabs.dragonfly.simulator.Activator;
 import com.buglabs.dragonfly.util.UIUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -54,8 +54,6 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 
 	private List modelListeners;
 
-	private List authenticationListeners;
-
 	public File jarFolder;
 
 	private BundleContext context;
@@ -66,7 +64,7 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	public static final String ROOT_BUGNET_URL = "http://api.buglabs.net";
 
 	public static final String PREF_SERVER_NAME = "PREF_SERVER_NAME";
-	
+
 	public static final String PREF_PROTOCOL = "PREF_PROTOCOL";
 
 	public static final String PREF_BUGNET_NUM_OF_APPS = "PREF_BUGNET_NUM_OF_APPS";
@@ -80,25 +78,21 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	public static final String PROJ_LIBRARY_NAME = "My Library";
 
 	public static final String PREF_DEFAULT_BUGPORT = "PREF_DEFAULT_BUGPORT";
-	
+
 	public static final int HTTPS_PORT = 443;
-	
+
 	public static final String HTTP = "http://";
-	
+
 	public static final String HTTPS = "https://";
 
 	public static final String DEFAULT_PROTOCOL = "DEFAULT_PROTOCOL";
-	
+
 	public static final String VIRTUAL_BUG = "Virtual BUG";
-	
-	private String protocol = "";
 
 	// The shared instance
 	private static DragonflyActivator plugin;
 
 	private static AuthenticationData authData;
-
-	private IProject myLibraryProject;
 
 	private ResourceBundle resourceBundle;
 
@@ -111,11 +105,9 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 		authData = new AuthenticationData();
 		try {
 			resourceBundle = ResourceBundle.getBundle("com.buglabs.dragonfly.pluginProperties"); //$NON-NLS-1$
-			protocol = DragonflyActivator.getString("DEFAULT_PROTOCOL");
 		} catch (MissingResourceException e) {
 			UIUtils.handleNonvisualError("Unable to load resource file", e);
 			resourceBundle = null;
-			protocol = HTTPS;
 		}
 	}
 
@@ -248,15 +240,15 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 		getPluginPreferences().setValue(PREF_BUGNET_USER, username);
 		getPluginPreferences().setValue(PREF_BUGNET_PWD, pwd);
 	}
-	
+
 	public void setAuthDataFromPrefs() {
 		authData.setUsername(getPluginPreferences().getString(PREF_BUGNET_USER));
-		authData.setPassword(getPluginPreferences().getString(PREF_BUGNET_PWD));	
+		authData.setPassword(getPluginPreferences().getString(PREF_BUGNET_PWD));
 	}
 
 	public String getBugKernelLocation() {
 		try {
-			return BugKernel.getDefault().getBugKernelLocation();
+			return Activator.getDefault().getBUGBundleLocation();
 		} catch (Exception e) {
 			UIUtils.handleVisualError("Unable to determine location of BUG libraries.", e);
 		}
@@ -310,33 +302,15 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public List getBugKernelJars() {
+	public List getBUGOSGiJars() {
 		try {
-			return BugKernel.getDefault().getBugKernelJars();
+			return Activator.getDefault().getBUGOSGiJars();
 		} catch (Exception e) {
 			UIUtils.handleNonvisualError("Unable to retrieve BUG libraries.", e);
 		}
 
 		return new ArrayList(0);
 	}
-	
-	/*
-
-	public synchronized void addBUGnetAuthenticationListener(IBUGnetAuthenticationListener listener) {
-		if (authenticationListeners == null) {
-			authenticationListeners = new ArrayList();
-		}
-
-		if (!authenticationListeners.contains(listener)) {
-			authenticationListeners.add(listener);
-		}
-	}
-
-	public List getBUGnetAuthenticationLIsteners() {
-		return authenticationListeners;
-	}
-	
-	*/
 
 	/**
 	 * @return http port number defined in preferences
@@ -368,13 +342,14 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	public boolean isVirtualBugRemovedByTerminate() {
 		return isVirtualBugRemovedByTerminate;
 	}
-	
-	public void setVirtualBugRemovedByTerminate(boolean b){
+
+	public void setVirtualBugRemovedByTerminate(boolean b) {
 		isVirtualBugRemovedByTerminate = b;
 	}
 
 	/**
 	 * Returns current protocol either http or https
+	 * 
 	 * @return current protocol
 	 */
 	/*
@@ -382,9 +357,10 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 		return protocol;
 	}
 	*/
-	
+
 	/**
 	 * Sets current protocol
+	 * 
 	 * @param protocol
 	 */
 	/*
@@ -392,7 +368,7 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 		this.protocol = protocol;
 	}
 	*/
-	
+
 	/**
 	 * Resets protocol to https
 	 */

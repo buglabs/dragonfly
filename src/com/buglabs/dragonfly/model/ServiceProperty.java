@@ -4,21 +4,19 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Very simple bucket for key value pairs representing
- * properties of an osgi service
+ * Very simple bucket for key value pairs representing properties of an osgi
+ * service
  * 
  * A list of these guys is sortable
  * 
  * @author brian
- *
+ * 
  */
 public class ServiceProperty implements Comparable<ServiceProperty> {
 	private String key;
 	private Set<String> values;
-	
-	
-	public ServiceProperty(
-			String key, Set<String> values) {
+
+	public ServiceProperty(String key, Set<String> values) {
 		this.key = key;
 		this.values = values;
 	}
@@ -40,19 +38,18 @@ public class ServiceProperty implements Comparable<ServiceProperty> {
 	public void addValue(String value) {
 		values.add(value);
 	}
-	
+
 	public void addValues(Set<String> values) {
 		this.values.addAll(values);
 	}
-		
+
 	public int compareTo(ServiceProperty o) {
 		return key.compareTo(o.getKey());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof ServiceProperty && 
-			this.compareTo((ServiceProperty) obj) == 0;
+		return obj instanceof ServiceProperty && this.compareTo((ServiceProperty) obj) == 0;
 	}
 
 	@Override

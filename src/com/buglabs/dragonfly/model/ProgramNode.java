@@ -72,8 +72,7 @@ public class ProgramNode extends BaseNode {
 			addedProperties = true;
 		}
 
-		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList
-				.size()]);
+		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList.size()]);
 
 		return ipd;
 	}

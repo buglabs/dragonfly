@@ -28,80 +28,80 @@ import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
- * This singleton class manages the BUG connections.
- * Through this class the sdk knows what BUGs are connected.
- * It keeps a combination of avahi/mDNS connections (DiscoveredBugConnection),
- *  Virtual Bug Connections (VirtualBUGConnection), 
- *  and manually created connections (StaticBugConnection).
- *  
- *  get a collection of connected bugs:
- *  	BugConnectionManager.getInstance().getBugConnections()
- *  
- *  It is important to note that the underlying ITreeNode object, which stores
- *  BugConnectionS, is not thread safe.  All access should be synchronized against
- *  the singleton object.
- *  
- *  NOTE: In nearly every case the logic of modifying bug_connections_root has been implemented
- *  in a synchronized method in this class, so use those synchronized methods. If you make
- *  modifications to this class be careful of the synchronized methods -- don't call synchronized
- *  methods from other synchronized methods in this class
+ * This singleton class manages the BUG connections. Through this class the sdk
+ * knows what BUGs are connected. It keeps a combination of avahi/mDNS
+ * connections (DiscoveredBugConnection), Virtual Bug Connections
+ * (VirtualBUGConnection), and manually created connections
+ * (StaticBugConnection).
+ * 
+ * get a collection of connected bugs:
+ * BugConnectionManager.getInstance().getBugConnections()
+ * 
+ * It is important to note that the underlying ITreeNode object, which stores
+ * BugConnectionS, is not thread safe. All access should be synchronized against
+ * the singleton object.
+ * 
+ * NOTE: In nearly every case the logic of modifying bug_connections_root has
+ * been implemented in a synchronized method in this class, so use those
+ * synchronized methods. If you make modifications to this class be careful of
+ * the synchronized methods -- don't call synchronized methods from other
+ * synchronized methods in this class
  * 
  * @author bballantine
- *
+ * 
  */
 public class BugConnectionManager {
-	
-	private static final String BUGS_ROOT_NAME 	= "Connected Bugs Root";
-	private static final String SERVICE_TYPE 	= "_bugdevice._tcp.local.";
-	private static final String PROTOCOL 		= "http://";
+
+	private static final String BUGS_ROOT_NAME = "Connected Bugs Root";
+	private static final String SERVICE_TYPE = "_bugdevice._tcp.local.";
+	private static final String PROTOCOL = "http://";
 	private static final String VIRTUAL_BUG_URL = PROTOCOL + "localhost";
-	private static final String USB_BUG_NAME	= "USB BUG";
-	private static final String USB_BUG_IP		= "10.10.10.10";
-	
-	public static final String REFRESH_BUG 		= "refresh_bug";
-	public static final String REMOVE_BUG 		= "remove_bug";
-	public static final String ADD_BUG 			= "add_bug";	
-	
+	private static final String USB_BUG_NAME = "USB BUG";
+	private static final String USB_BUG_IP = "10.10.10.10";
+
+	public static final String REFRESH_BUG = "refresh_bug";
+	public static final String REMOVE_BUG = "remove_bug";
+	public static final String ADD_BUG = "add_bug";
+
 	private ITreeNode bug_connections_root;
 	// this lock is only for creation of the connected bugs_root,
 	// used in getBugConnectionsRoot()
 	private Object root_creation_lock = new Object();
 	private JmDNS jmdns;
 	private ServiceListener listener;
-	
+
 	/**
-	 *  keep track of singleton instance
+	 * keep track of singleton instance
 	 */
 	private static BugConnectionManager _instance;
 
 	/**
-	 * return the BugConnectionManager instance or 
-	 * create and init a new one if it doesn't yet exist
+	 * return the BugConnectionManager instance or create and init a new one if
+	 * it doesn't yet exist
 	 * 
 	 * @return
 	 */
 	public static BugConnectionManager getInstance() {
 		if (_instance == null) {
-			synchronized(BugConnectionManager.class) {
+			synchronized (BugConnectionManager.class) {
 				if (_instance == null) {
 					_instance = new BugConnectionManager();
 				}
 			}
 		}
 		return _instance;
-	}	
-	
+	}
+
 	/**
-	 * private constructor to protect singleton
-	 * initializes the the jmdns object which helps manage avahi services
+	 * private constructor to protect singleton initializes the the jmdns object
+	 * which helps manage avahi services
 	 */
 	private BugConnectionManager() {
 		initialize();
 	}
 
 	/**
-	 * Do all the work to create the jmdns object and add
-	 * the service listener
+	 * Do all the work to create the jmdns object and add the service listener
 	 */
 	private void initialize() {
 		// jmdns is our main connection
@@ -110,36 +110,37 @@ public class BugConnectionManager {
 		} catch (IOException e) {
 			UIUtils.handleNonvisualWarning("Unable to create JmDNS instance.", e);
 		}
-		if (jmdns == null) return;
+		if (jmdns == null)
+			return;
 		listener = new BugDeviceServiceListener();
 		jmdns.addServiceListener(SERVICE_TYPE, listener);
-		
+
 		// try to get USB BUG
 		new Thread() {
 			public void run() {
 				StaticBugConnection usbBug = null;
 				List<Object> programs = null;
 				try {
-					usbBug = new StaticBugConnection(
-							USB_BUG_NAME, new URL(PROTOCOL + USB_BUG_IP));
+					usbBug = new StaticBugConnection(USB_BUG_NAME, new URL(PROTOCOL + USB_BUG_IP));
 					programs = BugWSHelper.getPrograms(usbBug.getProgramURL());
 				} catch (Exception e) {
-					UIUtils.handleNonvisualError("Unable to connect to USB BUG.",e);
+					UIUtils.handleNonvisualError("Unable to connect to USB BUG.", e);
 					return;
 				}
-				if (programs == null) return;
+				if (programs == null)
+					return;
 				addBugConnection(usbBug);
 			};
-		}.start();		
-	}	
-	
+		}.start();
+	}
+
 	/**
-	 * completely reset the BugConnectionManager by
-	 * 	removing the service listener, removing the discovered
-	 * 	bugs and then re-creating everything.
+	 * completely reset the BugConnectionManager by removing the service
+	 * listener, removing the discovered bugs and then re-creating everything.
 	 */
 	public void reset() {
-		if (jmdns == null) return;
+		if (jmdns == null)
+			return;
 		if (listener != null)
 			jmdns.removeServiceListener(SERVICE_TYPE, listener);
 		// store all non-discovered bugs
@@ -148,13 +149,13 @@ public class BugConnectionManager {
 		initialize();
 		// add the non-discoverd bugs back
 		for (IModelNode bug : staticBugs) {
-			addBugConnection((BugConnection)bug);
+			addBugConnection((BugConnection) bug);
 		}
 	}
-	
+
 	/**
-	 * Get's the static bug connections, 
-	 * 	i.e. all connections except discovered connections
+	 * Get's the static bug connections, i.e. all connections except discovered
+	 * connections
 	 * 
 	 * @return
 	 */
@@ -167,10 +168,10 @@ public class BugConnectionManager {
 		}
 		return staticBugs;
 	}
-	
+
 	/**
-	 * Return current connections as the root ITreeNode
-	 * This is used in the jface viewer to display connected bugs
+	 * Return current connections as the root ITreeNode This is used in the
+	 * jface viewer to display connected bugs
 	 * 
 	 * @return
 	 */
@@ -184,7 +185,7 @@ public class BugConnectionManager {
 		}
 		return bug_connections_root;
 	}
-	
+
 	/**
 	 * returns bug connections as a Collection of IModelNodeS
 	 * 
@@ -193,13 +194,13 @@ public class BugConnectionManager {
 	public Collection<IModelNode> getBugConnections() {
 		return getBugConnectionsRoot().getChildren();
 	}
-	
+
 	/**
-	* Returns a specific bug connection based on its name
-	* 
-	* @param connectionName
-	* @return
-	*/
+	 * Returns a specific bug connection based on its name
+	 * 
+	 * @param connectionName
+	 * @return
+	 */
 	public synchronized BugConnection getBugConnection(String name) {
 		Collection<IModelNode> chillins = getBugConnections();
 		for (IModelNode child : chillins) {
@@ -208,26 +209,25 @@ public class BugConnectionManager {
 		}
 		return null;
 	}
-	 
+
 	/**
-	* Returns a specific bug connection based on its name
-	* 
-	* @param connectionName
-	* @return
-	*/
+	 * Returns a specific bug connection based on its name
+	 * 
+	 * @param connectionName
+	 * @return
+	 */
 	public synchronized BugConnection getBugConnectionByIP(String ipaddress) {
 		Collection<IModelNode> chillins = getBugConnections();
 		for (IModelNode child : chillins) {
-			if (child instanceof BugConnection && 
-					((BugConnection) child).getUrl().getHost().equals(ipaddress))
+			if (child instanceof BugConnection && ((BugConnection) child).getUrl().getHost().equals(ipaddress))
 				return (BugConnection) child;
 		}
 		return null;
-	}	
-	
+	}
+
 	/**
-	 * Adds a new bug connection to the tracked bugs and fires a
-	 *  bug connection change event
+	 * Adds a new bug connection to the tracked bugs and fires a bug connection
+	 * change event
 	 * 
 	 * @param connectedBug
 	 */
@@ -238,8 +238,8 @@ public class BugConnectionManager {
 		} catch (NodeNotUniqueException e) {
 			UIUtils.handleNonvisualError("Bug already exists.", e);
 		}
-	 }
-	
+	}
+
 	/**
 	 * fires ModelChangeEvent for the BUG removal
 	 * 
@@ -247,72 +247,72 @@ public class BugConnectionManager {
 	 * @param element
 	 */
 	public void fireBugRemovedEvent(Object source, IModelNode element) {
-		if (DragonflyActivator.getDefault() == null) return;
-		DragonflyActivator.getDefault().fireModelChangeEvent(
-				new PropertyChangeEvent(source, REMOVE_BUG, null, element));		 
+		if (DragonflyActivator.getDefault() == null)
+			return;
+		DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(source, REMOVE_BUG, null, element));
 	}
-	
+
 	/**
 	 * fires ModelChangeEvent for adding a BUG
-	 *  
+	 * 
 	 * @param source
 	 * @param element
 	 */
 	public void fireBugAddedEvent(Object source, IModelNode element) {
-		if (DragonflyActivator.getDefault() == null) return;
-		DragonflyActivator.getDefault().fireModelChangeEvent(
-				new PropertyChangeEvent(source, ADD_BUG, null, element));
+		if (DragonflyActivator.getDefault() == null)
+			return;
+		DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(source, ADD_BUG, null, element));
 	}
-	
+
 	/**
 	 * fires ModelChangeEvent for refreshing a BUG
-	 *  
+	 * 
 	 * @param source
 	 * @param element
 	 */
 	public void fireBugRefreshEvent(Object source, IModelNode element) {
-		if (DragonflyActivator.getDefault() == null) return;
-		DragonflyActivator.getDefault().fireModelChangeEvent(
-				new PropertyChangeEvent(source, REFRESH_BUG, null, element));
+		if (DragonflyActivator.getDefault() == null)
+			return;
+		DragonflyActivator.getDefault().fireModelChangeEvent(new PropertyChangeEvent(source, REFRESH_BUG, null, element));
 	}
-	
+
 	/**
 	 * 
 	 * @param name
 	 * @return
 	 */
 	public boolean sameNameConnected(String name) {
-    	if (getBugConnection(name) == null)
-    			return false;
-    	else
-    		return true;
-	}	
-	
+		if (getBugConnection(name) == null)
+			return false;
+		else
+			return true;
+	}
+
 	/**
 	 * 
 	 * @param event
 	 * @return
 	 */
 	public boolean isConnected(ServiceInfo info) {
-		if (info == null) return false;
-		return (getBugConnectionByIP(
-				info.getAddress().getHostAddress()) != null);
+		if (info == null)
+			return false;
+		return (getBugConnectionByIP(info.getAddress().getHostAddress()) != null);
 	}
-	
+
 	/**
-	 * Special method to handle adding a new virtual BUG 
+	 * Special method to handle adding a new virtual BUG
 	 */
 	public void addNewVirtualBugConnection() {
 		try {
-			addBugConnection(new VirtualBUGConnection(DragonflyActivator.VIRTUAL_BUG, 
-					new URL(VIRTUAL_BUG_URL + ":" + DragonflyActivator.getDefault().getHttpPort())));
+			addBugConnection(new VirtualBUGConnection(DragonflyActivator.VIRTUAL_BUG, new URL(VIRTUAL_BUG_URL + ":" + DragonflyActivator.getDefault().getHttpPort())));
 		} catch (MalformedURLException e) {
 			UIUtils.handleNonvisualError("Unable to create Virtual Bug Connection", e);
 		}
 	}
-	
+
 	/**
 	 * Special method to handle removing the Virtual BUG
+	 * 
 	 * @return
 	 */
 	public synchronized boolean removeVirtualBugConnection() {
@@ -326,8 +326,7 @@ public class BugConnectionManager {
 		}
 		return false;
 	}
-		
-	
+
 	/**
 	 * Iterate through all the Bugs in the model and run a refresh action.
 	 * 
@@ -340,7 +339,7 @@ public class BugConnectionManager {
 			fireBugRefreshEvent(this, child);
 		}
 	}
-	
+
 	/**
 	 * remove a list of bug connections
 	 * 
@@ -352,7 +351,7 @@ public class BugConnectionManager {
 			fireBugRemovedEvent(this, connection);
 		}
 	}
-	
+
 	/**
 	 * remove a bug connection
 	 * 
@@ -362,79 +361,79 @@ public class BugConnectionManager {
 		getBugConnections().remove(connection);
 		fireBugRemovedEvent(this, connection);
 	}
-	
+
 	/**
 	 * remove all the existing bug connections
 	 */
 	public synchronized void clearAllBugConnections() {
 		getBugConnections().clear();
 	}
-	
+
 	/**
-	 *  call this from plugin shutdown
+	 * call this from plugin shutdown
 	 */
 	public synchronized void destroy() {
 		jmdns.close();
 		bug_connections_root.getChildren().clear();
 	}
-	
+
 	/**
-	 * This listens for mDNS events and handles the adding and removal
-	 * of BUGs based on these events.
+	 * This listens for mDNS events and handles the adding and removal of BUGs
+	 * based on these events.
 	 * 
 	 * @author bballantine
-	 *
+	 * 
 	 */
 	private class BugDeviceServiceListener implements ServiceListener {
 
 		/**
-		 * When service is added, kick off request for service info (a request to resolve service)
-		 *  when service is resolved, serviceResolved event will get called
+		 * When service is added, kick off request for service info (a request
+		 * to resolve service) when service is resolved, serviceResolved event
+		 * will get called
 		 */
 		public void serviceAdded(final ServiceEvent event) {
-			UIUtils.log(new Status(Status.INFO, 
-					DragonflyActivator.PLUGIN_ID, "BUG Device Added - " + event.getName()));
+			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "BUG Device Added - " + event.getName()));
 			new Thread(new Runnable() {
 				public void run() {
-					event.getDNS().requestServiceInfo(
-							event.getType(), event.getName());
+					event.getDNS().requestServiceInfo(event.getType(), event.getName());
 				}
 			}).start();
-        }
-		
+		}
+
 		/**
 		 * The service is removed, remove from list and send event
 		 */
-        public void serviceRemoved(ServiceEvent event) {
-        	UIUtils.log(new Status(Status.INFO, 
-        			DragonflyActivator.PLUGIN_ID, "Bug Device Removed - " + event.getName()));
-        	IModelNode bug = getBugConnection(event.getName());
-        	if (bug == null) return;
-        	
-        	if (bug instanceof DiscoveredBugConnection) {
-        		removeBugConnection((BugConnection)bug);
-        	}
-        }
-        
-        /**
-         *  The service is resolved, add to list and send event
-         *  
-         *  TODO - remove some of logging
-         */
-        public void serviceResolved(final ServiceEvent event) {
-        	if (event.getInfo() == null) return;
-        	
-        	UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
-        			"Bug Device Resolved - " + event.getName() + " " + event.getInfo().getHostAddress()));
-        	
-        	URL bugUrl = null;
+		public void serviceRemoved(ServiceEvent event) {
+			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug Device Removed - " + event.getName()));
+			IModelNode bug = getBugConnection(event.getName());
+			if (bug == null)
+				return;
+
+			if (bug instanceof DiscoveredBugConnection) {
+				removeBugConnection((BugConnection) bug);
+			}
+		}
+
+		/**
+		 * The service is resolved, add to list and send event
+		 * 
+		 * TODO - remove some of logging
+		 */
+		public void serviceResolved(final ServiceEvent event) {
+			if (event.getInfo() == null)
+				return;
+
+			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug Device Resolved - " + event.getName() + " " + event.getInfo().getHostAddress()));
+
+			URL bugUrl = null;
 			try {
 				bugUrl = new URL(PROTOCOL + event.getInfo().getAddress().getHostAddress());
 			} catch (MalformedURLException e) {
 				UIUtils.handleNonvisualWarning("Unable to get url of connected BUG.", e);
 			}
-			if (bugUrl == null) return;
-			
+			if (bugUrl == null)
+				return;
+
 			BugConnection bug = null;
 			// if bug w/ same IP address get it
 			if (isConnected(event.getInfo())) {
@@ -443,16 +442,14 @@ public class BugConnectionManager {
 				if (bug instanceof DiscoveredBugConnection) {
 					bug.setName(event.getName());
 				}
-				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
-						"Bug w/ same ip as " + event.getName() + " exists: " + bug.getName()));
+				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug w/ same ip as " + event.getName() + " exists: " + bug.getName()));
 			}
 			// else if bug w/ same name get it and set IP address
 			else if (sameNameConnected(event.getName())) {
 				bug = getBugConnection(event.getName());
 				// set IP address
 				bug.setUrl(bugUrl);
-				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
-						"Bug w/ same name as " + event.getName() + " exists, ip: " + bugUrl.getHost()));				
+				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug w/ same name as " + event.getName() + " exists, ip: " + bugUrl.getHost()));
 			}
 			// finally it's brand new so create it and add it
 			else {
@@ -464,6 +461,6 @@ public class BugConnectionManager {
 			if (bug != null)
 				fireBugAddedEvent(this, bug);
 
-        }        
+		}
 	}
 }

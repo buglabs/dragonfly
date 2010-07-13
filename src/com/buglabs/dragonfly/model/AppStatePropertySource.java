@@ -16,8 +16,9 @@ import com.buglabs.util.XmlNode;
 
 /**
  * Complex property of application state
+ * 
  * @author akravets
- *
+ * 
  */
 public class AppStatePropertySource implements IPropertySource {
 
@@ -41,9 +42,9 @@ public class AppStatePropertySource implements IPropertySource {
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors = new IPropertyDescriptor[appStateMap.size()];
 		int cnt = 0;
-		for(Iterator i = appStateMap.keySet().iterator(); i.hasNext();){
+		for (Iterator i = appStateMap.keySet().iterator(); i.hasNext();) {
 			DescriptorDefinition dd = (DescriptorDefinition) appStateMap.get(i.next());
-			descriptors[cnt] = dd.getDescriptor() ;
+			descriptors[cnt] = dd.getDescriptor();
 			cnt++;
 		}
 		return descriptors;
@@ -52,11 +53,11 @@ public class AppStatePropertySource implements IPropertySource {
 	public Object getPropertyValue(Object id) {
 		DescriptorDefinition dd = (DescriptorDefinition) appStateMap.get(id);
 		int value = Integer.parseInt(dd.getValue());
-		switch(value){
-			case Bundle.ACTIVE:
-				return new Integer(0);
-			case Bundle.UNINSTALLED:
-				return new Integer(1);
+		switch (value) {
+		case Bundle.ACTIVE:
+			return new Integer(0);
+		case Bundle.UNINSTALLED:
+			return new Integer(1);
 		}
 		return new Integer(1);
 	}
@@ -76,14 +77,14 @@ public class AppStatePropertySource implements IPropertySource {
 		try {
 			XmlNode node = new XmlNode("update");
 			node.addAttribute("type", BugConnection.PROPERTY_TYPE_APP_STATE);
-			
+
 			XmlNode prop = new XmlNode("property");
 			prop.addAttribute("pid", "com.buglabs.bug.program.UserAppManager");
 			prop.addAttribute("applicationName", id.toString());
-			
+
 			String state = BugConnection.APPLICATION_STATE[Integer.parseInt(value.toString())];
 			prop.addAttribute("newValue", bundleStateDef.get(state).toString());
-			
+
 			node.addChildElement(prop);
 			BugWSHelper.setConfigurationProperty(bug.getConfigAdminURL(), node.toString());
 		} catch (MalformedURLException e) {

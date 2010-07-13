@@ -15,15 +15,14 @@ import java.net.URL;
  * default connection provider used by HTTPRequest if none is provided
  * 
  * @author Brian
- *
+ * 
  */
 public class DefaultConnectionProvider implements IConnectionProvider {
 
 	public HttpURLConnection getConnection(String urlStr) throws IOException {
 		URL url = new URL(urlStr);
-		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-		return connection;			
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		return connection;
 	}
-	
-	
+
 }

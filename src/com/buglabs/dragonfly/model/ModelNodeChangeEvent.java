@@ -31,9 +31,9 @@ public class ModelNodeChangeEvent extends PropertyChangeEvent {
 	public ModelNodeChangeEvent(Object source, IModelNode changedNode) {
 		super(source, null, changedNode, null);
 	}
-	
-	public ModelNodeChangeEvent(Object source, String propertyName, IModelNode changeNode){
-		super(source,propertyName,changeNode,changeNode);
+
+	public ModelNodeChangeEvent(Object source, String propertyName, IModelNode changeNode) {
+		super(source, propertyName, changeNode, changeNode);
 	}
 
 	/**

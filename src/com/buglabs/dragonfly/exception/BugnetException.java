@@ -13,10 +13,11 @@ import java.io.IOException;
  * Generic BugnetException, extend this if you want a new one.
  * 
  * @author Brian
- *
+ * 
  */
 public class BugnetException extends IOException {
 	private static final long serialVersionUID = -4526324236776240815L;
+
 	public BugnetException(String error) {
 		super(error);
 	}

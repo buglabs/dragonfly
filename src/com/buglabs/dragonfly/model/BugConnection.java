@@ -35,31 +35,31 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 	private static final String URL_PROPERTY_DESCTIPTION = "URL_PROPERTY_DESCTIPTION";
 
 	private Map configProperty;
-	
+
 	private Map appStateMap;
 
 	private HashMap bundleStateDef;
 
 	private AppStatePropertySource appStateProperty;
 
-	private static final String[] MODULE_STATE = {"true","false"};
-	
-	public static final String[] APPLICATION_STATE = {"ACTIVE","UNINSTALLED"}; 
-	
+	private static final String[] MODULE_STATE = { "true", "false" };
+
+	public static final String[] APPLICATION_STATE = { "ACTIVE", "UNINSTALLED" };
+
 	public static final String PROPERTY_TYPE_REGULAR = "PROPERTY_TYPE_REGULAR";
-	
+
 	public static final String PROPERTY_TYPE_APP_STATE = "PROPERTY_TYPE_APP_STATE";
 
 	public BugConnection(String name, URL url) {
 		super(name, url);
 		configProperty = new HashMap();
 		appStateMap = new HashMap();
-		appStateProperty = new AppStatePropertySource(appStateMap,this);
-		
+		appStateProperty = new AppStatePropertySource(appStateMap, this);
+
 		bundleStateDef = new HashMap();
-		bundleStateDef.put(new Integer(Bundle.ACTIVE),"ACTIVE");
-		bundleStateDef.put(new Integer(Bundle.UNINSTALLED),"UNINSTALLED");
-		bundleStateDef.put(new Integer(Bundle.STARTING),"STARTING");		
+		bundleStateDef.put(new Integer(Bundle.ACTIVE), "ACTIVE");
+		bundleStateDef.put(new Integer(Bundle.UNINSTALLED), "UNINSTALLED");
+		bundleStateDef.put(new Integer(Bundle.STARTING), "STARTING");
 	}
 
 	public IPropertyDescriptor[] getPropertyDescriptors() {
@@ -82,12 +82,12 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 			List list = prepareData(properties);
 
 			for (Iterator i = list.iterator(); i.hasNext();) {
-				Map propertyMap = ((Map)i.next());
-				for(Iterator j = propertyMap.keySet().iterator(); j.hasNext();){
+				Map propertyMap = ((Map) i.next());
+				for (Iterator j = propertyMap.keySet().iterator(); j.hasNext();) {
 					IPropertyDescriptor descriptor = (IPropertyDescriptor) j.next();
 					String id = (String) descriptor.getId();
 					propertyDescriptorList.add(descriptor);
-					configProperty.put(id, new DescriptorDefinition(id,descriptor,propertyMap.get(descriptor)));
+					configProperty.put(id, new DescriptorDefinition(id, descriptor, propertyMap.get(descriptor)));
 				}
 			}
 		} catch (MalformedURLException e) {
@@ -99,7 +99,7 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		}
 	}
 
-	private List prepareData(String xml) throws IOException{
+	private List prepareData(String xml) throws IOException {
 		XmlParser parser = new XmlParser();
 		List props = new ArrayList();
 
@@ -114,7 +114,7 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 			List children = e.getChildren();
 
 			for (Iterator j = children.iterator(); j.hasNext();) {
-				XmlNode property = (XmlNode)j.next();
+				XmlNode property = (XmlNode) j.next();
 
 				Map propertyMap = new HashMap();
 
@@ -123,31 +123,31 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 
 				// if configuration has a pid signature of PublicWSProvider.PACKAGE_ID then it's a property for a module's state. Prefix module name
 				// before the property name. This is a workaround for PropertySource's requirement of a property being unique.
-				if(configurationName.indexOf(PublicWSProvider.PACKAGE_ID) != -1 && name.equals("enabled")){
-					displayName = configurationName.substring(configurationName.lastIndexOf(".") + 1, configurationName.length()) + "-" +  name;
+				if (configurationName.indexOf(PublicWSProvider.PACKAGE_ID) != -1 && name.equals("enabled")) {
+					displayName = configurationName.substring(configurationName.lastIndexOf(".") + 1, configurationName.length()) + "-" + name;
 				}
 
 				PropertyDescriptor descriptor = null;
-				
+
 				// make all properties editable
-				descriptor = new TextPropertyDescriptor(displayName,displayName);
-				
+				descriptor = new TextPropertyDescriptor(displayName, displayName);
+
 				descriptor.setCategory(configurationName);
 
 				propertyMap.put(descriptor, property.getAttribute("value"));
 
 				props.add(propertyMap);
-				
-				if(name.equals("app.state")){
+
+				if (name.equals("app.state")) {
 					List applicationStates = property.getChildren();
 					appStateMap.clear();
 					for (Iterator k = applicationStates.iterator(); k.hasNext();) {
-						XmlNode appStateProperty = (XmlNode)k.next();
+						XmlNode appStateProperty = (XmlNode) k.next();
 						String appName = appStateProperty.getAttribute("appName");
 						String appState = appStateProperty.getAttribute("state");
-						ComboBoxPropertyDescriptor appDescriptor = new ComboBoxPropertyDescriptor(appName,appName,APPLICATION_STATE);
-						
-						appStateMap.put(appName, new DescriptorDefinition(appName,appDescriptor,appState));
+						ComboBoxPropertyDescriptor appDescriptor = new ComboBoxPropertyDescriptor(appName, appName, APPLICATION_STATE);
+
+						appStateMap.put(appName, new DescriptorDefinition(appName, appDescriptor, appState));
 					}
 				}
 			}
@@ -164,47 +164,45 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 
 		if (id.equals(URL_PROPERTY_DESCTIPTION)) {
 			return getUrl();
-		}
-		else if(id.equals(PROP_NAME)){
+		} else if (id.equals(PROP_NAME)) {
 			return getName();
 		}
-		
+
 		val = getConfigurationValue(id);
-		
+
 		if (val == null) {
 			val = new String("[null]");
 		}
-		
+
 		return val;
 	}
 
 	private Object getConfigurationValue(Object id) {
-		for(Iterator i = configProperty.keySet().iterator(); i.hasNext();){
+		for (Iterator i = configProperty.keySet().iterator(); i.hasNext();) {
 			Object key = i.next();
 			DescriptorDefinition def = (DescriptorDefinition) configProperty.get(key);
 			String value = def.getValue();
-			if(id.equals(key)){
-				if(((String)id).indexOf("enabled") != -1 || ((String)id).indexOf("Status Bar contribution") != -1){
-					if(value.equals("true")){
+			if (id.equals(key)) {
+				if (((String) id).indexOf("enabled") != -1 || ((String) id).indexOf("Status Bar contribution") != -1) {
+					if (value.equals("true")) {
 						return "0";
 					}
 					return "1";
-				}
-				else if(((String)id).indexOf("app.state") != -1){
+				} else if (((String) id).indexOf("app.state") != -1) {
 					return appStateProperty;
 				}
 			}
-			if(id.equals(key)){
+			if (id.equals(key)) {
 				return value;
 			}
 		}
 		return null;
 	}
 
-	public void setPropertyValue(Object id, Object value) {		
+	public void setPropertyValue(Object id, Object value) {
 		try {
-			if(!id.equals("app.state")){
-				setConfigurationValue(id,value);
+			if (!id.equals("app.state")) {
+				setConfigurationValue(id, value);
 			}
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -219,21 +217,22 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		DescriptorDefinition definition = (DescriptorDefinition) configProperty.get(id);
 		String category = definition.getDescriptor().getCategory();
 		// TODO: this is bad, needs to be refactored
-		if(category.indexOf("com.buglabs.service.ws") != -1 || category.equals("com.buglabs.bug.emulator.base.Activator") || category.equals("com.buglabs.bug.module.gps.Activator")){
+		if (category.indexOf("com.buglabs.service.ws") != -1 || category.equals("com.buglabs.bug.emulator.base.Activator")
+				|| category.equals("com.buglabs.bug.module.gps.Activator")) {
 			value = MODULE_STATE[Integer.parseInt(value.toString())];
 		}
-		
+
 		// payload for updating state of the module
 		XmlNode node = new XmlNode("update");
 		node.addAttribute("type", PROPERTY_TYPE_REGULAR);
-		
+
 		XmlNode prop = new XmlNode("property");
 		prop.addAttribute("pid", category);
 		prop.addAttribute("id", id.toString());
 		prop.addAttribute("newValue", value.toString());
-		
+
 		node.addChildElement(prop);
-		BugWSHelper.setConfigurationProperty(getConfigAdminURL(),node.toString());
+		BugWSHelper.setConfigurationProperty(getConfigAdminURL(), node.toString());
 	}
 
 	public boolean equals(Object o) {
@@ -277,7 +276,7 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		return null;
 	}
 
-	public String toString(){
+	public String toString() {
 		return getClass().getName() + "[" + getName() + ", " + getUrl() + "]";
 	}
 }

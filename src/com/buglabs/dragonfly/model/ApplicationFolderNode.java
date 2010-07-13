@@ -45,7 +45,7 @@ public class ApplicationFolderNode extends FolderNode {
 				UIUtils.handleNonvisualError("Unable to retrieve programs.", e);
 			} catch (Exception e) {
 				Throwable cause = e.getCause();
-				if(cause instanceof ConnectException)
+				if (cause instanceof ConnectException)
 					UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
 			}
 		}
@@ -60,21 +60,21 @@ public class ApplicationFolderNode extends FolderNode {
 
 		return super.hasChildren();
 	}
-	
+
 	/**
-	 * @return Bundles that are of type <code>BugBundleConstants.BUG_BUNDLE_APPLICATION</code>
+	 * @return Bundles that are of type
+	 *         <code>BugBundleConstants.BUG_BUNDLE_APPLICATION</code>
 	 */
-	public List getBugBundles(){
+	public List getBugBundles() {
 		List bugBundles = new ArrayList();
-		
+
 		Iterator iterator = getChildren().iterator();
-		
+
 		String bundleType;
-		while(iterator.hasNext()){
-			ProgramNode bundle = (ProgramNode)iterator.next();
+		while (iterator.hasNext()) {
+			ProgramNode bundle = (ProgramNode) iterator.next();
 			bundleType = bundle.getBundleType();
-			if(!bundleType.equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) &&
-					!bundleType.equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)){
+			if (!bundleType.equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) && !bundleType.equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)) {
 				continue;
 			}
 			bugBundles.add(bundle);

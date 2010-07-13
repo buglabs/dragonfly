@@ -28,14 +28,14 @@ public class BaseTreeNode extends BaseNode implements ITreeNode {
 	private ITreeNode parent;
 
 	public BaseTreeNode(String name) {
-		super(name);		
+		super(name);
 	}
 
 	public IModelNode addChild(IModelNode child) throws NodeNotUniqueException {
 		if (children == null) {
 			children = new ArrayList();
 		}
-		
+
 		if (children.contains(child)) {
 			throw new NodeNotUniqueException("A node with name " + child.getName() + " already exists at this level.");
 		}
@@ -70,7 +70,6 @@ public class BaseTreeNode extends BaseNode implements ITreeNode {
 			children = new ArrayList();
 		}
 
-		
 		if (childExists(child)) {
 			children.remove(child);
 			return child;
@@ -88,7 +87,7 @@ public class BaseTreeNode extends BaseNode implements ITreeNode {
 		if (children == null) {
 			children = new ArrayList();
 		}
-		
+
 		if (children.size() > 0) {
 			return true;
 		}

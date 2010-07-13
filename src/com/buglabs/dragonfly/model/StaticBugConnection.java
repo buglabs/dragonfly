@@ -16,8 +16,8 @@ public class StaticBugConnection extends BugConnection {
 		super(name, url);
 		defaultUrl = url.toString();
 	}
-	
-	public String getDefaultUrl(){
+
+	public String getDefaultUrl() {
 		return defaultUrl;
 	}
 

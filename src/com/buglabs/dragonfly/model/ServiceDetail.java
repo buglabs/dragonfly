@@ -1,11 +1,7 @@
 package com.buglabs.dragonfly.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * This is a container for Service Details It keeps some properties of a Service
@@ -37,10 +33,10 @@ public class ServiceDetail {
 			service_properties = new ArrayList<ServiceProperty>();
 		return service_properties;
 	}
-	
+
 	/**
-	 * Add a property keeping out duplicates 
-	 * (a duplicate has both key and value equal)
+	 * Add a property keeping out duplicates (a duplicate has both key and value
+	 * equal)
 	 * 
 	 * @param prop
 	 */
@@ -57,15 +53,14 @@ public class ServiceDetail {
 	public synchronized void addServiceProperties(List<ServiceProperty> properties) {
 		for (ServiceProperty p : properties) {
 			if (getServiceProperties().contains(p))
-				getServiceProperties().get(
-						getServiceProperties().indexOf(p)).addValues(p.getValues());
+				getServiceProperties().get(getServiceProperties().indexOf(p)).addValues(p.getValues());
 			else
 				getServiceProperties().add(p);
 		}
 	}
-	
+
 	public synchronized void clearServiceProperties() {
 		getServiceProperties().clear();
 	}
-	
+
 }

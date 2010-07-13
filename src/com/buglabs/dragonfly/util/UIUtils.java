@@ -423,8 +423,7 @@ public class UIUtils {
 	 * @param filterNames
 	 * @return text field
 	 */
-	public static Text createDyanamicFileField(final Composite parent, String label, final String[] filterExtensions,
-			final String[] filterNames) {
+	public static Text createDyanamicFileField(final Composite parent, String label, final String[] filterExtensions, final String[] filterNames) {
 		Composite c = new Composite(parent, SWT.NONE);
 		c.setLayout(new GridLayout(2, false));
 		GridData data = new GridData(GridData.FILL_HORIZONTAL);
@@ -684,17 +683,17 @@ public class UIUtils {
 
 		disp.syncExec(new Runnable() {
 			public void run() {
-				MessageDialog.openError(new Shell(disp), "An error has occurred.", msg
-						+ "\n\nPlease consult log file for additional details.");
+				MessageDialog.openError(new Shell(disp), "An error has occurred.", msg + "\n\nPlease consult log file for additional details.");
 			}
 		});
 	}
-	
+
 	/**
 	 * Displays information message to the user
+	 * 
 	 * @param message
 	 */
-	public static void giveVisualInformation(final String message){
+	public static void giveVisualInformation(final String message) {
 		final Display disp = PlatformUI.getWorkbench().getDisplay();
 		disp.syncExec(new Runnable() {
 			public void run() {
@@ -702,12 +701,13 @@ public class UIUtils {
 			}
 		});
 	}
-	
+
 	/**
 	 * Displays information message to the user
+	 * 
 	 * @param message
 	 */
-	public static void giveNonVisualInformation(final String message){
+	public static void giveNonVisualInformation(final String message) {
 		DragonflyActivator.getDefault().getLog().log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, message));
 	}
 
@@ -720,7 +720,7 @@ public class UIUtils {
 	public static void handleNonvisualError(String message, Exception e) {
 		DragonflyActivator.getDefault().getLog().log(new Status(Status.ERROR, DragonflyActivator.PLUGIN_ID, 0, message, e));
 	}
-	
+
 	/**
 	 * Log warning to the Eclipse log.
 	 * 
@@ -729,24 +729,24 @@ public class UIUtils {
 	 */
 	public static void handleNonvisualWarning(String message, Exception e) {
 		DragonflyActivator da = DragonflyActivator.getDefault();
-		
+
 		if (da == null) {
 			System.err.println(message);
 			System.err.println(e.toString());
 			return;
 		}
-		
+
 		ILog log = da.getLog();
-		
+
 		if (log == null) {
 			System.err.println(message);
 			System.err.println(e.toString());
 			return;
 		}
-		
+
 		log.log(new Status(Status.WARNING, DragonflyActivator.PLUGIN_ID, 0, message, e));
 	}
-	
+
 	/**
 	 * A simple abstraction of logging for use in the plug-in
 	 * 
@@ -771,13 +771,13 @@ public class UIUtils {
 			}
 		}
 	}
-	
-	public static String getStackTrace(Throwable t){
+
+	public static String getStackTrace(Throwable t) {
 		StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw, true);
-        t.printStackTrace(pw);
-        pw.flush();
-        sw.flush();
-        return sw.toString();
+		PrintWriter pw = new PrintWriter(sw, true);
+		t.printStackTrace(pw);
+		pw.flush();
+		sw.flush();
+		return sw.toString();
 	}
 }

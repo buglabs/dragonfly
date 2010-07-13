@@ -89,13 +89,11 @@ public class Base64 {
 													 * May be something funny
 													 * like EBCDIC
 													 */
-	{ (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D', (byte) 'E', (byte) 'F', (byte) 'G', (byte) 'H', (byte) 'I', (byte) 'J', (byte) 'K',
-			(byte) 'L', (byte) 'M', (byte) 'N', (byte) 'O', (byte) 'P', (byte) 'Q', (byte) 'R', (byte) 'S', (byte) 'T', (byte) 'U',
-			(byte) 'V', (byte) 'W', (byte) 'X', (byte) 'Y', (byte) 'Z', (byte) 'a', (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e',
-			(byte) 'f', (byte) 'g', (byte) 'h', (byte) 'i', (byte) 'j', (byte) 'k', (byte) 'l', (byte) 'm', (byte) 'n', (byte) 'o',
-			(byte) 'p', (byte) 'q', (byte) 'r', (byte) 's', (byte) 't', (byte) 'u', (byte) 'v', (byte) 'w', (byte) 'x', (byte) 'y',
-			(byte) 'z', (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4', (byte) '5', (byte) '6', (byte) '7', (byte) '8',
-			(byte) '9', (byte) '+', (byte) '/' };
+	{ (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D', (byte) 'E', (byte) 'F', (byte) 'G', (byte) 'H', (byte) 'I', (byte) 'J', (byte) 'K', (byte) 'L', (byte) 'M', (byte) 'N',
+			(byte) 'O', (byte) 'P', (byte) 'Q', (byte) 'R', (byte) 'S', (byte) 'T', (byte) 'U', (byte) 'V', (byte) 'W', (byte) 'X', (byte) 'Y', (byte) 'Z', (byte) 'a', (byte) 'b',
+			(byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f', (byte) 'g', (byte) 'h', (byte) 'i', (byte) 'j', (byte) 'k', (byte) 'l', (byte) 'm', (byte) 'n', (byte) 'o', (byte) 'p',
+			(byte) 'q', (byte) 'r', (byte) 's', (byte) 't', (byte) 'u', (byte) 'v', (byte) 'w', (byte) 'x', (byte) 'y', (byte) 'z', (byte) '0', (byte) '1', (byte) '2', (byte) '3',
+			(byte) '4', (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) '+', (byte) '/' };
 
 	/** Determine which ALPHABET to use. */
 	static {
@@ -174,8 +172,9 @@ public class Base64 {
 	 * Encodes up to the first three bytes of array <var>threeBytes</var> and
 	 * returns a four-byte array in Base64 notation. The actual number of
 	 * significant bytes in your array is given by <var>numSigBytes</var>. The
-	 * array <var>threeBytes</var> needs only be as big as <var>numSigBytes</var>.
-	 * Code can reuse a byte array by passing a four-byte array as <var>b4</var>.
+	 * array <var>threeBytes</var> needs only be as big as
+	 * <var>numSigBytes</var>. Code can reuse a byte array by passing a
+	 * four-byte array as <var>b4</var>.
 	 * 
 	 * @param b4
 	 *            A reusable byte array to reduce array instantiation
@@ -228,8 +227,7 @@ public class Base64 {
 		// We have to shift left 24 in order to flush out the 1's that appear
 		// when Java treats a value as negative that is cast from a byte to an
 		// int.
-		int inBuff = (numSigBytes > 0 ? ((source[srcOffset] << 24) >>> 8) : 0)
-				| (numSigBytes > 1 ? ((source[srcOffset + 1] << 24) >>> 16) : 0)
+		int inBuff = (numSigBytes > 0 ? ((source[srcOffset] << 24) >>> 8) : 0) | (numSigBytes > 1 ? ((source[srcOffset + 1] << 24) >>> 16) : 0)
 				| (numSigBytes > 2 ? ((source[srcOffset + 2] << 24) >>> 24) : 0);
 
 		switch (numSigBytes) {
@@ -582,8 +580,7 @@ public class Base64 {
 			// )
 			// | ( ( DECODABET[ source[ srcOffset + 1 ] ] << 24 ) >>> 12 )
 			// | ( ( DECODABET[ source[ srcOffset + 2 ] ] << 24 ) >>> 18 );
-			int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18) | ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12)
-					| ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6);
+			int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18) | ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12) | ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6);
 
 			destination[destOffset] = (byte) (outBuff >>> 16);
 			destination[destOffset + 1] = (byte) (outBuff >>> 8);
@@ -600,8 +597,8 @@ public class Base64 {
 				// | ( ( DECODABET[ source[ srcOffset + 1 ] ] << 24 ) >>> 12 )
 				// | ( ( DECODABET[ source[ srcOffset + 2 ] ] << 24 ) >>> 18 )
 				// | ( ( DECODABET[ source[ srcOffset + 3 ] ] << 24 ) >>> 24 );
-				int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18) | ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12)
-						| ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6) | ((DECODABET[source[srcOffset + 3]] & 0xFF));
+				int outBuff = ((DECODABET[source[srcOffset]] & 0xFF) << 18) | ((DECODABET[source[srcOffset + 1]] & 0xFF) << 12) | ((DECODABET[source[srcOffset + 2]] & 0xFF) << 6)
+						| ((DECODABET[source[srcOffset + 3]] & 0xFF));
 
 				destination[destOffset] = (byte) (outBuff >> 16);
 				destination[destOffset + 1] = (byte) (outBuff >> 8);
@@ -691,7 +688,7 @@ public class Base64 {
 		catch (java.io.UnsupportedEncodingException uee) {
 			bytes = s.getBytes();
 		} // end catch
-		// </change>
+			// </change>
 
 		// Decode
 		bytes = decode(bytes, 0, bytes.length);
@@ -953,8 +950,8 @@ public class Base64 {
 
 	/**
 	 * A {@link Base64.InputStream} will read data from another
-	 * <tt>java.io.InputStream</tt>, given in the constructor, and
-	 * encode/decode to/from Base64 notation on the fly.
+	 * <tt>java.io.InputStream</tt>, given in the constructor, and encode/decode
+	 * to/from Base64 notation on the fly.
 	 * 
 	 * @see Base64
 	 * @since 1.3
@@ -978,8 +975,7 @@ public class Base64 {
 		 * Constructs a {@link Base64.InputStream} in DECODE mode.
 		 * 
 		 * @param in
-		 *            the <tt>java.io.InputStream</tt> from which to read
-		 *            data.
+		 *            the <tt>java.io.InputStream</tt> from which to read data.
 		 * @since 1.3
 		 */
 		public InputStream(java.io.InputStream in) {
@@ -1004,8 +1000,7 @@ public class Base64 {
 		 * 
 		 * 
 		 * @param in
-		 *            the <tt>java.io.InputStream</tt> from which to read
-		 *            data.
+		 *            the <tt>java.io.InputStream</tt> from which to read data.
 		 * @param options
 		 *            Specified options
 		 * @see Base64#ENCODE

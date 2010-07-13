@@ -19,23 +19,24 @@ public class AuthenticationData extends BaseNode {
 	private String username;
 
 	private String password;
-	
+
 	public AuthenticationData() {
 		super("BUGnet Authentication Data");
 
 	}
 
 	/**
-	 *  if we're missing data return false
+	 * if we're missing data return false
 	 * 
 	 */
 	public boolean hasData() {
-		if (username == null || username.length() <= 0 ||
-				password == null || password.length() <= 1) {
+		if (username == null || username.length() <= 0 || password == null || password.length() <= 1) {
 			return false;
-		} else { return true; }
+		} else {
+			return true;
+		}
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -43,11 +44,11 @@ public class AuthenticationData extends BaseNode {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}

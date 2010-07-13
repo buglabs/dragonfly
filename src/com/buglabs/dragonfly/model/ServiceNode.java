@@ -37,8 +37,7 @@ abstract public class ServiceNode extends BaseNode {
 			propertyDescriptorList.add(new PropertyDescriptor(URL_DESCRIPTION, "Web Service URL"));
 			propertyAdded = true;
 		}
-		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList
-				.size()]);
+		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList.size()]);
 
 		return ipd;
 	}

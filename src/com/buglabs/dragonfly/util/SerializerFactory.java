@@ -21,8 +21,8 @@ public class SerializerFactory {
 	/**
 	 * Return a serializer.
 	 * 
-	 * @param formatType -
-	 *            "text" will return a plaintext serializer, otherwise XML.
+	 * @param formatType
+	 *            - "text" will return a plaintext serializer, otherwise XML.
 	 * @return
 	 */
 	public static ISerializer getSerializer(String formatType) {

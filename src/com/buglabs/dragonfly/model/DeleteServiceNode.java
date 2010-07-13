@@ -24,8 +24,7 @@ public class DeleteServiceNode extends ServiceNode {
 			propertyDescriptorList.add(new PropertyDescriptor(HTTP_PROPERTY_DESCRIPTION, "HTTP Operation"));
 			propertyAdded = true;
 		}
-		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList
-				.size()]);
+		IPropertyDescriptor[] ipd = (IPropertyDescriptor[]) propertyDescriptorList.toArray(new IPropertyDescriptor[propertyDescriptorList.size()]);
 
 		return ipd;
 	}

@@ -11,9 +11,6 @@ import java.rmi.dgc.VMID;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
-
-import javax.print.DocFlavor.SERVICE_FORMATTED;
 
 public class PackageImpl implements IPackage {
 
@@ -42,7 +39,7 @@ public class PackageImpl implements IPackage {
 	private String bundleType = "";
 
 	private ServiceDetail[] serviceDetails;
-	
+
 	public PackageImpl() {
 		author = new String();
 		created = Calendar.getInstance().getTime().toString();
@@ -213,8 +210,7 @@ public class PackageImpl implements IPackage {
 		return serviceDetails;
 	}
 
-	public void setServiceDetails(
-			ServiceDetail[] serviceDetails) {
+	public void setServiceDetails(ServiceDetail[] serviceDetails) {
 		this.serviceDetails = serviceDetails;
 	}
 }

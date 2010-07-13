@@ -18,6 +18,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
 import java.util.Enumeration;
+
 /**
  * A set of static helper classes to create BUGNet URLS. All URL creating should
  * be defined in this class.
@@ -67,7 +68,6 @@ public class URLUtils {
 		return nicIP;
 	}
 
-	
 	/**
 	 * 
 	 * Handles, generally, adding a property to the querystring of a URL.
@@ -82,12 +82,12 @@ public class URLUtils {
 		String urlStr = url.toString();
 		// if url does not contain ?, add it. Otherwise use &
 		String par = "&";
-		if(urlStr.indexOf("?") == -1)
+		if (urlStr.indexOf("?") == -1)
 			par = "?";
 		urlStr += par + key + "=" + value; //$NON-NLS-1$
 		return new URL(urlStr);
 	}
-	
+
 	/**
 	 * @param url
 	 * @return Returns data from the server with a given url
@@ -111,31 +111,33 @@ public class URLUtils {
 
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Reads data from specified stream
 	 * 
-	 *  bb - I added a "newline" character  (\n) on the append because, for some reason,
-	 *  	it was reading in line by line but not appending together the lines w/ a newline
+	 * bb - I added a "newline" character (\n) on the append because, for some
+	 * reason, it was reading in line by line but not appending together the
+	 * lines w/ a newline
 	 * 
-	 * @param stream - Stream from which data should be read
+	 * @param stream
+	 *            - Stream from which data should be read
 	 * @return Result from server response
 	 * @throws IOException
 	 */
 	public static String readFromStream(InputStream stream) throws IOException {
 		StringBuffer sb = null;
 		BufferedReader in = null;
-		
+
 		in = new BufferedReader(new InputStreamReader(stream));
-		
+
 		String line;
 		sb = new StringBuffer();
 		while ((line = in.readLine()) != null) {
 			sb.append(line + "\n");
 		}
-		
+
 		in.close();
-		
+
 		return sb.toString();
 	}
 }

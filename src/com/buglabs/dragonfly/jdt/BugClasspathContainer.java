@@ -23,7 +23,7 @@ public class BugClasspathContainer implements IClasspathContainer {
 	public static final String ID = "com.buglabs.dragonfly.jdt.BugClasspathContainer";
 
 	public IClasspathEntry[] getClasspathEntries() {
-		List libraries = DragonflyActivator.getDefault().getBugKernelJars();
+		List libraries = DragonflyActivator.getDefault().getBUGOSGiJars();
 
 		if (!libraries.isEmpty()) {
 			IClasspathEntry[] ceLibs = new IClasspathEntry[libraries.size()];

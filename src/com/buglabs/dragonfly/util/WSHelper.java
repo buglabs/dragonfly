@@ -150,16 +150,16 @@ public class WSHelper {
 	 */
 	protected static String post(URL url, InputStream inputStream) throws IOException {
 		URLConnection connection = url.openConnection();
-		connection.setDoInput( true );
-	    connection.setDoOutput( true );
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
 
-	    OutputStream stream = connection.getOutputStream();
-	    writeTo(stream, inputStream);
-	    stream.flush();
-	    stream.close();
-	    
-	    InputStream is = connection.getInputStream();
-	    BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+		OutputStream stream = connection.getOutputStream();
+		writeTo(stream, inputStream);
+		stream.flush();
+		stream.close();
+
+		InputStream is = connection.getInputStream();
+		BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 		String line, resp = new String("");
 		while ((line = rd.readLine()) != null) {
 			resp = resp + line + "\n";
@@ -169,19 +169,17 @@ public class WSHelper {
 
 		return resp;
 	}
-	
-	private static void writeTo(OutputStream outputStream, InputStream inputStream) throws IOException {
-        byte[] buffer = new byte[8 * 1024];
-        int count = 0;
-        do {
-            outputStream.write( buffer, 0, count );
-            count = inputStream.read( buffer, 0, buffer.length );
-        } while (count != -1);
 
-        inputStream.close();
-    }
-	
-	
+	private static void writeTo(OutputStream outputStream, InputStream inputStream) throws IOException {
+		byte[] buffer = new byte[8 * 1024];
+		int count = 0;
+		do {
+			outputStream.write(buffer, 0, count);
+			count = inputStream.read(buffer, 0, buffer.length);
+		} while (count != -1);
+
+		inputStream.close();
+	}
 
 	/**
 	 * Post contents of input stream to URL.
@@ -335,10 +333,10 @@ public class WSHelper {
 		HttpClient c = new HttpClient();
 		DeleteMethod delete = new DeleteMethod(url);
 		int response = c.executeMethod(delete);
-		
+
 		if (response >= 400)
 			throw new HttpException("Unable to complete delete operation with HTTP error code " + response + ".");
-		
+
 		return delete.getResponseBodyAsString();
 	}
 

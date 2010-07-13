@@ -20,22 +20,21 @@ import com.buglabs.util.Base64;
 
 /**
  * 
- * Helps BugnetWSHelper communicate w/ web service by setting up
- * header variables used for each connection, namely authentication
+ * Helps BugnetWSHelper communicate w/ web service by setting up header
+ * variables used for each connection, namely authentication
  * 
  * @author brian
- *
+ * 
  */
 public class BugnetConnectionProvider implements IConnectionProvider {
-	
+
 	String credentials = "";
 
-	
 	public BugnetConnectionProvider() {
 		AuthenticationData data = BugnetStateProvider.getInstance().getAuthenticationData();
 		setCredentials(data.getUsername(), data.getPassword());
 	}
-	
+
 	public BugnetConnectionProvider(String username, String password) {
 		setCredentials(username, password);
 	}
@@ -43,34 +42,35 @@ public class BugnetConnectionProvider implements IConnectionProvider {
 	public HttpURLConnection getConnection(String urlStr) throws IOException {
 		SSLUtils.verifyHost();
 		URL url = new URL(urlStr);
-		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		// Handle authentication retrieval from outside java URL framework
 		// so set default authenticator to one that just returns null
 		// TODO - move existing authentication stuff into custom authenticator
 		Authenticator.setDefault(new NullAuthenticator());
-		connection.setRequestProperty("Authorization", "Basic " + credentials);		
+		connection.setRequestProperty("Authorization", "Basic " + credentials);
 		return connection;
 	}
-	
+
 	private void setCredentials(String username, String password) {
 		String rawCreds = username + ":" + password;
-		credentials = Base64.encodeBytes(rawCreds.getBytes());		
+		credentials = Base64.encodeBytes(rawCreds.getBytes());
 	}
-	
+
 	/**
-	 * Set this authenticator to return null on getPasswordAuthentication()
-	 * This keeps the username password dialog from appearing from within the URL framework
+	 * Set this authenticator to return null on getPasswordAuthentication() This
+	 * keeps the username password dialog from appearing from within the URL
+	 * framework
 	 * 
-	 * TODO Rewrite authentication code to use a custom authenticator that shows a dialog.
-	 * 		This would be cleaner than what we're doing now
+	 * TODO Rewrite authentication code to use a custom authenticator that shows
+	 * a dialog. This would be cleaner than what we're doing now
 	 * 
 	 * @author brian
-	 *
+	 * 
 	 */
 	private class NullAuthenticator extends Authenticator {
 		protected PasswordAuthentication getPasswordAuthentication() {
 			return null;
 		}
 	}
-		
+
 }

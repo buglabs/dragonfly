@@ -19,8 +19,7 @@ public class BugClasspathContainerInitializer extends ClasspathContainerInitiali
 
 	public void initialize(IPath containerPath, IJavaProject project) throws CoreException {
 		BugClasspathContainer bugCC = new BugClasspathContainer();
-		JavaCore.setClasspathContainer(new Path(ID), new IJavaProject[] { project }, new IClasspathContainer[] { bugCC },
-				new NullProgressMonitor());
+		JavaCore.setClasspathContainer(new Path(ID), new IJavaProject[] { project }, new IClasspathContainer[] { bugCC }, new NullProgressMonitor());
 	}
 
 	public String getDescription(IPath containerPath, IJavaProject project) {

@@ -21,47 +21,50 @@ import com.buglabs.dragonfly.util.Base64;
  * 
  * 
  * @author Brian
- *
+ * 
  */
 public class HTTPRequest {
 	////////////////////////////////////////////////  HTTP REQUEST METHODS	
-	
+
 	private IConnectionProvider _connectionProvider;
-	
+
 	/**
 	 * constructor where client provides connectionProvider
 	 */
 	public HTTPRequest(IConnectionProvider connectionProvider) {
 		_connectionProvider = connectionProvider;
 	}
-	
+
 	/**
 	 * constructor that uses default connection provider
 	 */
 	public HTTPRequest() {
 		_connectionProvider = new DefaultConnectionProvider();
 	}
-	
-    /**
-     * Do an authenticated HTTP GET from url
-     * 
-     * @param url   String URL to connect to
-     * @return      HttpURLConnection ready with response data
-     */
+
+	/**
+	 * Do an authenticated HTTP GET from url
+	 * 
+	 * @param url
+	 *            String URL to connect to
+	 * @return HttpURLConnection ready with response data
+	 */
 	public HTTPResponse get(String url) throws IOException {
 		HttpURLConnection conn = _connectionProvider.getConnection(url);
 		conn.setDoInput(true);
 		conn.setDoOutput(false);
 		return connect(conn);
 	}
-	
-    /**
-     * Do an authenticated HTTP POST to url
-     * 
-     * @param url   String URL to connect to
-     * @param data  String data to post 
-     * @return      HttpURLConnection ready with response data
-     */
+
+	/**
+	 * Do an authenticated HTTP POST to url
+	 * 
+	 * @param url
+	 *            String URL to connect to
+	 * @param data
+	 *            String data to post
+	 * @return HttpURLConnection ready with response data
+	 */
 	public HTTPResponse post(String url, String data) throws IOException {
 		HttpURLConnection conn = _connectionProvider.getConnection(url);
 		conn.setDoOutput(true);
@@ -72,25 +75,29 @@ public class HTTPRequest {
 		return connect(conn);
 	}
 
-    /**
-     * Do an authenticated HTTP POST to url
-     * 
-     * @param url       String URL to connect to
-     * @param stream    InputStream data to post 
-     * @return          HttpURLConnection ready with response data
-     */
+	/**
+	 * Do an authenticated HTTP POST to url
+	 * 
+	 * @param url
+	 *            String URL to connect to
+	 * @param stream
+	 *            InputStream data to post
+	 * @return HttpURLConnection ready with response data
+	 */
 	public HTTPResponse post(String url, InputStream stream) throws IOException {
 		byte[] buff = streamToByteArray(stream);
 		String data = Base64.encodeBytes(buff);
 		return post(url, data);
-	}	
-	
+	}
+
 	/**
 	 * Do an authenticated HTTP PUT to url
 	 * 
-	 * @param url  String URL to connect to
-	 * @param data String data to post 
-	 * @return     HttpURLConnection ready with response data
+	 * @param url
+	 *            String URL to connect to
+	 * @param data
+	 *            String data to post
+	 * @return HttpURLConnection ready with response data
 	 */
 	public HTTPResponse put(String url, String data) throws IOException {
 		HttpURLConnection connection = _connectionProvider.getConnection(url);
@@ -105,36 +112,36 @@ public class HTTPRequest {
 	}
 
 	/**
-     * Do an authenticated HTTP PUT to url
-     * 
-     * @param url       String URL to connect to
-     * @param stream    InputStream data to put 
-     * @return          HttpURLConnection ready with response data
-     */	
+	 * Do an authenticated HTTP PUT to url
+	 * 
+	 * @param url
+	 *            String URL to connect to
+	 * @param stream
+	 *            InputStream data to put
+	 * @return HttpURLConnection ready with response data
+	 */
 	public HTTPResponse put(String url, InputStream stream) throws IOException {
 		byte[] buff = streamToByteArray(stream);
 		String data = Base64.encodeBytes(buff);
-		return put(url, data);		
-	}	
-	
+		return put(url, data);
+	}
 
-    /**
-     * Do an authenticated HTTP HEAD to url
-     * 
-     * @param url       String URL to connect to 
-     * @return          HttpURLConnection ready with response data
-     */ 
+	/**
+	 * Do an authenticated HTTP HEAD to url
+	 * 
+	 * @param url
+	 *            String URL to connect to
+	 * @return HttpURLConnection ready with response data
+	 */
 	public HTTPResponse head(String url) throws IOException {
 		HttpURLConnection connection = _connectionProvider.getConnection(url);
 		connection.setDoOutput(true);
 		connection.setRequestMethod("HEAD");
 		return connect(connection);
 	}
-	
-	
+
 	////////////////////////////////////////////////////////////// THESE HELP
 
-    
 	/**
 	 * Connect to server, check the status, and return the new HTTPResponse
 	 */
@@ -143,14 +150,14 @@ public class HTTPRequest {
 		response.checkStatus();
 		return response;
 	}
-	
 
-    /**
-     * A simple helper function
-     * 
-     * @param in    InputStream to turn into a byte array 
-     * @return      byte array (byte[]) w/ contents of input stream
-     */ 
+	/**
+	 * A simple helper function
+	 * 
+	 * @param in
+	 *            InputStream to turn into a byte array
+	 * @return byte array (byte[]) w/ contents of input stream
+	 */
 	public static byte[] streamToByteArray(InputStream in) throws IOException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		int read = 0;
@@ -163,6 +170,6 @@ public class HTTPRequest {
 			e1.printStackTrace();
 		}
 		return os.toByteArray();
-	}	
+	}
 
 }

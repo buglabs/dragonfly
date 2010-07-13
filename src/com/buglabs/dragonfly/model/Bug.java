@@ -21,7 +21,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class Bug extends BaseTreeNode {
 	private static final long serialVersionUID = -6726829616562590688L;
-	
+
 	private URL baseUrl;
 
 	private URL moduleUrl;
@@ -33,13 +33,13 @@ public class Bug extends BaseTreeNode {
 	private boolean connected = false;
 
 	private URL eventUrl;
-	
+
 	private URL packageURL;
 
 	private URL configAdminUrl;
-	
+
 	private URL supportInfoUrl;
-	
+
 	public Bug(String name, URL url) {
 		super(name);
 		this.baseUrl = url;
@@ -61,7 +61,6 @@ public class Bug extends BaseTreeNode {
 
 		return super.getChildren();
 	}
-
 
 	/**
 	 * @return A URL for the module ws api.
@@ -114,12 +113,12 @@ public class Bug extends BaseTreeNode {
 
 		return eventUrl;
 	}
-	
+
 	/**
 	 * @return A URL for packages on the BUG.
 	 * @throws MalformedURLException
 	 */
-	public URL getPackageURL() throws MalformedURLException{
+	public URL getPackageURL() throws MalformedURLException {
 		if (packageURL == null) {
 			String surl = baseUrl.getProtocol() + "://" + baseUrl.getHost() + ":" + baseUrl.getPort() + baseUrl.getPath() + "/package";
 
@@ -128,12 +127,12 @@ public class Bug extends BaseTreeNode {
 
 		return packageURL;
 	}
-	
+
 	/**
 	 * @return ConfigurationAdmin url
 	 * @throws MalformedURLException
 	 */
-	public URL getConfigAdminURL() throws MalformedURLException{
+	public URL getConfigAdminURL() throws MalformedURLException {
 		if (configAdminUrl == null) {
 			String surl = baseUrl.getProtocol() + "://" + baseUrl.getHost() + ":" + baseUrl.getPort() + baseUrl.getPath() + "/configuration";
 
@@ -147,7 +146,7 @@ public class Bug extends BaseTreeNode {
 	 * @return supportInfoUrl url
 	 * @throws MalformedURLException
 	 */
-	public URL getSupportURL() throws MalformedURLException{
+	public URL getSupportURL() throws MalformedURLException {
 		if (supportInfoUrl == null) {
 			String surl = baseUrl.getProtocol() + "://" + baseUrl.getHost() + ":" + baseUrl.getPort() + baseUrl.getPath() + "/support";
 
@@ -155,8 +154,8 @@ public class Bug extends BaseTreeNode {
 		}
 
 		return supportInfoUrl;
-	}	
-	
+	}
+
 	public void disconnect() {
 		connected = false;
 		moduleUrl = null;
