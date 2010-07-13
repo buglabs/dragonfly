@@ -25,9 +25,9 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.util.BugWSHelper;
-import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.osgi.concierge.core.builder.ManifestConsistencyChecker;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
@@ -37,7 +37,7 @@ public class ImportBundleFromStreamAction extends Action {
 	String userName;
 	private File jarFile;
 	private boolean overwriteApp;
-	
+
 	public ImportBundleFromStreamAction() {
 		overwriteApp = false;
 	}
@@ -63,23 +63,22 @@ public class ImportBundleFromStreamAction extends Action {
 					overwriteApp = false;
 					if (proj.exists()) {
 						PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
-							
+
 							public void run() {
 								IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 								Shell shell = new Shell();
 								if (window != null) {
 									shell = window.getShell();
 								}
-								overwriteApp = MessageDialog.openQuestion(
-										shell, "Import Warning",  "A project with the same name already exists in " +
-													"the current workspace.  Would you like to overwrite?");								
+								overwriteApp = MessageDialog.openQuestion(shell, "Import Warning", "A project with the same name already exists in "
+										+ "the current workspace.  Would you like to overwrite?");
 								return;
 							}
 						});
 
-					} 
+					}
 
-					if (!proj.exists() || overwriteApp){
+					if (!proj.exists() || overwriteApp) {
 						if (stream == null)
 							stream = BugnetWSHelper.getProgram(programName);
 						jarFile = DragonflyActivator.getDefault().createFile(jarFileName(programName));
@@ -107,11 +106,11 @@ public class ImportBundleFromStreamAction extends Action {
 						*/
 						jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 						jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
-						
+
 						ProjectUtils.configureBuilder(jproj.getProject(), ManifestConsistencyChecker.ID);
-						
+
 						monitor.worked(10);
-						
+
 						/*
 						 * for the time being, not refreshing the BugnetView
 						 * Thing is... this code is cludgy.. this whole class is cludgy
@@ -192,7 +191,7 @@ public class ImportBundleFromStreamAction extends Action {
 
 		});
 	}
-	
+
 	private IStatus createErrorStatus(String message, Exception e) {
 		IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, message, e);
 		return errorStatus;

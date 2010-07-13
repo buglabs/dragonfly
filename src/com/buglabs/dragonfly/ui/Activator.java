@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -28,9 +27,7 @@ import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-
 import com.buglabs.dragonfly.ui.actions.LaunchWelcomeEditorAction;
-import com.buglabs.dragonfly.ui.jobs.ConnectBugHelper;
 import com.buglabs.dragonfly.ui.jobs.LoadBugsJob;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -41,7 +38,7 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_KEY_BASE_UNIT_SELECTED = "images/baseUnitSelected.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_KEY_BASE_UNIT = "images/baseUnit.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_KEY_BASE_UNIT_DISCONNECTED = "images/baseUnitDisconnected.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_KEY_MODULE_SLOT_0 = "images/upperLeftModule.gif"; //$NON-NLS-1$
@@ -91,29 +88,29 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_COLOR_DFLY = "icons/color/dfly.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_DWNLD = "icons/color/dwnld.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_DWNLD_SDK = "icons/color/dwnld_to_sdk.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_CAMERA = "icons/color/cameraModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_GPS = "icons/color/gpsModule.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_M_GSM = "icons/color/gsmModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_LCD = "icons/color/lcdModule.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_M_MOTION = "icons/color/motionModule.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_M_SOUND = "icons/color/soundModule.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_M_VH = "icons/color/vhModule.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_M_WIFI = "icons/color/wifibluetoothModule.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_M_BUGBEE = "icons/color/bugbeeModule.gif"; //$NON-NLS-1$	
 
 	public static final String IMAGE_COLOR_M_SENSOR = "icons/color/sensorModule.gif";
-	
+
 	public static final String IMAGE_COLOR_MANIFEST = "icons/color/manifest.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_MODULE = "icons/color/module.gif"; //$NON-NLS-1$
@@ -145,9 +142,9 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_PROPERTIES = "/icons/color/properties.gif"; //$NON-NLS-1$		
 
 	public static final String IMAGE_COLOR_SERVICES = "/icons/color/services.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_APP_REMOVE = "/icons/color/app_remove.gif"; //$NON-NLS-1$
-	
+
 	public static final String IMAGE_COLOR_APP_SEARCH = "/icons/color/new/bugnetSearch.gif"; //$NON-NLS-1$
 
 	public static final String PLUGIN_ID = "com.buglabs.dragonfly.ui"; //$NON-NLS-1$
@@ -157,13 +154,12 @@ public class Activator extends AbstractUIPlugin {
 	private static final String LOOPBACK_IP_ADDRESS = "127.0.0.1"; //$NON-NLS-1$
 
 	public static final String ICON_VIRTUAL_BUG = "/icons/color/new/myBUG.gif";
-	
+
 	public static final String ICON_SLP_BUG = "/icons/color/new/slpBUG.gif";
-	
+
 	public static final String ICON_STATIC_BUG = "/icons/color/new/staticBUG.gif";
-	
+
 	public static final String ICON_DISCOVERED_BUG = "/icons/color/new/slpBUG.gif";
-	
 
 	private static Activator plugin;
 
@@ -199,7 +195,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		this.context = context;
-		
+
 		File welcomScreenState = Activator.getDefault().getStateLocation().append("sdk-welcome.xml").toFile(); //$NON-NLS-1$
 
 		// if file doesn't exist, create file, populate it with locking data and launch welcome editor
@@ -225,7 +221,7 @@ public class Activator extends AbstractUIPlugin {
 			if (!isWelcomeLoaded)
 				launchWelcomeEditor();
 		}
-		
+
 		httpServiceThread = new SimpleHttpSever(DragonflyActivator.MODEL_CHANGE_EVENT_LISTEN_PORT);
 		httpServiceThread.start();
 
@@ -240,12 +236,12 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	private void launchWelcomeEditor() {
-		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable(){
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-					LaunchWelcomeEditorAction welcomeAction = new LaunchWelcomeEditorAction();
-					welcomeAction.run();
-					
-					//ActionFactory.MAXIMIZE.create(PlatformUI.getWorkbench().getActiveWorkbenchWindow()).run();
+				LaunchWelcomeEditorAction welcomeAction = new LaunchWelcomeEditorAction();
+				welcomeAction.run();
+
+				//ActionFactory.MAXIMIZE.create(PlatformUI.getWorkbench().getActiveWorkbenchWindow()).run();
 			}
 		});
 	}
@@ -355,11 +351,11 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_COLOR_SERVICES, getImageDescriptor(IMAGE_COLOR_SERVICES).createImage());
 		imageRegistry.put(IMAGE_COLOR_APP_REMOVE, getImageDescriptor(IMAGE_COLOR_APP_REMOVE).createImage());
 		imageRegistry.put(IMAGE_COLOR_APP_SEARCH, getImageDescriptor(IMAGE_COLOR_APP_SEARCH).createImage());
-		
+
 		imageRegistry.put(ICON_SLP_BUG, getImageDescriptor(ICON_SLP_BUG).createImage());
 		imageRegistry.put(ICON_STATIC_BUG, getImageDescriptor(ICON_STATIC_BUG).createImage());
 		imageRegistry.put(ICON_VIRTUAL_BUG, getImageDescriptor(ICON_VIRTUAL_BUG).createImage());
-		
+
 	}
 
 	public File exportToJar(IProject proj) throws CoreException {

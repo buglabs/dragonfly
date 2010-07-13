@@ -21,7 +21,7 @@ import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
  */
 public class RefreshBugNetViewAction extends Action {
 
-    BugnetView view;
+	BugnetView view;
 
 	public RefreshBugNetViewAction(BugnetView view) {
 		this.view = view;
@@ -35,7 +35,6 @@ public class RefreshBugNetViewAction extends Action {
 	}
 
 	public ImageDescriptor getImageDescriptor() {
-		return Activator.getDefault().
-		    getImageRegistry().getDescriptor(Activator.IMAGE_CONNECTION_REFRESH);
+		return Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_CONNECTION_REFRESH);
 	}
 }

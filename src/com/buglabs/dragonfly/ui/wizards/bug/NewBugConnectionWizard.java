@@ -61,12 +61,11 @@ public class NewBugConnectionWizard extends Wizard implements INewWizard {
 			IPerspectiveDescriptor persp = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getPerspective();
 			if (!persp.getId().equals(PerspectiveFactory.PERSPECTIVE_ID)) {
 
-				boolean canSwitch = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), Messages
-						.getString("NewProjectWizard.3"), Messages.getString("NewProjectWizard.4")); //$NON-NLS-1$ //$NON-NLS-2$
+				boolean canSwitch = MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+						Messages.getString("NewProjectWizard.3"), Messages.getString("NewProjectWizard.4")); //$NON-NLS-1$ //$NON-NLS-2$
 
 				if (canSwitch) {
-					PlatformUI.getWorkbench().showPerspective(PerspectiveFactory.PERSPECTIVE_ID,
-							PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+					PlatformUI.getWorkbench().showPerspective(PerspectiveFactory.PERSPECTIVE_ID, PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 				}
 			}
 		} catch (WorkbenchException e) {
@@ -85,5 +84,6 @@ public class NewBugConnectionWizard extends Wizard implements INewWizard {
 		return proj;
 	}
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {}
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
 }

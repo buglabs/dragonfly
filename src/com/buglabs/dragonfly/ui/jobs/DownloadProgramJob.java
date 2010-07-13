@@ -14,13 +14,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.actions.ImportBundleFromStreamAction;
-import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 
 /**
- * DON'T THINK THIS IS CURRENTLY BEING USED 
- * 									- bballantine
+ * DON'T THINK THIS IS CURRENTLY BEING USED - bballantine
  * 
  * This job downloads a program from bugnet and places it in the My Library
  * section of the Bug explorer. This class intentionally references interal PDE

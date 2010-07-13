@@ -22,10 +22,10 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.APIVersionManager;
-import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
+import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.dragonfly.validator.BUGApplicationProjectValidator;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
@@ -40,7 +40,7 @@ public class ExportJarToBUGNetAction extends Action {
 	public final String errorMessage = "Unable to upload Jar to BUGnet.";
 
 	private UploadJarToBUGNetJob job;
-	
+
 	private String location;
 
 	public ExportJarToBUGNetAction(IProject proj, IJobChangeListener jobListener) {
@@ -51,13 +51,13 @@ public class ExportJarToBUGNetAction extends Action {
 	}
 
 	public void run() {
-		
+
 		try {
 			setAPIVersion(project, APIVersionManager.getSDKAPIVersion());
 		} catch (Exception e2) {
 			UIUtils.handleNonvisualError("Unable to set API Version", e2);
 		}
-		
+
 		try {
 			boolean valid = BUGApplicationProjectValidator.validate(project, true);
 			if (!valid) {
@@ -87,19 +87,18 @@ public class ExportJarToBUGNetAction extends Action {
 			if (applicationUploadJobChangeListener != null) {
 				job.addJobChangeListener(applicationUploadJobChangeListener);
 			}
-			
+
 			job.schedule();
 		}
 	}
 
-	private void setAPIVersion(
-			IProject projekt, String apiVersion) throws CoreException, IOException {
+	private void setAPIVersion(IProject projekt, String apiVersion) throws CoreException, IOException {
 		IFile manfile = projekt.getFile("META-INF/MANIFEST.MF");
-		if (manfile == null || !manfile.exists()) return;
-		BufferedReader reader = 
-			new BufferedReader(new InputStreamReader(manfile.getContents()));
+		if (manfile == null || !manfile.exists())
+			return;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(manfile.getContents()));
 		StringBuffer result = new StringBuffer();
-		
+
 		// remove old BUG-API-Version line;
 		String line;
 		while ((line = reader.readLine()) != null) {
@@ -108,14 +107,12 @@ public class ExportJarToBUGNetAction extends Action {
 			if (line.trim().length() > 0)
 				result.append(line + "\n");
 		}
-		
+
 		// add BUG-API-Version
-		result.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY 
-				+ ": " + APIVersionManager.getSDKAPIVersion() + "\n");		
-		
+		result.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY + ": " + APIVersionManager.getSDKAPIVersion() + "\n");
+
 		// write out the new contents
-		manfile.setContents(new ByteArrayInputStream(
-				result.toString().getBytes()), true, false, null);
+		manfile.setContents(new ByteArrayInputStream(result.toString().getBytes()), true, false, null);
 	}
 
 	private class UploadJarToBUGNetJob extends Job {
@@ -128,8 +125,7 @@ public class ExportJarToBUGNetAction extends Action {
 		}
 
 		protected IStatus run(IProgressMonitor monitor) {
-			IStatus okStatus = new Status(
-					IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "Successful upload to Jar to BUGnet", null); //$NON-NLS-1$
+			IStatus okStatus = new Status(IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "Successful upload to Jar to BUGnet", null); //$NON-NLS-1$
 
 			try {
 				// make sure credentials are good
@@ -140,9 +136,9 @@ public class ExportJarToBUGNetAction extends Action {
 					job.removeJobChangeListener(applicationUploadJobChangeListener);
 					return okStatus;
 				}
-					
+
 				location = BugnetWSHelper.addProgram(jar, project.getName());
-				
+
 			} catch (BugnetAuthenticationException e2) {
 				String myMessage = errorMessage + "  An application of the same name may already exist."; //$NON-NLS-1$
 				job.removeJobChangeListener(jobListener);
@@ -151,13 +147,13 @@ public class ExportJarToBUGNetAction extends Action {
 			} catch (IOException e) {
 				job.removeJobChangeListener(jobListener);
 				job.removeJobChangeListener(applicationUploadJobChangeListener);
-				return createErrorStatus("Unable to upload to BUGnet", e);			
+				return createErrorStatus("Unable to upload to BUGnet", e);
 			} catch (Exception e) {
 				job.removeJobChangeListener(jobListener);
 				job.removeJobChangeListener(applicationUploadJobChangeListener);
 				return createErrorStatus(errorMessage, e);
 			}
-			
+
 			return okStatus;
 		}
 
@@ -167,20 +163,29 @@ public class ExportJarToBUGNetAction extends Action {
 		IStatus errorStatus = new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, message, e);
 		return errorStatus;
 	}
-	
+
 	/**
 	 * After an application is uploaded, launch the version notes browser page
 	 * 
 	 * @author brian
-	 *
+	 * 
 	 */
 	private class ApplicationUploadJobChangeListener implements IJobChangeListener {
 
-		public void aboutToRun(IJobChangeEvent event) {}
-		public void awake(IJobChangeEvent event) {}
-		public void running(IJobChangeEvent event) {}
-		public void scheduled(IJobChangeEvent event) {}
-		public void sleeping(IJobChangeEvent event) {}
+		public void aboutToRun(IJobChangeEvent event) {
+		}
+
+		public void awake(IJobChangeEvent event) {
+		}
+
+		public void running(IJobChangeEvent event) {
+		}
+
+		public void scheduled(IJobChangeEvent event) {
+		}
+
+		public void sleeping(IJobChangeEvent event) {
+		}
 
 		public void done(IJobChangeEvent event) {
 			// try to create and then open the version notes url
@@ -191,17 +196,17 @@ public class ExportJarToBUGNetAction extends Action {
 		}
 
 	}
-	
+
 	/**
 	 * Launch a browser window for editing the version notes
 	 * 
 	 * @author brian
-	 *
+	 * 
 	 */
 	private class LaunchVersionNotesJob extends Job {
 
 		private IStatus status = Status.OK_STATUS;
-		
+
 		public LaunchVersionNotesJob() {
 			super("Launch Version Notes Job");
 		}
@@ -209,17 +214,18 @@ public class ExportJarToBUGNetAction extends Action {
 		protected IStatus run(IProgressMonitor monitor) {
 			// get the version notes url and a token
 			// we need the token because editing version notes requires login
-			URL tmp_url = null; 
+			URL tmp_url = null;
 			try {
 				String tmp_token = BugnetWSHelper.getToken();
 				if (tmp_token != null && tmp_token.length() > 0) {
 					String urlStr = getVersionNotesUrl(project.getName(), tmp_token);
-					if (urlStr != null) tmp_url = new URL(urlStr);
+					if (urlStr != null)
+						tmp_url = new URL(urlStr);
 				}
 			} catch (IOException e) {
 				status = handleException(e);
 			}
-			
+
 			// Launch the browser with the correct URL
 			if (tmp_url != null && status.isOK()) {
 				final URL url = tmp_url;
@@ -229,15 +235,16 @@ public class ExportJarToBUGNetAction extends Action {
 						action.run();
 					}
 				});
-			}		
+			}
 			return status;
 		}
-		
-		
+
 		/**
-		 * Need to go to buglabs.net/applications/<programName>/version_notes?context=IDE&token=SOMETHING
-		 * 	but SDK doesn't know about buglabs.net, only api.buglabs.net, so we need to go through
-		 *  api.buglabs.net's helper controller
+		 * Need to go to
+		 * buglabs.net/applications/<programName>/version_notes?context
+		 * =IDE&token=SOMETHING but SDK doesn't know about buglabs.net, only
+		 * api.buglabs.net, so we need to go through api.buglabs.net's helper
+		 * controller
 		 * 
 		 * @param programName
 		 * @return
@@ -246,15 +253,14 @@ public class ExportJarToBUGNetAction extends Action {
 			String version_notes_url = null;
 			try {
 				programName = URLEncoder.encode(programName, "UTF-8");
-				String path =  URLEncoder.encode("/applications/" 
-						+ programName + "/version_notes?context=IDE&token=" + token, "UTF-8");
+				String path = URLEncoder.encode("/applications/" + programName + "/version_notes?context=IDE&token=" + token, "UTF-8");
 				version_notes_url = BugnetWSHelper.getBugNetBaseURL() + "helper/redirect?path=" + path;
 			} catch (UnsupportedEncodingException e) {
 				UIUtils.handleNonvisualError("Error generating url for updating version notes.", e);
 			}
 			return version_notes_url;
-		}		
-		
+		}
+
 		/**
 		 * lil' helper for handling exceptions in the job
 		 * 
@@ -262,10 +268,9 @@ public class ExportJarToBUGNetAction extends Action {
 		 * @return
 		 */
 		private IStatus handleException(Exception e) {
-			UIUtils.handleVisualError(
-					"There was an error launching the browser for editing version notes.", e);
-			return createErrorStatus("There was an error launching the browser for editing version notes: " + e.getMessage(), e);		
-		}		
+			UIUtils.handleVisualError("There was an error launching the browser for editing version notes.", e);
+			return createErrorStatus("There was an error launching the browser for editing version notes: " + e.getMessage(), e);
+		}
 	}
-	
+
 }

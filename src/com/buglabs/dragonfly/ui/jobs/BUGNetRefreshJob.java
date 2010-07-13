@@ -10,8 +10,9 @@ import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
 
 public class BUGNetRefreshJob implements IJobChangeListener {
 
-	public BUGNetRefreshJob() {}
-	
+	public BUGNetRefreshJob() {
+	}
+
 	public void aboutToRun(IJobChangeEvent event) {
 		// TODO Auto-generated method stub
 

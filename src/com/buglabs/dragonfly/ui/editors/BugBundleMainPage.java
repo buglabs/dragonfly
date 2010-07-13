@@ -67,8 +67,7 @@ public class BugBundleMainPage extends FormPage {
 
 		Combo cmbBugBundleType = new Combo(mainComposite, SWT.READ_ONLY);
 		cmbBugBundleType
-				.setItems(new String[] {
-						Messages.getString("BugBundleMainPage.17"), Messages.getString("BugBundleMainPage.18"), Messages.getString("BugBundleMainPage.19") }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				.setItems(new String[] { Messages.getString("BugBundleMainPage.17"), Messages.getString("BugBundleMainPage.18"), Messages.getString("BugBundleMainPage.19") }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		cmbBugBundleType.select(0);
 		cmbBugBundleType.setLayoutData(gdRight);
 
@@ -78,8 +77,7 @@ public class BugBundleMainPage extends FormPage {
 		modulesSection.setClient(modulesComposite);
 		addModules(modulesComposite);
 
-		Section requiredBundlesSection = createSection(
-				Messages.getString("BugBundleMainPage.22"), Messages.getString("BugBundleMainPage.23")); //$NON-NLS-1$ //$NON-NLS-2$
+		Section requiredBundlesSection = createSection(Messages.getString("BugBundleMainPage.22"), Messages.getString("BugBundleMainPage.23")); //$NON-NLS-1$ //$NON-NLS-2$
 		Composite requiredBundlesComposite = (Composite) requiredBundlesSection.getClient();
 	}
 

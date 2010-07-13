@@ -14,7 +14,7 @@ import org.eclipse.ui.PlatformUI;
  * 
  */
 public class BugImportQuery implements IImportQuery {
-		
+
 	private Shell shell;
 
 	private String message;

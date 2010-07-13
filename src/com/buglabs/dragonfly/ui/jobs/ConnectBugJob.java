@@ -14,10 +14,10 @@ import com.buglabs.dragonfly.util.BugWSHelper;
 
 public class ConnectBugJob extends Job {
 
-	private static final String MODULES_NODE_NAME 		= "Modules";
-	private static final String APPLICATIONS_NODE_NAME 	= "Applications";
-	private static final String SERVICES_NODE_NAME 		= "Services";
-	
+	private static final String MODULES_NODE_NAME = "Modules";
+	private static final String APPLICATIONS_NODE_NAME = "Applications";
+	private static final String SERVICES_NODE_NAME = "Services";
+
 	private BugConnection bug;
 	private boolean quiet;
 
@@ -33,7 +33,6 @@ public class ConnectBugJob extends Job {
 		this.quiet = quiet;
 	}
 
-	
 	protected IStatus run(IProgressMonitor monitor) {
 		try {
 			monitor.beginTask("Connecting to BUG " + bug.getName(), 100);
@@ -53,7 +52,7 @@ public class ConnectBugJob extends Job {
 
 			bug.setConnected(true);
 			monitor.done();
-			
+
 		} catch (MalformedURLException e) {
 			result = handleException(e);
 		} catch (IOException e) {
@@ -66,9 +65,9 @@ public class ConnectBugJob extends Job {
 
 	private IStatus handleException(Exception e) {
 		int status = IStatus.ERROR;
-		if (quiet) status = IStatus.WARNING;
-		return new Status(status, com.buglabs.dragonfly.ui.Activator.PLUGIN_ID, status, "Unable to connect to "
-				+ bug.getName(), new Throwable(e.toString()));
+		if (quiet)
+			status = IStatus.WARNING;
+		return new Status(status, com.buglabs.dragonfly.ui.Activator.PLUGIN_ID, status, "Unable to connect to " + bug.getName(), new Throwable(e.toString()));
 	}
 
 	public boolean belongsTo(Object family) {

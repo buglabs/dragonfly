@@ -40,12 +40,10 @@ public class ExportJarActionDelegate implements IObjectActionDelegate {
 			if (element instanceof IProject) {
 				project = (IProject) element;
 			}
-			
+
 			// disable sending to BUG if project has errors or there are no active BUGs
 			try {
-				if(ProjectUtils.existsProblems(project) || 
-						(BugConnectionManager.getInstance().
-								getBugConnections().size() == 0)){
+				if (ProjectUtils.existsProblems(project) || (BugConnectionManager.getInstance().getBugConnections().size() == 0)) {
 					action.setEnabled(false);
 				}
 			} catch (CoreException e) {

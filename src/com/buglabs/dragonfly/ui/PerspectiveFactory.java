@@ -66,7 +66,7 @@ public class PerspectiveFactory implements IPerspectiveFactory {
 		bottom.addView(JAVADOC_VIEW_ID);
 		bottom.addView(IPageLayout.ID_PROP_SHEET);
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
-		
+
 		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, (float) .60, editorArea); //$NON-NLS-1$
 		right.addView(BugnetView.VIEW_ID);
 		right.addView(MyBugsView.ID);

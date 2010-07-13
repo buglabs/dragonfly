@@ -7,8 +7,7 @@ import org.eclipse.debug.ui.ILaunchConfigurationTab;
 public class VirtualBugTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] { 
-				new VirtualBugTab(), new VirtualBUGSystemPropertiesTab() };
+		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] { new VirtualBugTab(), new VirtualBUGSystemPropertiesTab() };
 		setTabs(tabs);
 	}
 

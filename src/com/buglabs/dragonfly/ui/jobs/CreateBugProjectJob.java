@@ -33,7 +33,6 @@ import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.osgi.concierge.core.utils.ConciergeUtils;
 import com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject;
-import com.buglabs.phoneme.personal.PhoneMEClasspathContainer;
 import com.buglabs.util.BugBundleConstants;
 
 public class CreateBugProjectJob extends CreateConciergeProject {
@@ -42,15 +41,18 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		super(projInfo);
 	}
 
-	/* TODO this used?
-	public static String getClassName(String projName) {
-		return BugProjectUtil.formatProjectNameAsPackage(projName) + ".Activator";
-	}
-	*/
+	/*
+	 * TODO this used? public static String getClassName(String projName) {
+	 * return BugProjectUtil.formatProjectNameAsPackage(projName) +
+	 * ".Activator"; }
+	 */
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#execute(org.eclipse.core.runtime.IProgressMonitor)
+	 * 
+	 * @see
+	 * com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#execute(org
+	 * .eclipse.core.runtime.IProgressMonitor)
 	 */
 	protected void execute(IProgressMonitor monitor) throws CoreException, InvocationTargetException, InterruptedException {
 		super.execute(monitor);
@@ -62,7 +64,7 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 			setJava16Options(jproj);
 		else
 			setPhoneMEOptions(jproj);
-		
+
 		jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 		jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
 
@@ -76,28 +78,32 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#addClasspathEntries()
+	 * 
+	 * @see
+	 * com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#addClasspathEntries
+	 * ()
 	 */
 	protected void addClasspathEntries() {
 		super.addClasspathEntries();
 		getClasspathEntries().remove(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
 		getClasspathEntries().add(JavaCore.newContainerEntry(new Path(BugClasspathContainerInitializer.ID)));
 		getClasspathEntries().add(getJavaRuntimeEntry());
-	}	
-	
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#getManifestContents()
+	 * 
+	 * @see
+	 * com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#getManifestContents
+	 * ()
 	 */
 	protected StringBuffer getManifestContents() {
 		StringBuffer manifestContents = super.getManifestContents();
-		manifestContents.append(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER 
-				+ ": " + BugBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
-		
+		manifestContents.append(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER + ": " + BugBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
+
 		// add API Version
-		manifestContents.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY 
-				+ ": " + APIVersionManager.getSDKAPIVersion() + "\n");
-		
+		manifestContents.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY + ": " + APIVersionManager.getSDKAPIVersion() + "\n");
+
 		BugProjectInfo pinfo = getBugProjectInfo();
 		List services = pinfo.getServices();
 
@@ -128,13 +134,17 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#addNatures(org.eclipse.core.resources.IProject, org.eclipse.core.runtime.IProgressMonitor)
+	 * 
+	 * @see
+	 * com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#addNatures(
+	 * org.eclipse.core.resources.IProject,
+	 * org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	protected void addNatures(IProject proj, IProgressMonitor monitor) throws CoreException {
 		super.addNatures(proj, monitor);
 		ConciergeUtils.addNatureToProject(proj, BugApplicationNature.ID, monitor);
 	}
-	
+
 	/**
 	 * Called from execute to generate the service tracker code
 	 * 
@@ -172,43 +182,38 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		StringBuffer sb = new StringBuffer();
 		BugProjectInfo pinfo = getBugProjectInfo();
 		String projectName = pinfo.getProjectName();
-		 
-		// last param is usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
-		// for v1.5 of SDK (which will be built against R1.4.3 or greater of BUG)
+
+		// last param is
+		// usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
+		// for v1.5 of SDK (which will be built against R1.4.3 or greater of
+		// BUG)
 		// Just use false for v1.4 and previous
-		sb.append(new ServiceTrackerCustomizer().generate(
-					pinfo.getServices(),
-					convertHelperMapToMapofStrings(pinfo.getServicePropertyHelperMap()),
-					BugProjectUtil.formatProjectNameAsClassName(projectName),
-					getServiceTrackerPackageName(projectName), 
-					BugProjectUtil.formatProjectNameAsPackage(projectName), 
-					pinfo.isShouldGenerateApplicationLoop(),
-					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
+		sb.append(new ServiceTrackerCustomizer().generate(pinfo.getServices(), convertHelperMapToMapofStrings(pinfo.getServicePropertyHelperMap()),
+				BugProjectUtil.formatProjectNameAsClassName(projectName), getServiceTrackerPackageName(projectName), BugProjectUtil.formatProjectNameAsPackage(projectName),
+				pinfo.isShouldGenerateApplicationLoop(), usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
 
 		return sb;
 	}
-	
+
 	/**
-	 * TODO
-	 * Is this called from anywhere -- 
-	 * 	think this functionality is in CreateConciergeProject.generateActivator
-	 * 	and not being used here.
+	 * TODO Is this called from anywhere -- think this functionality is in
+	 * CreateConciergeProject.generateActivator and not being used here.
 	 * 
 	 * @param monitor
 	 * @throws CoreException
 	 */
 	/*
-	protected void createActivator(IProgressMonitor monitor) throws CoreException {
-		String packageName = BugProjectUtil.formatProjectNameAsPackage(getBugProjectInfo().getProjectName());
-		String path = getPackageNamePath(packageName);
-		IFolder mainPackageFolder = getProject().getFolder(path);
-
-		IFile activatorFile = mainPackageFolder.getFile("Activator.java");
-		String activatorContents = getActivatorContents().toString();
-		writeContents(activatorFile, activatorContents, monitor);
-	}
-	*/
-
+	 * protected void createActivator(IProgressMonitor monitor) throws
+	 * CoreException { String packageName =
+	 * BugProjectUtil.formatProjectNameAsPackage
+	 * (getBugProjectInfo().getProjectName()); String path =
+	 * getPackageNamePath(packageName); IFolder mainPackageFolder =
+	 * getProject().getFolder(path);
+	 * 
+	 * IFile activatorFile = mainPackageFolder.getFile("Activator.java"); String
+	 * activatorContents = getActivatorContents().toString();
+	 * writeContents(activatorFile, activatorContents, monitor); }
+	 */
 
 	/**
 	 * Helper to return the current bug project from the workspace
@@ -223,22 +228,23 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#getActivatorContents()
+	 * 
+	 * @see com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject#
+	 * getActivatorContents()
 	 */
 	protected StringBuffer getActivatorContents() {
 		if (getBugProjectInfo().getServices().size() > 0) {
 
 			StringBuffer sb = new StringBuffer();
 			String projectName = getBugProjectInfo().getProjectName();
-			
-			// last param is usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
-			// for v1.5 of SDK (which will be built against R1.4.3 or greater of BUG)
+
+			// last param is
+			// usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
+			// for v1.5 of SDK (which will be built against R1.4.3 or greater of
+			// BUG)
 			// Use false otherwise
-			sb.append(new Activator().generate(
-					BugProjectUtil.formatProjectNameAsClassName(projectName), 
-					BugProjectUtil.formatProjectNameAsPackage(projectName), 
-					getServiceTrackerPackageName(projectName),
-					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
+			sb.append(new Activator().generate(BugProjectUtil.formatProjectNameAsClassName(projectName), BugProjectUtil.formatProjectNameAsPackage(projectName),
+					getServiceTrackerPackageName(projectName), usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
 			return sb;
 		}
 
@@ -247,25 +253,24 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 
 	/**
 	 * Get the java runtime classpath entry for this project based on the user's
-	 * selection.  The default is PhoneME.  Otherwise, it's Java 1.6
+	 * selection. The default is PhoneME. Otherwise, it's Java 1.6
 	 * 
 	 * @return
 	 */
 	private IClasspathEntry getJavaRuntimeEntry() {
-		// if Java 1.6 Execution Environment was selected, get it via the execution environments
-		if (getBugProjectInfo().getExecutionEnvironment().indexOf(JavaCore.VERSION_1_6) != -1) {
-			IExecutionEnvironment[] executionEnvs = 
-				JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
-			for (int i= 0; i < executionEnvs.length; i++) {
-				if (executionEnvs[i].getId().indexOf(JavaCore.VERSION_1_6) != -1) {
-					return JavaCore.newContainerEntry(JavaRuntime.newJREContainerPath(executionEnvs[i]));
-				}
-			}			
+		// if Java 1.6 Execution Environment was selected, get it via the
+		// execution environments
+
+		IExecutionEnvironment[] executionEnvs = JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
+		for (int i = 0; i < executionEnvs.length; i++) {
+			if (executionEnvs[i].getId().indexOf(JavaCore.VERSION_1_6) != -1) {
+				return JavaCore.newContainerEntry(JavaRuntime.newJREContainerPath(executionEnvs[i]));
+			}
 		}
-		return JavaCore.newContainerEntry(new Path(PhoneMEClasspathContainer.ID));
+
+		throw new RuntimeException("Unable to find classpath entry.");
 	}
 
-	
 	/**
 	 * returns the current BugProjectInfo object
 	 * 
@@ -273,11 +278,11 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	 */
 	private BugProjectInfo getBugProjectInfo() {
 		return (BugProjectInfo) getProjectInfo();
-	}	
-	
+	}
+
 	/**
-	 * Set java project options for using PhoneME
-	 * Called if the user selected PhoneME on app creation
+	 * Set java project options for using PhoneME Called if the user selected
+	 * PhoneME on app creation
 	 * 
 	 * @param jproj
 	 */
@@ -286,11 +291,10 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		jproj.setOption(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_3);
 		jproj.setOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_2);
 	}
-	
-	
+
 	/**
-	 * Set java project options for using Java 1.6
-	 * Called if user selected Java 1.6 on app creation
+	 * Set java project options for using Java 1.6 Called if user selected Java
+	 * 1.6 on app creation
 	 * 
 	 * @param jproj
 	 */
@@ -299,12 +303,11 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		jproj.setOption(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_6);
 		jproj.setOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_6);
 	}
-	
-	
+
 	/**
-	 *  Creates the BUG Application Loop
-	 *  if a user selected "Generate Application Loop" in wizard
-	 *  
+	 * Creates the BUG Application Loop if a user selected
+	 * "Generate Application Loop" in wizard
+	 * 
 	 * @param monitor
 	 * @throws CoreException
 	 */
@@ -324,8 +327,7 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	}
 
 	/**
-	 * Gets application loop code
-	 * Helper called by createApplication
+	 * Gets application loop code Helper called by createApplication
 	 * 
 	 * @return
 	 */
@@ -337,10 +339,11 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 				BugProjectUtil.formatProjectNameAsPackage(projectName), pinfo.getServices());
 
 		return appContents;
-	}	
-	
+	}
+
 	/**
-	 * Get formatted package name and add .servicetracker to end for creating servicetracker package
+	 * Get formatted package name and add .servicetracker to end for creating
+	 * servicetracker package
 	 * 
 	 * @param projectName
 	 * @return
@@ -359,45 +362,41 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		return packageName.replace('.', '/');
 	}
 
-
 	/**
-	 * Converts a map of service property helpers (keyed by Service Property IDs) to
-	 * a more generaic map of Service property string maps:
-	 * Map<String, List<ServicePropertyHelper>> ==> Map<String, Map<String, String>>
+	 * Converts a map of service property helpers (keyed by Service Property
+	 * IDs) to a more generaic map of Service property string maps: Map<String,
+	 * List<ServicePropertyHelper>> ==> Map<String, Map<String, String>>
 	 * 
-	 *  This is for use by the code generators so they can build service property filters
-	 *   for the new BUG App.
+	 * This is for use by the code generators so they can build service property
+	 * filters for the new BUG App.
 	 * 
 	 * @param helperMap
 	 * @return
 	 */
-	private static Map<String, Map<String, String>> convertHelperMapToMapofStrings(
-			Map<String, List<ServicePropertyHelper>> helperMap) {
+	private static Map<String, Map<String, String>> convertHelperMapToMapofStrings(Map<String, List<ServicePropertyHelper>> helperMap) {
 		Map<String, Map<String, String>> output = new HashMap<String, Map<String, String>>();
 		for (String key : helperMap.keySet()) {
 			if (!output.containsKey(key))
 				output.put(key, new HashMap<String, String>());
 			List<ServicePropertyHelper> helperList = helperMap.get(key);
 			for (ServicePropertyHelper helper : helperList) {
-				output.get(key).put(
-						helper.getKey(), helper.getSelectedValue());
+				output.get(key).put(helper.getKey(), helper.getSelectedValue());
 			}
 		}
 		return output;
 	}
-	
+
 	/**
-    * Helper function to look at our property map and determine
-    * if we're actually using property filters, which affects the way the code is
-    * generated
-    */
-    private static boolean usePropertyFilters(Map<String, List<ServicePropertyHelper>> helperMap) {
-    	for (String key: helperMap.keySet()) {
-    		if (helperMap.get(key) != null && 
-    				helperMap.get(key).size() > 0)
-    			return true;
-    	}
-        return false;
-    }		
+	 * Helper function to look at our property map and determine if we're
+	 * actually using property filters, which affects the way the code is
+	 * generated
+	 */
+	private static boolean usePropertyFilters(Map<String, List<ServicePropertyHelper>> helperMap) {
+		for (String key : helperMap.keySet()) {
+			if (helperMap.get(key) != null && helperMap.get(key).size() > 0)
+				return true;
+		}
+		return false;
+	}
 
 }

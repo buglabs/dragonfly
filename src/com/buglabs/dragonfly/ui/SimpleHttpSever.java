@@ -12,10 +12,9 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
-import com.buglabs.dragonfly.BugConnectionManager;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 
 /**
  * A runnable that listens on a port and generates a ModelNodeChangeEvent when a
@@ -30,7 +29,7 @@ public class SimpleHttpSever extends Thread {
 	private boolean running;
 	private ServerSocket serverSocket;
 	private Socket socket;
-	
+
 	public SimpleHttpSever(int port) {
 		this.port = port;
 
@@ -44,7 +43,7 @@ public class SimpleHttpSever extends Thread {
 		} catch (IOException e1) {
 			handleException(e1);
 		}
-		
+
 		running = true;
 		socket = null;
 		while (running) {
@@ -54,7 +53,7 @@ public class SimpleHttpSever extends Thread {
 				// Check to see if we got a poison pill. If so cleanup and exit.
 				if (this.isInterrupted()) {
 					running = false;
-					resetSockets();					
+					resetSockets();
 					return;
 				}
 
@@ -65,13 +64,12 @@ public class SimpleHttpSever extends Thread {
 					out.close();
 					socket.close();
 				} catch (IOException e) {
-					Activator.getDefault().getLog().log(
-							new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem completing.", e));
+					Activator.getDefault().getLog().log(new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem completing.", e));
 				}
 				BugConnectionManager.getInstance().refreshBugConnections();
 			} catch (IOException e) {
 				handleException(e);
-			} catch(NullPointerException e) {
+			} catch (NullPointerException e) {
 				handleException(e);
 			}
 		}
@@ -82,27 +80,25 @@ public class SimpleHttpSever extends Thread {
 	}
 
 	private void handleException(Exception e) {
-		Activator.getDefault().getLog().log(
-				new Status(Status.WARNING, Activator.getDefault().PLUGIN_ID, Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e));
+		Activator.getDefault().getLog().log(new Status(Status.WARNING, Activator.getDefault().PLUGIN_ID, Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e));
 		running = false;
 		resetSockets();
 	}
 
-
 	private void resetSockets() {
 		try {
-			if (serverSocket != null) serverSocket.close();
-			if (socket != null) socket.close();
+			if (serverSocket != null)
+				serverSocket.close();
+			if (socket != null)
+				socket.close();
 		} catch (IOException e) {
-			Activator.getDefault().getLog().log(
-					new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem cleaning up SimpleHttpServer sockets", e));
+			Activator.getDefault().getLog().log(new Status(Status.INFO, Activator.getDefault().PLUGIN_ID, "Problem cleaning up SimpleHttpServer sockets", e));
 		} finally {
 			serverSocket = null;
 			socket = null;
 		}
 	}
-	
-	
+
 	public boolean isRunning() {
 		return running;
 	}

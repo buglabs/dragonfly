@@ -30,46 +30,44 @@ import com.buglabs.dragonfly.util.UIUtils;
  * Handles attempts to authenticate with BUGnet via dialog
  * 
  * @author brian
- *
+ * 
  */
 public class BugnetAuthenticationHelper {
-	
+
 	private static boolean saveAuthentication = false;
 	private static boolean canceled = false;
 	private static List<IBugnetAuthenticationListener> authenticationListeners;
 	private static final String BROWSER_TITLE = "BUGnet";
-	
+
 	/*
 	 * Add an authentication listener
 	 */
-	public static synchronized void addBugnetAuthenticationListener(
-			IBugnetAuthenticationListener listener) {
+	public static synchronized void addBugnetAuthenticationListener(IBugnetAuthenticationListener listener) {
 		if (authenticationListeners == null) {
 			authenticationListeners = new ArrayList<IBugnetAuthenticationListener>();
 		}
-		
+
 		if (!authenticationListeners.contains(listener)) {
 			authenticationListeners.add(listener);
 		}
-	}	
-	
+	}
+
 	/**
-	 * Checks login without throwing an error so you can do simple
-	 * so false means not logged in for whatever reason
+	 * Checks login without throwing an error so you can do simple so false
+	 * means not logged in for whatever reason
 	 * 
 	 * @return
 	 */
 	public static boolean isLoggedIn() {
-	    boolean logged_in = false;
-	    try {
-	        logged_in = checkLogin();
-	    } catch (IOException e) {
-            UIUtils.handleVisualError(
-                    "Unable to verify log in, check the BUGnet URL in your preferences page.",e);	        
-	    }
-	    return logged_in;
-	}	
-	
+		boolean logged_in = false;
+		try {
+			logged_in = checkLogin();
+		} catch (IOException e) {
+			UIUtils.handleVisualError("Unable to verify log in, check the BUGnet URL in your preferences page.", e);
+		}
+		return logged_in;
+	}
+
 	/*
 	 * call this to try to login to bugnet with a prompt
 	 * it'll try to use the credentials already available to it to login
@@ -77,8 +75,8 @@ public class BugnetAuthenticationHelper {
 	 * 
 	 */
 	public static boolean processLogin() throws IOException {
-	    boolean logged_in = checkLogin();
-		
+		boolean logged_in = checkLogin();
+
 		// don't need to query for login or notifiy listeners
 		// because we're already logged in
 		if (logged_in) {
@@ -86,38 +84,36 @@ public class BugnetAuthenticationHelper {
 			saveAuthentication();
 			return true;
 		}
-		
+
 		// not logged in so call regular login method
 		return login();
 	}
-	
+
 	/*
 	 * Assumed not logged in
 	 */
 	public static boolean login() throws IOException {
 		canceled = saveAuthentication = false;
 		boolean logged_in = false;
-		
+
 		// Loop shows prompt until user is logged in
-		while(!canceled && !logged_in) {
+		while (!canceled && !logged_in) {
 			loginPrompt();
 			if (!canceled && !(logged_in = BugnetWSHelper.verifyCurrentUser())) {
-				UIUtils.handleVisualError(
-					"Unable to set authentication data. It appears that you have entered an incorrect username or password.",
-					new Exception());				
+				UIUtils.handleVisualError("Unable to set authentication data. It appears that you have entered an incorrect username or password.", new Exception());
 			}
 		}
-		
+
 		// Login was successful, do some other stuff
 		if (logged_in) {
 			saveAuthentication();
 			notifyLoggedInEvent();
 		}
-		return logged_in;		
+		return logged_in;
 	}
-	
+
 	/**
-	 *  helper function removes stored authentication data
+	 * helper function removes stored authentication data
 	 */
 	public static void logout() {
 		DragonflyActivator.getDefault().getAuthenticationData().setUsername(null);
@@ -125,22 +121,20 @@ public class BugnetAuthenticationHelper {
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_USER, "");
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_BUGNET_PWD, "");
 		notifyLoggedOutEvent();
-	}	
-	
-	
-	private static boolean checkLogin() throws IOException{
-        // prepare authentication data
-        // if there's something missing, try to get it from preferences
-        if (!BugnetStateProvider.getInstance().getAuthenticationData().hasData())
-            DragonflyActivator.getDefault().setAuthDataFromPrefs();
-        
-        return BugnetWSHelper.verifyCurrentUser();	    
 	}
-	
-	
+
+	private static boolean checkLogin() throws IOException {
+		// prepare authentication data
+		// if there's something missing, try to get it from preferences
+		if (!BugnetStateProvider.getInstance().getAuthenticationData().hasData())
+			DragonflyActivator.getDefault().setAuthDataFromPrefs();
+
+		return BugnetWSHelper.verifyCurrentUser();
+	}
+
 	private static void notifyLoggedInEvent() {
 		// if there are no active listeners do not iterate through them
-		if(authenticationListeners != null && authenticationListeners.size() != 0){
+		if (authenticationListeners != null && authenticationListeners.size() != 0) {
 			Iterator<IBugnetAuthenticationListener> iter = authenticationListeners.iterator();
 			while (iter.hasNext()) {
 				IBugnetAuthenticationListener l = iter.next();
@@ -148,10 +142,10 @@ public class BugnetAuthenticationHelper {
 			}
 		}
 	}
-	
+
 	private static void notifyLoggedOutEvent() {
 		// if there are no active listeners do not iterate through them
-		if(authenticationListeners != null && authenticationListeners.size() != 0){
+		if (authenticationListeners != null && authenticationListeners.size() != 0) {
 			Iterator<IBugnetAuthenticationListener> iter = authenticationListeners.iterator();
 			while (iter.hasNext()) {
 				IBugnetAuthenticationListener l = iter.next();
@@ -159,20 +153,18 @@ public class BugnetAuthenticationHelper {
 			}
 		}
 	}
-		
-	
+
 	/**
 	 * if we checked saveAuthentication, try 'n save it
 	 */
 	private static void saveAuthentication() {
 		// if we checked saveAuthentication, try 'n save it
 		if (saveAuthentication) {
-			DragonflyActivator.getDefault().saveAuthentication(
-			        BugnetStateProvider.getInstance().getAuthenticationData().getUsername(), 
-			        BugnetStateProvider.getInstance().getAuthenticationData().getPassword());
-		}	
+			DragonflyActivator.getDefault().saveAuthentication(BugnetStateProvider.getInstance().getAuthenticationData().getUsername(),
+					BugnetStateProvider.getInstance().getAuthenticationData().getPassword());
+		}
 	}
-	
+
 	/**
 	 * subroutine handles display of login window
 	 */
@@ -201,7 +193,7 @@ public class BugnetAuthenticationHelper {
 								String bugNetBaseURL = BugnetWSHelper.getBugNetBaseURL();
 								if (bugNetBaseURL == null || bugNetBaseURL.equals("/")) //$NON-NLS-1$
 									bugNetBaseURL = Messages.getString("defaultURL"); //$NON-NLS-1$
-								
+
 								String path = "";
 								try {
 									path = URLEncoder.encode("/" + Messages.getString("AccountSingupAppPath") + "?context=IDE", "UTF-8");
@@ -209,15 +201,14 @@ public class BugnetAuthenticationHelper {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								
+
 								URL url = new URL(bugNetBaseURL + "helper/redirect?path=" + path);
 
 								GenericBrowserInput gbi = new GenericBrowserInput(url);
 								gbi.setName(BROWSER_TITLE);
 								gbi.setToolTip(BROWSER_TITLE);
 
-								PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(gbi,
-										GenericBrowserEditor.ID);
+								PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(gbi, GenericBrowserEditor.ID);
 							} catch (PartInitException e) {
 								UIUtils.handleVisualError(Messages.getString("LaunchPhysicalEditorJob.1"), e); //$NON-NLS-1$
 							} catch (MalformedURLException e) {
@@ -226,20 +217,20 @@ public class BugnetAuthenticationHelper {
 						}
 					});
 					canceled = true; // clicking sign up cancels dialog
-				
+
 					// click cancel button
 				} else if (userSelection != Dialog.OK) {
 					canceled = true;
-					
-				// only other option is to try to login
+
+					// only other option is to try to login
 				} else {
-				    BugnetStateProvider.getInstance().getAuthenticationData().setUsername(d.getUsername());
-				    BugnetStateProvider.getInstance().getAuthenticationData().setPassword(d.getPwd());
-					if (d.getSaveAuthentication()) saveAuthentication = true;
+					BugnetStateProvider.getInstance().getAuthenticationData().setUsername(d.getUsername());
+					BugnetStateProvider.getInstance().getAuthenticationData().setPassword(d.getPwd());
+					if (d.getSaveAuthentication())
+						saveAuthentication = true;
 				}
 			}
-		});		
+		});
 	}
-	
 
 }

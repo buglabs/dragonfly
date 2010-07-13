@@ -66,8 +66,7 @@ public class DragonflyEditorContributor extends MultiPageEditorActionBarContribu
 	private void createActions() {
 		sampleAction = new Action() {
 			public void run() {
-				MessageDialog.openInformation(null,
-						Messages.getString("DragonflyEditorContributor.0"), Messages.getString("DragonflyEditorContributor.1")); //$NON-NLS-1$ //$NON-NLS-2$
+				MessageDialog.openInformation(null, Messages.getString("DragonflyEditorContributor.0"), Messages.getString("DragonflyEditorContributor.1")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		};
 		sampleAction.setText(Messages.getString("DragonflyEditorContributor.2")); //$NON-NLS-1$

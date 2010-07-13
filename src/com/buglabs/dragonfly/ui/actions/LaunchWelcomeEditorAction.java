@@ -39,12 +39,12 @@ public class LaunchWelcomeEditorAction extends Action {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void run() {
 		try {
 			IEditorInput input = new BrowserEditorInput(new URL(url.toExternalForm()), title); //$NON-NLS-1$
 
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(input,"com.buglabs.dragonfly.ui.editors.BrowserEditor"); //$NON-NLS-1$
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(input, "com.buglabs.dragonfly.ui.editors.BrowserEditor"); //$NON-NLS-1$
 		} catch (PartInitException e) {
 			UIUtils.handleVisualError(Messages.getString("LaunchBrowserAction.6"), e); //$NON-NLS-1$
 		} catch (IOException e) {

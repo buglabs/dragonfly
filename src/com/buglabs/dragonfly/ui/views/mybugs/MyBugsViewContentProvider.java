@@ -33,14 +33,12 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 
 	public Object[] getChildren(Object parentElement) {
 		// try to connect to bug when bug is selected
-		if (parentElement instanceof BugConnection 
-				&& !((BugConnection) parentElement).isConnected()) {
+		if (parentElement instanceof BugConnection && !((BugConnection) parentElement).isConnected()) {
 			ConnectBugHelper.connectToBug((BugConnection) parentElement, false);
-			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, 
-					"Trying to connect w/ the BUG because getChildren was called in tree node: " 
-					+ ((BugConnection) parentElement).getName() ));
-		} 
-		
+			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Trying to connect w/ the BUG because getChildren was called in tree node: "
+					+ ((BugConnection) parentElement).getName()));
+		}
+
 		else if (parentElement instanceof ITreeNode) {
 			Collection children = ((ITreeNode) parentElement).getChildren();
 			if (children == null) {
@@ -60,12 +58,9 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 	}
 
 	public boolean hasChildren(Object element) {
-		if (element instanceof ProgramNode 
-				|| element instanceof Module 
-				|| element instanceof ServiceNode)
+		if (element instanceof ProgramNode || element instanceof Module || element instanceof ServiceNode)
 			return false;
-		if (element instanceof BugConnection 
-				&& !((BugConnection) element).isConnected())
+		if (element instanceof BugConnection && !((BugConnection) element).isConnected())
 			return false;
 		return true;
 	}

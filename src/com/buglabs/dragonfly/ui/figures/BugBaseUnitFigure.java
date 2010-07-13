@@ -36,8 +36,7 @@ public class BugBaseUnitFigure extends AbstractBugFigure {
 		this.bug = bug;
 	}
 
-	private static final Point[] POINTS = { new Point(0, 102), new Point(0, 152), new Point(475, 152), new Point(580, 50),
-			new Point(580, 0), new Point(105, 0) };
+	private static final Point[] POINTS = { new Point(0, 102), new Point(0, 152), new Point(475, 152), new Point(580, 50), new Point(580, 0), new Point(105, 0) };
 
 	public static final int WIDTH = 580;
 

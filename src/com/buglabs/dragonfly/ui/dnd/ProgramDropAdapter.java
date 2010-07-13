@@ -46,8 +46,8 @@ public class ProgramDropAdapter extends CommonDropAdapterAssistant {
 						if (proj.hasNature(BugApplicationNature.ID)) { //$NON-NLS-1$
 							BugProjectNode bugProjNode = (BugProjectNode) fnode.getParent();
 
-							UpsertToBugAction action = new UpsertToBugAction(bugProjNode.getUrl().toString(), bugProjNode.getName(), proj,
-									new UploadJARToBUGChangeListener(bugProjNode));
+							UpsertToBugAction action = new UpsertToBugAction(bugProjNode.getUrl().toString(), bugProjNode.getName(), proj, new UploadJARToBUGChangeListener(
+									bugProjNode));
 
 							action.run();
 						}

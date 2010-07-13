@@ -111,11 +111,11 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	private BugSelectableFigure baseUnitFigure;
 
 	private PhysicalEditorFocusListener physicalEditorListener;
-	
+
 	public static final String EDITOR_FOCUS_GAINED = "FOCUS_GAINED";
-	
+
 	public static final String EDITOR_FOCUS_LOST = "FOCUS_LOST";
-	
+
 	public static final String MODULES_CHANGED = "MODULES_CHANGED";
 
 	public static final String REFRESH = "REFRESH";
@@ -184,13 +184,13 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 				drawBugControl();
 			}
 		});
-		
+
 		// add listener to the figure to make interested parties aware of changes in the editor
 		physicalEditorListener = new PhysicalEditorFocusListener();
 		fc.addFocusListener(new PhysicalEditorFocusListener());
 	}
 
-	private class PhysicalEditorFocusListener implements FocusListener{
+	private class PhysicalEditorFocusListener implements FocusListener {
 
 		public void focusGained(FocusEvent e) {
 			/*  This code used to notify the BUGNetView of a physical editor change
@@ -209,12 +209,13 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 		public void focusLost(FocusEvent e) {
 			// remove listener
-			if(physicalEditorListener != null){
+			if (physicalEditorListener != null) {
 				fc.removeFocusListener(physicalEditorListener);
 			}
 		}
-		
+
 	}
+
 	private void hookContextMenu(Composite parent) {
 		MenuManager menuMgr = new MenuManager();
 		Separator additions = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
@@ -250,14 +251,14 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		int n;
 		for (Iterator i = moduleList.iterator(); i.hasNext();) {
 			m = (Module) i.next();
-			
-			if(m != null){
+
+			if (m != null) {
 				Map properties = m.getProperties();
-				if(properties != null){
+				if (properties != null) {
 					slot = (BugProperty) properties.get("Slot"); //$NON-NLS-1$
 					if (slot != null) {
 						n = Integer.parseInt(slot.getValue());
-		
+
 						if (n >= 0 && n < 4) {
 							modules[n] = m;
 						}
@@ -288,11 +289,10 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		Figure centerFigure = new Figure();
 
 		baseUnitFigure = new BugSelectableFigure();
-		if(isBUGConnected()){
+		if (isBUGConnected()) {
 			baseUnitFigure.setImage(imageRegistry.get(Activator.IMAGE_KEY_BASE_UNIT));
 			baseUnitFigure.setSelectedImage(imageRegistry.get(Activator.IMAGE_KEY_BASE_UNIT_SELECTED));
-		}
-		else{
+		} else {
 			baseUnitFigure.setImage(imageRegistry.get(Activator.IMAGE_KEY_BASE_UNIT_DISCONNECTED));
 			baseUnitFigure.setSelectedImage(imageRegistry.get(Activator.IMAGE_KEY_BASE_UNIT_DISCONNECTED));
 		}
@@ -430,35 +430,32 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
-		URL editorBug = null,
-		eventBug = null;
-		if(event != null){
+		URL editorBug = null, eventBug = null;
+		if (event != null) {
 			String property = event.getPropertyName();
-			if(property != null){
-				if(property.equals(BugConnectionManager.REMOVE_BUG)){
+			if (property != null) {
+				if (property.equals(BugConnectionManager.REMOVE_BUG)) {
 					editorBug = bug.getUrl();
-					eventBug = ((BugConnection)event.getNewValue()).getUrl();
+					eventBug = ((BugConnection) event.getNewValue()).getUrl();
 					// update physical editor of the BUG that was disconnected
-					if(editorBug.toString().equals(eventBug.toString())){
+					if (editorBug.toString().equals(eventBug.toString())) {
 						bug.setConnected(false);
 						moduleList.clear();
 						redrawEditor();
 					}
-				}
-				else if(property.equals(BugConnectionManager.ADD_BUG)){
+				} else if (property.equals(BugConnectionManager.ADD_BUG)) {
 					editorBug = bug.getUrl();
-					eventBug = ((BugConnection)event.getNewValue()).getUrl();
-					if(editorBug.toString().equals(eventBug.toString())){
+					eventBug = ((BugConnection) event.getNewValue()).getUrl();
+					if (editorBug.toString().equals(eventBug.toString())) {
 						GetModulesJob job = new GetModulesJob("Connecting to " + bug.getUrl());
 						job.schedule();
 					}
-				}
-				else if(property.equals(BugConnectionManager.REFRESH_BUG)){
-					if(bug != null){
+				} else if (property.equals(BugConnectionManager.REFRESH_BUG)) {
+					if (bug != null) {
 						editorBug = bug.getUrl();
-						eventBug = ((BugConnection)event.getNewValue()).getUrl();
-						if(editorBug.toString().equals(eventBug.toString())){
-							if(bug.isConnected())
+						eventBug = ((BugConnection) event.getNewValue()).getUrl();
+						if (editorBug.toString().equals(eventBug.toString())) {
+							if (bug.isConnected())
 								refreshModules();
 						}
 					}
@@ -468,31 +465,31 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	}
 
 	private void refreshModules() {
-			moduleList.clear();
-			try {
-				moduleList.addAll(BugWSHelper.getModuleList(null, bug.getModuleURL()));
-				bug.setConnected(true);
-			} catch (MalformedURLException e) {
-				bug.setConnected(false);
-				UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
-			} catch (ConnectException e) {
-				bug.setConnected(false);
-				UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
-			} catch (Exception e) {
-				bug.setConnected(false);
-				UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
-			}
-			finally{
-				redrawEditor();	
-			}
+		moduleList.clear();
+		try {
+			moduleList.addAll(BugWSHelper.getModuleList(null, bug.getModuleURL()));
+			bug.setConnected(true);
+		} catch (MalformedURLException e) {
+			bug.setConnected(false);
+			UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
+		} catch (ConnectException e) {
+			bug.setConnected(false);
+			UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
+		} catch (Exception e) {
+			bug.setConnected(false);
+			UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
+		} finally {
+			redrawEditor();
+		}
 	}
 
 	/**
 	 * A job that calls refreshModules()
+	 * 
 	 * @author akravets
-	 *
+	 * 
 	 */
-	private class GetModulesJob extends Job{
+	private class GetModulesJob extends Job {
 
 		public GetModulesJob(String name) {
 			super(name);
@@ -503,9 +500,9 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			refreshModules();
 			monitor.done();
 			return Status.OK_STATUS;
-		}	
+		}
 	}
-	
+
 	private void redrawEditor() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 
@@ -549,21 +546,22 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			BugWSHelper.subscribeToBug(bug);
 			refreshModules();
 		} catch (Exception e) {
-			UIUtils.handleVisualError("Unable to refresh " + bug.getName() + "(" +bug.getUrl() +  "). Please check error log for further information", e);
+			UIUtils.handleVisualError("Unable to refresh " + bug.getName() + "(" + bug.getUrl() + "). Please check error log for further information", e);
 		}
 	}
 
 	/**
-	 * @return Returns <code>true</code> if {@link BugConnection} associated with the editor is connected, <code>false</code> otherwise.
+	 * @return Returns <code>true</code> if {@link BugConnection} associated
+	 *         with the editor is connected, <code>false</code> otherwise.
 	 */
 	public boolean isBUGConnected() {
 		return bug.isConnected();
 	}
-	
+
 	/**
 	 * @return Returns {@link Bug} associated with this editor
 	 */
-	public Bug getBug(){
+	public Bug getBug() {
 		return bug;
 	}
 }

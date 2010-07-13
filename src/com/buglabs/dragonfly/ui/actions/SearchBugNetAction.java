@@ -15,8 +15,9 @@ import com.buglabs.dragonfly.util.UIUtils;
 
 /**
  * Action that opens up browser with BUGnet Search page
+ * 
  * @author akravets
- *
+ * 
  */
 public class SearchBugNetAction extends Action {
 

@@ -21,9 +21,8 @@ public class ApplicationFilter extends ViewerFilter {
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
 
 		if (element instanceof ProgramNode) {
-			ProgramNode pn = (ProgramNode) element; 
-			if (pn.getBundleType().equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) ||
-					pn.getBundleType().equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)) {
+			ProgramNode pn = (ProgramNode) element;
+			if (pn.getBundleType().equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) || pn.getBundleType().equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)) {
 				return true;
 			} else {
 				return false;

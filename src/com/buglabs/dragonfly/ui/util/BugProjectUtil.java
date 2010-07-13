@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -24,7 +23,6 @@ import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class BugProjectUtil extends ProjectUtils {
-
 
 	/**
 	 * Formats project name into valid form for use with PDE
@@ -59,10 +57,9 @@ public class BugProjectUtil extends ProjectUtils {
 		return temp;
 	}
 
-	
 	/**
-	 * Returns an entry for the IProject's manifest file
-	 * 	or null if it can't be found or something goes wrong
+	 * Returns an entry for the IProject's manifest file or null if it can't be
+	 * found or something goes wrong
 	 * 
 	 * @param project
 	 * @param name
@@ -70,14 +67,15 @@ public class BugProjectUtil extends ProjectUtils {
 	 * @throws CoreException
 	 * @throws IOException
 	 */
-	public static String getManifestEntry(
-			IProject project, String name) throws CoreException, IOException {
+	public static String getManifestEntry(IProject project, String name) throws CoreException, IOException {
 		IFile file = ProjectUtils.getManifestFile(project);
-		if (file == null) return null;
-		
+		if (file == null)
+			return null;
+
 		InputStream in = file.getContents();
-		if (in == null) return null;
-		
+		if (in == null)
+			return null;
+
 		Attributes attr = null;
 		try {
 			Manifest manifest = new Manifest(in);
@@ -85,11 +83,11 @@ public class BugProjectUtil extends ProjectUtils {
 		} finally {
 			in.close();
 		}
-		if (attr == null) return null;
+		if (attr == null)
+			return null;
 		return attr.getValue(name);
 	}
-	
-	
+
 	/**
 	 * Builds a list of Concierge Projects
 	 * 
@@ -100,7 +98,7 @@ public class BugProjectUtil extends ProjectUtils {
 	public static List getWSBugProjects() {
 		return getWSBugProjects(null);
 	}
-	
+
 	/**
 	 * Builds a list of the BUG project names currently in the workspace
 	 * 
@@ -108,21 +106,22 @@ public class BugProjectUtil extends ProjectUtils {
 	 */
 	public static List<String> getWSBugProjectNames() {
 		return getProjectNames(getWSBugProjects());
-	}	
-	
+	}
+
 	/**
-	 * Gets the projects listed in projectNames,  If projectNames is null
-	 * it gets all the projects in the workspace
+	 * Gets the projects listed in projectNames, If projectNames is null it gets
+	 * all the projects in the workspace
 	 * 
-	 * @param projectNames - if null, gets all in workspace
+	 * @param projectNames
+	 *            - if null, gets all in workspace
 	 * @return
 	 */
 	private static List getWSBugProjects(final String[] projectNames) {
 		final List projects = new Vector();
 		final List projectNameList;
-		if (projectNames != null) 
+		if (projectNames != null)
 			projectNameList = Arrays.asList(projectNames);
-		else 
+		else
 			projectNameList = null;
 		IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
 		try {
@@ -132,10 +131,7 @@ public class BugProjectUtil extends ProjectUtils {
 						return true;
 					} else if (resource.getType() == IResource.PROJECT) {
 						IProject project = (IProject) resource;
-						if (project.isOpen() 
-								&& project.hasNature(BugApplicationNature.ID)
-								&& (projectNameList == null 
-										|| projectNameList.contains(project.getName()))) {
+						if (project.isOpen() && project.hasNature(BugApplicationNature.ID) && (projectNameList == null || projectNameList.contains(project.getName()))) {
 							projects.add(project);
 						}
 					}
@@ -145,7 +141,7 @@ public class BugProjectUtil extends ProjectUtils {
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to retrieve Bug Projects", e);
 		}
-		return projects;		
+		return projects;
 	}
 
 	private static List<String> getProjectNames(List projects) {
@@ -158,5 +154,5 @@ public class BugProjectUtil extends ProjectUtils {
 
 		return names;
 	}
-	
+
 }

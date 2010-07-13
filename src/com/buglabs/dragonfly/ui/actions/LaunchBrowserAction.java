@@ -11,12 +11,10 @@ import java.io.IOException;
 import java.net.URL;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
 import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.ui.editors.BrowserEditorInput;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -38,8 +36,8 @@ public class LaunchBrowserAction extends Action {
 	private boolean checkAuthentication = true;
 
 	/**
-	 * Deprecated because not used.
-	 * Call LaunchBrowserAction(URL url, ...) and pre-prepare url with token if needed
+	 * Deprecated because not used. Call LaunchBrowserAction(URL url, ...) and
+	 * pre-prepare url with token if needed
 	 * 
 	 * @deprecated - use LaunchBrowserAction(URL url, String title)
 	 * 
@@ -81,7 +79,7 @@ public class LaunchBrowserAction extends Action {
 	public void run() {
 		try {
 			IEditorInput input = null;
-			
+
 			/* 
 			Commented out by BB - not being used AFAIK.
 			Token no longer comes from authData, but is asked for anew each time
@@ -113,8 +111,7 @@ public class LaunchBrowserAction extends Action {
 
 			input = new BrowserEditorInput(new URL(url.toExternalForm()), title); //$NON-NLS-1$
 
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(input,
-					"com.buglabs.dragonfly.ui.editors.BrowserEditor"); //$NON-NLS-1$
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(input, "com.buglabs.dragonfly.ui.editors.BrowserEditor"); //$NON-NLS-1$
 		} catch (PartInitException e) {
 			UIUtils.handleVisualError(Messages.getString("LaunchBrowserAction.6"), e); //$NON-NLS-1$
 		} catch (IOException e) {

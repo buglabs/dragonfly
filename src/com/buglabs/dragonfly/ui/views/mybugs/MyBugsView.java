@@ -111,12 +111,12 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		viewer.addFilter(new ApplicationFilter());
 		viewer.setComparator(new MyBugsViewComparator());
 		//viewer.setLabelProvider(new BugLabelProvider());
-		
+
 		// use columnlabelprovider so we can have a tooltip
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 		TreeViewerColumn column = new TreeViewerColumn(viewer, SWT.LEFT);
 		column.setLabelProvider(new BugLabelProvider());
-		
+
 		// gtk seems to ignore this but text gets limited to this width on mac
 		//	and it seems to be required or else items won't appear
 		// 	250 is a good number - wish I didn't have to set it!
@@ -130,7 +130,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		createToolBar();
 
 		getSite().setSelectionProvider(viewer);
-		
+
 		// open com.buglabs.dragonfly.ui.physicalEditor
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -166,11 +166,11 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 					} else {
 						deleteConnectionAction.setEnabled(false);
 					}
-					
+
 					if (firstElement instanceof BugConnection) {
-						refreshBugAction.setEnabled(true);						
+						refreshBugAction.setEnabled(true);
 					} else {
-						refreshBugAction.setEnabled(false);						
+						refreshBugAction.setEnabled(false);
 					}
 
 				}
@@ -224,14 +224,14 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		//refreshBugAction = new MyBugRefreshAction(viewer);
 		refreshBugAction = new ConnectAndRefreshBugAction(viewer);
 		refreshBugAction.setEnabled(false);
-		
+
 		showBugConsoleAction = new ShowBUGConsoleAction(viewer);
 		showBugConsoleAction.setEnabled(false);
 	}
 
 	private void createToolBar() {
 		IToolBarManager manager = getViewSite().getActionBars().getToolBarManager();
-		manager.add(new CollapseAllAction(viewer,"Collapse All")); // collapses all nodes in the view
+		manager.add(new CollapseAllAction(viewer, "Collapse All")); // collapses all nodes in the view
 		manager.add(new RefreshBugConnectionsAction());
 		manager.add(addConectionAction);
 	}
@@ -256,7 +256,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		manager.add(addConectionAction);
 		manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(deleteConnectionAction);
-		
+
 		manager.add(refreshBugAction);
 		manager.add(new Separator());
 		manager.add(showBugConsoleAction);
@@ -290,14 +290,14 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 	public static TreeViewer getViewer() {
 		return viewer;
 	}
-	
+
 	/**
 	 * Functionality taken from pde internal class,
-	 * 	org.eclipse.pde.internal.ui.editor.actions.CollapseAction
-	 * 	and modified to suit the purpose of the MyBugs view to collapse all
+	 * org.eclipse.pde.internal.ui.editor.actions.CollapseAction and modified to
+	 * suit the purpose of the MyBugs view to collapse all
 	 * 
 	 * @author bballantine
-	 *
+	 * 
 	 */
 	public class CollapseAllAction extends Action {
 
@@ -308,8 +308,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 			setToolTipText(tooltipText);
 			// in ganymede and before, it won't find this image, so won't set an image
 			// 	 instead it will display "Collapse All" text on button
-			Image img = PlatformUI.getWorkbench().
-				getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL);
+			Image img = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL);
 			if (img != null)
 				setImageDescriptor(ImageDescriptor.createFromImage(img));
 			tree_viewer = viewer;
@@ -319,27 +318,29 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 		 * @see org.eclipse.jface.action.Action#run()
 		 */
 		public void run() {
-			if (tree_viewer == null) return;
-			else tree_viewer.collapseAll();
+			if (tree_viewer == null)
+				return;
+			else
+				tree_viewer.collapseAll();
 		}
 
 	}
-	
+
 	/**
 	 * Completely refreshes the MyBUGs view
 	 * 
 	 * @author bballantine
-	 *
+	 * 
 	 */
 	public class RefreshBugConnectionsAction extends Action {
 		private static final String TOOLTIP = "Refresh Discovered BUGs";
+
 		public RefreshBugConnectionsAction() {
 			super(TOOLTIP, IAction.AS_PUSH_BUTTON);
 			setToolTipText(TOOLTIP);
-			setImageDescriptor(Activator.getDefault().
-				    getImageRegistry().getDescriptor(Activator.IMAGE_CONNECTION_REFRESH));
+			setImageDescriptor(Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_CONNECTION_REFRESH));
 		}
-		
+
 		@Override
 		public void run() {
 			BugConnectionManager.getInstance().reset();

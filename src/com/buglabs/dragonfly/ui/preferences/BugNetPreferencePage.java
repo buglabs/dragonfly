@@ -37,11 +37,11 @@ import com.buglabs.dragonfly.ui.views.bugnet.BugnetView;
 public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	private static final String PROTOCOL_SEPARATOR = "://";
-	
+
 	private String serverName;
 
 	private String protocol;
-	
+
 	private boolean enabled;
 
 	private String numofapps;
@@ -164,8 +164,8 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		numOfApplications.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				numofapps = numOfApplications.getText();
-				
-				if(!numofapps.equals("")){
+
+				if (!numofapps.equals("")) {
 					if (Integer.parseInt(numofapps) > 100) {
 						setErrorMessage("Maximum number of applications is 100");
 						setValid(false);
@@ -208,22 +208,22 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		setData();
 		// if serverName has changed clear authentication data
 		// logout will cause an event that will refresh the BUGnet
-		if(!originalServerName.equals(serverName)){
+		if (!originalServerName.equals(serverName)) {
 			originalServerName = serverName;
 			BugnetAuthenticationHelper.logout();
 		} else {
 			refreshBUGnetView();
 		}
-		applyPerformed  = true;
+		applyPerformed = true;
 	}
 
 	public boolean performOk() {
 		// perform Ok only if apply wasn't performed
-		if(!applyPerformed){
+		if (!applyPerformed) {
 			setData();
 			// if serverName has changed clear authentication data
 			// logout will cause an event that will refresh the BUGnet
-			if(!originalServerName.equals(serverName)){
+			if (!originalServerName.equals(serverName)) {
 				originalServerName = serverName;
 				BugnetAuthenticationHelper.logout();
 			} else {
@@ -238,8 +238,7 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 
 			public void run() {
-				BugnetView bugNetView = (BugnetView) DragonflyActivator.getDefault().getWorkbench().getActiveWorkbenchWindow()
-						.getActivePage().findView(BugnetView.VIEW_ID);
+				BugnetView bugNetView = (BugnetView) DragonflyActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(BugnetView.VIEW_ID);
 				if (bugNetView != null) {
 					new RefreshBugNetViewAction(bugNetView).run();
 				}
@@ -262,7 +261,7 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		setDefaults();
 
 		originalServerName = serverName;
-		
+
 		serverNameTextField.setText(protocol + serverName);
 		numOfApplications.setText(numofapps);
 		enableChk.setSelection(enabled);
@@ -298,9 +297,9 @@ public class BugNetPreferencePage extends PreferencePage implements IWorkbenchPr
 		} else {
 			protocol = "https://";
 		}
-		serverName = serverText;		
+		serverName = serverText;
 	}
-	
+
 	private void resetChangePerform() {
 		applyPerformed = false;
 	}

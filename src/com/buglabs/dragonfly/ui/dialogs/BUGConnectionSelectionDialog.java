@@ -11,7 +11,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -124,8 +123,7 @@ public class BUGConnectionSelectionDialog extends Dialog {
 		viewer.setLabelProvider(new LabelProvider() {
 			public String getText(Object element) {
 				if (element instanceof BugConnection) {
-					return ((BugConnection) element).getName() + 
-						" [" + ((BugConnection) element).getUrl().getHost() + "]";
+					return ((BugConnection) element).getName() + " [" + ((BugConnection) element).getUrl().getHost() + "]";
 				} else {
 					return super.getText(element);
 				}
@@ -134,21 +132,18 @@ public class BUGConnectionSelectionDialog extends Dialog {
 			public Image getImage(Object element) {
 				if (element instanceof VirtualBUGConnection) {
 					return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
-				}
-				else if(element instanceof StaticBugConnection){
+				} else if (element instanceof StaticBugConnection) {
 					return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
-				}
-				else if(element instanceof DiscoveredBugConnection){
+				} else if (element instanceof DiscoveredBugConnection) {
 					return Activator.getDefault().getImageRegistry().get(Activator.ICON_DISCOVERED_BUG);
 				}
 				return super.getImage(element);
 			}
 		});
-		
+
 		viewer.setComparator(new MyBugsViewComparator());
 
-		BaseTreeNode root = 
-			(BaseTreeNode) BugConnectionManager.getInstance().getBugConnectionsRoot();
+		BaseTreeNode root = (BaseTreeNode) BugConnectionManager.getInstance().getBugConnectionsRoot();
 		viewer.setInput(root);
 		return top;
 	}

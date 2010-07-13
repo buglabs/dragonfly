@@ -8,10 +8,11 @@ import com.buglabs.dragonfly.ui.actions.LaunchWelcomeEditorAction;
 
 /**
  * A handler for help.sdk_welcome command
+ * 
  * @author akravets
- *
+ * 
  */
-public class WelcomeHandler extends AbstractHandler{
+public class WelcomeHandler extends AbstractHandler {
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		LaunchWelcomeEditorAction action = new LaunchWelcomeEditorAction();

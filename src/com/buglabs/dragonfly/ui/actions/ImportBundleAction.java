@@ -37,9 +37,7 @@ public class ImportBundleAction extends Action {
 				action.run();
 			}
 		} catch (Exception e1) {
-			UIUtils.handleVisualError(
-					Messages.getString("ImportBundleAction.0") + program.getName() +
-					Messages.getString("ImportBundleAction.1"), e1); //$NON-NLS-1$ //$NON-NLS-2$
+			UIUtils.handleVisualError(Messages.getString("ImportBundleAction.0") + program.getName() + Messages.getString("ImportBundleAction.1"), e1); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 	}

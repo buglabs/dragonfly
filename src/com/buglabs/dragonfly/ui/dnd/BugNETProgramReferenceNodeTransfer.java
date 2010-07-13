@@ -25,8 +25,7 @@ public class BugNETProgramReferenceNodeTransfer extends ByteArrayTransfer {
 
 	private static final BugNETProgramReferenceNodeTransfer INSTANCE = new BugNETProgramReferenceNodeTransfer();
 
-	private static final String TYPE_NAME = "bugprogramreferencenode-transfer-format:" + System.currentTimeMillis() + ":"
-			+ INSTANCE.hashCode();
+	private static final String TYPE_NAME = "bugprogramreferencenode-transfer-format:" + System.currentTimeMillis() + ":" + INSTANCE.hashCode();
 
 	private static final int TYPEID = registerType(TYPE_NAME);
 

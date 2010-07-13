@@ -254,4 +254,3 @@ public class ShowBUGConsoleAction extends Action {
 		}
 	}
 }
-

@@ -15,11 +15,13 @@ import com.buglabs.dragonfly.model.ProgramNode;
 import com.buglabs.dragonfly.ui.Activator;
 
 /**
- * Bundles that calls {@link RemoveBundleJob} to remove all applications from the BUG
+ * Bundles that calls {@link RemoveBundleJob} to remove all applications from
+ * the BUG
+ * 
  * @author akravets
- *
+ * 
  */
-public class RemoveAllBundleActionDelegate implements IObjectActionDelegate{
+public class RemoveAllBundleActionDelegate implements IObjectActionDelegate {
 	public static final String ACTION_ID = "com.buglabs.dragonfly.ui.actions.RemoveAllBundleActionDelegate"; //$NON-NLS-1$
 	private static final IStatus OK = new Status(IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "", null);
 	private ApplicationFolderNode applicationNode;
@@ -32,8 +34,8 @@ public class RemoveAllBundleActionDelegate implements IObjectActionDelegate{
 	public void run(IAction action) {
 		List bundles = applicationNode.getBugBundles();
 		ProgramNode[] applications = (ProgramNode[]) bundles.toArray(new ProgramNode[bundles.size()]);
-		
-		RemoveBundleJob job = new RemoveBundleJob("Removing applications",applications);
+
+		RemoveBundleJob job = new RemoveBundleJob("Removing applications", applications);
 		job.schedule();
 	}
 
@@ -43,7 +45,7 @@ public class RemoveAllBundleActionDelegate implements IObjectActionDelegate{
 			Object element = ((IStructuredSelection) selection).getFirstElement();
 			if (element instanceof ApplicationFolderNode) {
 				applicationNode = (ApplicationFolderNode) element;
-				if(applicationNode.getBugBundles().size() == 0)
+				if (applicationNode.getBugBundles().size() == 0)
 					action.setEnabled(false);
 			}
 		}

@@ -67,7 +67,6 @@ public class LoadBugsJob extends Job {
 		return new Status(IStatus.OK, Activator.PLUGIN_ID, IStatus.OK, "", null);
 	}
 
-
 	private void loadSavedBugs(IProgressMonitor monitor) throws WorkbenchException, IOException {
 		FileReader reader = new FileReader(bugsFileName);
 
@@ -83,13 +82,12 @@ public class LoadBugsJob extends Job {
 					try {
 						url = new URL(bugs[i].getString(BUG_URL));
 					} catch (MalformedURLException e) {
-						UIUtils.handleNonvisualError(
-								"URL is bad for BUG " + bugName + " url: " + bugs[i].getString(BUG_URL), e);
+						UIUtils.handleNonvisualError("URL is bad for BUG " + bugName + " url: " + bugs[i].getString(BUG_URL), e);
 					}
-					if (url == null) continue;
-					
-					BugConnectionManager.getInstance().addBugConnection(
-										new StaticBugConnection(bugName, url));
+					if (url == null)
+						continue;
+
+					BugConnectionManager.getInstance().addBugConnection(new StaticBugConnection(bugName, url));
 					monitor.worked(i);
 				}
 			}

@@ -16,7 +16,7 @@ public class BugKernelSourceLocator extends ConciergeSourceLocator {
 	protected List getSourceJars() {
 
 		List jars = super.getSourceJars();
-		jars.addAll(DragonflyActivator.getDefault().getBugKernelJars());
+		jars.addAll(DragonflyActivator.getDefault().getBUGOSGiJars());
 		return jars;
 	}
 }

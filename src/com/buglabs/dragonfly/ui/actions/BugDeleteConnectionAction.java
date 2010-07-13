@@ -1,8 +1,5 @@
 package com.buglabs.dragonfly.ui.actions;
 
-import java.beans.PropertyChangeEvent;
-import java.util.Iterator;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -10,7 +7,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.BugConnectionManager;
-import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.Activator;
@@ -38,7 +34,7 @@ public class BugDeleteConnectionAction extends Action {
 		} else {
 			message = "Are you sure you want to delete BUG Connection '" + element.getName() + "'?";
 		}
-		
+
 		if (MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title, message)) {
 			if (selection.size() > 1) {
 				//Activator.getDefault().getNoConnectList().removeAll(selection.toList());\

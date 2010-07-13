@@ -4,11 +4,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.TransferData;
-import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.BugApplicationNature;
 import com.buglabs.dragonfly.DragonflyActivator;
@@ -32,7 +30,7 @@ public class ProgramToViewDropAdapter extends ViewerDropAdapter {
 		Object[] dropData = (Object[]) data;
 		if (dropData[0] instanceof IProject) {
 			IProject proj = (IProject) dropData[0];
-			
+
 			// The following checks the bug to see if the app exists, but the UpsertToBugAction already does this, so commented out
 			//
 			//ApplicationFolderNode node = (ApplicationFolderNode) fnode;
@@ -45,11 +43,12 @@ public class ProgramToViewDropAdapter extends ViewerDropAdapter {
 			//	}
 			//}
 			//
-			
+
 			if (proj != null) {
 				try {
-					if(ProjectUtils.existsProblems(proj)){
-						IStatus status = new Status(IStatus.ERROR,DragonflyActivator.PLUGIN_ID,"Application '" + proj.getName() + "' contains errors. Please fix errors before uploading.",null);
+					if (ProjectUtils.existsProblems(proj)) {
+						IStatus status = new Status(IStatus.ERROR, DragonflyActivator.PLUGIN_ID, "Application '" + proj.getName()
+								+ "' contains errors. Please fix errors before uploading.", null);
 						throw new CoreException(status);
 					}
 					if (proj.hasNature(BugApplicationNature.ID)) {

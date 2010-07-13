@@ -15,17 +15,20 @@ import com.buglabs.dragonfly.ui.actions.RefreshBugAction;
 import com.buglabs.dragonfly.util.UIUtils;
 
 public class ConnectBugHelper {
-	
+
 	/**
-	 * This method creates a ConnectBugJob, attaches a listener for when job is complete
-	 * to either register SDK w/ BUG for BUG events or, if no connection, set bug state.
-	 * Finally, refreshes the view via RefreshBugAction
+	 * This method creates a ConnectBugJob, attaches a listener for when job is
+	 * complete to either register SDK w/ BUG for BUG events or, if no
+	 * connection, set bug state. Finally, refreshes the view via
+	 * RefreshBugAction
 	 * 
-	 * @param bug 	- The bug to connect
-	 * @param quiet	- Whether or not to show user an error if connection fails
+	 * @param bug
+	 *            - The bug to connect
+	 * @param quiet
+	 *            - Whether or not to show user an error if connection fails
 	 */
 	public static void connectToBug(final BugConnection bug, boolean quiet) {
-		Job connectBugJob = new ConnectBugJob(bug, quiet);		
+		Job connectBugJob = new ConnectBugJob(bug, quiet);
 		connectBugJob.addJobChangeListener(new JobChangeAdapter() {
 			@Override
 			public void done(final IJobChangeEvent event) {
@@ -45,7 +48,7 @@ public class ConnectBugHelper {
 				super.done(event);
 			}
 		});
-		
+
 		// Some logic to only schedule the job if it hasn't
 		// already been scheduled
 		IJobManager manager = Job.getJobManager();
@@ -55,10 +58,11 @@ public class ConnectBugHelper {
 			connectBugJob.schedule();
 		}
 	}
-	
+
 	/**
-	 * This is the old connectToBug method taken from the MyBugsViewContentProvider
-	 * it is here just to keep track of what it used to do.  It's been replaced by
+	 * This is the old connectToBug method taken from the
+	 * MyBugsViewContentProvider it is here just to keep track of what it used
+	 * to do. It's been replaced by
 	 * 
 	 * ConnectBugHelper.connectToBug
 	 * 
@@ -101,7 +105,7 @@ public class ConnectBugHelper {
 				}
 
 			});
-			
+
 			/*
 			job.addJobChangeListener(new JobChangeAdapter() {
 
@@ -125,6 +129,6 @@ public class ConnectBugHelper {
 			bug.setConnected(false);
 			UIUtils.handleVisualError(Messages.getString("BugContentProvider.5"), e); //$NON-NLS-1$
 		}
-	}	
-	
+	}
+
 }

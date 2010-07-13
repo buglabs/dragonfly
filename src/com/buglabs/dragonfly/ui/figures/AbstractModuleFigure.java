@@ -41,8 +41,7 @@ public abstract class AbstractModuleFigure extends AbstractBugFigure {
 		}
 	}
 
-	private static final Point[] POINTS = { new Point(0, 104), new Point(0, 134), new Point(235, 134), new Point(340, 30),
-			new Point(340, 0), new Point(105, 0) };
+	private static final Point[] POINTS = { new Point(0, 104), new Point(0, 134), new Point(235, 134), new Point(340, 30), new Point(340, 0), new Point(105, 0) };
 
 	public abstract Image getImageOffResource();
 

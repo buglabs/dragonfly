@@ -93,11 +93,11 @@ public class BrowserEditor extends EditorPart implements IModelChangeListener {
 
 			public void completed(ProgressEvent event) {
 				String myUrl = browser.getUrl();
-				
+
 				if (myUrl == null) {
 					return;
 				}
-				
+
 				try {
 					myUrl = URLDecoder.decode(myUrl, "UTF-8");
 				} catch (UnsupportedEncodingException e1) {
@@ -117,9 +117,8 @@ public class BrowserEditor extends EditorPart implements IModelChangeListener {
 					e.printStackTrace();
 				} catch (BugnetAuthenticationException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();					
-				}
-				catch (IOException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -191,8 +190,8 @@ public class BrowserEditor extends EditorPart implements IModelChangeListener {
 	 * @throws IOException
 	 */
 	private void downloadProgram(String project) throws IOException {
-			ImportBundleFromStreamAction action = new ImportBundleFromStreamAction(project);
-			action.run();
+		ImportBundleFromStreamAction action = new ImportBundleFromStreamAction(project);
+		action.run();
 	}
 
 }

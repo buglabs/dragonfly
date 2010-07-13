@@ -26,7 +26,7 @@ public class BugProjectInfo extends ProjectInfo {
 	public Map<String, List<ServicePropertyHelper>> getServicePropertyHelperMap() {
 		return service_property_helpers;
 	}
-	
+
 	public boolean isShouldGenerateApplicationLoop() {
 		return shouldGenerateApplicationLoop;
 	}

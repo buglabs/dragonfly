@@ -82,7 +82,7 @@ public class ConnectBug_MainPage extends WizardPage {
 
 		txtProjectName.setFocus();
 
-		Label blank = new Label(top,SWT.NONE);
+		Label blank = new Label(top, SWT.NONE);
 		blank.setText("");
 
 		Label lblBugAddress = new Label(top, SWT.NONE);
@@ -106,10 +106,10 @@ public class ConnectBug_MainPage extends WizardPage {
 
 		});
 
-		testConnectionButton = new Button(top,SWT.NONE);
+		testConnectionButton = new Button(top, SWT.NONE);
 		testConnectionButton.setText("Test Connection");
 		testConnectionButton.setEnabled(false);
-		testConnectionButton.addSelectionListener(new SelectionListener(){
+		testConnectionButton.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
@@ -119,7 +119,7 @@ public class ConnectBug_MainPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				TestConnectionJob con = new TestConnectionJob(bugAddress);
 				con.schedule();
-				con.addJobChangeListener(new IJobChangeListener(){
+				con.addJobChangeListener(new IJobChangeListener() {
 
 					public void aboutToRun(IJobChangeEvent event) {
 						// TODO Auto-generated method stub
@@ -195,15 +195,15 @@ public class ConnectBug_MainPage extends WizardPage {
 					return false;
 				}
 			}
-			
+
 			Collection children = root.getChildren();
 			Iterator iterator = children.iterator();
-			while(iterator.hasNext()){
+			while (iterator.hasNext()) {
 				BugConnection bugConnection = (BugConnection) iterator.next();
-				
+
 				String bugAddress = getBugAddress();
-				String bcAddress = (bugAddress.endsWith("//") || bugAddress.endsWith("/"))?bugAddress.substring(0,bugAddress.indexOf("/")):bugAddress;
-				if(bugConnection.getUrl().toString().equals(bcAddress)){
+				String bcAddress = (bugAddress.endsWith("//") || bugAddress.endsWith("/")) ? bugAddress.substring(0, bugAddress.indexOf("/")) : bugAddress;
+				if (bugConnection.getUrl().toString().equals(bcAddress)) {
 					setErrorMessage("BUG Connection with this url already exists.");
 					disable();
 					return false;
@@ -227,11 +227,11 @@ public class ConnectBug_MainPage extends WizardPage {
 		return txtProjectName.getText();
 	}
 
-	private void disable(){
+	private void disable() {
 		testConnectionButton.setEnabled(false);
 	}
 
-	private void enable(){
+	private void enable() {
 		testConnectionButton.setEnabled(true);
 	}
 

@@ -85,8 +85,7 @@ public class ProgramEditorContributor extends MultiPageEditorActionBarContributo
 	private void createActions() {
 		sampleAction = new Action() {
 			public void run() {
-				MessageDialog.openInformation(null,
-						Messages.getString("ProgramEditorContributor.0"), Messages.getString("ProgramEditorContributor.1")); //$NON-NLS-1$ //$NON-NLS-2$
+				MessageDialog.openInformation(null, Messages.getString("ProgramEditorContributor.0"), Messages.getString("ProgramEditorContributor.1")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		};
 		sampleAction.setText(Messages.getString("ProgramEditorContributor.2")); //$NON-NLS-1$

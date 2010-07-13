@@ -50,7 +50,7 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 		ILaunchConfiguration[] configs = getLaunchConfigurations();
 
 		if (configs.length == 0) {
-			configuration =  createNewConfiguration(mode);
+			configuration = createNewConfiguration(mode);
 		} else if (configs.length == 1) {
 			configuration = configs[0];
 		} else {
@@ -71,13 +71,12 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 			UIUtils.handleNonvisualError("Error launching Virtual BUG", e);
 		}
 
-		if(configuration != null) {
+		if (configuration != null) {
 			return configuration.launch(mode, progressMonitor);
 		}
-		
+
 		return null;
 	}
-
 
 	private ILaunchConfiguration[] getLaunchConfigurations() {
 		ArrayList result = new ArrayList();
@@ -99,31 +98,31 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 
 		ILaunchConfigurationType configType = getLaunchConfigurationType();
 		String computedName = getComputedName("Virtual BUG"); //$NON-NLS-1$
-		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, computedName);  
+		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, computedName);
 		VirtualBugLaunchConfigurationInitializer.initializeSystemProperties(wc);
-		config = wc.doSave();		
+		config = wc.doSave();
 
 		return config;
 	}
 
 	private ILaunchConfigurationType getLaunchConfigurationType() {
 		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-		return  manager.getLaunchConfigurationType(VirtualBugLaunchConfigurationDelegate.ID);		
+		return manager.getLaunchConfigurationType(VirtualBugLaunchConfigurationDelegate.ID);
 	}
 
 	protected ILaunchConfiguration chooseConfiguration(ILaunchConfiguration[] configs, String mode) {
 		IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
-		ElementListSelectionDialog dialog= new ElementListSelectionDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), labelProvider);
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), labelProvider);
 		dialog.setElements(configs);
-		dialog.setTitle("Launch Virtual BUG");  
+		dialog.setTitle("Launch Virtual BUG");
 		dialog.setMessage("Please select a launch configuration.");
 		dialog.setMultipleSelection(false);
-		int result= dialog.open();
+		int result = dialog.open();
 		labelProvider.dispose();
 		if (result == Window.OK) {
-			return (ILaunchConfiguration)dialog.getFirstResult();
+			return (ILaunchConfiguration) dialog.getFirstResult();
 		}
-		return null;		
+		return null;
 	}
 
 	private String getComputedName(String prefix) {

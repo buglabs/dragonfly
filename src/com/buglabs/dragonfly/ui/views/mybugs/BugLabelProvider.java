@@ -9,7 +9,6 @@
 package com.buglabs.dragonfly.ui.views.mybugs;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -28,8 +27,8 @@ import com.buglabs.dragonfly.model.VirtualBUGConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.views.Messages;
 
-public class BugLabelProvider extends ColumnLabelProvider  {
-//public class BugLabelProvider implements ILabelProvider  {
+public class BugLabelProvider extends ColumnLabelProvider {
+	//public class BugLabelProvider implements ILabelProvider  {
 
 	private ISharedImages shared;
 
@@ -47,35 +46,26 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 
 			if (name.equals("camera")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_CAMERA);
-			} 
-			else if (name.equals("gps")) {
+			} else if (name.equals("gps")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_GPS);
-			} 
-			else if (name.equals("gsm")) {
+			} else if (name.equals("gsm")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_GSM);
-			} 
-			else if (name.equals("lcd")) {
+			} else if (name.equals("lcd")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_LCD);
-			}
-			else if(name.equals("motion")){
+			} else if (name.equals("motion")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_MOTION);
-			}
-			else if(name.equals("audio")){
+			} else if (name.equals("audio")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_SOUND);
-			}
-			else if(name.equals("vonhippel")){
+			} else if (name.equals("vonhippel")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_VH);
-			} 
-			else if (name.equals("wifi-bluetooth")) {
+			} else if (name.equals("wifi-bluetooth")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_WIFI);
-			}
-			else if (name.equals("bugbee")) {
+			} else if (name.equals("bugbee")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_BUGBEE);
-			} 
-			else if (name.equals("sensor")) {
+			} else if (name.equals("sensor")) {
 				return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_M_SENSOR);
 			}
-			
+
 			// return shared.getImage(ISharedImages.IMG_OBJ_ELEMENT);
 			// return generic modules icon instead of generic eclipse icon
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_MODULE);
@@ -83,17 +73,13 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 
 		if (element instanceof ProgramNode) {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_BUGVIEW_APPLICATION);
-		}
-		else if (element instanceof ServiceNode) {
+		} else if (element instanceof ServiceNode) {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_SERVICES);
-		}
-		else if (element instanceof VirtualBUGConnection) {
+		} else if (element instanceof VirtualBUGConnection) {
 			return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
-		}
-		else if(element instanceof StaticBugConnection){
+		} else if (element instanceof StaticBugConnection) {
 			return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
-		}
-		else if(element instanceof DiscoveredBugConnection){
+		} else if (element instanceof DiscoveredBugConnection) {
 			return Activator.getDefault().getImageRegistry().get(Activator.ICON_DISCOVERED_BUG);
 		}
 
@@ -111,16 +97,15 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 		return text; //$NON-NLS-1$
 	}
 
-
 	/* tooltip support */
 	public String getToolTipText(Object element) {
 		return Messages.getString("BugLabelProvider.TOOLTIP_TEXT");
 	}
-	
+
 	public Point getToolTipShift(Object object) {
 		return new Point(5, 5);
 	}
-	
+
 	public int getToolTipDisplayDelayTime(Object object) {
 		return 100;
 	}
@@ -128,8 +113,7 @@ public class BugLabelProvider extends ColumnLabelProvider  {
 	public int getToolTipTimeDisplayed(Object object) {
 		return 5000;
 	}
-		
-	
+
 	public void addListener(ILabelProviderListener listener) {
 		// TODO Auto-generated method stub
 

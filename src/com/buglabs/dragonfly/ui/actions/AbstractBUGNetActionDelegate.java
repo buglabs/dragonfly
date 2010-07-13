@@ -10,7 +10,6 @@ import org.eclipse.ui.IActionDelegate;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 /**
@@ -28,8 +27,7 @@ public abstract class AbstractBUGNetActionDelegate implements IActionDelegate {
 	protected IProject project;
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		if (selection instanceof IStructuredSelection
-				&& DragonflyActivator.getDefault().getPluginPreferences().getBoolean(DragonflyActivator.PREF_BUGNET_ENABLED)
+		if (selection instanceof IStructuredSelection && DragonflyActivator.getDefault().getPluginPreferences().getBoolean(DragonflyActivator.PREF_BUGNET_ENABLED)
 				&& Activator.getDefault().isConnectionAvailable()) {
 			action.setEnabled(true);
 			Object element = ((IStructuredSelection) selection).getFirstElement();
@@ -39,11 +37,11 @@ public abstract class AbstractBUGNetActionDelegate implements IActionDelegate {
 		} else {
 			action.setEnabled(false);
 		}
-		
-		if(action.isEnabled()){
+
+		if (action.isEnabled()) {
 			// disable sending to BUG if project has errors
 			try {
-				if(ProjectUtils.existsProblems(project)){
+				if (ProjectUtils.existsProblems(project)) {
 					action.setEnabled(false);
 					//UIUtils.handleNonvisualError("Uploading to BUGnet and BUG has been suspended due to errors with project " + project.getName() + ". Please fix errors and try again.", null);
 				}

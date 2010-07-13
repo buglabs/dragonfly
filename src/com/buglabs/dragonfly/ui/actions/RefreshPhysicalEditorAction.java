@@ -10,7 +10,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
-import com.buglabs.dragonfly.model.ModelNodeChangeEvent;
 import com.buglabs.dragonfly.ui.editors.PhysicalEditor;
 
 public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
@@ -27,11 +26,11 @@ public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
 	}
 
 	public void run(IAction action) {
-		if(editor instanceof PhysicalEditor){
-			if(((PhysicalEditor)editor).isBUGConnected()){
+		if (editor instanceof PhysicalEditor) {
+			if (((PhysicalEditor) editor).isBUGConnected()) {
 				IJobManager manager = Job.getJobManager();
 				Job[] jobs = manager.find("Refresh"); //$NON-NLS-1$
-				
+
 				if (editor instanceof PhysicalEditor && jobs.length == 0) {
 					job = new RefreshJob("Refresh", PhysicalEditor.REFRESH_FAMILY);
 					job.schedule();
@@ -40,14 +39,16 @@ public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
 		}
 	}
 
-	public void selectionChanged(IAction action, ISelection selection) {}
-	
+	public void selectionChanged(IAction action, ISelection selection) {
+	}
+
 	/**
 	 * A job that calls refreshModules()
+	 * 
 	 * @author akravets
-	 *
+	 * 
 	 */
-	private class RefreshJob extends Job{
+	private class RefreshJob extends Job {
 
 		private String family;
 
@@ -59,7 +60,7 @@ public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.beginTask("Refreshing editor", IProgressMonitor.UNKNOWN);
 			((PhysicalEditor) editor).refresh();
-			
+
 			/* TODO - remove this code
 			 *  physical editor used to affect the Bugnet view, but it no longer does
 			 
@@ -70,7 +71,7 @@ public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
 				view.propertyChange(event);
 			}
 			*/
-			
+
 			monitor.done();
 			return Status.OK_STATUS;
 		}
@@ -79,6 +80,5 @@ public class RefreshPhysicalEditorAction implements IEditorActionDelegate {
 			return this.family.equals(family);
 		}
 
-		
 	}
 }
