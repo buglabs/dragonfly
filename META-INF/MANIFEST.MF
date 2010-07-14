@@ -1,0 +1,8 @@
+Export-Package: com.buglabs.bug.base.pub, com.buglabs.bug.bmi.pub, com.buglabs.bug.module.gps.pub, org.osgi.util.measurement, org.osgi.util.position, com.buglabs.bug.module.gsm.pub
+Bundle-Vendor: Bug Labs, Inc.
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: com.buglabs.bug.simulator
+Bundle-Activator: com.buglabs.bug.simulator.Activator
+Bundle-SymbolicName: com.buglabs.bug.simulator
+Import-Package: com.buglabs.application,com.buglabs.bug.base.pub,com.buglabs.bug.module.pub,com.buglabs.nmea.sentences,com.buglabs.support,com.buglabs.util,com.buglabs.module,javax.servlet,javax.servlet.http,org.osgi.service.cm,org.osgi.service.http,org.osgi.service.log,org.osgi.util.position,org.osgi.util.tracker, com.buglabs.osgi.shell,com.buglabs.osgi.shell.pub,com.buglabs.services.ws,com.buglabs.nmea2,com.buglabs.nmea
