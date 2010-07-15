@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Simulator
+Bundle-SymbolicName: com.buglabs.dragonfly.simulator
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.buglabs.dragonfly.simulator.Activator
+Bundle-Vendor: Bug Labs, Inc.
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.buglabs.dragonfly.simulator
