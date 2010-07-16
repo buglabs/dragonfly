@@ -27,7 +27,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.launching,
  org.eclipse.gef,
  org.eclipse.ui.views,
- org.eclipse.ui.console
+ org.eclipse.ui.console,
+ com.buglabs.dragonfly.simulator
 Eclipse-LazyStart: true
 Export-Package: com.buglabs.dragonfly.launch,
  com.buglabs.dragonfly.ui.actions,

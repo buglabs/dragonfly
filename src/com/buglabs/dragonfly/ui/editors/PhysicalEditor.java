@@ -1,6 +1,7 @@
 package com.buglabs.dragonfly.ui.editors;
 
 import java.beans.PropertyChangeEvent;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,6 +31,7 @@ import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.editparts.GridLayer;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -58,6 +60,7 @@ import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.BugProperty;
 import com.buglabs.dragonfly.model.IModelChangeListener;
 import com.buglabs.dragonfly.model.Module;
+import com.buglabs.dragonfly.simulator.controller.Client;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.borders.RoundedLineBorder;
 import com.buglabs.dragonfly.ui.draw2d.BugSelectableFigure;
@@ -120,6 +123,8 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 	public static final String REFRESH = "REFRESH";
 
+	private Client controllerClient;
+
 	public PhysicalEditor(Bug bug) {
 		this.bug = bug;
 	}
@@ -157,12 +162,34 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			this.setPartName(bug.getName());
 		}
 
+		if (isSimulatedBUG(bug)) {
+			try {
+				controllerClient = Client.getClient(bug.getUrl().getHost(), 8093);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			/*//TODO: add code to start socket converstation with BUG for module UI
+			Thread t = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						controllerClient = Client.getClient(bug.getUrl().getHost(), 8093);
+					} catch (IOException e) {						
+						e.printStackTrace();
+					}
+				}
+			});
+			t.start();*/
+		}
+
 		DragonflyActivator.getDefault().addListener(this);
 		imageRegistry = Activator.getDefault().getImageRegistry();
+
 	}
 
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -221,10 +248,47 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		Separator additions = new Separator(IWorkbenchActionConstants.MB_ADDITIONS);
 		menuMgr.removeAll();
 		menuMgr.add(additions);
+
+		if (isSimulatedBUG(bug)) {
+			final MenuManager subMenu = new MenuManager("Virtual BUG");
+			try {
+				List availableModules = controllerClient.getAvailableModuleNames();
+
+				for (int i = 0; i < 4; ++i) {
+					MenuManager mm = new MenuManager("Slot " + i);
+					createModuleMenu(mm, i, availableModules);
+					subMenu.add(mm);
+				}
+
+				menuMgr.add(subMenu);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 		Menu menu = menuMgr.createContextMenu(parent);
+
 		fc.setMenu(menu);
 
 		getSite().registerContextMenu(menuMgr, CanvasSelectionProvider.getDefault());
+	}
+
+	private void createModuleMenu(MenuManager mm, int slot, List availableModules) {
+		for (Iterator i = availableModules.iterator(); i.hasNext();) {
+			mm.add(new ModuleMenuAction((String) i.next(), slot));
+		}
+		mm.add(new EmptyModuleMenuAction(slot));
+	}
+
+	private boolean isSimulatedBUG(Bug b) {
+		if (b == null) {
+			return false;
+		}
+
+		System.out.println("host: " + b.getUrl().getHost());
+
+		return b.getUrl().getHost().equalsIgnoreCase("localhost") || b.getUrl().getHost().contains("127.0.0.1");
 	}
 
 	/**
@@ -496,7 +560,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		}
 
 		protected IStatus run(IProgressMonitor monitor) {
-			monitor.beginTask("Trying to connect to BUG", IProgressMonitor.UNKNOWN);
+			monitor.beginTask("Connecting to BUG", IProgressMonitor.UNKNOWN);
 			refreshModules();
 			monitor.done();
 			return Status.OK_STATUS;
@@ -563,5 +627,49 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	 */
 	public Bug getBug() {
 		return bug;
+	}
+
+	private class ModuleMenuAction extends Action {
+		private final int slot;
+		private boolean moduleSet;
+
+		public ModuleMenuAction(String name, int slot) {
+			super(name);
+			moduleSet = false;
+			this.slot = slot;
+		}
+
+		@Override
+		public void run() {
+			try {
+				if (moduleSet) {
+					controllerClient.RemoveModuleFromSlot(slot);
+					moduleSet = false;
+				} else {
+					controllerClient.AttachModule(getText(), slot);
+					moduleSet = true;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private class EmptyModuleMenuAction extends Action {
+		private final int slot;
+
+		public EmptyModuleMenuAction(int slot) {
+			super("<Empty>");
+			this.slot = slot;
+		}
+
+		@Override
+		public void run() {
+			try {
+				controllerClient.RemoveModuleFromSlot(slot);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
