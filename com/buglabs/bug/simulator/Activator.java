@@ -58,6 +58,7 @@ import com.buglabs.bug.module.gps.GPSActivator;
 import com.buglabs.bug.module.gsm.GSMActivator;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
+import com.buglabs.bug.simulator.controller.Server;
 import com.buglabs.bug.simulator.ui.SimulatorModuleCommands;
 import com.buglabs.osgi.shell.IShellCommandProvider;
 import com.buglabs.support.SupportInfoTextFormatter;
@@ -106,6 +107,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private ServiceRegistration shellCommandReg;
 
 	private GSMActivator gsmActivator;
+
+	private Server controllerServer;
 
 	public void start(final BundleContext context) throws Exception {
 		//Basic setup ********************************************
@@ -157,9 +160,13 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		
 		//UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
+		
+		//Module Controller *************************************
+		controllerServer = Server.getServer(8093, logService, context);
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		controllerServer.shutdown();
 		shellCommandReg.unregister();
 		
 		if (gpsActivator != null) {
