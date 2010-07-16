@@ -165,9 +165,11 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	}
 
 	public void fireModelChangeEvent(PropertyChangeEvent event) {
-		for (Iterator i = modelListeners.iterator(); i.hasNext();) {
-			IModelChangeListener l = (IModelChangeListener) i.next();
-			l.propertyChange(event);
+		synchronized (modelListeners) {
+			for (Iterator i = modelListeners.iterator(); i.hasNext();) {
+				IModelChangeListener l = (IModelChangeListener) i.next();
+				l.propertyChange(event);
+			}
 		}
 	}
 
