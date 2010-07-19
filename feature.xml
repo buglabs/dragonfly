@@ -2,7 +2,7 @@
 <feature
       id="com.buglabs.dragonfly.feature"
       label="Dragonfly SDK"
-      version="1.6.1.qualifier"
+      version="2.0.0.qualifier"
       provider-name="Bug Labs, Inc."
       plugin="com.buglabs.dragonfly.ui">
 
@@ -50,12 +50,6 @@ Contributors:
          version="0.0.0"/>
 
    <plugin
-         id="com.buglabs.dragonfly.bug.kernel"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="com.buglabs.common"
          download-size="0"
          install-size="0"
@@ -90,14 +84,14 @@ Contributors:
          unpack="false"/>
 
    <plugin
-         id="com.buglabs.phoneme.personal"
+         id="com.buglabs.dragonfly.help"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.buglabs.dragonfly.help"
+         id="com.buglabs.dragonfly.simulator"
          download-size="0"
          install-size="0"
          version="0.0.0"
