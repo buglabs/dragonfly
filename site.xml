@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.buglabs.dragonfly.feature_1.6.1.qualifier.jar" id="com.buglabs.dragonfly.feature" version="1.6.1.qualifier">
+   <feature url="features/com.buglabs.dragonfly.feature_2.0.0.qualifier.jar" id="com.buglabs.dragonfly.feature" version="2.0.0.qualifier">
       <category name="Dragonfly SDK"/>
    </feature>
    <category-def name="Dragonfly SDK" label="Dragonfly SDK"/>
