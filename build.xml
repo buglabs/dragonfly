@@ -7,7 +7,8 @@
 	<!-- to build for eclipse 3.5, change eclipse.version to be 3.5.1.R35x_20090820 -->
 	<!-- to build for eclipse 3.4, change eclipse.version to be 3.4.1.R34x_v20081217 -->
 	<!-- to build for eclipse 3.3, change eclipse.version to be 3.3.2.v20071019 -->
-	<property name="eclipse.version" value="3.5.1.R35x_20090820" />
+	<!-- <property name="eclipse.version" value="3.5.1.R35x_20090820" /> -->
+	<property name="eclipse.version" value="3.5.2.R35x_20100114" />
 	<property name="projectName" value="com.buglabs.dragonfly.feature" />
 
 	<!-- =================================================================== -->
