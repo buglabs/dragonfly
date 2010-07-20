@@ -23,14 +23,14 @@ import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.IModelNode;
 import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.model.VirtualBUGConnection;
+import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
  * This singleton class manages the BUG connections. Through this class the sdk
  * knows what BUGs are connected. It keeps a combination of avahi/mDNS
- * connections (DiscoveredBugConnection), Virtual Bug Connections
+ * connections (DiscoveredBugConnection), BUG Simulator Connections
  * (VirtualBUGConnection), and manually created connections
  * (StaticBugConnection).
  * 
@@ -300,25 +300,25 @@ public class BugConnectionManager {
 	}
 
 	/**
-	 * Special method to handle adding a new virtual BUG
+	 * Special method to handle adding a new BUG Simulator
 	 */
 	public void addNewVirtualBugConnection() {
 		try {
-			addBugConnection(new VirtualBUGConnection(DragonflyActivator.VIRTUAL_BUG, new URL(VIRTUAL_BUG_URL + ":" + DragonflyActivator.getDefault().getHttpPort())));
+			addBugConnection(new BUGSimulatorConnection(DragonflyActivator.VIRTUAL_BUG, new URL(VIRTUAL_BUG_URL + ":" + DragonflyActivator.getDefault().getHttpPort())));
 		} catch (MalformedURLException e) {
-			UIUtils.handleNonvisualError("Unable to create Virtual Bug Connection", e);
+			UIUtils.handleNonvisualError("Unable to create BUG Simulator Connection", e);
 		}
 	}
 
 	/**
-	 * Special method to handle removing the Virtual BUG
+	 * Special method to handle removing the BUG Simulator
 	 * 
 	 * @return
 	 */
 	public synchronized boolean removeVirtualBugConnection() {
 		Collection<IModelNode> chillins = getBugConnections();
 		for (IModelNode child : chillins) {
-			if (child instanceof VirtualBUGConnection) {
+			if (child instanceof BUGSimulatorConnection) {
 				getBugConnectionsRoot().removeChild(child);
 				fireBugRemovedEvent(this, child);
 				return true;
