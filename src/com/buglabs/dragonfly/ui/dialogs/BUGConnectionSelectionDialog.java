@@ -25,7 +25,7 @@ import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.model.VirtualBUGConnection;
+import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsViewComparator;
 
@@ -130,7 +130,7 @@ public class BUGConnectionSelectionDialog extends Dialog {
 			}
 
 			public Image getImage(Object element) {
-				if (element instanceof VirtualBUGConnection) {
+				if (element instanceof BUGSimulatorConnection) {
 					return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
 				} else if (element instanceof StaticBugConnection) {
 					return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);

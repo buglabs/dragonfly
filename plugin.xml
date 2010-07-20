@@ -274,13 +274,6 @@
             id="com.buglabs.dragonfly.ui.preferences.BugNetPreferencePage"
             class="com.buglabs.dragonfly.ui.preferences.BugNetPreferencePage"
             name="BUGnet"/>
-         <!--   
-	  	<page
-         category="BUGSKCategory"
-         class="com.buglabs.dragonfly.ui.preferences.VirtualBugPreferencePage"
-         id="com.buglabs.dragonfly.ui.preferences.VirtualBugPreferencePage"
-         name="Virtual BUG"/>
-         -->            
    </extension>
 
    <extension
@@ -345,7 +338,7 @@
                class="com.buglabs.dragonfly.ui.actions.LaunchVirtualBugAction"
                icon="icons/color/virtual_bug.gif"
                id="com.buglabs.dragonfly.ui.actions.LaunchVirtualBugAction"
-               label="Launch Virtual BUG"
+               label="Launch BUG Simulator"
                style="push"
                toolbarPath="dragonfly/3/launchVirtualBug"/>
       </actionSet>
@@ -356,7 +349,7 @@
             delegate="com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate"
             id="com.buglabs.dragonfly.launch.virtualBug"
             modes="run, debug"
-            name="Virtual BUG"
+            name="BUG Simulator"
             sourceLocatorId="com.buglabs.dragonfly.launch.BugKernelSourceLocator"
             sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"/>
    </extension>
@@ -376,7 +369,7 @@
             class="com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut"
             icon="icons/color/virtual_bug.gif"
             id="com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut"
-            label="Virtual BUG"
+            label="BUG Simulator"
             modes="run, debug">
          <perspective id="com.buglabs.dragonfly.ui.perspective"/>
          <contextualLaunch>

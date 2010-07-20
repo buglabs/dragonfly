@@ -14,7 +14,7 @@ import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
 import com.buglabs.osgi.concierge.runtime.ConciergeRuntime;
 
 /**
- * This class defines the default launch configuration of the Virtual BUG.
+ * This class defines the default launch configuration of the BUG Simulator.
  * 
  * @author aroman
  * 

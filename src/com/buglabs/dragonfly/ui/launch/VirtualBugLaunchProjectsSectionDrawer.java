@@ -186,7 +186,7 @@ public class VirtualBugLaunchProjectsSectionDrawer {
 	}
 
 	/**
-	 * When this flag is set, it means to launch the virtual bug with all
+	 * When this flag is set, it means to launch the BUG Simulator with all
 	 * workspace projects selected This is the default
 	 * 
 	 * @param val

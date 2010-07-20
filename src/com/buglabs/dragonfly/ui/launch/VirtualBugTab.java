@@ -35,7 +35,7 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	private final static String GPS_LOG_LABEL = "GPS Log: ";
 	private final static String ACC_LOG_LABEL = "Accelerometer Log: ";
 	private final static String HTTP_PORT_LABEL = "HTTP Port:";
-	private final static String TAB_NAME = "Virtual BUG";
+	private final static String TAB_NAME = "BUG Simulator";
 
 	private Text httpPort;
 	private String httpPortValue;

@@ -23,7 +23,7 @@ import com.buglabs.dragonfly.model.Module;
 import com.buglabs.dragonfly.model.ProgramNode;
 import com.buglabs.dragonfly.model.ServiceNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.model.VirtualBUGConnection;
+import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.views.Messages;
 
@@ -75,7 +75,7 @@ public class BugLabelProvider extends ColumnLabelProvider {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_BUGVIEW_APPLICATION);
 		} else if (element instanceof ServiceNode) {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_SERVICES);
-		} else if (element instanceof VirtualBUGConnection) {
+		} else if (element instanceof BUGSimulatorConnection) {
 			return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
 		} else if (element instanceof StaticBugConnection) {
 			return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);

@@ -42,7 +42,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			this.action = action;
 
 			DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(false);
-			// about to launch a Virtual BUG, disable action
+			// about to launch a BUG Simulator, disable action
 			ServerSocket socket = new ServerSocket(Integer.parseInt(DragonflyActivator.getDefault().getHttpPort()));
 			socket.close();
 
@@ -52,7 +52,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			IProcess[] launchedProcesses = launch.getProcesses();
 			launchedProcesses[0].setAttribute(TYPE, VIRTUAL_BUG);
 
-			// we need to find out when virtual bug has launched so we can
+			// we need to find out when BUG Simulator has launched so we can
 			// enabled vb button, once we enable
 			// and user tries to launch again, connecting to ServerSocket will
 			// throw an exception.
@@ -75,7 +75,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 				});
 
 				// if we got to here w/o throwing an exception, the assumption is the
-				// virtual bug is launching, however, it takes a few seconds, so delay
+				// BUG Simulator is launching, however, it takes a few seconds, so delay
 				// creation of connection for 3 seconds
 				new Timer().schedule(new TimerTask() {
 					public void run() {
@@ -86,14 +86,14 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 
 		} catch (CoreException e) {
 			action.setEnabled(true);
-			UIUtils.handleVisualError("Unable to launch Virtual BUG", e);
+			UIUtils.handleVisualError("Unable to launch BUG Simulator", e);
 		} catch (IOException e) {
 			action.setEnabled(true);
-			UIUtils.handleNonvisualError("Virtual BUG is already running", e);
-			MessageDialog.openInformation(new Shell(), "Virtual BUG Launch", "A Virtual BUG is already running. Please close it and launch again.");
+			UIUtils.handleNonvisualError("BUG Simulator is already running", e);
+			MessageDialog.openInformation(new Shell(), "BUG Simulator Launch", "A BUG Simulator is already running. Please close it and launch again.");
 		} catch (Exception e) {
 			action.setEnabled(true);
-			UIUtils.handleNonvisualError("Unable to launch Virtual BUG", e);
+			UIUtils.handleNonvisualError("Unable to launch BUG Simulator", e);
 		}
 	}
 
@@ -108,7 +108,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 	}
 
 	/**
-	 * Pick up a virtual bug debug event
+	 * Pick up a BUG Simulator debug event
 	 */
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (int i = 0; i < events.length; i++) {
@@ -122,7 +122,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 	}
 
 	/**
-	 * Handle the virtual bug event. right now just removing the vbug connection
+	 * Handle the BUG Simulator event. right now just removing the BUG Simulator connection
 	 * on TERMINATE event
 	 * 
 	 * @param event

@@ -250,7 +250,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		menuMgr.add(additions);
 
 		if (isSimulatedBUG(bug)) {
-			final MenuManager subMenu = new MenuManager("Virtual BUG");
+			final MenuManager subMenu = new MenuManager("BUG Simulator");
 			try {
 				List availableModules = controllerClient.getAvailableModuleNames();
 

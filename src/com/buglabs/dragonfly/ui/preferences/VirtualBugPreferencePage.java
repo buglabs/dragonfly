@@ -16,7 +16,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import com.buglabs.dragonfly.DragonflyActivator;
 
 /**
- * Preference page that defines http port that virtual BUG listens to
+ * Preference page that defines http port that BUG Simulator listens to
  * 
  * @author akravets
  * 
@@ -28,7 +28,7 @@ public class VirtualBugPreferencePage extends PreferencePage implements IWorkben
 	protected String httpPortValue;
 
 	public VirtualBugPreferencePage() {
-		super("Virtual BUG");
+		super("BUG Simulator");
 	}
 
 	/*

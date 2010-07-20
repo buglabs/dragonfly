@@ -72,7 +72,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 				Display.getCurrent().syncExec(new Runnable() {
 					
 					public void run() {
-						MessageDialog.openInformation(new Shell(), "Virtual BUG Launch", "A Virtual BUG is already running. Please close it and launch again.");
+						MessageDialog.openInformation(new Shell(), "BUG Simulator Launch", "BUG Simulator is already running. Please close it and launch again.");
 					}
 				});
 			}
@@ -202,7 +202,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	}
 
 	/**
-	 * This one called from the parent on launching of virtual bugs says which
+	 * This one called from the parent on launching of BUG Simulator says which
 	 * projects from the workspace to build. It returns a list of strings of
 	 * Project names.
 	 * 

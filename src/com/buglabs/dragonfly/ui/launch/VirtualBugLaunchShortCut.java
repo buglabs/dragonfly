@@ -66,9 +66,9 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 				}
 			});
 		} catch (InvocationTargetException e) {
-			UIUtils.handleNonvisualError("Error launching Virtual BUG", e);
+			UIUtils.handleNonvisualError("Error launching BUG Simulator", e);
 		} catch (InterruptedException e) {
-			UIUtils.handleNonvisualError("Error launching Virtual BUG", e);
+			UIUtils.handleNonvisualError("Error launching BUG Simulator", e);
 		}
 
 		if (configuration != null) {
@@ -97,7 +97,7 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 		ILaunchConfiguration config = null;
 
 		ILaunchConfigurationType configType = getLaunchConfigurationType();
-		String computedName = getComputedName("Virtual BUG"); //$NON-NLS-1$
+		String computedName = getComputedName("BUG Simulator"); //$NON-NLS-1$
 		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, computedName);
 		VirtualBugLaunchConfigurationInitializer.initializeSystemProperties(wc);
 		config = wc.doSave();
@@ -114,7 +114,7 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 		IDebugModelPresentation labelProvider = DebugUITools.newDebugModelPresentation();
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), labelProvider);
 		dialog.setElements(configs);
-		dialog.setTitle("Launch Virtual BUG");
+		dialog.setTitle("Launch BUG Simulator");
 		dialog.setMessage("Please select a launch configuration.");
 		dialog.setMultipleSelection(false);
 		int result = dialog.open();

@@ -43,7 +43,7 @@ public class ShowBUGConsoleAction extends Action {
 	private static final String BUG_CONSOLE_NAME = "BUG Console"; //$NON-NLS-1$
 	private static final String ACTION_LABEL = "Show OSGi Console"; //$NON-NLS-1$
 	private static final Object LOOPBACK_ADDRESS = "127.0.0.1"; //$NON-NLS-1$
-	private static final String VIRTUAL_BUG_CONSOLE_TITLE = "Virtual BUG"; //$NON-NLS-1$
+	private static final String VIRTUAL_BUG_CONSOLE_TITLE = "BUG Simulator"; //$NON-NLS-1$
 	private final TreeViewer viewer;
 	private Bug bug;
 
@@ -59,7 +59,7 @@ public class ShowBUGConsoleAction extends Action {
 		try {
 			IConsole c = null;
 
-			// If the action was selected on a Virtual BUG, simply show the
+			// If the action was selected on a BUG Simulator, simply show the
 			// pre-existing launch configuration.
 			// If there are multiple VBs running, this will show the first one
 			// found.
@@ -67,7 +67,7 @@ public class ShowBUGConsoleAction extends Action {
 			// connect to the default
 			// OSGi console port.
 			if (bug.getUrl().getHost().equals(LOOPBACK_ADDRESS)) {
-				// This is a virtual bug, look for that.
+				// This is a BUG Simulator, look for that.
 				c = findConsole(VIRTUAL_BUG_CONSOLE_TITLE);
 			} else {
 				c = findConsole(BUG_CONSOLE_NAME + " [" + bug.getUrl().getHost() + ":" + DEFAULT_BUG_CONSOLE_PORT + "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

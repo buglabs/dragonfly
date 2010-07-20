@@ -100,8 +100,8 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	private static final String PAGE_TITLE = "Service Definition";
 	private static final String TARGET_BUG_TITLE = "Target BUG";
 	private static final String TARGET_BUG_INSTRUCTIONS = "Select a BUG from the list below to be used as a target";
-	private static final String START_VIRTUAL_BUG_LABEL = "Start &Virtual BUG";
-	private static final String START_VIRTUAL_BUG_TOOLTIP = "Start Virtual BUG and start consuming its services";
+	private static final String START_VIRTUAL_BUG_LABEL = "Start &BUG Simulator";
+	private static final String START_VIRTUAL_BUG_TOOLTIP = "Start BUG Simulator and start consuming its services";
 	private static final String REQUIRED_SERVICES_TITLE = "Required Services";
 
 	private static final String NAME_LABEL = "Name";
@@ -118,7 +118,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	private static final String RELOAD_LIST_WARN_TITLE = "Reloading Services List";
 	private static final String RELOAD_LIST_WARN_MESSAGE = "Any selections you've made will be lost.  Would you like to continue?";
 
-	private static final String LAUNCH_VBUG_MESSAGE = "Launch Virtual BUG to select services that this project will consume.";
+	private static final String LAUNCH_VBUG_MESSAGE = "Launch BUG Simulator to select services that this project will consume.";
 	private static final String SELECT_BUG_MESSAGE = "Select a BUG from Target BUG List to choose services that this project will consume.";
 	private static final String SVCS_INSTRUCTIONS_TEXT = "Selecting a service will add it to the list of services required to run your project.  Double click the service to add required properties.";
 	private static final int BUGS_VIEWER_HEIGHT_HINT = 100;
@@ -674,7 +674,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	}
 
 	/**
-	 * Private inner class to handle clicking of "Lauch Virtual BUG" button
+	 * Private inner class to handle clicking of "Lauch BUG Simulator" button
 	 * 
 	 * Broken out into private innner class (instead of anonymous class) to make
 	 * the code easier to read.
@@ -692,7 +692,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 		}
 
 		/**
-		 * Selected the Launch Virtual BUG button
+		 * Selected the Launch BUG Simulator button
 		 */
 		public synchronized void widgetSelected(SelectionEvent e) {
 			btnStartVBUG.setEnabled(false);
@@ -706,7 +706,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 					try {
 						processes = virtualBugLaunchShortcut.launch(ILaunchManager.RUN_MODE).getProcesses();
 					} catch (CoreException e) {
-						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, DragonflyActivator.PLUGIN_ID, IStatus.OK, "Failure launching Virtual BUG", e));
+						Activator.getDefault().getLog().log(new Status(IStatus.ERROR, DragonflyActivator.PLUGIN_ID, IStatus.OK, "Failure launching BUG Simulator", e));
 					}
 					if (processes == null || processes.length < 1)
 						return;
@@ -715,7 +715,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 					processes[0].getStreamsProxy().getOutputStreamMonitor().addListener(new ProcessStreamListener());
 
 					// if we got to here w/o throwing an exception, the assumption is the
-					// virtual bug is launching, however, it takes a few seconds, so delay
+					// BUG Simulator is launching, however, it takes a few seconds, so delay
 					// creation of connection for 3 seconds
 					new Timer().schedule(new TimerTask() {
 						public void run() {
@@ -784,7 +784,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	}
 
 	/* 
-	 * The next two methods handle removing a Virtual Bug launched from the code generation page, 
+	 * The next two methods handle removing a BUG Simulator launched from the code generation page, 
 	 * This code was hastily copied from LaunchVirtualBugAction -- Couldn't figure out a quick way to keep DRY.
 	 * 
 	 * First method satisfies implementation of IDebugEventSetListener
@@ -792,7 +792,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 
 	/**
 	 * 
-	 * Pick up a virtual bug debug event
+	 * Pick up a BUG Simulator debug event
 	 */
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (int i = 0; i < events.length; i++) {
@@ -806,7 +806,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	}
 
 	/**
-	 * Handle the virtual bug event. right now just removing the vbug connection
+	 * Handle the BUG Simulator event. right now just removing the vbug connection
 	 * on TERMINATE event
 	 * 
 	 * @param event
