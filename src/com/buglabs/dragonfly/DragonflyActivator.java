@@ -213,27 +213,9 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 
 	public static String getAppId() {
 
-		return "BUG Dragonfly IDE";
+		return "BUG Dragonfly SDK";
 	}
 
-	/*
-	public void addProgramToLibrary(ProgramNode prog) {
-		IFile progFile = myLibraryProject.getFile(prog.getName() + ".bpx");
-
-		if (!progFile.exists()) {
-
-			try {
-				String contents = BugnetWSHelper.getProgramContents(prog.getPackage(), getAuthenticationData());
-				progFile.create(new ByteArrayInputStream(contents.getBytes()), true, new NullProgressMonitor());
-			} catch (CoreException e) {
-				UIUtils.handleVisualError("An error occurred while creating My Library project", e);
-			} catch (Exception e) {
-				UIUtils.handleVisualError("An error occurred while creating My Library project", e);
-			}
-		}
-
-	}
-	*/
 	public File createFile(String fileName) {
 		return context.getDataFile(fileName);
 	}
