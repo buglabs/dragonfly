@@ -181,12 +181,12 @@ public class GSMModlet implements IModlet, IGSMModuleControl, IModuleControl, Pu
 	}
 
 	public int resume() throws IOException {
-		throw new IOException("GSMModlet resume call is not implemented for Virtual BUG");
+		throw new IOException("GSMModlet resume call is not implemented for BUG Simulator");
 	}
 	
 
 	public int suspend() throws IOException {
-		throw new IOException("GSMModlet suspend call is not implemented for Virtual BUG");
+		throw new IOException("GSMModlet suspend call is not implemented for BUG Simulator");
 	}
 
 	

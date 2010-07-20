@@ -386,10 +386,10 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 	}
 
 	public int resume() throws IOException {
-		throw new IOException("GPSModlet resume call is not implemented for Virtual BUG");
+		throw new IOException("GPSModlet resume call is not implemented for BUG Simulator");
 	}
 
 	public int suspend() throws IOException {
-		throw new IOException("GPSModlet suspend call is not implemented for Virtual BUG");
+		throw new IOException("GPSModlet suspend call is not implemented for BUG Simulator");
 	}
 }

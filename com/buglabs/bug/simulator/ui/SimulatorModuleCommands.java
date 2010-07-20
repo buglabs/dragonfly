@@ -14,7 +14,7 @@ import com.buglabs.osgi.shell.pub.AbstractCommand;
 import com.buglabs.util.OSGiServiceLoader;
 
 /**
- * Commands for interacting with the Virtual BUG.  Insert/remove modules.
+ * Commands for interacting with the BUG Simulator.  Insert/remove modules.
  * @author kgilmer
  *
  */
@@ -69,7 +69,7 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 	}
 	
 	/**
-	 * List available modules that can be attached to Virtual BUG.
+	 * List available modules that can be attached to BUG Simulator.
 	 * @author kgilmer
 	 *
 	 */

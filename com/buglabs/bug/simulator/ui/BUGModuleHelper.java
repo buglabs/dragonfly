@@ -10,7 +10,7 @@ import org.osgi.framework.BundleContext;
 import com.buglabs.util.BugBundleConstants;
 
 /**
- * Utility class for virtual bug.
+ * Utility class for BUG Simulator.
  * 
  * @author akravets
  * 

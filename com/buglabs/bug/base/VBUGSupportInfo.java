@@ -19,14 +19,14 @@ public class VBUGSupportInfo extends SupportInfo {
 	}
 
 	protected String getKernelVersion() {
-		return "Virtual BUG (No Kernel)";
+		return "BUG Simulator (No Kernel)";
 	}
 
 	protected String getRootfsVersion() {
 		String val = (String) headers.get(VERSION_MANIFEST_KEY);
 		if (val != null)
 			return VERSION_OUT_KEY + val;
-		return "Virtual BUG (No RootFS Version)";
+		return "BUG Simulator (No RootFS Version)";
 	}
 
 }

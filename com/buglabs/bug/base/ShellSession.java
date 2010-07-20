@@ -71,7 +71,7 @@ public class ShellSession implements IShellSession {
 
 	/**
 	 * @return true if we are running on Windows OS. This is only possible with
-	 *         Virtual BUG.
+	 *         BUG Simulator.
 	 */
 	private boolean isWindows() {
 		return System.getProperty("os.name").indexOf("Win") != -1;
