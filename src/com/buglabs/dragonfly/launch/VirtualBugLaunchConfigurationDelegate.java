@@ -71,7 +71,6 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 				
 				Display.getCurrent().syncExec(new Runnable() {
 					
-					@Override
 					public void run() {
 						MessageDialog.openInformation(new Shell(), "Virtual BUG Launch", "A Virtual BUG is already running. Please close it and launch again.");
 					}
