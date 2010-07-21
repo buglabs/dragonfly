@@ -1,4 +1,9 @@
-Export-Package: com.buglabs.bug.base.pub, com.buglabs.bug.bmi.pub, com.buglabs.bug.module.gps.pub, org.osgi.util.measurement, org.osgi.util.position, com.buglabs.bug.module.gsm.pub
+Export-Package: com.buglabs.bug.base.pub,
+ com.buglabs.bug.bmi.pub,
+ com.buglabs.bug.module.gps.pub,
+ com.buglabs.bug.module.sierra.pub,
+ org.osgi.util.measurement,
+ org.osgi.util.position
 Bundle-Vendor: Bug Labs, Inc.
 Manifest-Version: 1.0
 Bundle-Version: 1.0.0

@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.module.gsm;
+package com.buglabs.bug.module.sierra;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.gsm.pub.IGSMModuleControl;
 import com.buglabs.bug.module.pub.IModlet;
+import com.buglabs.bug.module.sierra.pub.ISierraModuleControl;
 import com.buglabs.module.IModuleControl;
 import com.buglabs.module.IModuleLEDController;
 import com.buglabs.module.IModuleProperty;
@@ -55,7 +55,7 @@ import com.buglabs.util.RemoteOSGiServiceConstants;
  * @author jconnolly
  * 
  */
-public class GSMModlet implements IModlet, IGSMModuleControl, IModuleControl, PublicWSProvider2, IModuleLEDController {
+public class GSMModlet implements IModlet, ISierraModuleControl, IModuleControl, PublicWSProvider2, IModuleLEDController {
 
 	private BundleContext context;
 
@@ -107,7 +107,7 @@ public class GSMModlet implements IModlet, IGSMModuleControl, IModuleControl, Pu
 
 		moduleRef = context.registerService(IModuleControl.class.getName(), this, null);
 		ledRef = context.registerService(IModuleLEDController.class.getName(), this, createRemotableProperties(null));
-		gsmControlRef = context.registerService(IGSMModuleControl.class.getName(), this, createRemotableProperties(null));
+		gsmControlRef = context.registerService(ISierraModuleControl.class.getName(), this, createRemotableProperties(null));
 	}
 
 	/**

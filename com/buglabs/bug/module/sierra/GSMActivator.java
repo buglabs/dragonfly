@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.module.gsm;
+package com.buglabs.bug.module.sierra;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -61,11 +61,11 @@ public class GSMActivator implements BundleActivator, IModletFactory {
 	}
 
 	public String getModuleId() {
-		return "GSM";
+		return "SIERRA";
 	}
 
 	public String getName() {
-		return "com.buglabs.bug.module.gsm";
+		return "com.buglabs.bug.module.sierra";
 	}
 
 	public String getVersion() {

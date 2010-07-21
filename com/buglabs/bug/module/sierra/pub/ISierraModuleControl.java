@@ -25,12 +25,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.module.gsm.pub;
+package com.buglabs.bug.module.sierra.pub;
 
 import com.buglabs.module.IModuleControl;
 import com.buglabs.module.IModuleLEDController;
 
-public interface IGSMModuleControl extends IModuleControl, IModuleLEDController {
+public interface ISierraModuleControl extends IModuleControl, IModuleLEDController {
 
 	
 }
