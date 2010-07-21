@@ -54,6 +54,7 @@ import com.buglabs.bug.base.pub.IShellService;
 import com.buglabs.bug.base.pub.ITimeProvider;
 import com.buglabs.bug.bmi.PipeReader;
 import com.buglabs.bug.bmi.pub.Manager;
+import com.buglabs.bug.module.audio.AudioActivator;
 import com.buglabs.bug.module.gps.GPSActivator;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
@@ -110,6 +111,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	private Server controllerServer;
 
+	private AudioActivator audioActivator;
+
 	public void start(final BundleContext context) throws Exception {
 		//Basic setup ********************************************
 		this.context = context;
@@ -154,9 +157,13 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		gpsActivator = new GPSActivator();
 		gpsActivator.start(context);
 		
-		//com.buglabs.bug.module.gsm ***********************
+		//com.buglabs.bug.module.sierra ***********************
 		gsmActivator = new GSMActivator();
 		gsmActivator.start(context);
+		
+		//com.buglabs.bug.module.audio ***********************
+		audioActivator = new AudioActivator();
+		audioActivator.start(context);
 		
 		//UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
@@ -175,6 +182,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		
 		if (gsmActivator != null) {
 			gsmActivator.stop(context);
+		}
+		
+		if (audioActivator != null) {
+			audioActivator.stop(context);
 		}
 		
 		try {
