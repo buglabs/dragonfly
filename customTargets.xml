@@ -26,8 +26,8 @@
 	<!-- ===================================================================== -->
 
 	<target name="assemble.com.buglabs.dragonfly.feature">
-		<antcall target="copyEmulatorJars" />
 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}" />
+		<antcall target="copyEmulatorJars" />
 	</target>
 
 	<!-- ===================================================================== -->
