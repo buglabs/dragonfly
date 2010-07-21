@@ -58,7 +58,6 @@ public class ControllerProtocol {
 			final String fmodule = module;
 			Thread t = new Thread(new Runnable() {
 
-				@Override
 				public void run() {
 					BMIMessage insertMSG = new BMIMessage(fmodule, "emulator", slotId, BMIMessage.EVENT_INSERT);
 					bmiManager.processMessage(insertMSG.toString());
@@ -78,7 +77,6 @@ public class ControllerProtocol {
 			final String fmodule = module;
 			Thread t = new Thread(new Runnable() {
 
-				@Override
 				public void run() {
 					BMIMessage removeMSG = new BMIMessage(fmodule, "emulator", slotId, BMIMessage.EVENT_REMOVE);
 					bmiManager.processMessage(removeMSG.toString());
@@ -100,7 +98,6 @@ public class ControllerProtocol {
 			this.slot = slot;
 		}
 
-		@Override
 		public void load(Object service) throws Exception {
 			if (((IModuleControl) service).getSlotId() == slot) {
 				moduleName = ((IModuleControl) service).getModuleName();
@@ -122,7 +119,6 @@ public class ControllerProtocol {
 		final StringBuffer sb = new StringBuffer();
 
 		OSGiServiceLoader.loadServices(context, IModletFactory.class.getName(), null, new OSGiServiceLoader.IServiceLoader() {
-			@Override
 			public void load(Object service) throws Exception {
 				sb.append(((IModletFactory) service).getModuleId());
 				sb.append(',');

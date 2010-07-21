@@ -32,7 +32,6 @@ public class Server extends Thread {
 		serverSocket = new ServerSocket(port);
 	}
 
-	@Override
 	public void run() {
 		while (true) {
 			try {

@@ -27,7 +27,6 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 		this.bmiManager = bmiManager;
 	}
 
-	@Override
 	public List getCommands() {
 		List l = new ArrayList();
 		
@@ -40,7 +39,6 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 	
 	private class RemoveModuleCommand extends AbstractCommand {
 
-		@Override
 		public void execute() throws Exception {
 			Integer slotId = Integer.parseInt((String) this.arguments.get(0));
 			
@@ -57,12 +55,10 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 			bmiManager.processMessage(removeMSG.toString());
 		}
 
-		@Override
 		public String getName() {
 			return "rmmodule";
 		}
 		
-		@Override
 		public String getUsage() {
 			return "slot";
 		}
@@ -75,10 +71,9 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 	 */
 	private class ListModulesCommand extends AbstractCommand {
 
-		@Override
 		public void execute() throws Exception {
 			OSGiServiceLoader.loadServices(context, IModletFactory.class.getName(), null, new OSGiServiceLoader.IServiceLoader() {				
-				@Override
+
 				public void load(Object service) throws Exception {
 					outWriter.write(((IModletFactory) service).getModuleId());
 					outWriter.write('\n');
@@ -87,7 +82,6 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 			});
 		}
 
-		@Override
 		public String getName() {
 			return "lsmodules";
 		}
@@ -97,7 +91,6 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 	
 		OSGiServiceLoader.loadServices(context, IModuleControl.class.getName(), null, new OSGiServiceLoader.IServiceLoader() {
 
-			@Override
 			public void load(Object service) throws Exception {
 				if (((IModuleControl) service).getSlotId() == slot) {
 					moduleName = ((IModuleControl) service).getModuleName();
