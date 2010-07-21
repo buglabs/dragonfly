@@ -109,7 +109,6 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 	 */
 	private class InsertModuleCommand extends AbstractCommand {
 
-		@Override
 		public void execute() throws Exception {
 			String module = (String) this.arguments.get(0);
 			Integer slotId = Integer.parseInt((String) this.arguments.get(1));
@@ -118,7 +117,6 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 			bmiManager.processMessage(insertMSG.toString());
 		}
 
-		@Override
 		public String getName() {
 			return "insmodule";
 		}
