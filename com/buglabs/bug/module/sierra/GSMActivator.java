@@ -77,7 +77,7 @@ public class GSMActivator implements BundleActivator, IModletFactory {
 	}
 
 	public String getVersion() {
-		return "1.0.0";
+		return "2.0.0";
 	}
 
 	public BundleContext getBundleContext() {

@@ -1,4 +1,4 @@
-package com.buglabs.bug.module.lcd;
+package com.buglabs.bug.module.vonhippel;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -13,24 +13,11 @@ import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.util.LogServiceUtil;
 
-/**
- * Activator for the LCD bundle (simulator).  
- * @author kgilmer
- *
- */
-public class LCDActivator implements BundleActivator, IModletFactory {
+public class VHActivator implements BundleActivator, IModletFactory {
 
 	private BundleContext context;
-
-	private LogService logService;
-
 	private ServiceRegistration sr;
-
-	private static LCDActivator instance;
-	
-	public LCDActivator() {
-		instance = this;
-	}
+	private LogService logService;
 
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
@@ -41,13 +28,6 @@ public class LCDActivator implements BundleActivator, IModletFactory {
 		
 		sr = context.registerService(IModletFactory.class.getName(), this, dict);
 		logService = LogServiceUtil.getLogService(context);
-		
-	}
-	
-	public static LCDActivator getInstance() {
-		synchronized (instance) {
-			return instance;
-		}
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -55,32 +35,23 @@ public class LCDActivator implements BundleActivator, IModletFactory {
 	}
 
 	public IModlet createModlet(BundleContext context, int slotId) {
-		return new LCDModlet(context, slotId, getModuleId(), logService);
+		VonHippelModlet vhm = new VonHippelModlet(context, slotId, getModuleId(), logService);
+		return vhm;
 	}
-
 
 	public IModlet createModlet(BundleContext context, int slotId, BMIModuleProperties properties) {
 		return createModlet(context, slotId);
-	}	
+	}
 	
 	public String getModuleId() {
-		return "LCD";
+		return "VONHIPPEL";
 	}
 
 	public String getName() {
-		return "com.buglabs.bug.module.lcd";
+		return "com.buglabs.bug.emulator.module.vonhippel";
 	}
 
 	public String getVersion() {
 		return "2.0.0";
 	}
-
-	public static LCDActivator getDefault() {
-		return instance;
-	}
-
-	public BundleContext getBundleContext() {
-		return context;
-	}
-
 }

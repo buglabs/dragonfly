@@ -62,6 +62,7 @@ import com.buglabs.bug.module.motion.MotionActivator;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.bug.module.sierra.GSMActivator;
+import com.buglabs.bug.module.vonhippel.VHActivator;
 import com.buglabs.bug.simulator.controller.Server;
 import com.buglabs.bug.simulator.ui.SimulatorModuleCommands;
 import com.buglabs.osgi.shell.IShellCommandProvider;
@@ -121,6 +122,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private MotionActivator motionActivator;
 
 	private LCDActivator lcdActivator;
+
+	private VHActivator vhActivator;
 
 	public void start(final BundleContext context) throws Exception {
 		//Basic setup ********************************************
@@ -182,6 +185,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		lcdActivator = new LCDActivator();
 		lcdActivator.start(context);
 		
+		//com.buglabs.bug.module.vonhippel ***********************
+		vhActivator = new VHActivator();
+		vhActivator.start(context);
+		
 		//UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
 		
@@ -196,6 +203,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	public void stop(BundleContext context) throws Exception {
 		controllerServer.shutdown();
 		shellCommandReg.unregister();
+		
+		if (lcdActivator != null) {
+			lcdActivator.stop(context);
+		}
 		
 		if (lcdActivator != null) {
 			lcdActivator.stop(context);
