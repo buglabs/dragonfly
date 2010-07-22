@@ -19,7 +19,7 @@ public class AccelerometerRawFeed extends StreamMultiplexer implements IAccelero
 	public AccelerometerRawFeed(InputStream is, AccelerometerControl control) {
 		super(is, BUFFER_SIZE, PROCESS_DELAY, READ_DELAY);
 		setName("AccelerometerRawFeed");
-		setLogService(LogServiceUtil.getLogService(Activator.getDefault().getBundleContext()));
+		setLogService(LogServiceUtil.getLogService(MotionActivator.getDefault().getBundleContext()));
 		mass = new MotionAccelerometerSampleStream(getInputStream(), control);
 	}
 

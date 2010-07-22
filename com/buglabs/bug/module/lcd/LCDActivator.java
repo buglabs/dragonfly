@@ -13,7 +13,12 @@ import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.util.LogServiceUtil;
 
-public class Activator implements BundleActivator, IModletFactory {
+/**
+ * Activator for the LCD bundle (simulator).  
+ * @author kgilmer
+ *
+ */
+public class LCDActivator implements BundleActivator, IModletFactory {
 
 	private BundleContext context;
 
@@ -21,9 +26,9 @@ public class Activator implements BundleActivator, IModletFactory {
 
 	private ServiceRegistration sr;
 
-	private static Activator instance;
+	private static LCDActivator instance;
 	
-	public Activator() {
+	public LCDActivator() {
 		instance = this;
 	}
 
@@ -39,7 +44,7 @@ public class Activator implements BundleActivator, IModletFactory {
 		
 	}
 	
-	public static Activator getInstance() {
+	public static LCDActivator getInstance() {
 		synchronized (instance) {
 			return instance;
 		}
@@ -59,18 +64,18 @@ public class Activator implements BundleActivator, IModletFactory {
 	}	
 	
 	public String getModuleId() {
-		return (String) context.getBundle().getHeaders().get("Bug-Module-Id");
+		return "LCD";
 	}
 
 	public String getName() {
-		return (String) context.getBundle().getHeaders().get("Bundle-SymbolicName");
+		return "com.buglabs.bug.module.lcd";
 	}
 
 	public String getVersion() {
-		return (String) context.getBundle().getHeaders().get("Bundle-Version");
+		return "1.0.0";
 	}
 
-	public static Activator getDefault() {
+	public static LCDActivator getDefault() {
 		return instance;
 	}
 

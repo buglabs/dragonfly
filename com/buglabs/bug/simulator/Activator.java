@@ -21,6 +21,7 @@ package com.buglabs.bug.simulator;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.BindException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,6 +57,8 @@ import com.buglabs.bug.bmi.PipeReader;
 import com.buglabs.bug.bmi.pub.Manager;
 import com.buglabs.bug.module.audio.AudioActivator;
 import com.buglabs.bug.module.gps.GPSActivator;
+import com.buglabs.bug.module.lcd.LCDActivator;
+import com.buglabs.bug.module.motion.MotionActivator;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.bug.module.sierra.GSMActivator;
@@ -78,6 +81,8 @@ import com.buglabs.util.LogServiceUtil;
  * 
  */
 public class Activator implements BundleActivator, ITimeProvider, ServiceListener {
+
+	private static final int BUG_SIMULATOR_CONTROLLER_PORT = 8093;
 
 	private static final String INFO_SERVLET_ALIAS = "/support";
 
@@ -112,6 +117,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private Server controllerServer;
 
 	private AudioActivator audioActivator;
+
+	private MotionActivator motionActivator;
+
+	private LCDActivator lcdActivator;
 
 	public void start(final BundleContext context) throws Exception {
 		//Basic setup ********************************************
@@ -165,16 +174,36 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		audioActivator = new AudioActivator();
 		audioActivator.start(context);
 		
+		//com.buglabs.bug.module.motion ***********************
+		motionActivator = new MotionActivator();
+		motionActivator.start(context);
+		
+		//com.buglabs.bug.module.lcd ***********************
+		lcdActivator = new LCDActivator();
+		lcdActivator.start(context);
+		
 		//UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
 		
 		//Module Controller *************************************
-		controllerServer = Server.getServer(8093, logService, context);
+		try {
+		controllerServer = Server.getServer(BUG_SIMULATOR_CONTROLLER_PORT, logService, context);
+		} catch (BindException e) {
+			logService.log(LogService.LOG_WARNING, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
+		}
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		controllerServer.shutdown();
 		shellCommandReg.unregister();
+		
+		if (lcdActivator != null) {
+			lcdActivator.stop(context);
+		}
+		
+		if (motionActivator != null) {
+			motionActivator.stop(context);
+		}
 		
 		if (gpsActivator != null) {
 			gpsActivator.stop(context);

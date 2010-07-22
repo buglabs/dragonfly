@@ -27,6 +27,9 @@
  *******************************************************************************/
 package com.buglabs.bug.module.sierra;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -47,7 +50,12 @@ public class GSMActivator implements BundleActivator, IModletFactory {
 
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		sr = context.registerService(IModletFactory.class.getName(), this, null);
+		
+		Dictionary dict = new Hashtable();
+		dict.put("Modlet Provider", getName());
+		dict.put("Module", getModuleId());
+		
+		sr = context.registerService(IModletFactory.class.getName(), this, dict);
 	}
 
 	public void stop(BundleContext context) throws Exception {

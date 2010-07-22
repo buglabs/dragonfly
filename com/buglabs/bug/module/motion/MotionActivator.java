@@ -13,16 +13,16 @@ import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.util.LogServiceUtil;
 
-public class Activator implements BundleActivator, IModletFactory {
+public class MotionActivator implements BundleActivator, IModletFactory {
 	private BundleContext context;
 
 	private ServiceRegistration sr;
 
 	private LogService logService;
 
-	private static Activator instance;
+	private static MotionActivator instance;
 
-	public Activator(){
+	public MotionActivator(){
 		instance = this;
 	}
 	
@@ -42,7 +42,7 @@ public class Activator implements BundleActivator, IModletFactory {
 		sr.unregister();
 	}
 	
-	public static Activator getDefault(){
+	public static MotionActivator getDefault(){
 		return instance;
 	}
 	
@@ -61,15 +61,15 @@ public class Activator implements BundleActivator, IModletFactory {
 	}	
 	
 	public String getModuleId() {
-		return (String) context.getBundle().getHeaders().get("Bug-Module-Id");
+		return "MOTION";
 	}
 
 	public String getName() {
-		return (String) context.getBundle().getHeaders().get("Bundle-SymbolicName");
+		return "com.buglabs.bug.module.motion";
 	}
 
 	public String getVersion() {
-		return (String) context.getBundle().getHeaders().get("Bundle-Version");
+		return "1.0.0";
 	}
 
 }
