@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogService;
 
 /**

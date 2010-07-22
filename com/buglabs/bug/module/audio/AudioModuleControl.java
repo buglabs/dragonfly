@@ -28,7 +28,9 @@
 package com.buglabs.bug.module.audio;
 
 import java.io.IOException;
+
 import org.osgi.service.log.LogService;
+
 import com.buglabs.bug.module.audio.pub.IAudioModuleControl;
 import com.buglabs.module.IModuleLEDController;
 
