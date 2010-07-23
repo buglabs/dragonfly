@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views,
  org.eclipse.ui.console,
  com.buglabs.dragonfly.simulator,
- com.buglabs.dragonfly.felix;bundle-version="1.0.0"
+ com.buglabs.dragonfly.felix
 Eclipse-LazyStart: true
 Export-Package: com.buglabs.dragonfly.launch,
  com.buglabs.dragonfly.ui.actions,
