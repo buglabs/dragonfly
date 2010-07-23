@@ -176,7 +176,7 @@ public class ShowBUGConsoleAction extends Action {
 					}
 				}
 			} catch (Exception e) {
-				UIUtils.handleNonvisualWarning("Exception was generated during OSGi console I/O.", e); //$NON-NLS-1$
+				UIUtils.handleNonvisualWarning("Exception was generated during OSGi console I/O.", e, true); //$NON-NLS-1$
 			} finally {
 				try {
 					bugIS.close();
@@ -230,7 +230,7 @@ public class ShowBUGConsoleAction extends Action {
 					}
 				}
 			} catch (Exception e) {
-				UIUtils.handleNonvisualWarning("Exception was generated during OSGi console I/O.", e); //$NON-NLS-1$
+				UIUtils.handleNonvisualWarning("Exception was generated during OSGi console I/O.", e, true); //$NON-NLS-1$
 			} finally {
 				try {
 					bugOS.close();

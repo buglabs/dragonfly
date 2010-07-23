@@ -34,15 +34,23 @@ public class ConnectBugHelper {
 			public void done(final IJobChangeEvent event) {
 				PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 					public void run() {
-						if (event.getResult().isOK()) {
-							Job registerJob = new RegisterEventListenerJob(bug);
-							registerJob.setPriority(Job.LONG);
-							registerJob.schedule();
-						} else {
-							bug.setConnected(false);
-							bug.getChildren().clear();
+						Job job = event.getJob();
+
+						if (!(job instanceof ConnectBugJob)) {
+							throw new RuntimeException("Invalid job in job event handler.");
 						}
-						new RefreshBugAction(bug).run();
+
+						if (!((ConnectBugJob) job).failedQuietly()) {
+							if (event.getResult().isOK()) {
+								Job registerJob = new RegisterEventListenerJob(bug);
+								registerJob.setPriority(Job.LONG);
+								registerJob.schedule();
+							} else {
+								bug.setConnected(false);
+								bug.getChildren().clear();
+							}
+							new RefreshBugAction(bug).run();
+						}
 					}
 				});
 				super.done(event);

@@ -185,10 +185,8 @@ public class UpsertToBugAction extends Action {
 			String ee = null;
 			try {
 				ee = BugProjectUtil.getManifestEntry(project, EXECUTION_ENVIRONMENT_KEY);
-			} catch (CoreException e1) {
-				UIUtils.handleNonvisualWarning("Unable to read Execution Environment for project " + project.getName(), e1); //$NON-NLS-1$
-			} catch (IOException e1) {
-				UIUtils.handleNonvisualWarning("Unable to read Execution Environment for project " + project.getName(), e1); //$NON-NLS-1$
+			} catch (Exception e1) {
+				UIUtils.handleNonvisualWarning("Unable to read Execution Environment for project " + project.getName(), e1, true); //$NON-NLS-1$
 			}
 			// No EE in App, assumed to be PhoneME
 			if (ee == null || ee.length() == 0)
@@ -214,7 +212,7 @@ public class UpsertToBugAction extends Action {
 						bugName = "default"; //$NON-NLS-1$
 					connection = new StaticBugConnection(bugName, new URL(url));
 				} catch (MalformedURLException e) {
-					UIUtils.handleNonvisualWarning(Messages.getString("ExportJarToBugJob.UNABLE_TO_LOCATE_BUG"), e); //$NON-NLS-1$
+					UIUtils.handleNonvisualWarning(Messages.getString("ExportJarToBugJob.UNABLE_TO_LOCATE_BUG"), e, true); //$NON-NLS-1$
 				}
 			}
 			return connection;

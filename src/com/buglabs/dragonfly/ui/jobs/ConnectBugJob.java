@@ -20,6 +20,7 @@ public class ConnectBugJob extends Job {
 
 	private BugConnection bug;
 	private boolean quiet;
+	private boolean quietFailed = false;
 
 	IStatus result = Status.OK_STATUS;
 
@@ -65,12 +66,19 @@ public class ConnectBugJob extends Job {
 
 	private IStatus handleException(Exception e) {
 		int status = IStatus.ERROR;
-		if (quiet)
-			status = IStatus.WARNING;
+		if (quiet) {
+			status = IStatus.OK;
+			quietFailed = true;
+		}
+		
 		return new Status(status, com.buglabs.dragonfly.ui.Activator.PLUGIN_ID, status, "Unable to connect to " + bug.getName(), new Throwable(e.toString()));
 	}
 
 	public boolean belongsTo(Object family) {
 		return bug.equals(family);
+	}
+
+	public boolean failedQuietly() {
+		return quietFailed;
 	}
 }

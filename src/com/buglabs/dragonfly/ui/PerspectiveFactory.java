@@ -21,6 +21,8 @@ import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 
 public class PerspectiveFactory implements IPerspectiveFactory {
 
+	private static final String ID_CONSOLE_VIEW = "org.eclipse.ui.console.ConsoleView";
+
 	public static final String ID_PROJECT_EXPLORER = "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
 
 	public static final String PERSPECTIVE_ID = "com.buglabs.dragonfly.ui.perspective"; //$NON-NLS-1$
@@ -66,6 +68,7 @@ public class PerspectiveFactory implements IPerspectiveFactory {
 		bottom.addView(JAVADOC_VIEW_ID);
 		bottom.addView(IPageLayout.ID_PROP_SHEET);
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
+		bottom.addView(ID_CONSOLE_VIEW);
 
 		IFolderLayout right = layout.createFolder("right", IPageLayout.RIGHT, (float) .60, editorArea); //$NON-NLS-1$
 		right.addView(BugnetView.VIEW_ID);

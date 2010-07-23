@@ -1,38 +1,25 @@
 package com.buglabs.dragonfly.launch;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
-import java.util.jar.JarFile;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
-import com.buglabs.dragonfly.util.JarUtils;
-import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
-import com.buglabs.osgi.concierge.runtime.ConciergeRuntime;
-import com.buglabs.util.BugBundleConstants;
 
-public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfiguration {
+public class VirtualBugLaunchConfigurationDelegate extends FelixLaunchConfiguration {
 
 	public static final String ID = "com.buglabs.dragonfly.launch.virtualBug";
 	public static final String ATTR_GPS_LOG = "GPS_LOG";
@@ -60,7 +47,6 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
 		int port = getHttpPort(configuration);
-		ILaunchConfigurationType type = configuration.getType();
 
 		try {
 			ServerSocket socket = new ServerSocket(port);
@@ -83,7 +69,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	 * (non-Javadoc)
 	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getSystemPropertiesContents(org.eclipse.debug.core.ILaunchConfiguration)
 	 */
-	@Override
+	/*@Override
 	protected StringBuffer getSystemPropertiesContents(ILaunchConfiguration configuration) throws CoreException {
 
 		StringBuffer sb = super.getSystemPropertiesContents(configuration);
@@ -92,32 +78,32 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		sb.append(generateSystemPropertiesContents(props));
 
 		return sb;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getVMArguments()
 	 */
-	@Override
-	protected List getVMArguments() {
+
+/*	protected List getVMArguments() {
 		ArrayList vmArgs = new ArrayList();
 		vmArgs.addAll(super.getVMArguments());
 		return vmArgs;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getClassPathEntries()
 	 */
-	@Override
+	/*@Override
 	protected IClasspathEntry[] getClassPathEntries() {
 		Vector cpes = new Vector();
 		cpes.addAll(Arrays.asList(super.getClassPathEntries()));
 
 		return (IClasspathEntry[]) cpes.toArray(new IClasspathEntry[cpes.size()]);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	protected List getBundleJars(ILaunchConfiguration configuration) throws CoreException {
 		Vector jars = new Vector();
 		Vector cgFilteredJars = new Vector();
@@ -138,13 +124,13 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		List bugJars = DragonflyActivator.getDefault().getBUGOSGiJars();
 		jars.addAll(bugJars);
 		return jars;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getInstallBundles(org.eclipse.debug.core.ILaunchConfiguration)
 	 */
-	@Override
+	/*@Override
 	protected List getInstallBundles(ILaunchConfiguration configuration) throws CoreException, IOException, URISyntaxException {
 		Vector installBundles = new Vector();
 
@@ -161,13 +147,13 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 			}
 		}
 		return installBundles;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getStartLevelMap(org.eclipse.debug.core.ILaunchConfiguration)
 	 */
-	@Override
+	/*@Override
 	protected Map getStartLevelMap(ILaunchConfiguration configuration) throws CoreException {
 		Map startlevelmap = super.getStartLevelMap(configuration);
 
@@ -190,16 +176,16 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		}
 
 		return startlevelmap;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getFrameworkStartLevel(org.eclipse.debug.core.ILaunchConfiguration)
 	 */
-	@Override
+	/*@Override
 	protected String getFrameworkStartLevel(ILaunchConfiguration configuration) throws CoreException {
 		return DEFAULT_START_LEVEL;
-	}
+	}*/
 
 	/**
 	 * This one called from the parent on launching of BUG Simulator says which
@@ -207,7 +193,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	 * Project names.
 	 * 
 	 */
-	@Override
+	
 	protected List<String> getWorkspaceBundles(ILaunchConfiguration configuration) throws CoreException {
 		List selectedProjects = BugProjectUtil.getWSBugProjectNames();
 		String launchAll = getSystemProperty(configuration, PROP_LAUNCH_ALL, "true");
@@ -231,15 +217,8 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		return Integer.parseInt((String) val);
 	}
 
-	private List getJarNames(List jars) {
-		Vector names = new Vector();
-		Iterator jarsIter = jars.iterator();
-		while (jarsIter.hasNext()) {
-			File jarFile = (File) jarsIter.next();
-			String jarName = jarFile.getName().substring(0, jarFile.getName().length() - 4);
-			names.add(jarName);
-		}
-		return names;
+	@Override
+	protected String getSourceDir() throws Exception {
+		return com.buglabs.dragonfly.simulator.Activator.getDefault().getBUGBundleLocation();
 	}
-
 }

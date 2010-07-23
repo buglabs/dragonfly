@@ -1,6 +1,7 @@
 package com.buglabs.dragonfly.ui.views.bugnet;
 
 import java.net.NoRouteToHostException;
+import java.net.UnknownHostException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -47,11 +48,14 @@ public class QueryBugnetJob extends Job {
 			// to provide user with better feedback
 			// call can throw (at least)
 			// BugnetAuthenticationException, BugnetException, and IOException			
+		} catch (UnknownHostException e) {
+			//Unable to resolve host, machine is probably offline.
+			return new Status(IStatus.CANCEL, Activator.PLUGIN_ID, OK_STATUS_MESSAGE);
 		} catch (Exception e) {
 			UIUtils.handleNonvisualError(ERROR_STATUS_MESSAGE, e);
 			return new Status(IStatus.WARNING, Activator.PLUGIN_ID, ERROR_STATUS_MESSAGE, e);
 		}
-		return new Status(IStatus.OK, Activator.PLUGIN_ID, OK_STATUS_MESSAGE, null);
+		return new Status(IStatus.OK, Activator.PLUGIN_ID, OK_STATUS_MESSAGE);
 	}
 
 }

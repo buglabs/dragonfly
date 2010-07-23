@@ -533,15 +533,9 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		try {
 			moduleList.addAll(BugWSHelper.getModuleList(null, bug.getModuleURL()));
 			bug.setConnected(true);
-		} catch (MalformedURLException e) {
-			bug.setConnected(false);
-			UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
-		} catch (ConnectException e) {
-			bug.setConnected(false);
-			UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
 		} catch (Exception e) {
 			bug.setConnected(false);
-			UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
+			UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e, true);
 		} finally {
 			redrawEditor();
 		}
