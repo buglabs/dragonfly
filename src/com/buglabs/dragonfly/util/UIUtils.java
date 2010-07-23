@@ -727,7 +727,7 @@ public class UIUtils {
 	 * @param message
 	 * @param e1
 	 */
-	public static void handleNonvisualWarning(String message, Exception e) {
+	public static void handleNonvisualWarning(String message, Exception e, boolean showStacktrace) {
 		DragonflyActivator da = DragonflyActivator.getDefault();
 
 		if (da == null) {
@@ -744,7 +744,11 @@ public class UIUtils {
 			return;
 		}
 
-		log.log(new Status(Status.WARNING, DragonflyActivator.PLUGIN_ID, 0, message, e));
+		if (showStacktrace) {
+			log.log(new Status(Status.WARNING, DragonflyActivator.PLUGIN_ID, message, e));
+		} else {
+			log.log(new Status(Status.WARNING, DragonflyActivator.PLUGIN_ID, message));
+		}
 	}
 
 	/**

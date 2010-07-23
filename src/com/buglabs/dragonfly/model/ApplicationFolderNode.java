@@ -46,7 +46,7 @@ public class ApplicationFolderNode extends FolderNode {
 			} catch (Exception e) {
 				Throwable cause = e.getCause();
 				if (cause instanceof ConnectException)
-					UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e);
+					UIUtils.handleNonvisualWarning("Unable to connect to " + bug.getUrl(), e, true);
 			}
 		}
 

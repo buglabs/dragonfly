@@ -108,15 +108,17 @@ public class BugConnectionManager {
 		try {
 			jmdns = JmDNS.create();
 		} catch (IOException e) {
-			UIUtils.handleNonvisualWarning("Unable to create JmDNS instance.", e);
-		}
+			UIUtils.handleNonvisualWarning("Unable to create JmDNS instance.", e, false);
+		} 
 		if (jmdns == null)
 			return;
 		listener = new BugDeviceServiceListener();
 		jmdns.addServiceListener(SERVICE_TYPE, listener);
 
 		// try to get USB BUG
+		// if the connection times out, assume no BUG is connected and do not display error.
 		new Thread() {
+			@Override
 			public void run() {
 				StaticBugConnection usbBug = null;
 				List<Object> programs = null;
@@ -124,11 +126,11 @@ public class BugConnectionManager {
 					usbBug = new StaticBugConnection(USB_BUG_NAME, new URL(PROTOCOL + USB_BUG_IP));
 					programs = BugWSHelper.getPrograms(usbBug.getProgramURL());
 				} catch (Exception e) {
-					UIUtils.handleNonvisualError("Unable to connect to USB BUG.", e);
 					return;
 				}
-				if (programs == null)
+				if (programs == null) {
 					return;
+				}
 				addBugConnection(usbBug);
 			};
 		}.start();
@@ -429,7 +431,7 @@ public class BugConnectionManager {
 			try {
 				bugUrl = new URL(PROTOCOL + event.getInfo().getAddress().getHostAddress());
 			} catch (MalformedURLException e) {
-				UIUtils.handleNonvisualWarning("Unable to get url of connected BUG.", e);
+				UIUtils.handleNonvisualWarning("Unable to get url of connected BUG.", e, true);
 			}
 			if (bugUrl == null)
 				return;
@@ -458,9 +460,9 @@ public class BugConnectionManager {
 			}
 
 			// fire bug added event so view is updated, etc.
-			if (bug != null)
+			if (bug != null) {
 				fireBugAddedEvent(this, bug);
-
+			}
 		}
 	}
 }
