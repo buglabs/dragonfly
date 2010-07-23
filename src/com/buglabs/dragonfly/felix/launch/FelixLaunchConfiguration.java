@@ -29,7 +29,6 @@ import com.buglabs.dragonfly.felix.Activator;
 
 public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
 
-	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		try {
 			int a = 1;
