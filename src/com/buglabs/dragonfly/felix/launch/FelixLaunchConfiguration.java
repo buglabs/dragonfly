@@ -31,7 +31,6 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		try {
-			int a = 1;
 			String felixPluginBase = Activator.getDefault().getBundle().getLocation().split(":")[2];
 			IPath launchDir = Activator.getDefault().getStateLocation();
 			String launchClass = "org.apache.felix.main.Main";
