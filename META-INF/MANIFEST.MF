@@ -14,6 +14,7 @@ Import-Package:
  com.buglabs.module, 
  javax.servlet, 
  javax.servlet.http, 
+ org.osgi.framework,
  org.osgi.service.cm, 
  org.osgi.service.http, 
  org.osgi.service.log, 
@@ -23,6 +24,5 @@ Import-Package:
  com.buglabs.osgi.shell.pub, 
  com.buglabs.services.ws, 
  com.buglabs.nmea2, 
- com.buglabs.nmea,
- org.osgi.framework
+ com.buglabs.nmea
 Bundle-SymbolicName: com.buglabs.bug.simulator
