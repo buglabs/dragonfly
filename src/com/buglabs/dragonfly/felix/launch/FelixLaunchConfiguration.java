@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -38,7 +41,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 			VMRunnerConfiguration vmconfig = new VMRunnerConfiguration(launchClass, bootClasspath);
 		
-			File confFile = createFelixConfFile(configuration, launchDir, felixPluginBase);
+			File confFile = createFelixConfFile(configuration, launchDir, felixPluginBase, getLaunchProperties());
+			
 			copyBundles(felixPluginBase + "bundle", launchDir, monitor);
 			copyBundles(getSourceDir(), launchDir, monitor);
 			
@@ -63,7 +67,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 		destStore = destStore.mkdir(EFS.NONE, monitor);
 		
-		srcStore.copy(destStore, EFS.OVERWRITE | EFS.SHALLOW, monitor);
+		srcStore.copy(destStore, EFS.OVERWRITE, monitor);
 	}
 
 	private String[] getVMArgs(File confFile, String felixPluginBase) {
@@ -72,29 +76,42 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 				};
 	}
 
-	private File createFelixConfFile(ILaunchConfiguration configuration, IPath launchDir, String felixPluginBase) throws IOException {
-		String fileContents = 
-			"org.osgi.framework.os.name=linux\n" + 
-			"org.osgi.framework.processor=armv7l\n" +
-			"java.library.path=/usr/lib/jni\n" +
-			"felix.auto.deploy.action=install,start\n" +
-			"felix.log.level=4\n" +
-			"org.osgi.framework.startlevel.beginning=1\n" +
-			"org.osgi.console.port=8090\n" +
-			"freetype.font=/usr/share/fonts/ttf/LiberationSans-Regular.ttf\n" +
-			"app.bundle.path=/usr/share/java/apps\n" +
-			"org.osgi.service.http.port=80\n" +
-			"obr.repository.url=http://felix.apache.org/obr/releases.xml\n" +
-			"bug.os.version=2009.X-stable\n";
+	private File createFelixConfFile(ILaunchConfiguration configuration, IPath launchDir, String felixPluginBase, Map<String, String> props) throws IOException {
 		
-		fileContents = "felix.auto.deploy.action=install,start\n";
+		
+		String fileContents = "felix.auto.deploy.action=install,start\n";
 		
 		File configFile = new File(launchDir.toOSString(), "config.properties");
 		FileWriter fw = new FileWriter(configFile);
 		fw.write(fileContents);
+		
+		props.putAll(getFelixLaunchProperties());
+		
+		for (Iterator i = props.keySet().iterator(); i.hasNext();) {
+			String key = (String) i.next();
+			String val = props.get(key);
+			
+			fw.write(key);
+			fw.write('=');
+			fw.write(val);
+			fw.write('\n');
+		}
+		
 		fw.close();
 		
 		return configFile;
+	}
+
+	private Map<String, String> getFelixLaunchProperties() {
+		
+		Map<String, String> m = new Hashtable();
+		
+		m.put("org.osgi.framework.os.name", "linux");
+		m.put("org.osgi.framework.processor", "armv7l");
+		m.put("felix.log.level", "4");
+		m.put("obr.repository.url","http://felix.apache.org/obr/releases.xml");
+		
+		return m;
 	}
 
 	private String[] loadBootClasspath(String felixPluginBase) throws IOException {
@@ -110,4 +127,9 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	 * @return A directory where OSGi bundles can be found that should be added to the started bundles for Felix.
 	 */
 	protected abstract String getSourceDir() throws Exception;
+	
+	/**
+	 * @return A map of name-value pairs of properties that should be added to the Felix launch configuration.
+	 */
+	protected abstract Map<String, String> getLaunchProperties();
 }
