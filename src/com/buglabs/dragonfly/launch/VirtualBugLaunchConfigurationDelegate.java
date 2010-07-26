@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.launch;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -220,5 +221,17 @@ public class VirtualBugLaunchConfigurationDelegate extends FelixLaunchConfigurat
 	@Override
 	protected String getSourceDir() throws Exception {
 		return com.buglabs.dragonfly.simulator.Activator.getDefault().getBUGBundleLocation();
+	}
+
+	@Override
+	protected Map<String, String> getLaunchProperties() {
+		Map m = new Hashtable();
+		
+		//m.put("org.osgi.console.port", "8090");
+		m.put("bug.os.version","2009.X-stable");
+		m.put("app.bundle.path","/usr/share/java/apps");
+		m.put("org.osgi.service.http.port", "8081");
+		
+		return m;
 	}
 }
