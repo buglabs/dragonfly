@@ -155,6 +155,7 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		return props;
 	}
 
+	@Override
 	public Object getPropertyValue(Object id) {
 		Object val = super.getPropertyValue(id);
 
@@ -235,6 +236,7 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		BugWSHelper.setConfigurationProperty(getConfigAdminURL(), node.toString());
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof BugConnection) {
 			if (this == o)
@@ -276,6 +278,7 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		return null;
 	}
 
+	@Override
 	public String toString() {
 		return getClass().getName() + "[" + getName() + ", " + getUrl() + "]";
 	}

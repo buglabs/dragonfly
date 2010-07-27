@@ -87,7 +87,7 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 
 	public static final String DEFAULT_PROTOCOL = "DEFAULT_PROTOCOL";
 
-	public static final String VIRTUAL_BUG = "Virtual BUG";
+	public static final String BUG_SIMULATOR_LABEL = "BUG Simulator";
 
 	// The shared instance
 	private static DragonflyActivator plugin;

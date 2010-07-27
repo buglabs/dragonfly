@@ -306,7 +306,7 @@ public class BugConnectionManager {
 	 */
 	public void addNewVirtualBugConnection() {
 		try {
-			addBugConnection(new BUGSimulatorConnection(DragonflyActivator.VIRTUAL_BUG, new URL(VIRTUAL_BUG_URL + ":" + DragonflyActivator.getDefault().getHttpPort())));
+			addBugConnection(new BUGSimulatorConnection(DragonflyActivator.BUG_SIMULATOR_LABEL, new URL(VIRTUAL_BUG_URL + ":" + DragonflyActivator.getDefault().getHttpPort())));
 		} catch (MalformedURLException e) {
 			UIUtils.handleNonvisualError("Unable to create BUG Simulator Connection", e);
 		}
