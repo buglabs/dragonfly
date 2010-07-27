@@ -371,7 +371,6 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 		throw new IOException("CameraModlet suspend call is not implemented for Virtual BUG");
 	}
 
-	@Override
 	public List getCommands() {
 		List l = new ArrayList();
 
@@ -382,7 +381,6 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 
 	private class CameraButtonCommand extends AbstractCommand {
 
-		@Override
 		public void execute() throws Exception {
 			String b = (String) arguments.get(0);
 
@@ -395,7 +393,6 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 			}
 		}
 
-		@Override
 		public String getName() {
 			return "button.camera";
 		}
