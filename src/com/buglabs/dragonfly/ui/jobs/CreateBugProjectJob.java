@@ -108,10 +108,9 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 		List services = pinfo.getServices();
 
 		Vector packages = new Vector();
-
+		manifestContents.append("Import-Package:");
+	
 		if (services.size() > 0) {
-
-			manifestContents.append("Import-Package:");
 			Iterator serviceIter = services.iterator();
 			while (serviceIter.hasNext()) {
 				String serviceQualified = (String) serviceIter.next();
@@ -122,11 +121,12 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 					manifestContents.append(" " + packagename + ",\n");
 				}
 			}
-
 			manifestContents.append(" org.osgi.framework,\n");
 			manifestContents.append(" org.osgi.util.tracker,\n");
 			manifestContents.append(" com.buglabs.application,\n");
 			manifestContents.append(" com.buglabs.util\n");
+		} else {
+			manifestContents.append(" org.osgi.framework\n");
 		}
 
 		return manifestContents;
