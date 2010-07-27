@@ -36,6 +36,7 @@ import com.buglabs.module.ModuleProperty;
 import com.buglabs.nmea.sentences.RMC;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
+import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.WSResponse;
 import com.buglabs.util.LogServiceUtil;
@@ -43,7 +44,7 @@ import com.buglabs.util.RemoteOSGiServiceConstants;
 import com.buglabs.util.SelfReferenceException;
 import com.buglabs.util.XmlNode;
 
-public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IGPSModuleControl, PublicWSProvider2, INMEARawFeed, IModuleLEDController {
+public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IGPSModuleControl, PublicWSProvider, PublicWSProvider2, INMEARawFeed, IModuleLEDController {
 	private BundleContext context;
 
 	private boolean deviceOn = true;

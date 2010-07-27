@@ -56,6 +56,7 @@ import com.buglabs.bug.base.pub.ITimeProvider;
 import com.buglabs.bug.bmi.PipeReader;
 import com.buglabs.bug.bmi.pub.Manager;
 import com.buglabs.bug.module.audio.AudioActivator;
+import com.buglabs.bug.module.camera.CameraActivator;
 import com.buglabs.bug.module.gps.GPSActivator;
 import com.buglabs.bug.module.lcd.LCDActivator;
 import com.buglabs.bug.module.motion.MotionActivator;
@@ -125,6 +126,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	private VHActivator vhActivator;
 
+	private CameraActivator cameraActivator;
+
 	public void start(final BundleContext context) throws Exception {
 		//Basic setup ********************************************
 		this.context = context;
@@ -189,6 +192,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		vhActivator = new VHActivator();
 		vhActivator.start(context);
 		
+		//com.buglabs.bug.module.vonhippel ***********************
+		cameraActivator = new CameraActivator();
+		cameraActivator.start(context);
+		
 		//UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
 		
@@ -196,7 +203,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		try {
 			controllerServer = Server.getServer(BUG_SIMULATOR_CONTROLLER_PORT, logService, context);
 		} catch (BindException e) {
-			logService.log(LogService.LOG_WARNING, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
+			logService.log(LogService.LOG_ERROR, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
 		}
 	}
 
@@ -204,8 +211,12 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		controllerServer.shutdown();
 		shellCommandReg.unregister();
 		
-		if (lcdActivator != null) {
-			lcdActivator.stop(context);
+		if (cameraActivator != null) {
+			cameraActivator.stop(context);
+		}
+
+		if (vhActivator != null) {
+			vhActivator.stop(context);
 		}
 		
 		if (lcdActivator != null) {

@@ -1,28 +1,28 @@
-Export-Package: com.buglabs.bug.base.pub,com.buglabs.bug.bmi.pub,com.buglabs.bug.module.gps.pub,com.buglabs.bug.module.sierra.pub,org.osgi.util.measurement,org.osgi.util.position, com.buglabs.bug.module.audio.pub, com.buglabs.bug.accelerometer.pub, com.buglabs.bug.module.lcd.pub, com.buglabs.bug.module.motion.pub, com.buglabs.bug.module.vonhippel.pub
+Export-Package: com.buglabs.bug.base.pub,com.buglabs.bug.bmi.pub,com.buglabs.bug.module.gps.pub,com.buglabs.bug.module.sierra.pub,org.osgi.util.measurement,org.osgi.util.position, com.buglabs.bug.module.audio.pub, com.buglabs.bug.accelerometer.pub, com.buglabs.bug.module.lcd.pub, com.buglabs.bug.module.motion.pub, com.buglabs.bug.module.vonhippel.pub, com.buglabs.bug.module.camera.pub
 Bundle-Vendor: Bug Labs, Inc.
-Bundle-Version: 1.0.0
 Manifest-Version: 1.0
+Bundle-Version: 1.0.0
 Bundle-Name: com.buglabs.bug.simulator
 Bundle-Activator: com.buglabs.bug.simulator.Activator
-Import-Package: 
- com.buglabs.application, 
- com.buglabs.bug.base.pub, 
- com.buglabs.bug.module.pub, 
- com.buglabs.nmea.sentences, 
- com.buglabs.support, 
- com.buglabs.util, 
- com.buglabs.module, 
- javax.servlet, 
- javax.servlet.http, 
- org.osgi.framework,
- org.osgi.service.cm, 
- org.osgi.service.http, 
- org.osgi.service.log, 
- org.osgi.util.position, 
- org.osgi.util.tracker,  
- com.buglabs.osgi.shell, 
- com.buglabs.osgi.shell.pub, 
- com.buglabs.services.ws, 
- com.buglabs.nmea2, 
- com.buglabs.nmea
 Bundle-SymbolicName: com.buglabs.bug.simulator
+Import-Package: com.buglabs.application,
+ com.buglabs.bug.base.pub,
+ com.buglabs.bug.module.pub,
+ com.buglabs.device,
+ com.buglabs.module,
+ com.buglabs.nmea,
+ com.buglabs.nmea.sentences,
+ com.buglabs.nmea2,
+ com.buglabs.osgi.shell,
+ com.buglabs.osgi.shell.pub,
+ com.buglabs.services.ws,
+ com.buglabs.support,
+ com.buglabs.util,
+ javax.servlet,
+ javax.servlet.http,
+ org.osgi.framework,
+ org.osgi.service.cm,
+ org.osgi.service.http,
+ org.osgi.service.log,
+ org.osgi.util.position,
+ org.osgi.util.tracker
