@@ -63,7 +63,7 @@ public class GSMActivator implements BundleActivator, IModletFactory {
 	}
 
 	public IModlet createModlet(BundleContext context, int slotId) {
-		GSMModlet modlet = new GSMModlet(context, slotId, getModuleId(), "GSM");
+		GSMModlet modlet = new GSMModlet(context, slotId, getModuleId(), "Sierra");
 
 		return modlet;
 	}

@@ -35,6 +35,9 @@ public class Server extends Thread {
 		while (true) {
 			try {
 				Thread.sleep(10);
+				if (Thread.interrupted()) {
+					return;
+				}
 
 				Socket clientSocket = serverSocket.accept();
 				PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -42,7 +45,7 @@ public class Server extends Thread {
 				String inputLine, outputLine;
 				ControllerProtocol protocol = new ControllerProtocol(context);
 
-				while ((inputLine = in.readLine()) != null) {
+				while (Thread.interrupted() == false && (inputLine = in.readLine()) != null) {
 					try {
 						log.log(LogService.LOG_INFO, "Server RECEIVED Message: " + inputLine);
 						outputLine = protocol.processInput(inputLine);
