@@ -10,10 +10,12 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,6 +38,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		try {
 			String felixPluginBase = Activator.getDefault().getBundle().getLocation().split(":")[2];
 			IPath launchDir = Activator.getDefault().getStateLocation();
+			deleteBundleCacheDir(launchDir.append("bundle"), monitor);
 			String launchClass = "org.apache.felix.main.Main";
 			String bootClasspath[] = loadBootClasspath(felixPluginBase);
 
@@ -45,6 +48,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			
 			copyBundles(felixPluginBase + "bundle", launchDir, monitor);
 			copyBundles(getSourceDir(), launchDir, monitor);
+			exportProjectsAsjars(getWorkspaceBundles(), launchDir.append("bundle").toFile());
 			
 			vmconfig.setVMArguments(getVMArgs(confFile, felixPluginBase));
 			vmconfig.setWorkingDirectory(launchDir.toOSString());
@@ -55,6 +59,18 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		} catch (Exception e) {
 			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to launch BUG Simulator", e));
 		} 
+	}
+
+	/**
+	 * Delete the bundle cache directory so that bundles from previous launches do not effect startup.
+	 * @param file
+	 * @throws IOException 
+	 * @throws CoreException 
+	 */
+	private void deleteBundleCacheDir(IPath dir2, IProgressMonitor monitor) throws IOException, CoreException {		
+		IFileSystem fs = EFS.getLocalFileSystem();
+		IFileStore target = fs.getStore(dir2);
+		target.delete(EFS.NONE, monitor);
 	}
 
 	private void copyBundles(String srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
@@ -123,6 +139,19 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		return (String[]) cp.toArray(new String[cp.size()]);
 	}
 	
+	private void exportProjectsAsjars(List workspaceBundles, File destinationDirectory) throws CoreException, IOException {
+		List cgProjects = ProjectUtils.getWSCGProjects();
+		Iterator projIter = cgProjects.iterator();
+
+		while (projIter.hasNext()) {
+			IProject proj = (IProject) projIter.next();
+
+			if (proj.isOpen() && workspaceBundles.contains(proj.getName())) {
+				ProjectUtils.exporToJar(destinationDirectory, proj, true);
+			}
+		}
+	}
+	
 	/**
 	 * @return A directory where OSGi bundles can be found that should be added to the started bundles for Felix.
 	 */
@@ -132,4 +161,6 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	 * @return A map of name-value pairs of properties that should be added to the Felix launch configuration.
 	 */
 	protected abstract Map<String, String> getLaunchProperties();
+	
+	protected abstract List<String> getWorkspaceBundles() throws Exception;
 }
