@@ -31,6 +31,8 @@ import com.buglabs.module.IModuleControl;
 import com.buglabs.module.IModuleLEDController;
 import com.buglabs.module.IModuleProperty;
 import com.buglabs.module.ModuleProperty;
+import com.buglabs.osgi.shell.IShellCommandProvider;
+import com.buglabs.osgi.shell.pub.AbstractCommand;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
@@ -43,7 +45,7 @@ import com.buglabs.util.RemoteOSGiServiceConstants;
  * @author kgilmer
  * 
  */
-public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, PublicWSProvider, IModuleControl, ICameraButtonEventProvider, KeyListener {
+public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, PublicWSProvider, IModuleControl, ICameraButtonEventProvider, IShellCommandProvider {
 	private ServiceRegistration wsRef;
 
 	private int megapixels;
@@ -59,9 +61,9 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 	private ServiceRegistration moduleControl;
 
 	private ServiceRegistration cameraService;
-	
+
 	private ServiceRegistration cameraModuleControl;
-	
+
 	private ServiceRegistration buttonEventProvider;
 
 	private boolean demoMode = false;
@@ -71,7 +73,7 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 	public static final String PROPERTY_CAMERA_SNAPSHOTS = "com.buglabs.bug.emulator.module.camera.snapshots";
 
 	public static final String MODULE_ID = "CAMERA";
-	
+
 	private List listeners;
 
 	private File fprops;
@@ -83,6 +85,8 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 	private LogService logService;
 
 	private String serviceName = "Picture";
+
+	private ServiceRegistration buttonCmdReg;
 
 	public CameraModlet(BundleContext context, int slotId, String moduleName, LogService logService) {
 		this.context = context;
@@ -130,42 +134,43 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 			}
 		}
 
-		wsRef = context.registerService(PublicWSProvider.class.getName(), this, null) ;
+		wsRef = context.registerService(PublicWSProvider.class.getName(), this, null);
 
 		moduleControl = context.registerService(IModuleControl.class.getName(), this, null);
 		CameraModuleControl cameraModuleControlObj = new CameraModuleControl(slotId, logService);
-		cameraModuleControl = context.registerService(
-				ICameraModuleControl.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
-		ledControl = context.registerService(
-				IModuleLEDController.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
+		cameraModuleControl = context.registerService(ICameraModuleControl.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
+		ledControl = context.registerService(IModuleLEDController.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
 
 		cameraService = context.registerService(ICameraDevice.class.getName(), this, createRemotableProperties(null));
-		
-		if(context.getServiceReferences(IButtonEventProvider.class.getName(), "(ButtonsProvided=Camera)") == null){
-			buttonEventProvider = context.registerService(ICameraButtonEventProvider.class.getName(), this, createRemotableProperties(getButtonServiceProperties()));	
-		}	
+
+		if (context.getServiceReferences(IButtonEventProvider.class.getName(), "(ButtonsProvided=Camera)") == null) {
+			buttonEventProvider = context.registerService(ICameraButtonEventProvider.class.getName(), this, createRemotableProperties(getButtonServiceProperties()));
+		}
+
+		buttonCmdReg = context.registerService(IShellCommandProvider.class.getName(), this, null);
 	}
 
 	public void stop() throws Exception {
+		buttonCmdReg.unregister();
 		cameraService.unregister();
 		moduleControl.unregister();
 		cameraModuleControl.unregister();
 		ledControl.unregister();
-		if(buttonEventProvider != null)
+		if (buttonEventProvider != null)
 			buttonEventProvider.unregister();
 		wsRef.unregister();
 	}
 
 	private Dictionary getButtonServiceProperties() {
 		Dictionary props = new Hashtable();
-		
+
 		props.put("ButtonEventProvider", this.getClass().getName());
 		props.put("ButtonsProvided", "Camera");
 		props.put("Emuluated", "true");
-		
+
 		return props;
 	}
-	
+
 	public PublicWSDefinition discover(int operation) {
 		if (operation == PublicWSProvider2.GET) {
 			return new PublicWSDefinition() {
@@ -274,7 +279,7 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 	public String getDescription() {
 		return "Retrieves image from camera module.";
 	}
-	
+
 	public synchronized void addListener(IButtonEventListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
@@ -302,10 +307,10 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 			break;
 		case 't':
 			fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_IN));
-			break;	
+			break;
 		case 'o':
 			fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_SHUTTER));
-			break;	
+			break;
 		default:
 			break;
 		}
@@ -313,12 +318,12 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -328,9 +333,9 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 		if (ht == null) {
 			ht = new Hashtable();
 		}
-		
+
 		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-		
+
 		return ht;
 	}
 
@@ -364,5 +369,51 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 
 	public int suspend() throws IOException {
 		throw new IOException("CameraModlet suspend call is not implemented for Virtual BUG");
+	}
+
+	@Override
+	public List getCommands() {
+		List l = new ArrayList();
+
+		l.add(new CameraButtonCommand());
+
+		return l;
+	}
+
+	private class CameraButtonCommand extends AbstractCommand {
+
+		@Override
+		public void execute() throws Exception {
+			String b = (String) arguments.get(0);
+
+			if (b.equals("out")) {
+				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_OUT));
+			} else if (b.equals("in")) {
+				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_IN));
+			} else if (b.equals("shutter")) {
+				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_SHUTTER));
+			}
+		}
+
+		@Override
+		public String getName() {
+			return "button.camera";
+		}
+
+		@Override
+		public boolean isValid() {
+			return this.arguments.size() == 1;
+		}
+
+		@Override
+		public String getUsage() {
+			return "[shutter | in | out]";
+		}
+
+		@Override
+		public String getDescription() {
+			return "Simulates button presses on camera module.";
+		}
+
 	}
 }
