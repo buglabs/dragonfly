@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -16,8 +18,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -59,6 +63,7 @@ public class ImportBundleFromStreamAction extends Action {
 				try {
 					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 					programName = URLDecoder.decode(programName, "UTF-8");
+
 					IProject proj = root.getProject(programName);
 					overwriteApp = false;
 					if (proj.exists()) {
@@ -104,23 +109,35 @@ public class ImportBundleFromStreamAction extends Action {
 						jproj.setOption(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_3);
 						jproj.setOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_2);
 						*/
+
 						jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 						jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
+
+						String[] acps = JavaCore.getClasspathVariableNames();
+						for (int i = 0; i < acps.length; ++i) {
+							System.out.println(acps[i]);
+						}
+
+						IClasspathEntry[] importCP = jproj.getRawClasspath();
+						List cpl = new ArrayList();
+						IClasspathEntry jre = JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath());
+
+						for (int i = 0; i < importCP.length; ++i) {
+							if (!importCP[i].getPath().toString().equals("com.buglabs.phoneme.personal.PhoneMEClasspathContainer")) {
+								cpl.add(importCP[i]);
+							} else {
+								if (!cpl.contains(jre)) {
+									cpl.add(jre);
+								}
+							}
+						}
+
+						jproj.setRawClasspath((IClasspathEntry[]) cpl.toArray(new IClasspathEntry[cpl.size()]), monitor);
 
 						ProjectUtils.configureBuilder(jproj.getProject(), ManifestConsistencyChecker.ID);
 
 						monitor.worked(10);
 
-						/*
-						 * for the time being, not refreshing the BugnetView
-						 * Thing is... this code is cludgy.. this whole class is cludgy
-						 *  and the purpose of this refresh is just to update the dl count
-						 *  which isn't all that important.
-						 * 
-						BUGNetView bugNetView = BUGNetView.getView();
-						if (bugNetView != null)
-							bugNetView.refresh();
-						*/
 					}
 				} catch (IOException e) {
 					return createErrorStatus("Unable to download " + programName + " from BUG.", e);
@@ -144,52 +161,6 @@ public class ImportBundleFromStreamAction extends Action {
 		};
 		job.setPriority(Job.LONG);
 		job.schedule();
-
-		job.addJobChangeListener(new IJobChangeListener() {
-
-			public void aboutToRun(IJobChangeEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void awake(IJobChangeEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void done(IJobChangeEvent event) {
-				// if downloading of app was successful and total time was more
-				// than five seconds inform the user
-				/*
-				 * if(job.getResult().getSeverity() == IStatus.OK){ final long
-				 * end = System.currentTimeMillis(); if((end - start)/1000 > 5){
-				 * PlatformUI.getWorkbench().getDisplay().asyncExec(new
-				 * Runnable(){
-				 * 
-				 * public void run() { MessageDialog.openInformation(new
-				 * Shell(), "Download complete", "'" + programName + "' has been
-				 * downloaded to your workspace"); }
-				 * 
-				 * }); } }
-				 */
-			}
-
-			public void running(IJobChangeEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void scheduled(IJobChangeEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void sleeping(IJobChangeEvent event) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
 	}
 
 	private IStatus createErrorStatus(String message, Exception e) {

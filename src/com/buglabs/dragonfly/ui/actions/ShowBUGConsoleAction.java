@@ -66,7 +66,7 @@ public class ShowBUGConsoleAction extends Action {
 			// If the address is not loopback, we assume a "real" bug and try to
 			// connect to the default
 			// OSGi console port.
-			if (bug.getUrl().getHost().equals(LOOPBACK_ADDRESS)) {
+			if (bug.getUrl().getHost().equals(LOOPBACK_ADDRESS) || bug.getUrl().getHost().equals("localhost")) {
 				// This is a BUG Simulator, look for that.
 				c = findConsole(VIRTUAL_BUG_CONSOLE_TITLE);
 			} else {

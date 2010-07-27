@@ -469,8 +469,9 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 	 * refreshes the login area w/ login info or login link
 	 */
 	private void refreshLoginArea(boolean isLoggedIn) {
-		if (loginArea == null)
+		if (loginArea == null || loginArea.isDisposed()) {
 			return;
+		}
 
 		// clear loginArea by disposing children
 		Control[] loginInfo = loginArea.getChildren();
@@ -639,6 +640,10 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 		 * Just need to know when we're done querying BUGnet
 		 */
 		public void done(final IJobChangeEvent event) {
+			if (PlatformUI.getWorkbench().getDisplay().isDisposed()) {
+				return;
+			}
+			
 			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 				public void run() {
 					if (bugnetViewer == null)
