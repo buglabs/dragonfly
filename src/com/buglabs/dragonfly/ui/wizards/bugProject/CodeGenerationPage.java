@@ -80,7 +80,7 @@ import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.filters.ServiceFilter;
 import com.buglabs.dragonfly.ui.info.BugProjectInfo;
 import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
-import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut;
+import com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsViewContentProvider;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -701,7 +701,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 					// Reset this global flag - fixes defect 322
 					DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(false);
 
-					VirtualBugLaunchShortCut virtualBugLaunchShortcut = new VirtualBugLaunchShortCut();
+					BUGSimulatorLaunchShortCut virtualBugLaunchShortcut = new BUGSimulatorLaunchShortCut();
 					IProcess[] processes = null;
 					try {
 						processes = virtualBugLaunchShortcut.launch(ILaunchManager.RUN_MODE).getProcesses();

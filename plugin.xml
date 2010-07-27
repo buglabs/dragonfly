@@ -346,7 +346,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate"
+            delegate="com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate"
             id="com.buglabs.dragonfly.launch.virtualBug"
             modes="run, debug"
             name="BUG Simulator"
@@ -366,9 +366,9 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut"
+            class="com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut"
             icon="icons/color/virtual_bug.gif"
-            id="com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut"
+            id="com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut"
             label="BUG Simulator"
             modes="run, debug">
          <perspective id="com.buglabs.dragonfly.ui.perspective"/>

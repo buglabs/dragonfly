@@ -25,7 +25,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.util.UIUtils;
 
-public class VirtualBugLaunchShortCut implements ILaunchShortcut {
+public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 
 	protected IProgressMonitor progressMonitor;
 
@@ -33,7 +33,7 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 		try {
 			launch(mode);
 		} catch (CoreException e) {
-			UIUtils.handleVisualError("Unable to launch VirtualBug", e);
+			UIUtils.handleVisualError("Unable to launch BUG Simulator", e);
 		}
 	}
 
@@ -41,7 +41,7 @@ public class VirtualBugLaunchShortCut implements ILaunchShortcut {
 		try {
 			launch(mode);
 		} catch (CoreException e) {
-			UIUtils.handleVisualError("Unable to launch VirtualBug", e);
+			UIUtils.handleVisualError("Unable to launch BUG Simulator", e);
 		}
 	}
 

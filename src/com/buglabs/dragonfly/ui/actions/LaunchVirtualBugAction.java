@@ -24,7 +24,7 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchShortCut;
+import com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut;
 import com.buglabs.dragonfly.util.UIUtils;
 
 public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, IDebugEventSetListener {
@@ -46,7 +46,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			ServerSocket socket = new ServerSocket(Integer.parseInt(DragonflyActivator.getDefault().getHttpPort()));
 			socket.close();
 
-			VirtualBugLaunchShortCut launchSC = new VirtualBugLaunchShortCut();
+			BUGSimulatorLaunchShortCut launchSC = new BUGSimulatorLaunchShortCut();
 			ILaunch launch = launchSC.launch(ILaunchManager.DEBUG_MODE);
 
 			IProcess[] launchedProcesses = launch.getProcesses();
