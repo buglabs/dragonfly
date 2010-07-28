@@ -19,9 +19,11 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -38,7 +40,9 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		try {
-			String felixPluginBase = Activator.getDefault().getBundle().getLocation().split(":")[2];
+			URL relativeURL =  Activator.getDefault().getBundle().getEntry("/");
+			URL localURL = FileLocator.toFileURL(relativeURL);
+			String felixPluginBase = localURL.getPath();
 			IPath launchDir = Activator.getDefault().getStateLocation();
 			deleteBundleCacheDir(launchDir.append("bundle"), monitor);
 			String launchClass = "org.apache.felix.main.Main";
