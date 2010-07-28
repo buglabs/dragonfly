@@ -1,8 +1,6 @@
 package com.buglabs.bug.module.camera;
 
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -297,33 +295,6 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 			IButtonEventListener listener = (IButtonEventListener) iter.next();
 			listener.buttonEvent(event);
 		}
-	}
-
-	public void keyPressed(KeyEvent event) {
-		char value = (char) event.getKeyChar();
-		switch (value) {
-		case 'w':
-			fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_OUT));
-			break;
-		case 't':
-			fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_IN));
-			break;
-		case 'o':
-			fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_SHUTTER));
-			break;
-		default:
-			break;
-		}
-	}
-
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
