@@ -123,8 +123,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		InputStream data = getAccelerometerSamples();
 		
 		acceld = new AccelerometerRawFeed(data,accControl);
-		acceld.start();
-		acceld.register(this);
 		
 		accRawFeedRef = context.registerService(IAccelerometerRawFeed.class.getName(), acceld, createRemotableProperties(createBasicServiceProperties()));
 		IAccelerometerSampleProvider asp = new AccelerometerSampleProvider(acceld, accDevice);
