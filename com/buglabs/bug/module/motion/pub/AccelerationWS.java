@@ -35,6 +35,7 @@ import com.buglabs.bug.accelerometer.pub.AccelerometerSample;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleProvider;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
+import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.WSResponse;
 import com.buglabs.util.XmlNode;
@@ -44,7 +45,7 @@ import com.buglabs.util.XmlNode;
  * @author kgilmer
  *
  */
-public class AccelerationWS implements PublicWSProvider2 {
+public class AccelerationWS implements PublicWSProvider2, PublicWSProvider {
 	private IAccelerometerSampleProvider acc;
 	private final LogService log;
 	private String serviceName = "Acceleration";
