@@ -5,7 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -74,6 +76,9 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	}
 
 	private void copyBundles(String srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
+		System.out.println("srcdir: " + srcDir);
+		System.out.println("dstdir: " + launchDir.toOSString());
+		
 		IPath destDir = launchDir.append("bundle");
 		
 		IFileSystem fs = EFS.getLocalFileSystem();
