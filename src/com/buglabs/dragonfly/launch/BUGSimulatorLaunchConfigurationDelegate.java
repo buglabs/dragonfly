@@ -2,16 +2,11 @@ package com.buglabs.dragonfly.launch;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
@@ -24,11 +19,14 @@ import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
-import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
 
+/**
+ * A launch configuration for BUG Simulator.  Relies on FelixLaunchConfiguration to provide OSGi framework jars.
+ * 
+ * @author kgilmer
+ *
+ */
 public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfiguration {
-
-	public static final String ID = "com.buglabs.dragonfly.launch.virtualBug";
 	public static final String ATTR_GPS_LOG = "GPS_LOG";
 	public static final String ATTR_IMAGES = "IMAGES";
 	public static final String ATTR_HTTP_PORT = "HTTP PORT";
@@ -74,129 +72,6 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getSystemPropertiesContents(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
-	/*@Override
-	protected StringBuffer getSystemPropertiesContents(ILaunchConfiguration configuration) throws CoreException {
-
-		StringBuffer sb = super.getSystemPropertiesContents(configuration);
-
-		Map props = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new Hashtable());
-		sb.append(generateSystemPropertiesContents(props));
-
-		return sb;
-	}*/
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getVMArguments()
-	 */
-
-/*	protected List getVMArguments() {
-		ArrayList vmArgs = new ArrayList();
-		vmArgs.addAll(super.getVMArguments());
-		return vmArgs;
-	}*/
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getClassPathEntries()
-	 */
-	/*@Override
-	protected IClasspathEntry[] getClassPathEntries() {
-		Vector cpes = new Vector();
-		cpes.addAll(Arrays.asList(super.getClassPathEntries()));
-
-		return (IClasspathEntry[]) cpes.toArray(new IClasspathEntry[cpes.size()]);
-	}*/
-
-	/*@Override
-	protected List getBundleJars(ILaunchConfiguration configuration) throws CoreException {
-		Vector jars = new Vector();
-		Vector cgFilteredJars = new Vector();
-
-		List cgJars = ConciergeRuntime.getDefault().getConciergeJars();
-		Iterator cgIter = cgJars.iterator();
-
-		while (cgIter.hasNext()) {
-			File cgjar = (File) cgIter.next();
-			if (!cgjar.getName().endsWith(CG_SHELL_BUNDLE)) {
-				// Remove cg shell
-				cgFilteredJars.add(cgjar);
-			}
-		}
-
-		jars.addAll(cgFilteredJars);
-
-		List bugJars = DragonflyActivator.getDefault().getBUGOSGiJars();
-		jars.addAll(bugJars);
-		return jars;
-	}*/
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getInstallBundles(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
-	/*@Override
-	protected List getInstallBundles(ILaunchConfiguration configuration) throws CoreException, IOException, URISyntaxException {
-		Vector installBundles = new Vector();
-
-		installBundles.addAll(super.getInstallBundles(configuration));
-
-		List jars = getBundleJars(configuration);
-		Iterator iter = jars.iterator();
-		while (iter.hasNext()) {
-			File jar = (File) iter.next();
-			JarFile jarFile = new JarFile(jar);
-			String bundleType = JarUtils.getBugBundleType(jarFile);
-			if ((bundleType != null && bundleType.equals(BugBundleConstants.BUG_BUNDLE_MODULE))) {
-				// installBundles.add(jar.toURL());
-			}
-		}
-		return installBundles;
-	}*/
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getStartLevelMap(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
-	/*@Override
-	protected Map getStartLevelMap(ILaunchConfiguration configuration) throws CoreException {
-		Map startlevelmap = super.getStartLevelMap(configuration);
-
-		List jars = ConciergeRuntime.getDefault().getConciergeJars();
-		jars.addAll(DragonflyActivator.getDefault().getBUGOSGiJars());
-		Iterator jarIter = jars.iterator();
-		while (jarIter.hasNext()) {
-			File jar = (File) jarIter.next();
-
-			// TODO: Replace this with regex to look for the shell bundle
-			if (jar.getName().startsWith(SHELL_BUNDLE)) {
-				startlevelmap.put(jar.getAbsolutePath(), "4");
-			} else if (jar.getName().startsWith("com.buglabs.bug.emulator")) {
-				startlevelmap.put(jar.getAbsolutePath(), "2");
-			} else if (jar.getName().startsWith("com.buglabs.bug.bmi")) {
-				startlevelmap.put(jar.getAbsolutePath(), "2");
-			} else if (jar.getName().startsWith("com.buglabs.bug.slp")) {
-				startlevelmap.put(jar.getAbsolutePath(), "3");
-			}
-		}
-
-		return startlevelmap;
-	}*/
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration#getFrameworkStartLevel(org.eclipse.debug.core.ILaunchConfiguration)
-	 */
-	/*@Override
-	protected String getFrameworkStartLevel(ILaunchConfiguration configuration) throws CoreException {
-		return DEFAULT_START_LEVEL;
-	}*/
-
-
 	private static String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
 
 		Map properties = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
@@ -221,17 +96,14 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 	protected Map<String, String> getLaunchProperties() {
 		Map m = new Hashtable();
 		
-		//m.put("org.osgi.console.port", "8090");
 		m.put("bug.os.version","2009.X-stable");
 		m.put("app.bundle.path","/usr/share/java/apps");
 		m.put("org.osgi.service.http.port", "8082");
 		m.put("org.osgi.framework.storage.clean", "onFirstInit");
+		m.put("org.osgi.framework.os.name", "linux");
+		m.put("org.osgi.framework.processor", "armv7l");
 		
 		return m;
-	}
-
-	private IProject getProjectFromName(String prjName) {
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(prjName);
 	}
 	
 	@Override
