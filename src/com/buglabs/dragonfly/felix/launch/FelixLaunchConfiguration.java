@@ -7,12 +7,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -23,7 +21,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -36,7 +33,19 @@ import org.eclipse.jdt.launching.VMRunnerConfiguration;
 
 import com.buglabs.dragonfly.felix.Activator;
 
+/**
+ * An abstract LaunchConfiguration for Apache Felix.  Subclasses specify additional jars and startup properties for launch.  
+ * This launch configuration bundles the Felix framework jar and a few other necessary elements to have a vanilla, non interactive
+ * OSGi environment.
+ * 
+ * @author kgilmer
+ *
+ */
 public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
+
+	private static final String FELIX_MAIN_CLASS = "org.apache.felix.main.Main";
+	private static final String REL_BUNDLE_DIR = "bundle";
+	private static final String FELIX_FRAMEWORK_REL_PATH = "framework/org.apache.felix.framework-3.0.1.jar";
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		try {
@@ -44,17 +53,17 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			URL localURL = FileLocator.toFileURL(relativeURL);
 			String felixPluginBase = localURL.getPath();
 			IPath launchDir = Activator.getDefault().getStateLocation();
-			deleteBundleCacheDir(launchDir.append("bundle"), monitor);
-			String launchClass = "org.apache.felix.main.Main";
+			deleteBundleCacheDir(launchDir.append(REL_BUNDLE_DIR), monitor);
+			String launchClass = FELIX_MAIN_CLASS;
 			String bootClasspath[] = loadBootClasspath(felixPluginBase);
 
 			VMRunnerConfiguration vmconfig = new VMRunnerConfiguration(launchClass, bootClasspath);
 		
 			File confFile = createFelixConfFile(configuration, launchDir, felixPluginBase, getLaunchProperties());
 			
-			copyBundles(felixPluginBase + "bundle", launchDir, monitor);
+			copyBundles(felixPluginBase + REL_BUNDLE_DIR, launchDir, monitor);
 			copyBundles(getSourceDir(), launchDir, monitor);
-			exportProjectsAsjars(getWorkspaceBundles(), launchDir.append("bundle").toFile());
+			exportProjectsAsjars(getWorkspaceBundles(), launchDir.append(REL_BUNDLE_DIR).toFile());
 			
 			vmconfig.setVMArguments(getVMArgs(confFile, felixPluginBase));
 			vmconfig.setWorkingDirectory(launchDir.toOSString());
@@ -83,7 +92,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		System.out.println("srcdir: " + srcDir);
 		System.out.println("dstdir: " + launchDir.toOSString());
 		
-		IPath destDir = launchDir.append("bundle");
+		IPath destDir = launchDir.append(REL_BUNDLE_DIR);
 		
 		IFileSystem fs = EFS.getLocalFileSystem();
 		
@@ -101,14 +110,9 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 				};
 	}
 
-	private File createFelixConfFile(ILaunchConfiguration configuration, IPath launchDir, String felixPluginBase, Map<String, String> props) throws IOException {
-		
-		
-		String fileContents = "felix.auto.deploy.action=install,start\n";
-		
+	private File createFelixConfFile(ILaunchConfiguration configuration, IPath launchDir, String felixPluginBase, Map<String, String> props) throws IOException {		
 		File configFile = new File(launchDir.toOSString(), "config.properties");
 		FileWriter fw = new FileWriter(configFile);
-		fw.write(fileContents);
 		
 		props.putAll(getFelixLaunchProperties());
 		
@@ -131,10 +135,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		
 		Map<String, String> m = new Hashtable();
 		
-		m.put("org.osgi.framework.os.name", "linux");
-		m.put("org.osgi.framework.processor", "armv7l");
+		m.put("felix.auto.deploy.action", "install,start");
 		m.put("felix.log.level", "4");
-		m.put("obr.repository.url","http://felix.apache.org/obr/releases.xml");
 		
 		return m;
 	}
@@ -143,7 +145,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		List cp = new ArrayList();
 		
 		//Add the Felix OSGi Framework
-		cp.add(felixPluginBase + "framework/felix.jar");
+		cp.add(felixPluginBase + FELIX_FRAMEWORK_REL_PATH);
 	
 		return (String[]) cp.toArray(new String[cp.size()]);
 	}
@@ -171,5 +173,9 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	 */
 	protected abstract Map<String, String> getLaunchProperties();
 	
+	/**
+	 * @return A list of workspace bundles that should be compiled and added to the Felix launch configuration.
+	 * @throws Exception
+	 */
 	protected abstract List<String> getWorkspaceBundles() throws Exception;
 }
