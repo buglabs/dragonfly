@@ -356,11 +356,11 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 			String b = (String) arguments.get(0);
 
 			if (b.equals("out")) {
-				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_OUT));
+				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_OUT, 0 , ButtonEvent.BUTTON_CAMERA_ZOOM_OUT));
 			} else if (b.equals("in")) {
-				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_IN));
+				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_IN, 0 , ButtonEvent.BUTTON_CAMERA_ZOOM_IN));
 			} else if (b.equals("shutter")) {
-				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_SHUTTER));
+				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_SHUTTER, 0, ButtonEvent.BUTTON_CAMERA_SHUTTER));
 			}
 		}
 
