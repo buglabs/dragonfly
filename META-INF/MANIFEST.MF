@@ -9,7 +9,6 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.buglabs.osgi.concierge.core,
- com.buglabs.osgi.concierge.runtime,
  com.buglabs.osgi.concierge.ui,
  com.buglabs.dragonfly,
  org.eclipse.core.resources,

@@ -28,7 +28,6 @@ import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.JarUtils;
 import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
-import com.buglabs.osgi.concierge.runtime.ConciergeRuntime;
 import com.buglabs.util.BugBundleConstants;
 
 public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfiguration {
@@ -116,19 +115,6 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		Vector jars = new Vector();
 		Vector cgFilteredJars = new Vector();
 
-		List cgJars = ConciergeRuntime.getDefault().getConciergeJars();
-		Iterator cgIter = cgJars.iterator();
-
-		while (cgIter.hasNext()) {
-			File cgjar = (File) cgIter.next();
-			if (!cgjar.getName().endsWith(CG_SHELL_BUNDLE)) {
-				// Remove cg shell
-				cgFilteredJars.add(cgjar);
-			}
-		}
-
-		jars.addAll(cgFilteredJars);
-
 		List bugJars = DragonflyActivator.getDefault().getBUGOSGiJars();
 		jars.addAll(bugJars);
 		return jars;
@@ -166,7 +152,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	protected Map getStartLevelMap(ILaunchConfiguration configuration) throws CoreException {
 		Map startlevelmap = super.getStartLevelMap(configuration);
 
-		List jars = ConciergeRuntime.getDefault().getConciergeJars();
+		List jars = new ArrayList();
 		jars.addAll(DragonflyActivator.getDefault().getBUGOSGiJars());
 		Iterator jarIter = jars.iterator();
 		while (jarIter.hasNext()) {
