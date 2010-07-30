@@ -1,15 +1,19 @@
 package com.buglabs.dragonfly.ui.jobs;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -19,8 +23,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import com.buglabs.dragonfly.APIVersionManager;
 import com.buglabs.dragonfly.BugApplicationNature;
@@ -32,20 +37,22 @@ import com.buglabs.dragonfly.ui.info.BugProjectInfo;
 import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.osgi.concierge.core.utils.ConciergeUtils;
-import com.buglabs.osgi.concierge.ui.jobs.CreateConciergeProject;
+import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
+import com.buglabs.osgi.concierge.templates.GeneratorActivator;
 import com.buglabs.util.BugBundleConstants;
 
-public class CreateBugProjectJob extends CreateConciergeProject {
+public class CreateBugProjectJob extends WorkspaceModifyOperation {
+
+	private BugProjectInfo projInfo;
+	private List classpathEntries;
+	
+	private IContainer srcContainer;
+	private IContainer binContainer;
 
 	public CreateBugProjectJob(BugProjectInfo projInfo) {
-		super(projInfo);
+		this.projInfo = projInfo;
+		classpathEntries = new ArrayList();
 	}
-
-	/*
-	 * TODO this used? public static String getClassName(String projName) {
-	 * return BugProjectUtil.formatProjectNameAsPackage(projName) +
-	 * ".Activator"; }
-	 */
 
 	/*
 	 * (non-Javadoc)
@@ -55,15 +62,25 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	 * .eclipse.core.runtime.IProgressMonitor)
 	 */
 	protected void execute(IProgressMonitor monitor) throws CoreException, InvocationTargetException, InterruptedException {
-		super.execute(monitor);
+		IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
+		IProject proj = wsroot.getProject(projInfo.getProjectName());
+		proj.create(monitor);
+		proj.open(monitor);
+
+		addNatures(proj, monitor);
+		createBinFolder(proj, monitor);
+		createSrcFolder(proj, monitor);
+		setProjectClassPath(proj, monitor);
+		createManifest(proj, monitor);
+
+		if (projInfo.isGenerateActivator()) {
+			generateActivator(monitor);
+		}
 
 		// Set the java version for BUG jvm compatibility
 		IJavaProject jproj = JavaCore.create(getProject());
 
-		if (getBugProjectInfo().getExecutionEnvironment().indexOf(JavaCore.VERSION_1_6) != -1)
-			setJava16Options(jproj);
-		else
-			setPhoneMEOptions(jproj);
+		setJava16Options(jproj);
 
 		jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 		jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
@@ -75,6 +92,74 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 			}
 		}
 	}
+	
+	private void createManifest(IProject proj, IProgressMonitor monitor) throws CoreException {
+		IFolder metainf = proj.getFolder("META-INF");
+		metainf.create(true, true, monitor);
+		IFile manifest = metainf.getFile("MANIFEST.MF");
+		String contents = getManifestContents().toString();
+		manifest.create(new ByteArrayInputStream(contents.getBytes()), true, monitor);
+	}
+
+	private void createSrcFolder(IProject proj, IProgressMonitor monitor) throws CoreException {
+		srcContainer = proj;// .getFolder("/");// proj.getFolder("src");
+
+		if (srcContainer.getType() == IResource.FOLDER) {
+			((IFolder) srcContainer).create(true, true, monitor);
+		}
+		classpathEntries.add(JavaCore.newSourceEntry(srcContainer.getFullPath()));
+	}
+
+	private void setProjectClassPath(IProject proj, IProgressMonitor monitor) throws JavaModelException {
+		addClasspathEntries();
+		IJavaProject jproj = JavaCore.create(proj);
+		jproj.setRawClasspath(getClassPathEntries(proj, monitor), null);
+	}
+
+	private void createBinFolder(IProject proj, IProgressMonitor monitor) throws CoreException {
+		binContainer = proj;
+		// bin.create(true, true, monitor);
+		IJavaProject jproj = JavaCore.create(proj);
+		jproj.setOutputLocation(binContainer.getFullPath(), monitor);
+	}
+	
+	protected void createDeepFile(IContainer container, Path childpath) throws CoreException {
+
+		IContainer localContainer = container;
+		for (int i = 0; i < childpath.segmentCount() - 1; ++i) {
+			IFolder folder = localContainer.getFolder(new Path(childpath.segment(i)));
+			folder.create(true, true, new NullProgressMonitor());
+			localContainer = folder;
+		}
+	}
+	
+	private IClasspathEntry[] getClassPathEntries(IProject project, IProgressMonitor monitor) {
+		return (IClasspathEntry[]) classpathEntries.toArray(new IClasspathEntry[classpathEntries.size()]);
+	}
+	
+	protected void writeContents(IFile file, String contents, IProgressMonitor monitor) throws CoreException {
+		if (file.exists()) {
+			file.delete(true, monitor);
+		}
+
+		file.create(new ByteArrayInputStream(contents.getBytes()), true, monitor);
+	}
+	
+	protected void generateActivator(IProgressMonitor monitor) throws CoreException {
+		String contents = getActivatorContents().toString();
+
+		String fileHandle = projInfo.getActivator().replace('.', '/');
+		/*
+		 * char[] charArray = fileHandle.toCharArray(); charArray[0] =
+		 * Character.toLowerCase(charArray[0]); fileHandle = new
+		 * String(charArray);
+		 */
+
+		Path activatorpath = new Path(fileHandle + ".java");
+		createDeepFile(srcContainer, activatorpath);
+		IFile activator = srcContainer.getFile(activatorpath);
+		writeContents(activator, contents, monitor);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -84,10 +169,9 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	 * ()
 	 */
 	protected void addClasspathEntries() {
-		super.addClasspathEntries();
-		getClasspathEntries().remove(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
-		getClasspathEntries().add(JavaCore.newContainerEntry(new Path(BugClasspathContainerInitializer.ID)));
-		getClasspathEntries().add(getJavaRuntimeEntry());
+		classpathEntries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
+		classpathEntries.add(JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins")));
+		classpathEntries.add(JavaCore.newContainerEntry(new Path(BugClasspathContainerInitializer.ID)));
 	}
 
 	/*
@@ -98,7 +182,31 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	 * ()
 	 */
 	protected StringBuffer getManifestContents() {
-		StringBuffer manifestContents = super.getManifestContents();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("Manifest-Version: 1.0\n");
+		buffer.append("Bundle-Name: " + projInfo.getProjectName() + "\n");
+
+		if (!projInfo.getActivator().trim().equals("") && projInfo.isGenerateActivator()) {
+			buffer.append("Bundle-Activator: " + projInfo.getActivator() + "\n");
+		}
+
+		if (!projInfo.getSymbolicName().trim().equals("")) {
+			buffer.append("Bundle-SymbolicName: " + ProjectUtils.formatName(projInfo.getSymbolicName()) + "\n");
+		}
+
+		if (!projInfo.getVersion().trim().equals("")) {
+			buffer.append("Bundle-Version: " + projInfo.getVersion() + "\n");
+		}
+
+		if (!projInfo.getVendor().trim().equals("")) {
+			buffer.append("Bundle-Vendor: " + projInfo.getVendor() + "\n");
+		}
+
+		if (!projInfo.getExecutionEnvironment().trim().equals("")) {
+			buffer.append("Bundle-RequiredExecutionEnvironment: " + projInfo.getExecutionEnvironment() + "\n");
+		}
+		
+		StringBuffer manifestContents = buffer;
 		manifestContents.append(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER + ": " + BugBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
 
 		// add API Version
@@ -141,7 +249,8 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	 * org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	protected void addNatures(IProject proj, IProgressMonitor monitor) throws CoreException {
-		super.addNatures(proj, monitor);
+		ConciergeUtils.addNatureToProject(proj, JavaCore.NATURE_ID, monitor);
+		ConciergeUtils.addNatureToProject(proj, "org.eclipse.pde.PluginNature", monitor);
 		ConciergeUtils.addNatureToProject(proj, BugApplicationNature.ID, monitor);
 	}
 
@@ -196,26 +305,6 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	}
 
 	/**
-	 * TODO Is this called from anywhere -- think this functionality is in
-	 * CreateConciergeProject.generateActivator and not being used here.
-	 * 
-	 * @param monitor
-	 * @throws CoreException
-	 */
-	/*
-	 * protected void createActivator(IProgressMonitor monitor) throws
-	 * CoreException { String packageName =
-	 * BugProjectUtil.formatProjectNameAsPackage
-	 * (getBugProjectInfo().getProjectName()); String path =
-	 * getPackageNamePath(packageName); IFolder mainPackageFolder =
-	 * getProject().getFolder(path);
-	 * 
-	 * IFile activatorFile = mainPackageFolder.getFile("Activator.java"); String
-	 * activatorContents = getActivatorContents().toString();
-	 * writeContents(activatorFile, activatorContents, monitor); }
-	 */
-
-	/**
 	 * Helper to return the current bug project from the workspace
 	 * 
 	 * @return
@@ -248,27 +337,8 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 			return sb;
 		}
 
-		return super.getActivatorContents();
-	}
-
-	/**
-	 * Get the java runtime classpath entry for this project based on the user's
-	 * selection. The default is PhoneME. Otherwise, it's Java 1.6
-	 * 
-	 * @return
-	 */
-	private IClasspathEntry getJavaRuntimeEntry() {
-		// if Java 1.6 Execution Environment was selected, get it via the
-		// execution environments
-
-		IExecutionEnvironment[] executionEnvs = JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
-		for (int i = 0; i < executionEnvs.length; i++) {
-			if (executionEnvs[i].getId().indexOf(JavaCore.VERSION_1_6) != -1) {
-				return JavaCore.newContainerEntry(JavaRuntime.newJREContainerPath(executionEnvs[i]));
-			}
-		}
-
-		throw new RuntimeException("Unable to find classpath entry.");
+		GeneratorActivator gen = new GeneratorActivator();
+		return new StringBuffer(gen.generate(projInfo));
 	}
 
 	/**
@@ -277,19 +347,7 @@ public class CreateBugProjectJob extends CreateConciergeProject {
 	 * @return
 	 */
 	private BugProjectInfo getBugProjectInfo() {
-		return (BugProjectInfo) getProjectInfo();
-	}
-
-	/**
-	 * Set java project options for using PhoneME Called if the user selected
-	 * PhoneME on app creation
-	 * 
-	 * @param jproj
-	 */
-	private void setPhoneMEOptions(IJavaProject jproj) {
-		jproj.setOption(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_4);
-		jproj.setOption(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_3);
-		jproj.setOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_2);
+		return projInfo;
 	}
 
 	/**

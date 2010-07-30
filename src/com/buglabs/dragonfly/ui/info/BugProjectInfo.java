@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.buglabs.osgi.concierge.ui.info.ProjectInfo;
+import com.buglabs.osgi.concierge.ui.info.BUGProjectInfo;
 
-public class BugProjectInfo extends ProjectInfo {
+public class BugProjectInfo extends BUGProjectInfo {
 	boolean shouldGenerateApplicationLoop;
 
 	private Vector services;
