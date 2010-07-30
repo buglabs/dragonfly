@@ -88,10 +88,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		target.delete(EFS.NONE, monitor);
 	}
 
-	private void copyBundles(String srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
-		System.out.println("srcdir: " + srcDir);
-		System.out.println("dstdir: " + launchDir.toOSString());
-		
+	private void copyBundles(String srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {		
 		IPath destDir = launchDir.append(REL_BUNDLE_DIR);
 		
 		IFileSystem fs = EFS.getLocalFileSystem();
@@ -101,7 +98,16 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 		destStore = destStore.mkdir(EFS.NONE, monitor);
 		
-		srcStore.copy(destStore, EFS.OVERWRITE, monitor);
+		IFileStore [] srcStores = srcStore.childStores(EFS.NONE, monitor);
+		
+		for (int i = 0; i < srcStores.length; ++i) {
+			//For runtime workbench, don't copy svn metadata contained in workspace.
+			if (!srcStores[i].getName().endsWith(".svn")) {
+				srcStores[i].copy(destStore.getChild(srcStores[i].getName()), EFS.OVERWRITE, monitor);
+			}
+		}
+		
+		//srcStore.copy(destStore, EFS.OVERWRITE, monitor);
 	}
 
 	private String[] getVMArgs(File confFile, String felixPluginBase) {
