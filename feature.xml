@@ -259,13 +259,6 @@ Parts of this program are licenced under the Apache Software License:
          version="0.0.0"/>
 
    <plugin
-         id="com.buglabs.osgi.concierge.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.buglabs.dragonfly.generators"
          download-size="0"
          install-size="0"
