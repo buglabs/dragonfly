@@ -53,6 +53,7 @@ import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.IBugnetAuthenticationListener;
 import com.buglabs.dragonfly.bugnet.BugnetApplicationCategoryHelper;
 import com.buglabs.dragonfly.bugnet.BugnetResultManager;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.Bug;
 import com.buglabs.dragonfly.model.IModelChangeListener;
 import com.buglabs.dragonfly.model.IModelNode;
@@ -63,7 +64,6 @@ import com.buglabs.dragonfly.ui.actions.SearchBugNetAction;
 import com.buglabs.dragonfly.ui.jobs.BUGNetRefreshJob;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 /**
  * The BugnetView, not to be confused with the old BUGnetView This one uses the
@@ -643,7 +643,7 @@ public class BugnetView extends ViewPart implements IModelChangeListener, IBugne
 			if (PlatformUI.getWorkbench().getDisplay().isDisposed()) {
 				return;
 			}
-			
+
 			PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 				public void run() {
 					if (bugnetViewer == null)

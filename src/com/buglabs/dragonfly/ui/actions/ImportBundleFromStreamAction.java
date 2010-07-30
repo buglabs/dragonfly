@@ -15,8 +15,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -30,10 +28,9 @@ import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.util.BugWSHelper;
-import com.buglabs.osgi.concierge.core.builder.ManifestConsistencyChecker;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class ImportBundleFromStreamAction extends Action {
 	String programName;
@@ -134,9 +131,10 @@ public class ImportBundleFromStreamAction extends Action {
 
 						jproj.setRawClasspath((IClasspathEntry[]) cpl.toArray(new IClasspathEntry[cpl.size()]), monitor);
 
-						ProjectUtils.configureBuilder(jproj.getProject(), ManifestConsistencyChecker.ID);
+						//ProjectUtils.configureBuilder(jproj.getProject(), ManifestConsistencyChecker.ID);
+						throw new RuntimeException("Hit unmigrated code.");
 
-						monitor.worked(10);
+						//monitor.worked(10);
 
 					}
 				} catch (IOException e) {

@@ -25,13 +25,13 @@ import org.osgi.framework.BundleContext;
 
 import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.actions.LaunchWelcomeEditorAction;
 import com.buglabs.dragonfly.ui.jobs.LoadBugsJob;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class Activator extends AbstractUIPlugin {
 
@@ -359,7 +359,7 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public File exportToJar(IProject proj) throws CoreException {
-		return ProjectUtils.exporToJar(new File(getJarLocation()), proj);
+		return ProjectUtils.exporToJar(new File(getJarLocation()), proj, false);
 	}
 
 	public String getJarLocation() {

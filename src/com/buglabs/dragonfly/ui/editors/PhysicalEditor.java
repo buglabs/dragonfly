@@ -2,8 +2,6 @@ package com.buglabs.dragonfly.ui.editors;
 
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;

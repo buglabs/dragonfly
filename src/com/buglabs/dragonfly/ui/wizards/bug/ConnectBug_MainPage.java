@@ -25,12 +25,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.buglabs.dragonfly.BugConnectionManager;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.jobs.TestConnectionJob;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 /**
  * Main page for the Bug Connection Project.

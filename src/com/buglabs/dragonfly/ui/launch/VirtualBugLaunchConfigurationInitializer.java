@@ -8,9 +8,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.launch.ConciergeLaunchConfiguration;
 import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
 
 /**
  * This class defines the default launch configuration of the BUG Simulator.
@@ -33,7 +33,7 @@ public class VirtualBugLaunchConfigurationInitializer {
 		}
 
 		String appDirectory = com.buglabs.dragonfly.felix.Activator.getDefault().getStateLocation() + File.separator + "apps";
-		
+
 		File f = new File(appDirectory);
 		if (!f.exists()) {
 			f.mkdirs();

@@ -74,12 +74,12 @@ import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
+import com.buglabs.dragonfly.model.BugProjectInfo;
 import com.buglabs.dragonfly.model.ServiceDetail;
 import com.buglabs.dragonfly.model.ServiceProperty;
+import com.buglabs.dragonfly.model.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.filters.ServiceFilter;
-import com.buglabs.dragonfly.model.BugProjectInfo;
-import com.buglabs.dragonfly.model.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsViewContentProvider;
 import com.buglabs.dragonfly.util.BugWSHelper;
@@ -805,8 +805,8 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	}
 
 	/**
-	 * Handle the BUG Simulator event. right now just removing the vbug connection
-	 * on TERMINATE event
+	 * Handle the BUG Simulator event. right now just removing the vbug
+	 * connection on TERMINATE event
 	 * 
 	 * @param event
 	 */

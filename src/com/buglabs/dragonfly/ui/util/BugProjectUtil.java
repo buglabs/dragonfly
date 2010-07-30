@@ -19,8 +19,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
 import com.buglabs.dragonfly.BugApplicationNature;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class BugProjectUtil extends ProjectUtils {
 
@@ -131,14 +131,14 @@ public class BugProjectUtil extends ProjectUtils {
 						return true;
 					} else if (resource.getType() == IResource.PROJECT) {
 						IProject project = (IProject) resource;
-						
+
 						if (!project.isOpen()) {
 							return false;
 						}
 						if (project.hasNature(BugApplicationNature.ID) && (projectNameList == null || projectNameList.contains(project.getName()))) {
 							projects.add(project);
 						}
-						
+
 						if (project.hasNature("org.eclipse.pde.PluginNature") && (projectNameList == null || projectNameList.contains(project.getName()))) {
 							projects.add(project);
 						}

@@ -7,16 +7,44 @@
  *******************************************************************************/
 package com.buglabs.dragonfly.launch;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupDirector;
+import org.eclipse.debug.core.sourcelookup.ISourceContainer;
+import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
+import org.eclipse.debug.core.sourcelookup.containers.ExternalArchiveSourceContainer;
+import org.eclipse.debug.core.sourcelookup.containers.WorkspaceSourceContainer;
+import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourceLookupParticipant;
+
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.osgi.concierge.runtime.sourcelocators.ConciergeSourceLocator;
 
-public class BugKernelSourceLocator extends ConciergeSourceLocator {
+public class BugKernelSourceLocator extends AbstractSourceLookupDirector {
+
+	public void initializeParticipants() {
+		// Theoretically the source containers should be added by a source computer.
+		addParticipants(new ISourceLookupParticipant[] { new JavaSourceLookupParticipant() });
+		ArrayList sourceContainers = new ArrayList();
+		sourceContainers.addAll(Arrays.asList(getSourceContainers()));
+
+		sourceContainers.add(new WorkspaceSourceContainer());
+
+		List jars = getSourceJars();
+		Iterator iter = jars.iterator();
+
+		while (iter.hasNext()) {
+			File jar = (File) iter.next();
+			ExternalArchiveSourceContainer easc = new ExternalArchiveSourceContainer(jar.getAbsolutePath(), true);
+			sourceContainers.add(easc);
+		}
+
+		setSourceContainers((ISourceContainer[]) sourceContainers.toArray(new ISourceContainer[sourceContainers.size()]));
+	}
+
 	protected List getSourceJars() {
-
-		List jars = super.getSourceJars();
-		jars.addAll(DragonflyActivator.getDefault().getBUGOSGiJars());
-		return jars;
+		return DragonflyActivator.getDefault().getBUGOSGiJars();
 	}
 }

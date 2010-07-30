@@ -24,11 +24,11 @@ import org.eclipse.ui.PlatformUI;
 import com.buglabs.dragonfly.APIVersionManager;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
 import com.buglabs.dragonfly.exception.BugnetAuthenticationException;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.BugnetAuthenticationHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 import com.buglabs.dragonfly.validator.BUGApplicationProjectValidator;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class ExportJarToBUGNetAction extends Action {
 
@@ -72,7 +72,7 @@ public class ExportJarToBUGNetAction extends Action {
 		File jarFile = null;
 
 		try {
-			jarFile = ProjectUtils.exporToJar(location, project);
+			jarFile = ProjectUtils.exporToJar(location, project, true);
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to export project as jar file.", e);
 			return;

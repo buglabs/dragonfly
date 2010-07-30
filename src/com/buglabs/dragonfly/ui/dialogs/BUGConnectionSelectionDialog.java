@@ -21,11 +21,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import com.buglabs.dragonfly.BugConnectionManager;
+import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsViewComparator;
 

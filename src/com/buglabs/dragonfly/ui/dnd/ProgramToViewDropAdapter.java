@@ -10,13 +10,13 @@ import org.eclipse.swt.dnd.TransferData;
 
 import com.buglabs.dragonfly.BugApplicationNature;
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.ApplicationFolderNode;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.FolderNode;
 import com.buglabs.dragonfly.ui.actions.UpsertToBugAction;
 import com.buglabs.dragonfly.ui.jobs.UploadJARToBUGChangeListener;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class ProgramToViewDropAdapter extends ViewerDropAdapter {
 

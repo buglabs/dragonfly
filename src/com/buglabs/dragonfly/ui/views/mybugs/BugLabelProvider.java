@@ -15,6 +15,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.FolderNode;
@@ -23,7 +24,6 @@ import com.buglabs.dragonfly.model.Module;
 import com.buglabs.dragonfly.model.ProgramNode;
 import com.buglabs.dragonfly.model.ServiceNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.views.Messages;
 

@@ -52,7 +52,6 @@ import com.buglabs.dragonfly.ui.actions.ShowBUGConsoleAction;
 import com.buglabs.dragonfly.ui.dnd.MyBugsViewProgramNodeTransfer;
 import com.buglabs.dragonfly.ui.dnd.ProgramToViewDropAdapter;
 import com.buglabs.dragonfly.ui.filters.ApplicationFilter;
-import com.buglabs.dragonfly.ui.jobs.ConnectBugHelper;
 import com.buglabs.dragonfly.ui.jobs.LaunchPhysicalEditorJob;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -140,7 +139,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 				final Object selectedNode = ((IStructuredSelection) selection).getFirstElement();
 				if (selectedNode instanceof BugConnection) {
 					final BugConnection bug = (BugConnection) selectedNode;
-				
+
 					if (bug.isConnected()) {
 						PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 							public void run() {
@@ -149,7 +148,7 @@ public class MyBugsView extends ViewPart implements ISelectionProvider {
 								job.schedule();
 							}
 						});
-					} 
+					}
 				}
 			}
 

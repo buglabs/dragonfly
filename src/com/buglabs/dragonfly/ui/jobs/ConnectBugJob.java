@@ -70,7 +70,7 @@ public class ConnectBugJob extends Job {
 			status = IStatus.OK;
 			quietFailed = true;
 		}
-		
+
 		return new Status(status, com.buglabs.dragonfly.ui.Activator.PLUGIN_ID, status, "Unable to connect to " + bug.getName(), new Throwable(e.toString()));
 	}
 

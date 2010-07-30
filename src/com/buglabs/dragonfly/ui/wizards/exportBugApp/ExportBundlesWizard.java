@@ -44,11 +44,9 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.BundleExportInfo;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.osgi.concierge.core.OSGiCore;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
-import com.buglabs.osgi.concierge.natures.ConciergeProjectNature;
 
 /**
  * 
@@ -61,7 +59,7 @@ public class ExportBundlesWizard extends Wizard implements IExportWizard {
 	BundleExportInfo expinfo;
 	private ProjectAndDestinationPage page1;
 	private IDialogSettings settings;
-	private String natureID = ConciergeProjectNature.ID;
+	private String natureID = "com.buglabs.osgi.concierge.natures.ConciergeProjectNature";
 
 	public ExportBundlesWizard() {
 		settings = Activator.getDefault().getDialogSettings().getSection(this.getClass().getName());
@@ -112,13 +110,13 @@ public class ExportBundlesWizard extends Wizard implements IExportWizard {
 		while (projectsIter.hasNext()) {
 			IProject proj = (IProject) projectsIter.next();
 			try {
-				File exporToJar = ProjectUtils.exporToJar(loc, proj);
+				File exporToJar = ProjectUtils.exporToJar(loc, proj, false);
 
 				if (exporToJar == null)
 					return false;
 
 			} catch (CoreException e) {
-				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, OSGiCore.PLUGIN_ID, IStatus.ERROR, e.getMessage(), null));
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, e.getMessage(), null));
 			}
 		}
 

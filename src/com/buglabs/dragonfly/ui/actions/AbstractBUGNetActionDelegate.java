@@ -9,8 +9,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionDelegate;
 
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 /**
  * An action delegate that responds to current state of BUGnet's enable status.

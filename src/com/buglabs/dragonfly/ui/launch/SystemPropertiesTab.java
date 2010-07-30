@@ -62,9 +62,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.osgi.concierge.core.OSGiCore;
-import com.buglabs.osgi.concierge.launch.ConciergeLaunchConfiguration;
-
 
 /**
  * 
@@ -411,7 +408,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			systemProps = configuration.getAttribute(ConciergeLaunchConfiguration.SYSTEM_PROPERTIES, new Hashtable());
+			systemProps = configuration.getAttribute("SYSTEM_PROPERTIES", new Hashtable());
 			propViewer.setInput(systemProps);
 			enableLogger.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.log.enabled", enableLogger));
 			logQuiet.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.log.quiet", logQuiet));
@@ -448,7 +445,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
 			String ll = (String) systemProps.get("ch.ethz.iks.concierge.log.level");
 
-			jvmArgStr = configuration.getAttribute(ConciergeLaunchConfiguration.JVM_ARGUMENTS, "");
+			jvmArgStr = configuration.getAttribute("com.buglabs.osgi.concierge.ui.launch.jvmArgs", "");
 
 			if (ll != null) {
 				switch (Integer.parseInt(ll)) {
@@ -472,19 +469,19 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 				bundleLocation.setText(bundleDir);
 			}
 
-			String args = configuration.getAttribute(ConciergeLaunchConfiguration.JVM_ARGUMENTS, "");
+			String args = configuration.getAttribute("com.buglabs.osgi.concierge.ui.launch.jvmArgs", "");
 			if (args != null) {
 				jvmArgs.setText(args);
 			}
 		} catch (CoreException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, OSGiCore.PLUGIN_ID, IStatus.ERROR, e.getMessage(), null));
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, e.getMessage(), null));
 		}
 
 	}
 
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(ConciergeLaunchConfiguration.SYSTEM_PROPERTIES, systemProps);
-		configuration.setAttribute(ConciergeLaunchConfiguration.JVM_ARGUMENTS, jvmArgStr);
+		configuration.setAttribute("SYSTEM_PROPERTIES", systemProps);
+		configuration.setAttribute("com.buglabs.osgi.concierge.ui.launch.jvmArgs", jvmArgStr);
 		propViewer.setInput(systemProps);
 	}
 

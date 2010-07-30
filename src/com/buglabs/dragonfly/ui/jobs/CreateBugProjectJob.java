@@ -29,6 +29,8 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import com.buglabs.dragonfly.APIVersionManager;
 import com.buglabs.dragonfly.BugApplicationNature;
+import com.buglabs.dragonfly.felix.ConciergeUtils;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.generators.jet.Activator;
 import com.buglabs.dragonfly.generators.jet.Application;
 import com.buglabs.dragonfly.generators.jet.ServiceTrackerCustomizer;
@@ -36,8 +38,6 @@ import com.buglabs.dragonfly.jdt.BugClasspathContainerInitializer;
 import com.buglabs.dragonfly.model.BugProjectInfo;
 import com.buglabs.dragonfly.model.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
-import com.buglabs.osgi.concierge.core.utils.ConciergeUtils;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 import com.buglabs.osgi.concierge.templates.GeneratorActivator;
 import com.buglabs.util.BugBundleConstants;
 
@@ -45,7 +45,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 
 	private BugProjectInfo projInfo;
 	private List classpathEntries;
-	
+
 	private IContainer srcContainer;
 	private IContainer binContainer;
 
@@ -92,7 +92,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 			}
 		}
 	}
-	
+
 	private void createManifest(IProject proj, IProgressMonitor monitor) throws CoreException {
 		IFolder metainf = proj.getFolder("META-INF");
 		metainf.create(true, true, monitor);
@@ -122,7 +122,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		IJavaProject jproj = JavaCore.create(proj);
 		jproj.setOutputLocation(binContainer.getFullPath(), monitor);
 	}
-	
+
 	protected void createDeepFile(IContainer container, Path childpath) throws CoreException {
 
 		IContainer localContainer = container;
@@ -132,11 +132,11 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 			localContainer = folder;
 		}
 	}
-	
+
 	private IClasspathEntry[] getClassPathEntries(IProject project, IProgressMonitor monitor) {
 		return (IClasspathEntry[]) classpathEntries.toArray(new IClasspathEntry[classpathEntries.size()]);
 	}
-	
+
 	protected void writeContents(IFile file, String contents, IProgressMonitor monitor) throws CoreException {
 		if (file.exists()) {
 			file.delete(true, monitor);
@@ -144,7 +144,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 
 		file.create(new ByteArrayInputStream(contents.getBytes()), true, monitor);
 	}
-	
+
 	protected void generateActivator(IProgressMonitor monitor) throws CoreException {
 		String contents = getActivatorContents().toString();
 
@@ -205,7 +205,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		if (!projInfo.getExecutionEnvironment().trim().equals("")) {
 			buffer.append("Bundle-RequiredExecutionEnvironment: " + projInfo.getExecutionEnvironment() + "\n");
 		}
-		
+
 		StringBuffer manifestContents = buffer;
 		manifestContents.append(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER + ": " + BugBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
 
@@ -217,7 +217,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 
 		Vector packages = new Vector();
 		manifestContents.append("Import-Package:");
-	
+
 		if (services.size() > 0) {
 			Iterator serviceIter = services.iterator();
 			while (serviceIter.hasNext()) {

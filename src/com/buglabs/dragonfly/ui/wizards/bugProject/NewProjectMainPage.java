@@ -25,10 +25,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.AuthenticationData;
-import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.model.BugProjectInfo;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
+import com.buglabs.dragonfly.ui.Activator;
 
 public class NewProjectMainPage extends WizardPage {
 
@@ -44,7 +44,7 @@ public class NewProjectMainPage extends WizardPage {
 		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
 		setMessage(Messages.getString("NewProjectMainPage.5")); //$NON-NLS-1$
 		this.pinfo = pinfo;
-		
+
 		try {
 			projectNameSize = Integer.parseInt(Activator.getString("PROJECT_NAME_SIZE"));
 		} catch (Exception e) {

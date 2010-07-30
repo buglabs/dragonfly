@@ -16,7 +16,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.buglabs.dragonfly.BugConnectionManager;
-import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 
 public class ExportJarActionDelegate implements IObjectActionDelegate {
 	IProject project;

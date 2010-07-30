@@ -122,8 +122,8 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 	}
 
 	/**
-	 * Handle the BUG Simulator event. right now just removing the BUG Simulator connection
-	 * on TERMINATE event
+	 * Handle the BUG Simulator event. right now just removing the BUG Simulator
+	 * connection on TERMINATE event
 	 * 
 	 * @param event
 	 */

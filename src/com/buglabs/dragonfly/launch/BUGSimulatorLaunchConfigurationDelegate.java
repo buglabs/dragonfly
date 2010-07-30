@@ -21,10 +21,11 @@ import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 
 /**
- * A launch configuration for BUG Simulator.  Relies on FelixLaunchConfiguration to provide OSGi framework jars.
+ * A launch configuration for BUG Simulator. Relies on FelixLaunchConfiguration
+ * to provide OSGi framework jars.
  * 
  * @author kgilmer
- *
+ * 
  */
 public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfiguration {
 	public static final String ATTR_GPS_LOG = "GPS_LOG";
@@ -61,9 +62,9 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 			super.launch(configuration, mode, launch, monitor);
 		} catch (IOException e) {
 			if (Activator.getDefault().getLaunchErrorVisible()) {
-				
+
 				Display.getCurrent().syncExec(new Runnable() {
-					
+
 					public void run() {
 						MessageDialog.openInformation(new Shell(), "BUG Simulator Launch", "BUG Simulator is already running. Please close it and launch again.");
 					}
@@ -95,23 +96,23 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 	@Override
 	protected Map<String, String> getLaunchProperties() {
 		Map m = new Hashtable();
-		
-		m.put("bug.os.version","2009.X-stable");
-		m.put("app.bundle.path","/usr/share/java/apps");
+
+		m.put("bug.os.version", "2009.X-stable");
+		m.put("app.bundle.path", "/usr/share/java/apps");
 		m.put("org.osgi.service.http.port", "8082");
 		m.put("org.osgi.framework.storage.clean", "onFirstInit");
 		m.put("org.osgi.framework.os.name", "linux");
 		m.put("org.osgi.framework.processor", "armv7l");
-		
+
 		return m;
 	}
-	
+
 	@Override
 	protected List<String> getWorkspaceBundles() throws CoreException {
 		List selectedProjects = BugProjectUtil.getWSBugProjectNames();
 		String launchAll = getSystemProperty(configuration, PROP_LAUNCH_ALL, "true");
 		if (!launchAll.equals("true"))
 			selectedProjects = configuration.getAttribute(ATTR_LAUNCH_PROJECTS, BugProjectUtil.getWSBugProjectNames());
-		return selectedProjects;	
+		return selectedProjects;
 	}
 }
