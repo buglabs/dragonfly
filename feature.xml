@@ -266,13 +266,6 @@ Parts of this program are licenced under the Apache Software License:
          unpack="false"/>
 
    <plugin
-         id="com.buglabs.osgi.concierge.runtime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.buglabs.osgi.concierge.ui"
          download-size="0"
          install-size="0"
