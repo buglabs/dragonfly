@@ -11,8 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views,
  org.eclipse.core.resources,
  org.eclipse.jdt.core,
- com.buglabs.common,
- com.buglabs.osgi.concierge.core
+ com.buglabs.common
 Eclipse-LazyStart: true
 Export-Package: com.buglabs.dragonfly,
  com.buglabs.dragonfly.bugnet,

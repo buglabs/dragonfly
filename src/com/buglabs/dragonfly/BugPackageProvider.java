@@ -10,7 +10,6 @@ import java.util.jar.Manifest;
 import org.eclipse.jdt.core.IClasspathEntry;
 
 import com.buglabs.dragonfly.jdt.BugClasspathContainer;
-import com.buglabs.osgi.concierge.core.IPackageProvider;
 
 public class BugPackageProvider implements IPackageProvider {
 
