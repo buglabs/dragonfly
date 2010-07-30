@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
-import com.buglabs.dragonfly.ui.info.BugProjectInfo;
-import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
+import com.buglabs.dragonfly.model.BugProjectInfo;
+import com.buglabs.dragonfly.model.ServicePropertyHelper;
 
 /**
  * A dialog for selecting properties for filtering in a Bug App's Service

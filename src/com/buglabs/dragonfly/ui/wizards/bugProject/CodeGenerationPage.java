@@ -78,8 +78,8 @@ import com.buglabs.dragonfly.model.ServiceDetail;
 import com.buglabs.dragonfly.model.ServiceProperty;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.filters.ServiceFilter;
-import com.buglabs.dragonfly.ui.info.BugProjectInfo;
-import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
+import com.buglabs.dragonfly.model.BugProjectInfo;
+import com.buglabs.dragonfly.model.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsViewContentProvider;
 import com.buglabs.dragonfly.util.BugWSHelper;
@@ -527,7 +527,6 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	 * 
 	 */
 	private void openServicePropertySelectorDialog(Shell shell, String selectedService, boolean clearCheckedOnCancel) {
-
 		/* TODO - Make sure this works, this is for 1.5 SDK, R1.4.3 of BUG */
 		if (servicePropertyOptionsMap.containsKey(selectedService) && servicePropertyOptionsMap.get(selectedService) != null
 				&& servicePropertyOptionsMap.get(selectedService).size() > 0) {

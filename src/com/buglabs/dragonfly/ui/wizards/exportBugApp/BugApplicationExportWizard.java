@@ -5,7 +5,6 @@ import org.eclipse.jface.wizard.WizardPage;
 
 import com.buglabs.dragonfly.BugApplicationNature;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.osgi.concierge.ui.wizards.export.ExportBundlesWizard;
 
 public class BugApplicationExportWizard extends ExportBundlesWizard {
 	public BugApplicationExportWizard() {

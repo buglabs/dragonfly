@@ -13,7 +13,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import com.buglabs.dragonfly.ui.info.BugProjectInfo;
+import com.buglabs.dragonfly.model.BugProjectInfo;
 import com.buglabs.dragonfly.ui.jobs.CreateBugProjectJob;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.UIUtils;

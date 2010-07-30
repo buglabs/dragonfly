@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Text;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.info.BugProjectInfo;
+import com.buglabs.dragonfly.model.BugProjectInfo;
 import com.buglabs.osgi.concierge.core.utils.ProjectUtils;
 
 public class NewProjectMainPage extends WizardPage {

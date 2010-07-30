@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-import com.buglabs.dragonfly.ui.info.ServicePropertyHelper;
+import com.buglabs.dragonfly.model.ServicePropertyHelper;
 
 /**
  * Used in ServicePropertySelectorDialog for the service properties TableViewer
