@@ -55,12 +55,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
 
 /**
@@ -70,10 +69,12 @@ import com.buglabs.dragonfly.ui.Activator;
  */
 public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
+	private static final String SYSTEM_PROPERTIES_KEY = "SYSTEM_PROPERTIES";
+
 	private Map systemProps;
 
-	private Button enableLogger;
-
+	private Button silentLevel;
+	
 	private Button errorLevel;
 
 	private Button warningLevel;
@@ -82,19 +83,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
 	private Button debugLevel;
 
-	private Button strictMode;
-
-	private Button logQuiet;
-
-	private Text bundleLocation;
-
 	private TableViewer propViewer;
-
-	private Button bundleDirButton;
-
-	private Button decompressEmbedded;
-
-	private Button enableSecurity;
 
 	private Button removePropButton;
 
@@ -104,16 +93,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
 	protected String jvmArgStr;
 
-	private Button debugBundles;
-
-	private Button debugPackages;
-
-	private Button debugClassloading;
-
-	private Button debugServices;
-
 	public SystemPropertiesTab() {
-		// systemProps = new Hashtable();
 	}
 
 	// Workaround
@@ -141,24 +121,25 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
 	public void createControl(final Composite parent) {
 		Composite main = new Composite(parent, SWT.None);
-		main.setLayout(new GridLayout(3, false));
+		main.setLayout(new GridLayout(2, false));
 		main.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Group logGroup = new Group(main, SWT.None);
-		logGroup.setText("Logging");
-		logGroup.setLayout(new GridLayout(2, false));
-
-		Composite logComp = new Composite(logGroup, SWT.None);
-		logComp.setLayout(StripGridLayoutMargins(new GridLayout()));
-		logComp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		enableLogger = new Button(logComp, SWT.CHECK);
-		enableLogger.setText("Framework Log Service");
-		enableLogger.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		Group levelGroup = new Group(logGroup, SWT.None);
+		Group levelGroup = new Group(main, SWT.None);
 		levelGroup.setText("Log Level");
 		levelGroup.setLayout(new GridLayout());
+		GridData gdata = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		levelGroup.setLayoutData(gdata);
+		
+		silentLevel = new Button(levelGroup, SWT.RADIO);
+		silentLevel.setText("Silent");
+		silentLevel.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+
+			public void widgetSelected(SelectionEvent arg0) {
+				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "0");
+			}
+		});
 
 		errorLevel = new Button(levelGroup, SWT.RADIO);
 		errorLevel.setText("Error");
@@ -167,7 +148,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put("ch.ethz.iks.concierge.log.level", "1");
+				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "1");
 			}
 		});
 		warningLevel = new Button(levelGroup, SWT.RADIO);
@@ -177,7 +158,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put("ch.ethz.iks.concierge.log.level", "2");
+				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "2");
 			}
 		});
 
@@ -188,7 +169,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put("ch.ethz.iks.concierge.log.level", "3");
+				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3");
 			}
 		});
 
@@ -199,101 +180,19 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put("ch.ethz.iks.concierge.log.level", "4");
+				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "4");
 			}
 		});
-
-		logQuiet = new Button(logComp, SWT.CHECK);
-		logQuiet.setText("Quiet Mode");
-		logQuiet.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		Group debugGroup = new Group(main, SWT.None);
-		debugGroup.setText("Debugging");
-		debugGroup.setLayout(new GridLayout(2, false));
-		debugGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
-
-		Composite debugComp = new Composite(debugGroup, SWT.None);
-		debugComp.setLayout(StripGridLayoutMargins(new GridLayout()));
-		debugComp.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		debugBundles = new Button(debugComp, SWT.CHECK);
-		debugBundles.setText("Bundle Messages");
-		debugBundles.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		debugPackages = new Button(debugComp, SWT.CHECK);
-		debugPackages.setText("Package Messages");
-		debugPackages.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		debugClassloading = new Button(debugComp, SWT.CHECK);
-		debugClassloading.setText("Classloader Messages");
-		debugClassloading.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		debugServices = new Button(debugComp, SWT.CHECK);
-		debugServices.setText("Service Messages");
-		debugServices.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-
-		Group bundleGroup = new Group(main, SWT.None);
-		bundleGroup.setText("General");
-		bundleGroup.setLayout(new GridLayout(2, false));
-		bundleGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
-
-		Label lblBundleLocation = new Label(bundleGroup, SWT.None);
-		lblBundleLocation.setText("Non-workspace Bundle Location");
-		GridData gdata = new GridData();
-		gdata.horizontalSpan = 2;
-		lblBundleLocation.setLayoutData(gdata);
-		bundleLocation = new Text(bundleGroup, SWT.BORDER);
-		bundleLocation.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		bundleLocation.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				put("ch.ethz.iks.concierge.jars", bundleLocation.getText());
-			}
-
-		});
-
-		bundleDirButton = new Button(bundleGroup, SWT.None);
-		bundleDirButton.setText("...");
-		bundleDirButton.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog fd = new FileDialog(parent.getShell());
-				String path = null;
-				if ((path = fd.open()) != null) {
-					put("ch.ethz.iks.concierge.jars", path);
-					bundleLocation.setText(path);
-				}
-			}
-
-		});
-
-		Composite generalComp = new Composite(bundleGroup, SWT.None);
-		gdata = new GridData(GridData.FILL_HORIZONTAL);
-		gdata.horizontalSpan = 2;
-		generalComp.setLayout(StripGridLayoutMargins(new GridLayout()));
-		generalComp.setLayoutData(gdata);
-
-		strictMode = new Button(generalComp, SWT.CHECK);
-		strictMode.setText("Strict Mode");
-
-		decompressEmbedded = new Button(generalComp, SWT.CHECK);
-		decompressEmbedded.setText("Decompress Embedded Jars");
-
-		enableSecurity = new Button(generalComp, SWT.CHECK);
-		enableSecurity.setText("Enable Security");
 
 		Composite propComp = new Composite(main, SWT.None);
 		GridLayout layout = new GridLayout(2, false);
 		propComp.setLayout(layout);
-		gdata = new GridData(GridData.FILL_HORIZONTAL);
-		gdata.horizontalSpan = 3;
+		gdata = new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_BEGINNING);
 		propComp.setLayoutData(gdata);
 
 		propViewer = new TableViewer(propComp, SWT.None | SWT.FULL_SELECTION | SWT.BORDER);
 		gdata = new GridData(GridData.FILL_HORIZONTAL);
-		gdata.heightHint = 90;
+		gdata.heightHint = 140;
 		propViewer.getTable().setLayoutData(gdata);
 		propViewer.setContentProvider(new PropertyContentProvider());
 		propViewer.setLabelProvider(new PropertyLabelProvider());
@@ -383,7 +282,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 		jvmArgGroup.setText("VM Arguments");
 		jvmArgGroup.setLayout(new GridLayout());
 		gdata = new GridData(GridData.FILL_HORIZONTAL);
-		gdata.horizontalSpan = 3;
+		gdata.horizontalSpan = 2;
 		jvmArgGroup.setLayoutData(gdata);
 
 		jvmArgs = new Text(jvmArgGroup, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
@@ -403,52 +302,22 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 	}
 
 	public String getName() {
-		return "Concierge";
+		return "Properties";
 	}
 
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
-			systemProps = configuration.getAttribute("SYSTEM_PROPERTIES", new Hashtable());
+			systemProps = configuration.getAttribute(SYSTEM_PROPERTIES_KEY, new Hashtable());
 			propViewer.setInput(systemProps);
-			enableLogger.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.log.enabled", enableLogger));
-			logQuiet.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.log.quiet", logQuiet));
-			strictMode.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.strictStartup", strictMode));
-			decompressEmbedded.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.decompressEmbedded", decompressEmbedded));
-			enableSecurity.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.security.enabled", enableSecurity));
 
-			debugBundles.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.debug.bundles", debugBundles));
-			debugClassloading.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.debug.classloading", debugClassloading));
-			debugPackages.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.debug.packages", debugPackages));
-			debugServices.addSelectionListener(new BooleanSelectionListener("ch.ethz.iks.concierge.debug.services", debugServices));
+			String ll = (String) systemProps.get(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL);
 
-			String el = (String) systemProps.get("ch.ethz.iks.concierge.log.enabled");
-
-			if (el != null && el.equals("true")) {
-				enableLogger.setSelection(true);
-			}
-
-			if (systemProps.get("ch.ethz.iks.concierge.debug.bundles") != null && systemProps.get("ch.ethz.iks.concierge.debug.bundles").equals("true")) {
-				debugBundles.setSelection(true);
-			}
-
-			if (systemProps.get("ch.ethz.iks.concierge.debug.classloading") != null && systemProps.get("ch.ethz.iks.concierge.debug.classloading").equals("true")) {
-				debugClassloading.setSelection(true);
-			}
-
-			if (systemProps.get("ch.ethz.iks.concierge.debug.packages") != null && systemProps.get("ch.ethz.iks.concierge.debug.packages").equals("true")) {
-				debugPackages.setSelection(true);
-			}
-
-			if (systemProps.get("ch.ethz.iks.concierge.debug.services") != null && systemProps.get("ch.ethz.iks.concierge.debug.services").equals("true")) {
-				debugServices.setSelection(true);
-			}
-
-			String ll = (String) systemProps.get("ch.ethz.iks.concierge.log.level");
-
-			jvmArgStr = configuration.getAttribute("com.buglabs.osgi.concierge.ui.launch.jvmArgs", "");
+			jvmArgStr = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, "");
 
 			if (ll != null) {
 				switch (Integer.parseInt(ll)) {
+				case 0:
+					silentLevel.setSelection(true);
 				case 1:
 					errorLevel.setSelection(true);
 					break;
@@ -464,12 +333,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 				}
 			}
 
-			String bundleDir = configuration.getAttribute("ch.ethz.iks.concierge.jars", "");
-			if (bundleDir != null && bundleDir.length() > 0) {
-				bundleLocation.setText(bundleDir);
-			}
-
-			String args = configuration.getAttribute("com.buglabs.osgi.concierge.ui.launch.jvmArgs", "");
+			String args = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, "");
 			if (args != null) {
 				jvmArgs.setText(args);
 			}
@@ -480,8 +344,8 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 	}
 
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute("SYSTEM_PROPERTIES", systemProps);
-		configuration.setAttribute("com.buglabs.osgi.concierge.ui.launch.jvmArgs", jvmArgStr);
+		configuration.setAttribute(SYSTEM_PROPERTIES_KEY, systemProps);
+		configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, jvmArgStr);
 		propViewer.setInput(systemProps);
 	}
 
@@ -501,37 +365,6 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 		return layout;
 	}
 
-	private class BooleanSelectionListener implements SelectionListener {
-
-		private final String prop;
-
-		public BooleanSelectionListener(String prop, Button control) {
-			this.prop = prop;
-
-			String val = (String) systemProps.get(prop);
-
-			if (val != null && val.length() > 0) {
-				boolean v = Boolean.getBoolean(val);
-				control.setSelection(v);
-			} else {
-				control.setSelection(false);
-			}
-		}
-
-		public void widgetDefaultSelected(SelectionEvent arg0) {
-		}
-
-		public void widgetSelected(SelectionEvent arg0) {
-			Button b = (Button) arg0.getSource();
-			update(b.getSelection());
-			refreshDialog();
-		}
-
-		private void update(boolean value) {
-			put(prop, Boolean.toString(value));
-		}
-
-	}
 
 	private class PropertyContentProvider implements IStructuredContentProvider {
 

@@ -42,6 +42,7 @@ public class SimpleHttpSever extends Thread {
 			serverSocket = new ServerSocket(port);
 		} catch (IOException e1) {
 			handleException(e1);
+			return;
 		}
 
 		running = true;

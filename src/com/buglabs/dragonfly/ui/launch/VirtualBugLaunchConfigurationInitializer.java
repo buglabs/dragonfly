@@ -21,9 +21,7 @@ import com.buglabs.dragonfly.ui.Activator;
 public class VirtualBugLaunchConfigurationInitializer {
 	public static void initializeSystemProperties(ILaunchConfigurationWorkingCopy wc) throws CoreException {
 		Map properties = wc.getAttribute(ConciergeLaunchConfiguration.SYSTEM_PROPERTIES, new HashMap());
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_SERVICE_LISTENER_CHECK, "true"); //$NON-NLS-1$
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_LOG_ENABLED, "true"); //$NON-NLS-1$
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_LOG_LEVEL, "4"); //$NON-NLS-1$
+		properties.put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3"); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG, "true"); //$NON-NLS-1$
 
 		String bundleVersion = (String) Activator.getDefault().getContext().getBundle().getHeaders().get("Bundle-Version"); //$NON-NLS-1$

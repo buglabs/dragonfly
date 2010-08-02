@@ -36,9 +36,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 	public static final String CG_SHELL_BUNDLE = "shell.jar";
 	public static final String PROP_LAUNCH_ALL = "com.buglabs.dragonfly.launch.launchAllProjects";
 	public static final String PROP_HTTP_PORT = "org.osgi.service.http.port";
-	public static final String PROP_SERVICE_LISTENER_CHECK = "ch.ethz.iks.concierge.deepServiceListenerCheck";
-	public static final String PROP_LOG_ENABLED = "ch.ethz.iks.concierge.log.enabled";
-	public static final String PROP_LOG_LEVEL = "ch.ethz.iks.concierge.log.level";
+	public static final String PROP_LOG_LEVEL = "felix.log.level";
 	public static final String PROP_VBUG = "com.buglabs.virtual.bug";
 	public static final String PROP_CAMERA_SNAPSHOTS = "com.buglabs.bug.emulator.module.camera.snapshots";
 	public static final String PROP_GPS_LOG = "com.buglabs.bug.emulator.module.gps.log";

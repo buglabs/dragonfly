@@ -135,11 +135,14 @@ public class BugProjectUtil extends ProjectUtils {
 						if (!project.isOpen()) {
 							return false;
 						}
+						
+						if (projects.contains(project)) {
+							return false;
+						}
+						
 						if (project.hasNature(BugApplicationNature.ID) && (projectNameList == null || projectNameList.contains(project.getName()))) {
 							projects.add(project);
-						}
-
-						if (project.hasNature("org.eclipse.pde.PluginNature") && (projectNameList == null || projectNameList.contains(project.getName()))) {
+						} else if (project.hasNature("org.eclipse.pde.PluginNature") && (projectNameList == null || projectNameList.contains(project.getName()))) {
 							projects.add(project);
 						}
 					}

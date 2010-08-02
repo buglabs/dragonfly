@@ -40,9 +40,6 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	public static final String CG_SHELL_BUNDLE = "shell.jar";
 	public static final String PROP_LAUNCH_ALL = "com.buglabs.dragonfly.launch.launchAllProjects";
 	public static final String PROP_HTTP_PORT = "org.osgi.service.http.port";
-	public static final String PROP_SERVICE_LISTENER_CHECK = "ch.ethz.iks.concierge.deepServiceListenerCheck";
-	public static final String PROP_LOG_ENABLED = "ch.ethz.iks.concierge.log.enabled";
-	public static final String PROP_LOG_LEVEL = "ch.ethz.iks.concierge.log.level";
 	public static final String PROP_VBUG = "com.buglabs.virtual.bug";
 	public static final String PROP_CAMERA_SNAPSHOTS = "com.buglabs.bug.emulator.module.camera.snapshots";
 	public static final String PROP_GPS_LOG = "com.buglabs.bug.emulator.module.gps.log";
@@ -53,6 +50,8 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	public static final String ATTR_VBUG_SYSTEM_PROPERTIES = "ATTR_VBUG_SYSTEM_PROPERTIES";
 	public static final String DEFAULT_START_LEVEL = "4";
 	public static final String APP_DIR = "app.bundle.path";
+	public static final String JVM_ARGS = "com.buglabs.osgi.concierge.ui.launch.jvmArgs";
+	public static final String FELIX_LOG_LEVEL = "felix.log.level";
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
