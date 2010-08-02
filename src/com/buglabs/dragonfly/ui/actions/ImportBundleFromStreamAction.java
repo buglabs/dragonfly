@@ -11,9 +11,11 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -28,9 +30,11 @@ import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.bugnet.BugnetWSHelper;
+import com.buglabs.dragonfly.felix.ConciergeUtils;
 import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.util.BugWSHelper;
+import com.buglabs.dragonfly.util.UIUtils;
 
 public class ImportBundleFromStreamAction extends Action {
 	String programName;
@@ -98,15 +102,6 @@ public class ImportBundleFromStreamAction extends Action {
 						ProjectUtils.importProjectIntoWorkspace(proj, jarFile);
 						IJavaProject jproj = JavaCore.create(proj);
 
-						/* TODO - verify removing this was a good idea...
-						 * if this is in here, apps downloaded from BUGnet get set to 1.4 compliance
-						 * but currently we're allowing 1.6 apps to be on bugnet
-						 * 
-						jproj.setOption(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_4);
-						jproj.setOption(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_3);
-						jproj.setOption(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_2);
-						*/
-
 						jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 						jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
 
@@ -118,24 +113,38 @@ public class ImportBundleFromStreamAction extends Action {
 						IClasspathEntry[] importCP = jproj.getRawClasspath();
 						List cpl = new ArrayList();
 						IClasspathEntry jre = JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath());
-
+						IClasspathEntry pde = JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins"));
+						boolean shownMessage = false;
+						
 						for (int i = 0; i < importCP.length; ++i) {
-							if (!importCP[i].getPath().toString().equals("com.buglabs.phoneme.personal.PhoneMEClasspathContainer")) {
-								cpl.add(importCP[i]);
-							} else {
+							System.out.println("Debug entry: " + importCP[i].getPath().toString());
+							String cpName = importCP[i].getPath().toString();
+							
+							if (cpName.equals("com.buglabs.osgi.concierge.jdt.ConciergeClasspathContainerInitializer") || 
+								cpName.equals("com.buglabs.phoneme.personal.PhoneMEClasspathContainer") || 
+								cpName.equals("com.buglabs.osgi.concierge.jdt.OSGiBundleClassPathContainerInitializer")) {
+								if (!shownMessage) {
+									shownMessage = true;
+									UIUtils.giveVisualInformation("This project will be converted to use BUG 2.0 dependencies.");
+								}
+								
 								if (!cpl.contains(jre)) {
 									cpl.add(jre);
 								}
-							}
+								
+								if (!cpl.contains(pde)) {
+									cpl.add(pde);
+								}
+							} else {
+								cpl.add(importCP[i]);
+							}							
 						}
 
 						jproj.setRawClasspath((IClasspathEntry[]) cpl.toArray(new IClasspathEntry[cpl.size()]), monitor);
+						ConciergeUtils.addNatureToProject(proj, "org.eclipse.pde.PluginNature", monitor);
 
-						//ProjectUtils.configureBuilder(jproj.getProject(), ManifestConsistencyChecker.ID);
-						throw new RuntimeException("Hit unmigrated code.");
-
-						//monitor.worked(10);
-
+						monitor.worked(10);
+						proj.build(IncrementalProjectBuilder.CLEAN_BUILD, monitor);
 					}
 				} catch (IOException e) {
 					return createErrorStatus("Unable to download " + programName + " from BUG.", e);
