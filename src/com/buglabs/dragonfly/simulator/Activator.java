@@ -47,7 +47,7 @@ public class Activator implements BundleActivator {
 	}
 
 	public String getBUGBundleLocation() throws IOException, URISyntaxException {
-		return getFileSystemLocation("/bundles");
+		return getFileSystemLocation(File.separator + "bundles");
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class Activator implements BundleActivator {
 	private String getFileSystemLocation(String path) throws IOException, URISyntaxException {
 		URL locURL = context.getBundle().getEntry(path);
 		URL fileURL = FileLocator.toFileURL(locURL);
-		File locDir = new File(fileURL.getFile());
+		File locDir = new File(fileURL.getPath());
 		return locDir.getAbsolutePath();
 	}
 
