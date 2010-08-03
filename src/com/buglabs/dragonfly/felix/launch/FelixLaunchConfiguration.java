@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -30,6 +31,7 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
+import org.osgi.framework.BundleReference;
 
 import com.buglabs.dragonfly.felix.Activator;
 
@@ -49,9 +51,11 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		try {
-			URL relativeURL =  Activator.getDefault().getBundle().getEntry(File.separator);
+			URL relativeURL = Activator.getDefault().getBundle().getEntry(File.separator);
+			URL bundleURL = FileLocator.toFileURL(Activator.getDefault().getBundle().getEntry(File.separator + REL_BUNDLE_DIR));
 			URL localURL = FileLocator.toFileURL(relativeURL);
 			String felixPluginBase = localURL.getPath();
+			
 			IPath launchDir = Activator.getDefault().getStateLocation();
 			deleteBundleCacheDir(launchDir.append(REL_BUNDLE_DIR), monitor);
 			String launchClass = FELIX_MAIN_CLASS;
@@ -61,8 +65,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		
 			File confFile = createFelixConfFile(configuration, launchDir, felixPluginBase, getLaunchProperties());
 			
-			copyBundles(felixPluginBase + REL_BUNDLE_DIR, launchDir, monitor);
-			copyBundles(getSourceDir(), launchDir, monitor);
+			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, monitor);
+			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, monitor);
 			exportProjectsAsjars(getWorkspaceBundles(), launchDir.append(REL_BUNDLE_DIR).toFile());
 			
 			vmconfig.setVMArguments(getVMArgs(confFile, felixPluginBase));
@@ -88,18 +92,16 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		target.delete(EFS.NONE, monitor);
 	}
 
-	private void copyBundles(String srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {		
+	private void copyBundles(IPath srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
 		IPath destDir = launchDir.append(REL_BUNDLE_DIR);
 		
 		IFileSystem fs = EFS.getLocalFileSystem();
 		
-		IFileStore srcStore = fs.getStore(new URI("file://" + srcDir));
+		IFileStore srcStore = fs.getStore(srcDir);
 		IFileStore destStore = fs.getStore(destDir);
-
 		destStore = destStore.mkdir(EFS.NONE, monitor);
-		
 		IFileStore [] srcStores = srcStore.childStores(EFS.NONE, monitor);
-		
+
 		for (int i = 0; i < srcStores.length; ++i) {
 			//For runtime workbench, don't copy svn metadata contained in workspace.
 			if (!srcStores[i].getName().endsWith(".svn")) {
