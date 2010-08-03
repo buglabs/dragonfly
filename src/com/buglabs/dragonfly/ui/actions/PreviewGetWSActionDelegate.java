@@ -26,7 +26,6 @@ public class PreviewGetWSActionDelegate implements IObjectActionDelegate {
 	public void run(IAction action) {
 		LaunchBrowserAction a;
 		try {
-			System.out.println(node.getUrl());
 			a = new LaunchBrowserAction(new URL(node.getUrl()), node.getName() + " Web Service");
 			a.run();
 		} catch (MalformedURLException e) {

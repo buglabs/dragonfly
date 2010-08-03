@@ -404,23 +404,6 @@ public class BugnetApplicationItemDrawer {
 				action.run(); // run actually calls a job thread
 			}
 		});
-
-		/*
-		 *  TODO - make download to BUG work
-		 */
-		/*  When you implement this, make sure you set Gridlayout num cols to 2 above
-		Button downloadToBUGButton = toolkit.createButton(comp, "", SWT.NONE);
-		gd = new GridData(SWT.END, SWT.NONE, false, false);
-		downloadToBUGButton.setImage(
-				Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_DWNLD));
-		downloadToBUGButton.setToolTipText(BUGBUTTON_TOOLTIP_TEXT);
-		downloadToBUGButton.setLayoutData(gd);        
-		downloadToBUGButton.addSelectionListener(new SelectionAdapter() {
-		    public void widgetSelected(SelectionEvent e) {
-		        System.out.println("Dowload to BUG");
-		    }
-		});
-		*/
 	}
 
 	/**

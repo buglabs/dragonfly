@@ -105,11 +105,6 @@ public class ImportBundleFromStreamAction extends Action {
 						jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 						jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
 
-						String[] acps = JavaCore.getClasspathVariableNames();
-						for (int i = 0; i < acps.length; ++i) {
-							System.out.println(acps[i]);
-						}
-
 						IClasspathEntry[] importCP = jproj.getRawClasspath();
 						List cpl = new ArrayList();
 						IClasspathEntry jre = JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath());
@@ -117,7 +112,6 @@ public class ImportBundleFromStreamAction extends Action {
 						boolean shownMessage = false;
 						
 						for (int i = 0; i < importCP.length; ++i) {
-							System.out.println("Debug entry: " + importCP[i].getPath().toString());
 							String cpName = importCP[i].getPath().toString();
 							
 							if (cpName.equals("com.buglabs.osgi.concierge.jdt.ConciergeClasspathContainerInitializer") || 

@@ -86,6 +86,5 @@ public class VirtualBugPreferencePage extends PreferencePage implements IWorkben
 
 	public void init(IWorkbench workbench) {
 		httpPortValue = DragonflyActivator.getDefault().getPluginPreferences().getString(DragonflyActivator.PREF_DEFAULT_BUGPORT);
-		System.out.println();
 	}
 }

@@ -284,8 +284,6 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			return false;
 		}
 
-		System.out.println("host: " + b.getUrl().getHost());
-
 		return b.getUrl().getHost().equalsIgnoreCase("localhost") || b.getUrl().getHost().contains("127.0.0.1");
 	}
 
