@@ -31,30 +31,6 @@ public class LCDAccelerometerSampleStream extends AccelerometerSampleStream impl
 		accControl.unregisterListener(this);
 	}
 
-	/*public AccelerometerSample readSample() throws IOException {
-		byte[] data = new byte[6];			
-		short[] sample = null;
-		
-		System.out.println("tring to read data...");
-		//int result = is.read(data);
-		int result = read(data);
-		if(result == data.length) {
-			sample = new short[3];
-
-			for(int i = 0; i < sample.length; ++i) {
-				short byte0 = (short) (0x00FF & (short)data[i*2 + 1]);
-				short byte1 = (short) (0x00FF & (short)data[i*2]);
-
-				sample[i] = (short) (byte1 >> 6);
-				sample[i] +=  (byte0 << 2);
-			}
-		}
-		
-		return new AccelerometerSample(convertToGs(sample[2]),
-									   convertToGs(sample[1]),
-									   convertToGs(sample[0]));
-	}*/
-	
 	public AccelerometerSample readSample() throws IOException {
 		if(buffer.ready()){
 			String line = buffer.readLine();

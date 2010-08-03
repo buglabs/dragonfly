@@ -14,11 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.accelerometer.pub.AccelerometerConfiguration;
@@ -80,8 +76,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 	private ServiceRegistration ledControllerRef;
 
 	private ServiceRegistration moduleControlRef;
-	
-	private ConfigurationAdmin cm;
 
 	private ServiceRegistration wsAccReg;
 
@@ -110,7 +104,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		moduleControlRef = context.registerService(IModuleControl.class.getName(), this, null);
 		lcdModRef = context.registerService(ILCDModuleControl.class.getName(), this, createRemotableProperties(null));
 		ledControllerRef = context.registerService(IModuleLEDController.class.getName(), this, createRemotableProperties(null));
-		cm = getConfiguration();
 
 		Dictionary props = new Hashtable();
 		props.put("width", new Integer(LCD_WIDTH));
@@ -147,17 +140,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
 		
 		return ht;
-	}
-
-	
-	private ConfigurationAdmin getConfiguration() throws IOException, InvalidSyntaxException {
-		ServiceReference cmRef = context.getServiceReference(ConfigurationAdmin.class.getName());
-		if(cmRef != null){
-			cm = (ConfigurationAdmin)context.getService(cmRef);
-			Configuration[] listConfigurations = cm.listConfigurations("Picture");
-			System.out.println();
-		}
-		return null;
 	}
 
 	private InputStream getAccelerometerSamples() throws IOException {
