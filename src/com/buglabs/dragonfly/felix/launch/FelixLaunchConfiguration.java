@@ -72,7 +72,6 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			
 			vmconfig.setVMArguments(getVMArgs(confFile, felixPluginBase));
 			
-			System.out.println("KGDEBUG Launch dir: " + launchDir.toOSString());
 			vmconfig.setWorkingDirectory(launchDir.toOSString());
 			
 			IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
@@ -114,11 +113,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	}
 
 	private String[] getVMArgs(File confFile, String felixPluginBase) throws MalformedURLException {
-		String up = confFile.toURI().toURL().toString();
-		System.out.println("KGDEBUG args path: " + up);
-		
 		return new String[] { 
-				"-Dfelix.config.properties=" + up,
+				"-Dfelix.config.properties=" + confFile.toURI().toURL().toString(),
 				};
 	}
 
