@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.felix.launch;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -70,6 +71,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			exportProjectsAsjars(getWorkspaceBundles(), launchDir.append(REL_BUNDLE_DIR).toFile());
 			
 			vmconfig.setVMArguments(getVMArgs(confFile, felixPluginBase));
+			
+			System.out.println("KGDEBUG Launch dir: " + launchDir.toOSString());
 			vmconfig.setWorkingDirectory(launchDir.toOSString());
 			
 			IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
@@ -108,13 +111,14 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 				srcStores[i].copy(destStore.getChild(srcStores[i].getName()), EFS.OVERWRITE, monitor);
 			}
 		}
-		
-		//srcStore.copy(destStore, EFS.OVERWRITE, monitor);
 	}
 
-	private String[] getVMArgs(File confFile, String felixPluginBase) {
+	private String[] getVMArgs(File confFile, String felixPluginBase) throws MalformedURLException {
+		String up = confFile.toURI().toURL().toString();
+		System.out.println("KGDEBUG args path: " + up);
+		
 		return new String[] { 
-				"-Dfelix.config.properties=file://" + confFile.getAbsolutePath(),
+				"-Dfelix.config.properties=" + up,
 				};
 	}
 
