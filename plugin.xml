@@ -137,6 +137,13 @@
                   name="projectNature"
                   value="com.buglabs.dragonfly.BugApplicationNature"/>
          </visibility>
+         <action
+               class="com.buglabs.dragonfly.ui.actions.ConvertProjectActionDelegate"
+               icon="icons/color/bugProject.gif"
+               id="com.buglabs.dragonfly.ui.ConvertProject"
+               label="Convert to BUG 2.0 Project"
+               menubarPath="bug">
+         </action>
       </objectContribution>
       <objectContribution
             adaptable="true"
