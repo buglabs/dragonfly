@@ -316,7 +316,6 @@ public class Unit {
 	private Unit(String name, long type) {
 		this.name = name;
 		this.type = type;
-		// System.out.println( name + " " + Long.toHexString( type ) );
 	}
 
 	/**
