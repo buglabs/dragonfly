@@ -324,15 +324,6 @@
       <actionSet
             id="com.buglabs.dragonfly.ui.actionsets.Dragonfly"
             label="Dragonfly Actions">
-            
-         <action
-               class="com.buglabs.dragonfly.ui.actions.LaunchNewBugWizard"
-               icon="icons/color/staticConnection.gif"
-               id="com.buglabs.dragonfly.ui.actions.newBug"
-               label="New BUG Connection"
-               style="push"
-               toolbarPath="dragonfly/1/newBug"/>
-               
          <action
                class="com.buglabs.dragonfly.ui.actions.LaunchNewProjectWizard"
                icon="icons/color/bugProject.gif"
