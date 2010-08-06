@@ -483,7 +483,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 		genAppGD.horizontalSpan = 2;
 		genAppGD.heightHint = 30;
 		btnGenerateThreadApp.setLayoutData(genAppGD);
-		btnGenerateThreadApp.setText("generate application loop");
+		btnGenerateThreadApp.setText("Generate application skeleton code.");
 		btnGenerateThreadApp.setEnabled(false);
 		btnGenerateThreadApp.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {/*unused here*/
