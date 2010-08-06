@@ -45,12 +45,18 @@ public class ConnectBugHelper {
 								Job registerJob = new RegisterEventListenerJob(bug);
 								registerJob.setPriority(Job.LONG);
 								registerJob.schedule();
-							} else {
-								bug.setConnected(false);
-								bug.getChildren().clear();
-							}
-							new RefreshBugAction(bug).run();
+								
+								new RefreshBugAction(bug).run();
+								
+								return;
+							} 
 						}
+
+						//Failed to connect to bug.
+						bug.setConnected(false);
+						bug.getChildren().clear();
+
+						new RefreshBugAction(bug).run();
 					}
 				});
 				super.done(event);
