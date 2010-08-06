@@ -326,4 +326,25 @@ Parts of this program are licenced under the Apache Software License:
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.buglabs.osgi.http"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.osgi.sewing"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.osgi.shell"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
