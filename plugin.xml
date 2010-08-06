@@ -22,9 +22,6 @@
       <classpathContainerInitializer
             class="com.buglabs.dragonfly.jdt.BugClasspathContainerInitializer"
             id="com.buglabs.dragonfly.jdt.BugClasspathContainerInitializer"/>
-      <classpathContainerInitializer
-            class="com.buglabs.dragonfly.jdt.PhoneMEClasspathContainerInitializer"
-            id="com.buglabs.dragonfly.jdt.PhoneMEClasspathContainer"/>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
