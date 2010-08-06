@@ -10,6 +10,7 @@ package com.buglabs.dragonfly.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
@@ -19,7 +20,7 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
  * @author ken
  * 
  */
-public class BaseNode implements IModelNode {
+public class BaseNode implements IModelNode, IAdaptable {
 	private static final long serialVersionUID = 2769474840703219612L;
 
 	// Subclassers can add to this list.
@@ -80,5 +81,9 @@ public class BaseNode implements IModelNode {
 
 	public String toString() {
 		return name;
+	}
+
+	public Object getAdapter(Class adapter) {
+		return null;
 	}
 }
