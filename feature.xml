@@ -284,4 +284,11 @@ Parts of this program are licenced under the Apache Software License:
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="com.buglabs.bug.simulator"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
