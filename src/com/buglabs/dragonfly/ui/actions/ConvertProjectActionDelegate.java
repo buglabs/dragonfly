@@ -56,7 +56,6 @@ public class ConvertProjectActionDelegate implements IActionDelegate {
 		}
 	}
 
-	@Override
 	public void run(IAction action) {
 		Job job = new Job("Convert Project") {
 
