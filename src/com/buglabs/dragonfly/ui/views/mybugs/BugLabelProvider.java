@@ -75,13 +75,21 @@ public class BugLabelProvider extends ColumnLabelProvider {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_BUGVIEW_APPLICATION);
 		} else if (element instanceof ServiceNode) {
 			return Activator.getDefault().getImageRegistry().get(Activator.IMAGE_COLOR_SERVICES);
-		} else if (element instanceof BUGSimulatorConnection) {
-			return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
-		} else if (element instanceof StaticBugConnection) {
-			return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
-		} else if (element instanceof DiscoveredBugConnection) {
-			return Activator.getDefault().getImageRegistry().get(Activator.ICON_DISCOVERED_BUG);
-		}
+		} else if (element instanceof BugConnection) {
+			BugConnection bc = (BugConnection) element;
+			
+			if (!bc.isConnected()) {
+				return Activator.getDefault().getImageRegistry().get(Activator.ICON_UNCONNECTED_BUG);
+			}
+			
+			if (element instanceof BUGSimulatorConnection) {
+				return Activator.getDefault().getImageRegistry().get(Activator.ICON_VIRTUAL_BUG);
+			} else if (element instanceof StaticBugConnection) {
+				return Activator.getDefault().getImageRegistry().get(Activator.ICON_STATIC_BUG);
+			} else if (element instanceof DiscoveredBugConnection) {
+				return Activator.getDefault().getImageRegistry().get(Activator.ICON_DISCOVERED_BUG);
+			}
+		} 
 
 		return null;
 	}

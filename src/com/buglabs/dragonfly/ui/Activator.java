@@ -29,6 +29,7 @@ import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.actions.LaunchWelcomeEditorAction;
+import com.buglabs.dragonfly.ui.actions.RefreshBugAction;
 import com.buglabs.dragonfly.ui.jobs.LoadBugsJob;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -159,6 +160,7 @@ public class Activator extends AbstractUIPlugin {
 
 	public static final String ICON_STATIC_BUG = "/icons/color/new/staticBUG.gif";
 
+	public static final String ICON_UNCONNECTED_BUG = "/icons/enabled/bug.gif";
 	public static final String ICON_DISCOVERED_BUG = "/icons/color/new/slpBUG.gif";
 
 	private static Activator plugin;
@@ -354,8 +356,8 @@ public class Activator extends AbstractUIPlugin {
 
 		imageRegistry.put(ICON_SLP_BUG, getImageDescriptor(ICON_SLP_BUG).createImage());
 		imageRegistry.put(ICON_STATIC_BUG, getImageDescriptor(ICON_STATIC_BUG).createImage());
+		imageRegistry.put(ICON_UNCONNECTED_BUG, getImageDescriptor(ICON_UNCONNECTED_BUG).createImage());
 		imageRegistry.put(ICON_VIRTUAL_BUG, getImageDescriptor(ICON_VIRTUAL_BUG).createImage());
-
 	}
 
 	public File exportToJar(IProject proj) throws CoreException {
