@@ -135,7 +135,7 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 					activator.setVirtualBugRemovedByTerminate(true);
 				}
 			}
-			if (!action.isEnabled()) {
+			if (!(action == null) && !action.isEnabled()) {
 				action.setEnabled(true);
 			}
 		}
