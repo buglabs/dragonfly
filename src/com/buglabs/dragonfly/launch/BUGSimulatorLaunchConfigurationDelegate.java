@@ -102,6 +102,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 		m.put("org.osgi.framework.os.name", "linux");
 		m.put("org.osgi.framework.processor", "armv7l");
 		m.put(PROP_VBUG, "true");
+		m.put(APP_DIR, getLaunchDirectory().toOSString());
 		
 		return m;
 	}
