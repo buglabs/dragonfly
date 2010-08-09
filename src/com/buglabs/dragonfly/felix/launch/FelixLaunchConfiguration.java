@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.felix.launch;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -49,6 +50,11 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	private static final String FELIX_MAIN_CLASS = "org.apache.felix.main.Main";
 	private static final String REL_BUNDLE_DIR = "bundle";
 	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-3.0.1.jar";
+	private IPath launchDir;
+	
+	public FelixLaunchConfiguration() {
+		launchDir = Activator.getDefault().getStateLocation();
+	}
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		try {
@@ -57,7 +63,6 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			URL localURL = FileLocator.toFileURL(relativeURL);
 			String felixPluginBase = localURL.getPath();
 			
-			IPath launchDir = Activator.getDefault().getStateLocation();
 			deleteBundleCacheDir(launchDir.append(REL_BUNDLE_DIR), monitor);
 			String launchClass = FELIX_MAIN_CLASS;
 			String bootClasspath[] = loadBootClasspath(felixPluginBase);
@@ -169,6 +174,13 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 				ProjectUtils.exporToJar(destinationDirectory, proj, true);
 			}
 		}
+	}
+	
+	/**
+	 * @return The local root directory where the launch data will be stored.  Is writable by clients but can be disposed of across launches.
+	 */
+	protected IPath getLaunchDirectory() {
+		return launchDir;
 	}
 	
 	/**
