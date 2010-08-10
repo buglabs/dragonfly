@@ -236,8 +236,7 @@ Parts of this program are licenced under the Apache Software License:
 
    <includes
          id="com.buglabs.dragonfly.dm.feature"
-         version="0.0.0"
-         optional="true"/>
+         version="0.0.0"/>
 
    <requires>
       <import feature="org.eclipse.gef"/>
