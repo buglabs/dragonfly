@@ -3,6 +3,7 @@ package com.buglabs.dragonfly.ui.editors;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -103,15 +104,11 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 	private Bug bug;
 
-	private Figure bugHolder;
-
 	private Map moduleToFigure = new HashMap();
 
 	ImageRegistry imageRegistry;
 
 	private BugSelectableFigure baseUnitFigure;
-
-	private PhysicalEditorFocusListener physicalEditorListener;
 
 	public static final String EDITOR_FOCUS_GAINED = "FOCUS_GAINED";
 
@@ -120,6 +117,11 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	public static final String MODULES_CHANGED = "MODULES_CHANGED";
 
 	public static final String REFRESH = "REFRESH";
+
+	/**
+	 * Slot ID on BUG20 that is video only.
+	 */
+	private static final int VIDEO_SLOT = 1;
 
 	private Client controllerClient;
 
@@ -166,20 +168,6 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			/*//TODO: add code to start socket converstation with BUG for module UI
-			Thread t = new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						controllerClient = Client.getClient(bug.getUrl().getHost(), 8093);
-					} catch (IOException e) {						
-						e.printStackTrace();
-					}
-				}
-			});
-			t.start();*/
 		}
 
 		DragonflyActivator.getDefault().addListener(this);
@@ -188,11 +176,12 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	}
 
 	public boolean isDirty() {
+		//Read-only editor.
 		return false;
 	}
 
 	public boolean isSaveAsAllowed() {
-		// TODO Auto-generated method stub
+		//Read-only editor.
 		return false;
 	}
 
@@ -209,36 +198,6 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 				drawBugControl();
 			}
 		});
-
-		// add listener to the figure to make interested parties aware of changes in the editor
-		physicalEditorListener = new PhysicalEditorFocusListener();
-		fc.addFocusListener(new PhysicalEditorFocusListener());
-	}
-
-	private class PhysicalEditorFocusListener implements FocusListener {
-
-		public void focusGained(FocusEvent e) {
-			/*  This code used to notify the BUGNetView of a physical editor change
-			 *  but the BugnetView works differently now, so, not being used.
-			 *  TODO - refactor this class and potententially remove this focus listener
-			 *  
-			// notify listeners that editor gained focus
-			ModelNodeChangeEvent event = new ModelNodeChangeEvent(this.getClass(),PhysicalEditor.EDITOR_FOCUS_GAINED, bug);
-			
-			BUGNetView view = BUGNetView.getView();
-			if(view != null){
-				view.propertyChange(event);
-			}
-			*/
-		}
-
-		public void focusLost(FocusEvent e) {
-			// remove listener
-			if (physicalEditorListener != null) {
-				fc.removeFocusListener(physicalEditorListener);
-			}
-		}
-
 	}
 
 	private void hookContextMenu(Composite parent) {
@@ -273,12 +232,56 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	}
 
 	private void createModuleMenu(MenuManager mm, int slot, List availableModules) {
+		
+		availableModules = filterAvailableModules(availableModules, slot);
+		
 		for (Iterator i = availableModules.iterator(); i.hasNext();) {
 			mm.add(new ModuleMenuAction((String) i.next(), slot));
 		}
 		mm.add(new EmptyModuleMenuAction(slot));
 	}
 
+	/**
+	 * Filter modules available for a given slot.  On BUG20 device
+	 * Video, LCD only on slot 1, and all others on 0, 2-3 slots.
+	 * 
+	 * @param availableModules
+	 * @param slot
+	 * @return List of modules available for a give slot.
+	 */
+	private List filterAvailableModules(List availableModules, int slot) {
+
+		List nl = new ArrayList();
+		
+		for (Iterator i = availableModules.iterator(); i.hasNext();) {
+			String modName = (String) i.next();
+			
+			if (slot == VIDEO_SLOT) {
+				if (isVideoModule(modName)) {
+					nl.add(modName);
+				}
+			} else {
+				if (!isVideoModule(modName)) {
+					nl.add(modName);
+				}
+			}
+		}
+		
+		return nl;
+	}
+
+	/**
+	 * @param modName
+	 * @return true if a given module id (name) is for the video module slot.
+	 */
+	private boolean isVideoModule(String modName) {
+		return modName.equals("LCD") || modName.equals("VIDEO");
+	}
+
+	/**
+	 * @param b
+	 * @return true if this editor is connected to a BUG Simulator
+	 */
 	private boolean isSimulatedBUG(Bug b) {
 		if (b == null) {
 			return false;
