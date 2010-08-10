@@ -81,7 +81,7 @@ public class SimpleHttpSever extends Thread {
 	}
 
 	private void handleException(Exception e) {
-		Activator.getDefault().getLog().log(new Status(Status.WARNING, Activator.getDefault().PLUGIN_ID, Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2, e));
+		Activator.getDefault().getLog().log(new Status(Status.WARNING, Activator.getDefault().PLUGIN_ID, Messages.SimpleHttpSever_1 + port + Messages.SimpleHttpSever_2));
 		running = false;
 		resetSockets();
 	}
