@@ -79,6 +79,8 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_PATH_LEFT_MODULE_SELECTED = "icons/bug_mod_right_on.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_APP = "icons/color/app.gif"; //$NON-NLS-1$
+	
+	public static final String IMAGE_APP = "icons/app.gif"; //$NON-NLS-1$
 
 	public static final String IMAGE_COLOR_BUGVIEW_APPLICATION = "icons/color/application.gif"; //$NON-NLS-1$
 
@@ -315,6 +317,7 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_KEY_LEFT_MODULE_SELECTED, getImageDescriptor(IMAGE_PATH_LEFT_MODULE_SELECTED).createImage());
 		imageRegistry.put(IMAGE_KEY_RIGHT_MODULE_SELECTED, getImageDescriptor(IMAGE_PATH_RIGHT_MODULE_SELECTED).createImage());
 		imageRegistry.put(IMAGE_COLOR_APP, getImageDescriptor(IMAGE_COLOR_APP).createImage());
+		imageRegistry.put(IMAGE_APP, getImageDescriptor(IMAGE_APP).createImage());
 		imageRegistry.put(IMAGE_COLOR_BUGVIEW_APPLICATION, getImageDescriptor(IMAGE_COLOR_BUGVIEW_APPLICATION).createImage());
 		imageRegistry.put(IMAGE_COLOR_BUGNET, getImageDescriptor(IMAGE_COLOR_BUGNET).createImage());
 		imageRegistry.put(IMAGE_COLOR_BUNDLE, getImageDescriptor(IMAGE_COLOR_BUNDLE).createImage());

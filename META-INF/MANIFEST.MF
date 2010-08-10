@@ -25,6 +25,7 @@ Require-Bundle: org.eclipse.ui,
  com.buglabs.dragonfly.felix
 Eclipse-LazyStart: true
 Export-Package: com.buglabs.dragonfly.launch,
+ com.buglabs.dragonfly.ui,
  com.buglabs.dragonfly.ui.actions,
  com.buglabs.dragonfly.ui.draw2d,
  com.buglabs.dragonfly.ui.jobs,
