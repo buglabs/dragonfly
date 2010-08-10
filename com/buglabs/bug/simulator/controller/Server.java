@@ -12,13 +12,15 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
 
 /**
- * Server of module/LED controller.
+ * Server of module/LED controller.  This server talks with the SDK to load graphical views on the BUG Simulator's "physical" state.
  * 
  * @author kgilmer
  * 
  */
 public class Server extends Thread {
 
+	private static final int REQUEST_LOOP_SLEEP_INTERVAL_MILLIS = 100;
+	private static final String LOCAL_HOSTNAME = "localhost";
 	private static Server ref;
 	private ServerSocket serverSocket;
 	private final LogService log;
@@ -31,10 +33,11 @@ public class Server extends Thread {
 		serverSocket = new ServerSocket(port);
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			try {
-				Thread.sleep(10);
+				Thread.sleep(REQUEST_LOOP_SLEEP_INTERVAL_MILLIS);
 				if (Thread.interrupted()) {
 					return;
 				}
@@ -47,7 +50,6 @@ public class Server extends Thread {
 
 				while (Thread.interrupted() == false && (inputLine = in.readLine()) != null) {
 					try {
-						log.log(LogService.LOG_INFO, "Server RECEIVED Message: " + inputLine);
 						outputLine = protocol.processInput(inputLine);
 
 						if (outputLine.equals(ControllerProtocol.CMD_GOODBYE)) {
@@ -55,10 +57,8 @@ public class Server extends Thread {
 							break;
 						}
 
-						log.log(LogService.LOG_INFO, "Server RESPONDE Message: " + outputLine);
 						out.println(outputLine.trim());
 					} catch (Exception e) {
-						log.log(LogService.LOG_INFO, "Server RESPONDE Message: " + e.getMessage());
 						out.println(ControllerProtocol.CMD_ERROR_RESPONSE);
 					}
 				}
@@ -83,7 +83,7 @@ public class Server extends Thread {
 	public void shutdown() {
 		ref.interrupt();
 		try {
-			Socket s = new Socket("localhost", port);
+			Socket s = new Socket(LOCAL_HOSTNAME, port);
 			s.getOutputStream().write((ControllerProtocol.CMD_GOODBYE + "\n").getBytes());
 			s.close();
 		} catch (UnknownHostException e) {
