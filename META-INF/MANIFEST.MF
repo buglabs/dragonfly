@@ -6,7 +6,6 @@ Bundle-Name: com.buglabs.bug.simulator
 Bundle-Activator: com.buglabs.bug.simulator.Activator
 Bundle-SymbolicName: com.buglabs.bug.simulator
 Import-Package: com.buglabs.application,
- com.buglabs.bug.base.pub,
  com.buglabs.bug.module.pub,
  com.buglabs.device,
  com.buglabs.module,
