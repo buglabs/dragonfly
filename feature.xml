@@ -234,6 +234,10 @@ Parts of this program are licenced under the Apache Software License:
       <discovery label="Dragonfly SDK Update Site" url="http://buglabs.net/sdk/production/current/updatesite"/>
    </url>
 
+   <includes
+         id="com.buglabs.dragonfly.dm.feature"
+         version="0.0.0"/>
+
    <requires>
       <import feature="org.eclipse.gef"/>
       <import feature="org.eclipse.pde" version="3.3.2" match="greaterOrEqual"/>
