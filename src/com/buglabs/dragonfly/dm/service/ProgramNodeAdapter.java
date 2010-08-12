@@ -32,7 +32,6 @@ public class ProgramNodeAdapter extends AbstractSystemViewAdapter implements IAd
 		this.node = next;
 	}
 
-	@Override
 	public Object getAdapter(Class adapter) {
 		//System.out.println("IAdaptable looking for " + adapter.getName());
 
