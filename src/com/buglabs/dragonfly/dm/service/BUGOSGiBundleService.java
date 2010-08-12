@@ -36,7 +36,6 @@ public class BUGOSGiBundleService extends AbstractService implements IBUGOSGiBun
 		this.connection = connection;
 	}
 
-	@Override
 	public Object[] getBundles() {
 
 		return bundles.toArray();
