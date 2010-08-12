@@ -18,7 +18,7 @@
 	<!-- Add one target for each root element and each configuration -->
 	<!-- ===================================================================== -->
 
-	<target name="assemble.com.buglabs.osgi.concierge.feature">
+	<target name="assemble.com.buglabs.dragonfly.dm.feature">
 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}"/>
 	</target>
 
