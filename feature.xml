@@ -57,4 +57,17 @@
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="com.buglabs.dragonfly.felix"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.buglabs.dragonfly.generators"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
