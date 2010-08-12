@@ -42,24 +42,20 @@ public class ProgramNodeAdapter extends AbstractSystemViewAdapter implements IAd
 		return null;
 	}
 
-	@Override
 	public String getText(Object element) {
 
 		return node.getName();
 	}
 
-	@Override
 	public String getAbsoluteName(Object object) {
 
 		return node.getName();
 	}
 
-	@Override
 	public void addActions(SystemMenuManager menu, IStructuredSelection selection, Shell parent, String menuGroup) {
 		menu.add(menuGroup, new UninstallAction(selection));
 	}
 
-	@Override
 	public ImageDescriptor getImageDescriptor(Object element) {
 		if (isApplicationBundle(node)) {
 			return Activator.getImageDescriptor(Activator.IMAGE_COLOR_APP);
@@ -72,33 +68,27 @@ public class ProgramNodeAdapter extends AbstractSystemViewAdapter implements IAd
 		return node2.getBundleType().equals("Application");
 	}
 
-	@Override
 	public String getType(Object element) {
 
 		return BUGResources.BUG_Resource_Type;
 	}
 
-	@Override
 	public Object getParent(Object element) {
 		return null;
 	}
 
-	@Override
 	public boolean hasChildren(IAdaptable element) {
 		return false;
 	}
 
-	@Override
 	public Object[] getChildren(IAdaptable element, IProgressMonitor monitor) {
 		return null;
 	}
 
-	@Override
 	protected IPropertyDescriptor[] internalGetPropertyDescriptors() {
 		return node.getPropertyDescriptors();
 	}
 
-	@Override
 	protected Object internalGetPropertyValue(Object key) {
 		return node.getPropertyValue(key);
 	}
