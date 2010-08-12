@@ -201,7 +201,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		
 		//Module Controller *************************************
 		try {
-			controllerServer = Server.getServer(BUG_SIMULATOR_CONTROLLER_PORT, logService, context);
+			controllerServer = Server.startServer(BUG_SIMULATOR_CONTROLLER_PORT, logService, context);
 		} catch (BindException e) {
 			logService.log(LogService.LOG_ERROR, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
 		}

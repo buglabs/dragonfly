@@ -24,10 +24,18 @@ public class Server extends Thread {
 	private static Server ref;
 	private ServerSocket serverSocket;
 	private final LogService log;
-	private int port;
+	private final int port;
 	private final BundleContext context;
 
+	/**
+	 * Private constructor for Server.
+	 * @param port
+	 * @param log
+	 * @param context
+	 * @throws IOException
+	 */
 	private Server(int port, LogService log, BundleContext context) throws IOException {
+		this.port = port;
 		this.log = log;
 		this.context = context;
 		serverSocket = new ServerSocket(port);
@@ -35,10 +43,12 @@ public class Server extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		boolean exit = false;
+		while (!exit) {
 			try {
 				Thread.sleep(REQUEST_LOOP_SLEEP_INTERVAL_MILLIS);
 				if (Thread.interrupted()) {
+					exit = true;
 					return;
 				}
 
@@ -64,14 +74,30 @@ public class Server extends Thread {
 				}
 			} catch (InterruptedException e) {
 				log.log(LogService.LOG_INFO, "Controller server has been shutdown.");
-				return;
 			} catch (IOException e) {
 				log.log(LogService.LOG_ERROR, "An IO error occurred in the controller server.", e);
+			} finally {
+				try {
+					exit = true;
+					serverSocket.close();
+					serverSocket = null;
+					log.log(LogService.LOG_INFO, "Shutdown of " + this.getClass().getName() + " complete.");
+					return;
+				} catch (IOException e) {					
+				}
 			}
 		}
 	}
 
-	public static Server getServer(int port, LogService log, BundleContext context) throws IOException {
+	/**
+	 * Start the socket server that serves to give external clients the ability to configure a BUG simulator instance.
+	 * @param port
+	 * @param log
+	 * @param context
+	 * @return
+	 * @throws IOException
+	 */
+	public static Server startServer(int port, LogService log, BundleContext context) throws IOException {
 		if (ref == null) {
 			ref = new Server(port, log, context);
 			ref.start();
@@ -80,7 +106,11 @@ public class Server extends Thread {
 		return ref;
 	}
 
+	/**
+	 * Shutdown the socket server.
+	 */
 	public void shutdown() {
+		log.log(LogService.LOG_INFO, "Shutdown of " + this.getClass().getName() + " started.");
 		ref.interrupt();
 		try {
 			Socket s = new Socket(LOCAL_HOSTNAME, port);
