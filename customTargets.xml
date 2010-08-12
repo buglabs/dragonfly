@@ -150,17 +150,22 @@
 	<target name="postBuild">
 		<property name="outputDir" location="${buildDirectory}/${buildLabel}"/>
 		<property name="distDir" location="${buildDirectory}/../dist"/>
+		<!--
 		<property name="UpdateSiteStagingLocation" value="${buildDirectory}/${updateSite}"/>
+	
 	 	<property name="sitePackagePrefix" value="${updateSite}"/>
-	  
+	  	-->
+		<!--
 		<delete dir="${UpdateSiteStagingLocation}"/>
 	  	<antcall target="generateUpdateSite"/>
-
+		-->
    	  	<copy todir="${distDir}">
    	  		<fileset dir="${outputDir}"/>
 	  	</copy>
 		
+		<!--
 	  	<zip destfile="${distDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}" excludes="CVS .project"/>
+		-->
 	
 		<delete dir="${publishDir}" />
 		<mkdir dir="${publishDir}" />
@@ -168,21 +173,22 @@
 			<fileset dir="${distDir}" />
 		</copy>	
 	</target>
-	
+	<!--
 	<target name="generateUpdateSite">
-	  <!-- Create the directory structure -->
+	 
 	  <mkdir dir="${UpdateSiteStagingLocation}"/>
 	  <mkdir dir="${UpdateSiteStagingLocation}/features"/>
 	  <mkdir dir="${UpdateSiteStagingLocation}/plugins"/>
-	  <!-- Build the jar files -->
+	
 	  <antcall target="allElements">
 	    <param name="genericTargets" value="${builder}/customTargets.xml"/>
 	    <param name="target" value="updateSiteExport"/>
 	  </antcall>
 	  <antcall target="copySiteXmlFromCvs"/>
 	  <antcall target="updateSiteXml"/>
-	  <!-- antcall target="createNightlyBuildSiteXml"/ -->
+	
 	</target>
+	-->
 	
 	<target name="updateSiteExport">
 	  <ant antfile="build.xml" dir="${buildDirectory}/features/${id}/" target="build.update.jar">
