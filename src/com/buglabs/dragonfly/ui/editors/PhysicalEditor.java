@@ -78,6 +78,8 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class PhysicalEditor extends EditorPart implements IModelChangeListener, ISelectionListener {
 
+	private static final int BUG_SIMULATOR_CONTROLLER_PORT = 8093;
+
 	public static final String ID = "com.buglabs.dragonfly.ui.physicalEditor";
 
 	public static final String LAYER_KEY_GRID_LAYER = "LAYER_KEY_GRID_LAYER";
@@ -125,12 +127,14 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 	private Client controllerClient;
 
+	private List menuActions;
+
 	public PhysicalEditor(Bug bug) {
 		this.bug = bug;
 	}
 
 	public PhysicalEditor() {
-
+		menuActions = new ArrayList();
 	}
 
 	public void dispose() {
@@ -164,9 +168,9 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 		if (isSimulatedBUG(bug)) {
 			try {
-				controllerClient = Client.getClient(bug.getUrl().getHost(), 8093);
+				controllerClient = Client.getClient(bug.getUrl().getHost(), BUG_SIMULATOR_CONTROLLER_PORT);
 			} catch (IOException e) {
-				e.printStackTrace();
+				UIUtils.handleNonvisualError("Unable to initialize BUG Simulator.", e);
 			}
 		}
 
@@ -236,7 +240,9 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		availableModules = filterAvailableModules(availableModules, slot);
 		
 		for (Iterator i = availableModules.iterator(); i.hasNext();) {
-			mm.add(new ModuleMenuAction((String) i.next(), slot));
+			ModuleMenuAction mma = new ModuleMenuAction((String) i.next(), slot);
+			mm.add(mma);
+			menuActions.add(mma);
 		}
 		mm.add(new EmptyModuleMenuAction(slot));
 	}
@@ -518,8 +524,20 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 						editorBug = bug.getUrl();
 						eventBug = ((BugConnection) event.getNewValue()).getUrl();
 						if (editorBug.toString().equals(eventBug.toString())) {
-							if (bug.isConnected())
+							if (bug.isConnected()) {
 								refreshModules();
+								if (isSimulatedBUG(bug)) {
+									try {
+										controllerClient = Client.getClient(bug.getUrl().getHost(), BUG_SIMULATOR_CONTROLLER_PORT);
+										
+										for (Iterator i = menuActions.iterator(); i.hasNext();) {
+											((ModuleMenuAction) i.next()).resetState();
+										}
+									} catch (IOException e) {
+										UIUtils.handleNonvisualError("Unable to initialize BUG Simulator.", e);
+									}
+								}
+							}
 						}
 					}
 				}
@@ -628,18 +646,28 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 		public ModuleMenuAction(String name, int slot) {
 			super(name);
-			moduleSet = false;
+			this.moduleSet = false;
 			this.slot = slot;
+		}
+		
+		public void resetState() {
+			moduleSet = false;
 		}
 
 		@Override
 		public void run() {
 			try {
-				if (moduleSet) {
-					controllerClient.RemoveModuleFromSlot(slot);
+				if (this.moduleSet) {
+					if (!controllerClient.RemoveModuleFromSlot(slot)) {
+						UIUtils.handleVisualError("Problem occured while connecting to BUG Simulator.", new Exception("RemoveModuleFromSlot() returned false."));
+						return;
+					}
 					moduleSet = false;
 				} else {
-					controllerClient.AttachModule(getText(), slot);
+					if (!controllerClient.AttachModule(getText(), slot)) {
+						UIUtils.handleVisualError("Problem occured while connecting to BUG Simulator.", new Exception("AttachModule() returned false."));
+						return;
+					}
 					moduleSet = true;
 				}
 			} catch (IOException e) {
