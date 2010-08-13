@@ -3,5 +3,9 @@
    <feature url="features/com.buglabs.dragonfly.feature_2.0.0.qualifier.jar" id="com.buglabs.dragonfly.feature" version="2.0.0.qualifier">
       <category name="Dragonfly SDK"/>
    </feature>
+   <feature url="features/com.buglabs.dragonfly.dm.feature_2.0.0.qualifier.jar" id="com.buglabs.dragonfly.dm.feature" version="2.0.0.qualifier">
+      <category name="Optional Extensions"/>
+   </feature>
    <category-def name="Dragonfly SDK" label="Dragonfly SDK"/>
+   <category-def name="Optional Extensions" label="Optional Extensions"/>
 </site>
