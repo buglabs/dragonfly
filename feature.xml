@@ -236,7 +236,9 @@ Parts of this program are licenced under the Apache Software License:
 
    <includes
          id="com.buglabs.dragonfly.dm.feature"
-         version="0.0.0"/>
+         version="0.0.0"
+         name="Device Management support for BUG"
+         optional="true"/>
 
    <requires>
       <import feature="org.eclipse.gef"/>
