@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="com.buglabs.dragonfly.cdt.buildDefinition1"
+         name="BUG 2.0 GNU Toolchain"
+         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
+      <projectType
+            buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe"
+            id="com.buglabs.dragonfly.cdt.executable"
+            isTest="false"
+            name="BUG 2.0 SDK"
+            projectEnvironmentSupplier="com.buglabs.dragonfly.cdt.preinstalled.PreInstalledProjectEnvironmentSupplier">
+         <configuration
+               artifactExtension="elf"
+               cleanCommand="rm -rf"
+               id="com.buglabs.dragonfly.cdt.configuration"
+               name="Pre-installed BUG 2.0 SDK">
+            <toolChain
+                  configurationEnvironmentSupplier="com.buglabs.dragonfly.cdt.ConfigEnvSupplier"
+                  id="com.buglabs.dragonfly.cdt.gcc"
+                  isAbstract="false"
+                  isSystem="false"
+                  isToolChainSupported="com.buglabs.dragonfly.cdt.preinstalled.PreInstalledToolchainSupportValidator"
+                  name="BUG 2.0 Toolchain"
+                  osList="linux"
+                  supportsManagedBuild="true">                  
+               <builder
+                     command="make"
+                     id="com.buglabs.dragonfly.cdt.builder"
+                     name="BUG 2.0 Native Builder">
+                     
+               </builder>               
+               <targetPlatform
+                     binaryParser="org.eclipse.cdt.core.ELF"
+                     id="com.buglabs.dragonfly.cdt.targetplatform"
+                     name="Target Platform"
+                     osList="linux">
+               </targetPlatform>
+               <tool
+                     command="arm-angstrom-linux-gnueabi-gcc"
+                     commandLineGenerator="com.buglabs.dragonfly.cdt.preinstalled.PreInstalledCommandLineGenerator"
+                     id="com.buglabs.dragonfly.cdt.compiler"
+                     isAbstract="false"
+                     name="GCC Compiler"
+                     natureFilter="cnature"
+                     outputFlag="-o">
+                     
+                      <supportedProperties>
+	            		<property id="org.eclipse.cdt.build.core.buildArtefactType">
+	            	        	<value id="org.eclipse.cdt.build.core.buildArtefactType.exe"/>
+    	        			<value id="org.eclipse.cdt.build.core.buildArtefactType.sharedLib"/>
+            			</property>
+            	      </supportedProperties>
+            	      
+                  <inputType
+                        buildVariable="SRCS"
+                        dependencyCalculator="org.eclipse.cdt.managedbuilder.makegen.internal.DefaultIndexerDependencyCalculator"
+                        dependencyContentType="org.eclipse.cdt.core.cHeader"
+                        id="com.buglabs.dragonfly.cdt.compiler.input"
+                        name="Compiler Input"
+                        primaryInput="true"
+                        sourceContentType="org.eclipse.cdt.core.cSource">
+                  </inputType>
+                  <outputType
+                        buildVariable="OBJS"
+                        id="com.buglabs.dragonfly.cdt.compiler.output"
+                        name="Compiler Output"
+                        outputs="o"
+                        primaryOutput="true">
+                  </outputType>
+                  <optionCategory
+                        id="com.buglabs.dragonfly.cdt.compiler.optionCategory.toolchainLocation"
+                        name="Toolchain location"
+                        owner="com.buglabs.dragonfly.cdt.compiler">
+                  </optionCategory>
+                  <option
+                        browseType="directory"
+                        category="com.buglabs.dragonfly.cdt.compiler.optionCategory.toolchainLocation"
+                        command="-I"
+                        id="com.buglabs.dragonfly.cdt.compiler.general.incpath"
+                        name="Include paths"
+                        valueType="includePath">
+                  </option>
+                  <!--
+                   <option
+                        browseType="directory"
+                        category="poky.toolchain.toolchain.compiler.optionCategory.general"
+                        command="-I"
+                        defaultValue="/usr/local/poky/eabi-glibc/arm/arm-angstrom-linux-gnueabi/usr/include"
+                        id="poky.toolchain.toolchain.compiler.general.incpath"
+                        name="Include paths"
+                        valueType="includePath">
+                        <listOptionValue
+                              value="/usr/local/poky/eabi-glibc/arm/arm-angstrom-linux-gnueabi/usr/include">
+                        </listOptionValue>
+                  </option>
+                  -->
+                  <option
+                        defaultValue="-c"
+                        id="com.buglabs.dragonfly.cdt.compiler.general.check-all"
+                        name="Other flags"
+                        valueType="string">
+                  </option>
+                  <option
+                        command="-Wall"
+                        commandFalse="-w"
+                        id="com.buglabs.dragonfly.cdt.compiler.general.errors"
+                        name="Error Messages"
+                        valueType="boolean">
+                  </option>
+                  <envVarBuildPath
+                        buildPathResolver="com.buglabs.dragonfly.cdt.preinstalled.PreInstalledBuildPathResolver"
+                        pathDelimiter=";"
+                        pathType="buildpathInclude"
+                        variableList="CPATH,C_INCLUDE_PATH">
+                  </envVarBuildPath>
+                   <option
+         		      	defaultValue="true"
+        		      	name="Do not search system paths."
+       			      	category="com.buglabs.dragonfly.cdt.compiler"
+               			command="-nostartfiles"
+               			id="org.openembedded.gnu.c.link.option.nostart"
+               			valueType="boolean">
+         			</option>
+           
+               </tool>
+               <tool
+                     command="arm-angstrom-linux-gnueabi-gcc"
+                     commandLineGenerator="com.buglabs.dragonfly.cdt.preinstalled.PreInstalledCommandLineGenerator"
+                     id="com.buglabs.dragonfly.cdt.linker"
+                     isAbstract="false"
+                     name="Linker"
+                     outputFlag="-o"
+                     superClass="cdt.managedbuild.tool.gnu.c.linker">
+                  <outputType
+                        buildVariable="EXECUTABLES"
+                        id="openembedded.gnu.c.linker.output"
+                        name="Linker Output"
+                        nameProvider="org.eclipse.cdt.managedbuilder.makegen.gnu.GnuLinkOutputNameProvider"
+                        outputs="elf">
+                     <enablement
+                           type="ALL">
+                        <checkOption
+                              optionId="gnu.c.link.option.shared"
+                              value="false">
+                        </checkOption>
+                     </enablement>
+                  </outputType>
+               </tool>
+            </toolChain>
+         </configuration>
+      </projectType>
+   </extension>
+
+</plugin>
