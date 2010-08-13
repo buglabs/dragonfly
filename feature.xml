@@ -240,6 +240,12 @@ Parts of this program are licenced under the Apache Software License:
          name="Device Management support for BUG"
          optional="true"/>
 
+   <includes
+         id="com.buglabs.dragonfly.cdt.feature"
+         version="0.0.0"
+         name="C/C++ Support for BUG"
+         optional="true"/>
+
    <requires>
       <import feature="org.eclipse.gef"/>
       <import feature="org.eclipse.pde" version="3.3.2" match="greaterOrEqual"/>
