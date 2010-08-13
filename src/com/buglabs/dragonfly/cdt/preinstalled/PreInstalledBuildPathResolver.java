@@ -26,7 +26,6 @@ public class PreInstalledBuildPathResolver implements IBuildPathResolver {
 	//"/usr/local/angstrom/arm/lib",
 	};
 
-	@Override
 	public String[] resolveBuildPaths(int pathType, String variableName, String variableValue, IConfiguration configuration) {
 		if (variableName.equals("LIBRARY_PATH")) {
 			return DEFAULT_LIBRARY_PATHS;

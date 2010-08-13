@@ -14,13 +14,11 @@ import org.eclipse.cdt.managedbuilder.envvar.IEnvironmentVariableProvider;
 
 public class ConfigEnvSupplier implements IConfigurationEnvironmentVariableSupplier {
 
-	@Override
 	public IBuildEnvironmentVariable getVariable(String variableName, IConfiguration configuration, IEnvironmentVariableProvider provider) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public IBuildEnvironmentVariable[] getVariables(IConfiguration configuration, IEnvironmentVariableProvider provider) {
 		// TODO Auto-generated method stub
 		return null;

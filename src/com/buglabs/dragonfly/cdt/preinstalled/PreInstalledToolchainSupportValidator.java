@@ -17,7 +17,6 @@ public class PreInstalledToolchainSupportValidator implements IManagedIsToolChai
 
 	public static final String ANGSTROM_DEFAULT_TOOLCHAIN_ROOT = "/usr/local/angstrom";
 
-	@Override
 	public boolean isSupported(IToolChain toolChain, PluginVersionIdentifier version, String instance) {
 		File f = new File(ANGSTROM_DEFAULT_TOOLCHAIN_ROOT);
 		return (f.exists() && f.isDirectory());

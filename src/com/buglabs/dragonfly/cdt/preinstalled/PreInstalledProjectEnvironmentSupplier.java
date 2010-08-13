@@ -48,7 +48,6 @@ public class PreInstalledProjectEnvironmentSupplier implements IProjectEnvironme
 		return m;
 	}
 
-	@Override
 	public IBuildEnvironmentVariable getVariable(final String variableName, IManagedProject project, IEnvironmentVariableProvider provider) {
 		if (variableMap.containsKey(variableName)) {
 			//System.out.println("Using predefined for " + variableName + "  value: " + variableMap.get(variableName));
@@ -58,23 +57,23 @@ public class PreInstalledProjectEnvironmentSupplier implements IProjectEnvironme
 		if (variableName.startsWith("workspace_loc:")) {
 			return new IBuildEnvironmentVariable() {
 
-				@Override
+				
 				public String getValue() {
 					return variableName.split(":")[1];
 				}
 
-				@Override
+				
 				public int getOperation() {
 					// TODO Auto-generated method stub
 					return 0;
 				}
 
-				@Override
+				
 				public String getName() {
 					return variableName.split(":")[0];
 				}
 
-				@Override
+				
 				public String getDelimiter() {
 					return ":";
 				}
@@ -85,29 +84,29 @@ public class PreInstalledProjectEnvironmentSupplier implements IProjectEnvironme
 
 		return new IBuildEnvironmentVariable() {
 
-			@Override
+			
 			public String getValue() {
 				return null;
 			}
 
-			@Override
+			
 			public int getOperation() {
 				return 0;
 			}
 
-			@Override
+			
 			public String getName() {
 				return variableName;
 			}
 
-			@Override
+			
 			public String getDelimiter() {
 				return ":";
 			}
 		};
 	}
 
-	@Override
+	
 	public IBuildEnvironmentVariable[] getVariables(IManagedProject project, IEnvironmentVariableProvider provider) {
 		List l = new ArrayList();
 
@@ -129,22 +128,22 @@ public class PreInstalledProjectEnvironmentSupplier implements IProjectEnvironme
 			this.key = key;
 		}
 
-		@Override
+		
 		public String getValue() {
 			return (String) map.get(key);
 		}
 
-		@Override
+		
 		public int getOperation() {
 			return 0;
 		}
 
-		@Override
+		
 		public String getName() {
 			return key;
 		}
 
-		@Override
+		
 		public String getDelimiter() {
 			return File.pathSeparator;
 		}
