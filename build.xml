@@ -1,0 +1,50 @@
+<project name="bundles.all" default="bundles.all" basedir=".">
+	<!-- =================================================================== -->
+	<property name="eclipse.home" location="../com.eclipse.sdk/eclipse" />
+	<property name="base" location="../com.eclipse.sdk" />
+	<property name="builder" location="." />
+	<property name="tmp.dir" location="build" />
+	<!-- to build for eclipse 3.5, change eclipse.version to be 3.5.1.R35x_20090820 -->
+	<!-- to build for eclipse 3.4, change eclipse.version to be 3.4.1.R34x_v20081217 -->
+	<!-- to build for eclipse 3.3, change eclipse.version to be 3.3.2.v20071019 -->
+	<!-- <property name="eclipse.version" value="3.5.1.R35x_20090820" /> -->
+	<property name="eclipse.version" value="3.5.2.R35x_20100114" />
+	<property name="projectName" value="com.buglabs.dragonfly.cdt.feature" />
+
+	<!-- =================================================================== -->
+	<!-- clean                                                               -->
+	<!-- =================================================================== -->
+	<target name="clean">
+
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- runpdebuild                                                         -->
+	<!-- =================================================================== -->
+	<!-- to build for 3.5.1, change first arg line to have org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar -->
+	<!-- to build for 3.4.2, change first arg line to have org.eclipse.equinox.launcher_1.0.101.R34x_v20081125.jar -->
+	<!-- to build for 3.3, change first arg line to have org.eclipse.equinox.launcher_1.0.1.R33x_v20080118.jar -->
+	 <target name="runpdebuild">
+	        <exec dir="." executable="java">
+	        	<arg line="-cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar org.eclipse.equinox.launcher.Main 
+	        		-DbuildId=${meta.project.version}
+	        		-Dbuilder=${builder} 
+	        		-DbuildDirectory=${tmp.dir} 
+	        		-DforceContextQualifier=${meta.project.version}
+	        		-DbasBuildDir=${base.build.dir}
+	        		-Dbuild.level=${build.level}
+	        		-Dbase=${base} 
+	        		-Did=${projectName} 
+	        		-buildfile ${eclipse.home}/plugins/org.eclipse.pde.build_${eclipse.version}/scripts/build.xml 
+	        		-verbose 
+	        		-application org.eclipse.ant.core.antRunner" />
+	        </exec>
+	    </target>
+	<!-- =================================================================== -->
+	<!-- bundles.all                                                         -->
+	<!-- =================================================================== -->
+	<target name="bundles.all">
+		<antcall target="runpdebuild">
+		</antcall>	
+	</target>
+</project>
