@@ -31,28 +31,21 @@ import org.eclipse.rse.services.clientserver.messages.SystemMessageException;
 import org.eclipse.rse.ui.RSEUIPlugin;
 import org.eclipse.rse.ui.model.ISystemRegistryUI;
 
-/**
- * This is our subsystem, which manages the remote connection and resources for
- * a particular Service (system connection) object.
- */
 public class BUGOSGiSubSystem extends SubSystem {
 
-	private IBUGOSGiBundleService fDaytimeService;
+	private IBUGOSGiBundleService bundleService;
 
-	public BUGOSGiSubSystem(IHost host, IConnectorService connectorService, IBUGOSGiBundleService daytimeService) {
+	public BUGOSGiSubSystem(IHost host, IConnectorService connectorService, IBUGOSGiBundleService bundleService) {
 		super(host, connectorService);
-		fDaytimeService = daytimeService;
+		this.bundleService = bundleService;
 	}
 
 	public void initializeSubSystem(IProgressMonitor monitor) throws SystemMessageException {
-		//This is called after connect - expand the daytime node.
-		// Always called in worker thread.
 		super.initializeSubSystem(monitor);
-		//TODO find a more elegant solution for expanding the item, e.g. use implicit connect like filters
+
 		final ISystemRegistryUI sr = RSEUIPlugin.getTheSystemRegistryUI();
 		final SystemResourceChangeEvent event = new SystemResourceChangeEvent(this, ISystemResourceChangeEvents.EVENT_SELECT_EXPAND, null);
-		//TODO bug 150919: postEvent() should not be necessary asynchronously
-		//sr.postEvent(event);
+	
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				sr.postEvent(event);
@@ -64,14 +57,14 @@ public class BUGOSGiSubSystem extends SubSystem {
 		return isConnected();
 	}
 
-	public IBUGOSGiBundleService getDaytimeService() {
-		return fDaytimeService;
+	public IBUGOSGiBundleService getBundleService() {
+		return bundleService;
 	}
 
 	public Object[] getChildren() {
 		if (isConnected()) {
 			try {
-				return fDaytimeService.getBundles();
+				return bundleService.getBundles();
 			} catch (Exception e) {
 				String msgTxt = NLS.bind(CommonMessages.MSG_CONNECT_FAILED, getHostName());
 				SystemMessage msg = new SimpleSystemMessage(Activator.PLUGIN_ID, ICommonMessageIds.MSG_CONNECT_FAILED, IStatus.ERROR, msgTxt, e);

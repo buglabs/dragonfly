@@ -117,7 +117,7 @@ public class BUGResourceAdapter extends AbstractSystemViewAdapter implements ISy
 
 	public String[] getRemoteParentNamesInUse(Object element, IProgressMonitor monitor) throws Exception {
 		BUGOSGiSubSystem ourSS = (BUGOSGiSubSystem) getSubSystem(element);
-		IBUGOSGiBundleService service = ourSS.getDaytimeService();
+		IBUGOSGiBundleService service = ourSS.getBundleService();
 		//String time = service.getTimeOfDay();
 		String[] allLabels = new String[] {};
 		return allLabels; // Return list of all labels

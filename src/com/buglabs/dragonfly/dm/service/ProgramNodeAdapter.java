@@ -9,16 +9,15 @@ package com.buglabs.dragonfly.dm.service;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.buglabs.dragonfly.dm.BUGResources;
+import com.buglabs.dragonfly.dm.actions.UninstallAction;
 import com.buglabs.dragonfly.model.ProgramNode;
 import com.buglabs.dragonfly.ui.Activator;
-import com.buglabs.dragonfly.ui.actions.RemoveBundleJob;
 
 import org.eclipse.rse.ui.SystemMenuManager;
 import org.eclipse.rse.ui.view.AbstractSystemViewAdapter;
@@ -26,7 +25,7 @@ import org.eclipse.rse.ui.view.ISystemViewElementAdapter;
 
 public class ProgramNodeAdapter extends AbstractSystemViewAdapter implements IAdaptable {
 
-	private final ProgramNode node;
+	final ProgramNode node;
 
 	public ProgramNodeAdapter(ProgramNode next) {
 		this.node = next;
@@ -53,7 +52,9 @@ public class ProgramNodeAdapter extends AbstractSystemViewAdapter implements IAd
 	}
 
 	public void addActions(SystemMenuManager menu, IStructuredSelection selection, Shell parent, String menuGroup) {
-		menu.add(menuGroup, new UninstallAction(selection));
+		if (isApplicationBundle(node)) {
+			menu.add(menuGroup, new UninstallAction(node, selection));
+		}
 	}
 
 	public ImageDescriptor getImageDescriptor(Object element) {
@@ -91,20 +92,5 @@ public class ProgramNodeAdapter extends AbstractSystemViewAdapter implements IAd
 
 	protected Object internalGetPropertyValue(Object key) {
 		return node.getPropertyValue(key);
-	}
-
-	private class UninstallAction extends Action {
-		private final IStructuredSelection selection;
-
-		public UninstallAction(IStructuredSelection selection) {
-			super("Uninstall Bundle");
-			this.selection = selection;
-		}
-
-		@Override
-		public void run() {
-			RemoveBundleJob job = new RemoveBundleJob("Uninstall bundle " + node.getName(), new ProgramNode[] { node });
-			job.schedule();
-		}
 	}
 }

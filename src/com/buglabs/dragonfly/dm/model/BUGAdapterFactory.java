@@ -15,7 +15,7 @@ import org.eclipse.rse.ui.view.ISystemViewElementAdapter;
 
 public class BUGAdapterFactory extends AbstractSystemRemoteAdapterFactory implements IAdapterFactory {
 
-	private BUGResourceAdapter daytimeAdapter = new BUGResourceAdapter();
+	private BUGResourceAdapter resourceAdapter = new BUGResourceAdapter();
 
 	public BUGAdapterFactory() {
 		super();
@@ -24,7 +24,7 @@ public class BUGAdapterFactory extends AbstractSystemRemoteAdapterFactory implem
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		ISystemViewElementAdapter adapter = null;
 		if (adaptableObject instanceof BUGResource) {
-			adapter = daytimeAdapter;
+			adapter = resourceAdapter;
 		}
 		// these lines are very important! 
 		if ((adapter != null) && (adapterType == IPropertySource.class)) {
