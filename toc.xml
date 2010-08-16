@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Dragonfly Device Management Support" topic="html/overview.html">   
+<toc label="Dragonfly Device Management Support" link_to="dragonflyRoot" topic="html/overview.html">
+   <topic href="html/GettingStarted.html" label="Getting Started">
+      <anchor id="gettingStarted"/>
+   </topic>   
 </toc>
