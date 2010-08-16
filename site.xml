@@ -4,11 +4,11 @@
       <category name="Dragonfly SDK"/>
    </feature>
    <feature url="features/com.buglabs.dragonfly.dm.feature_2.0.0.qualifier.jar" id="com.buglabs.dragonfly.dm.feature" version="2.0.0.qualifier">
-      <category name="Optional Extensions"/>
+      <category name="Optional Components"/>
    </feature>
    <feature url="features/com.buglabs.dragonfly.cdt.feature_1.0.0.qualifier.jar" id="com.buglabs.dragonfly.cdt.feature" version="1.0.0.qualifier">
-      <category name="Dragonfly SDK"/>
+      <category name="Optional Components"/>
    </feature>
-   <category-def name="Dragonfly SDK" label="Dragonfly Java SDK"/>
-   <category-def name="Optional Extensions" label="Optional Extensions"/>
+   <category-def name="Dragonfly SDK" label="Dragonfly SDK"/>
+   <category-def name="Optional Components" label="Optional Components (Alpha)"/>
 </site>
