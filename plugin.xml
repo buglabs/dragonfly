@@ -120,7 +120,7 @@
         		      	name="Do not search system paths."
        			      	category="com.buglabs.dragonfly.cdt.compiler"
                			command="-nostartfiles"
-               			id="org.openembedded.gnu.c.link.option.nostart"
+               			id="dragonfly.gnu.c.link.option.nostart"
                			valueType="boolean">
          			</option>
            
@@ -135,7 +135,7 @@
                      superClass="cdt.managedbuild.tool.gnu.c.linker">
                   <outputType
                         buildVariable="EXECUTABLES"
-                        id="openembedded.gnu.c.linker.output"
+                        id="dragonfly.gnu.c.linker.output"
                         name="Linker Output"
                         nameProvider="org.eclipse.cdt.managedbuilder.makegen.gnu.GnuLinkOutputNameProvider"
                         outputs="elf">
@@ -152,5 +152,14 @@
          </configuration>
       </projectType>
    </extension>
-
+	<extension point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="tocGettingStarted.xml"
+            primary="false">
+      </toc>      
+   </extension>
 </plugin>
