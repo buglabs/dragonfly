@@ -58,4 +58,10 @@ Martin Oberhuber (Wind River) - [186523] Move subsystemConfigurations from UI to
         vendor="Bug Labs, Inc.">
 		</configuration>
 	</extension>
+	<extension point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>      
+   </extension>
 </plugin> 
