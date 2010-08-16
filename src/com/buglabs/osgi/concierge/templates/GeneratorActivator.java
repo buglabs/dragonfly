@@ -22,7 +22,7 @@ public class GeneratorActivator {
 
 	public String generate(BugProjectInfo projInfo) {
 		final StringBuffer stringBuffer = new StringBuffer();
-		// Author: Angel Roman - roman@mdesystems.com
+		//Author: Angel Roman - roman@mdesystems.com
 
 		if (projInfo.getActivatorPackage().length() > 0) {
 
