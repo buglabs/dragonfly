@@ -27,11 +27,5 @@
          point="org.eclipse.core.runtime.preferences">
       <initializer class="com.buglabs.dragonfly.DragonflyPreferenceInitializer"/>
    </extension>
-   <extension
-         point="com.buglabs.osgi.concierge.core.packageproviders">
-      <packageprovider
-            class="com.buglabs.dragonfly.BugPackageProvider">
-      </packageprovider>
-   </extension>
 
 </plugin>
