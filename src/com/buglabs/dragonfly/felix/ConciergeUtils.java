@@ -26,6 +26,7 @@
  */
 package com.buglabs.dragonfly.felix;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -84,5 +85,21 @@ public class ConciergeUtils {
 		}
 
 		return matchingEntries;
+	}
+
+	public static void removeNatureFromProject(IProject project, String nid, IProgressMonitor monitor) throws CoreException {
+		IProjectDescription desc = project.getDescription();
+	
+		String[] nids = desc.getNatureIds();
+		List nl = new ArrayList();
+		
+		for (int i = 0; i < nids.length; ++i) {
+			if (!nids[i].equals(nid)) {
+				nl.add(nids[i]);
+			}
+		}
+		
+		desc.setNatureIds((String[]) nl.toArray(new String[nl.size()]));
+		project.setDescription(desc, monitor);
 	}
 }
