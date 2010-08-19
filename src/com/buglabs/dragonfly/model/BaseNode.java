@@ -10,6 +10,7 @@ package com.buglabs.dragonfly.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -83,7 +84,7 @@ public class BaseNode implements IModelNode, IAdaptable {
 		return name;
 	}
 
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(Class adapter) {		
 		return null;
 	}
 }
