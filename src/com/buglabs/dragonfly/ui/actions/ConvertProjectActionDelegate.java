@@ -77,7 +77,8 @@ public class ConvertProjectActionDelegate implements IActionDelegate {
 
 						if (cpName.equals("com.buglabs.osgi.concierge.jdt.ConciergeClasspathContainerInitializer")
 								|| cpName.equals("com.buglabs.phoneme.personal.PhoneMEClasspathContainer")
-								|| cpName.equals("com.buglabs.osgi.concierge.jdt.OSGiBundleClassPathContainerInitializer")) {
+								|| cpName.equals("com.buglabs.osgi.concierge.jdt.OSGiBundleClassPathContainerInitializer")
+								|| cpName.equals("org.eclipse.jdt.launching.JRE_CONTAINER")) {
 
 							if (!cpl.contains(jre)) {
 								cpl.add(jre);
@@ -87,12 +88,14 @@ public class ConvertProjectActionDelegate implements IActionDelegate {
 								cpl.add(pde);
 							}
 						} else {
+							System.out.println(cpName);
 							cpl.add(importCP[i]);
 						}
 					}
 
 					jproj.setRawClasspath((IClasspathEntry[]) cpl.toArray(new IClasspathEntry[cpl.size()]), monitor);
 					ConciergeUtils.addNatureToProject(project, "org.eclipse.pde.PluginNature", monitor);
+					ConciergeUtils.removeNatureFromProject(project, "com.buglabs.osgi.concierge.natures.ConciergeProjectNature", monitor);
 
 					project.build(IncrementalProjectBuilder.CLEAN_BUILD, monitor);
 
