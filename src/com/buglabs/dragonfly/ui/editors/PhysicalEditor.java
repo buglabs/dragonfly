@@ -37,8 +37,6 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -236,9 +234,9 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	}
 
 	private void createModuleMenu(MenuManager mm, int slot, List availableModules) {
-		
+
 		availableModules = filterAvailableModules(availableModules, slot);
-		
+
 		for (Iterator i = availableModules.iterator(); i.hasNext();) {
 			ModuleMenuAction mma = new ModuleMenuAction((String) i.next(), slot);
 			mm.add(mma);
@@ -248,8 +246,8 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	}
 
 	/**
-	 * Filter modules available for a given slot.  On BUG20 device
-	 * Video, LCD only on slot 1, and all others on 0, 2-3 slots.
+	 * Filter modules available for a given slot. On BUG20 device Video, LCD
+	 * only on slot 1, and all others on 0, 2-3 slots.
 	 * 
 	 * @param availableModules
 	 * @param slot
@@ -258,10 +256,10 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	private List filterAvailableModules(List availableModules, int slot) {
 
 		List nl = new ArrayList();
-		
+
 		for (Iterator i = availableModules.iterator(); i.hasNext();) {
 			String modName = (String) i.next();
-			
+
 			if (slot == VIDEO_SLOT) {
 				if (isVideoModule(modName)) {
 					nl.add(modName);
@@ -272,7 +270,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 				}
 			}
 		}
-		
+
 		return nl;
 	}
 
@@ -318,6 +316,10 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		Module m;
 		BugProperty slot;
 		int n;
+		for (Iterator i = menuActions.iterator(); i.hasNext();) {
+			((ModuleMenuAction) i.next()).setState(false);
+		}
+
 		for (Iterator i = moduleList.iterator(); i.hasNext();) {
 			m = (Module) i.next();
 
@@ -330,6 +332,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 						if (n >= 0 && n < 4) {
 							modules[n] = m;
+							setSlotUsed(n);
 						}
 					}
 				}
@@ -487,6 +490,21 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		pane.validate();
 	}
 
+	/**
+	 * For the actions that work against the virtual bug, set a given slot as
+	 * having a module attached.
+	 * 
+	 * @param n
+	 */
+	private void setSlotUsed(int n) {
+		for (Iterator i = menuActions.iterator(); i.hasNext();) {
+			ModuleMenuAction mma = ((ModuleMenuAction) i.next());
+			if (mma.getSlot() == n) {
+				mma.setState(true);
+			}
+		}
+	}
+
 	private Layer createLayer() {
 		Layer layer = new FreeformLayer();
 		layer.setLayoutManager(new DelegatingLayout());
@@ -529,10 +547,6 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 								if (isSimulatedBUG(bug)) {
 									try {
 										controllerClient = Client.getClient(bug.getUrl().getHost(), BUG_SIMULATOR_CONTROLLER_PORT);
-										
-										for (Iterator i = menuActions.iterator(); i.hasNext();) {
-											((ModuleMenuAction) i.next()).resetState();
-										}
 									} catch (IOException e) {
 										UIUtils.handleNonvisualError("Unable to initialize BUG Simulator.", e);
 									}
@@ -649,30 +663,47 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			this.moduleSet = false;
 			this.slot = slot;
 		}
-		
-		public void resetState() {
-			moduleSet = false;
+
+		public void setState(boolean value) {
+			moduleSet = value;
+		}
+
+		public int getSlot() {
+			return slot;
 		}
 
 		@Override
 		public void run() {
-			try {
-				if (this.moduleSet) {
-					if (!controllerClient.RemoveModuleFromSlot(slot)) {
-						UIUtils.handleVisualError("Problem occured while connecting to BUG Simulator.", new Exception("RemoveModuleFromSlot() returned false."));
-						return;
+			Job j = new Job("Set Slot") {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						if (ModuleMenuAction.this.moduleSet) {
+							if (!controllerClient.RemoveModuleFromSlot(slot)) {
+								ModuleMenuAction.this.moduleSet = false;
+								UIUtils.handleVisualError("Problem occured while connecting to BUG Simulator.", new Exception("RemoveModuleFromSlot() returned false."));
+								return Status.CANCEL_STATUS;
+							}
+							moduleSet = false;
+						} else {
+							if (!controllerClient.AttachModule(getText(), slot)) {
+								ModuleMenuAction.this.moduleSet = true;
+								UIUtils.handleVisualError("Problem occured while connecting to BUG Simulator.", new Exception("AttachModule() returned false."));
+								return Status.CANCEL_STATUS;
+							}
+							moduleSet = true;
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+						return Status.CANCEL_STATUS;
 					}
-					moduleSet = false;
-				} else {
-					if (!controllerClient.AttachModule(getText(), slot)) {
-						UIUtils.handleVisualError("Problem occured while connecting to BUG Simulator.", new Exception("AttachModule() returned false."));
-						return;
-					}
-					moduleSet = true;
+					
+					return Status.OK_STATUS;
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				
+			};
+			j.schedule();
 		}
 	}
 
@@ -686,11 +717,21 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 		@Override
 		public void run() {
-			try {
-				controllerClient.RemoveModuleFromSlot(slot);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			Job j = new Job("Clear Module") {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						controllerClient.RemoveModuleFromSlot(slot);
+					} catch (IOException e) {
+						e.printStackTrace();
+						return Status.CANCEL_STATUS;
+					}
+					return Status.OK_STATUS;
+				}
+
+			};
+			j.schedule();
 		}
 	}
 }
