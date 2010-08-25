@@ -330,35 +330,4 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	public void setVirtualBugRemovedByTerminate(boolean b) {
 		isVirtualBugRemovedByTerminate = b;
 	}
-
-	/**
-	 * Returns current protocol either http or https
-	 * 
-	 * @return current protocol
-	 */
-	/*
-	public String getProtocol() {
-		return protocol;
-	}
-	*/
-
-	/**
-	 * Sets current protocol
-	 * 
-	 * @param protocol
-	 */
-	/*
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
-	}
-	*/
-
-	/**
-	 * Resets protocol to https
-	 */
-	/*
-	public void resetProtocol() {
-		protocol = HTTPS;
-	}
-	*/
 }
