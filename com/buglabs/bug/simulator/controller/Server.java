@@ -66,8 +66,7 @@ public class Server extends Thread {
 				String inputLine, outputLine;
 				ControllerProtocol protocol = new ControllerProtocol(context);
 
-				while (Thread.interrupted() == false
-						&& (inputLine = in.readLine()) != null) {
+				while ((inputLine = in.readLine()) != null) {
 					try {
 						System.out.println("+++ Server Recieved: " + inputLine);
 						outputLine = protocol.processInput(inputLine);
