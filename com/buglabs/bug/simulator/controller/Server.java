@@ -12,7 +12,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
 
 /**
- * Server of module/LED controller.  This server talks with the SDK to load graphical views on the BUG Simulator's "physical" state.
+ * Server of module/LED controller. This server talks with the SDK to load
+ * graphical views on the BUG Simulator's "physical" state.
  * 
  * @author kgilmer
  * 
@@ -29,12 +30,14 @@ public class Server extends Thread {
 
 	/**
 	 * Private constructor for Server.
+	 * 
 	 * @param port
 	 * @param log
 	 * @param context
 	 * @throws IOException
 	 */
-	private Server(int port, LogService log, BundleContext context) throws IOException {
+	private Server(int port, LogService log, BundleContext context)
+			throws IOException {
 		this.port = port;
 		this.log = log;
 		this.context = context;
@@ -52,16 +55,20 @@ public class Server extends Thread {
 					return;
 				}
 
+				System.out.println("+++ Server waiting for a client.");
 				Socket clientSocket = serverSocket.accept();
-				PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				System.out.println("+++ Server accepted a client.");
+				PrintWriter out = new PrintWriter(
+						clientSocket.getOutputStream(), true);
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						clientSocket.getInputStream()));
 				String inputLine, outputLine;
 				ControllerProtocol protocol = new ControllerProtocol(context);
 
-				while (Thread.interrupted() == false && (inputLine = in.readLine()) != null) {
+				while (Thread.interrupted() == false
+						&& (inputLine = in.readLine()) != null) {
 					try {
-						System.out
-								.println("+++ Server Recieved: " + inputLine);
+						System.out.println("+++ Server Recieved: " + inputLine);
 						outputLine = protocol.processInput(inputLine);
 
 						if (outputLine.equals(ControllerProtocol.CMD_GOODBYE)) {
@@ -71,38 +78,43 @@ public class Server extends Thread {
 						System.out.println("+++ Server responding with: "
 								+ outputLine.trim());
 						out.println(outputLine.trim());
-						System.out
-								.println("+++ Server response complete.");
+						System.out.println("+++ Server response complete.");
 					} catch (Exception e) {
 						out.println(ControllerProtocol.CMD_ERROR_RESPONSE);
 					}
 				}
 			} catch (InterruptedException e) {
-				log.log(LogService.LOG_INFO, "Controller server has been shutdown.");
+				log.log(LogService.LOG_INFO,
+						"Controller server has been shutdown.");
 			} catch (IOException e) {
-				log.log(LogService.LOG_ERROR, "An IO error occurred in the controller server.", e);
+				log.log(LogService.LOG_ERROR,
+						"An IO error occurred in the controller server.", e);
 			} finally {
 				try {
 					exit = true;
 					serverSocket.close();
 					serverSocket = null;
-					log.log(LogService.LOG_INFO, "Shutdown of " + this.getClass().getName() + " complete.");
+					log.log(LogService.LOG_INFO, "Shutdown of "
+							+ this.getClass().getName() + " complete.");
 					return;
-				} catch (IOException e) {					
+				} catch (IOException e) {
 				}
 			}
 		}
 	}
 
 	/**
-	 * Start the socket server that serves to give external clients the ability to configure a BUG simulator instance.
+	 * Start the socket server that serves to give external clients the ability
+	 * to configure a BUG simulator instance.
+	 * 
 	 * @param port
 	 * @param log
 	 * @param context
 	 * @return
 	 * @throws IOException
 	 */
-	public static Server startServer(int port, LogService log, BundleContext context) throws IOException {
+	public static Server startServer(int port, LogService log,
+			BundleContext context) throws IOException {
 		if (ref == null) {
 			ref = new Server(port, log, context);
 			ref.start();
@@ -115,11 +127,13 @@ public class Server extends Thread {
 	 * Shutdown the socket server.
 	 */
 	public void shutdown() {
-		log.log(LogService.LOG_INFO, "Shutdown of " + this.getClass().getName() + " started.");
+		log.log(LogService.LOG_INFO, "Shutdown of " + this.getClass().getName()
+				+ " started.");
 		ref.interrupt();
 		try {
 			Socket s = new Socket(LOCAL_HOSTNAME, port);
-			s.getOutputStream().write((ControllerProtocol.CMD_GOODBYE + "\n").getBytes());
+			s.getOutputStream().write(
+					(ControllerProtocol.CMD_GOODBYE + "\n").getBytes());
 			s.close();
 		} catch (UnknownHostException e) {
 		} catch (IOException e) {
