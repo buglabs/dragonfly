@@ -61,7 +61,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			URL relativeURL = Activator.getDefault().getBundle().getEntry(File.separator);
 			URL bundleURL = FileLocator.toFileURL(Activator.getDefault().getBundle().getEntry(File.separator + REL_BUNDLE_DIR));
 			URL localURL = FileLocator.toFileURL(relativeURL);
-			String felixPluginBase = localURL.getPath();
+			String felixPluginBase = Path.fromPortableString(localURL.getPath()).toOSString();
 			
 			deleteBundleCacheDir(launchDir.append(REL_BUNDLE_DIR), monitor);
 			String launchClass = FELIX_MAIN_CLASS;
