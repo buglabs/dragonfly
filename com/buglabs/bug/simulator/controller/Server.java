@@ -60,14 +60,19 @@ public class Server extends Thread {
 
 				while (Thread.interrupted() == false && (inputLine = in.readLine()) != null) {
 					try {
+						System.out
+								.println("+++ Server Recieved: " + inputLine);
 						outputLine = protocol.processInput(inputLine);
 
 						if (outputLine.equals(ControllerProtocol.CMD_GOODBYE)) {
 							clientSocket.close();
 							break;
 						}
-
+						System.out.println("+++ Server responding with: "
+								+ outputLine.trim());
 						out.println(outputLine.trim());
+						System.out
+								.println("+++ Server response complete.");
 					} catch (Exception e) {
 						out.println(ControllerProtocol.CMD_ERROR_RESPONSE);
 					}
