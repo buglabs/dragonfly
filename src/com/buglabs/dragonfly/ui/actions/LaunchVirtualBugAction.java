@@ -2,8 +2,6 @@ package com.buglabs.dragonfly.ui.actions;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
@@ -11,9 +9,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.RuntimeProcess;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -57,31 +53,8 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			// and user tries to launch again, connecting to ServerSocket will
 			// throw an exception.
 			if (launchedProcesses != null && launchedProcesses.length > 0) {
-
 				// disable launch button only if processes were started
 				action.setEnabled(false);
-
-				launchedProcesses[0].getStreamsProxy().getOutputStreamMonitor().addListener(new IStreamListener() {
-					int cnt = 0;
-
-					public void streamAppended(String text, IStreamMonitor monitor) {
-						if (text.indexOf("com.buglabs.bug.emulator.awt") != -1) {
-							cnt++;
-							if (cnt == 2) {
-								action.setEnabled(true);
-							}
-						}
-					}
-				});
-
-				// if we got to here w/o throwing an exception, the assumption is the
-				// BUG Simulator is launching, however, it takes a few seconds, so delay
-				// creation of connection for 3 seconds
-				new Timer().schedule(new TimerTask() {
-					public void run() {
-						BugConnectionManager.getInstance().addNewVirtualBugConnection();
-					}
-				}, 3000);
 			}
 
 		} catch (CoreException e) {

@@ -72,7 +72,7 @@ public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 		}
 
 		if (configuration != null) {
-			return configuration.launch(mode, progressMonitor);
+			return configuration.launch(mode, progressMonitor);			
 		}
 
 		return null;

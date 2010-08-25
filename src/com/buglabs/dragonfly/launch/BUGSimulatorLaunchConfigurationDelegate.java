@@ -6,15 +6,21 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
 import com.buglabs.dragonfly.ui.Activator;
@@ -27,7 +33,7 @@ import com.buglabs.dragonfly.ui.util.BugProjectUtil;
  * @author kgilmer
  * 
  */
-public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfiguration {
+public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfiguration implements IDebugEventSetListener {
 	public static final String ATTR_GPS_LOG = "GPS_LOG";
 	public static final String ATTR_IMAGES = "IMAGES";
 	public static final String ATTR_HTTP_PORT = "HTTP PORT";
@@ -53,11 +59,17 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 
 		this.configuration = configuration;
 		int port = getHttpPort(configuration);
-
+		DebugPlugin.getDefault().addDebugEventListener(this);
+		
 		try {
 			ServerSocket socket = new ServerSocket(port);
 			socket.close();
 			super.launch(configuration, mode, launch, monitor);
+			new Timer().schedule(new TimerTask() {
+				public void run() {
+					BugConnectionManager.getInstance().addNewVirtualBugConnection();
+				}
+			}, 3000);
 		} catch (IOException e) {
 			if (Activator.getDefault().getLaunchErrorVisible()) {
 
@@ -114,5 +126,18 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 		if (!launchAll.equals("true"))
 			selectedProjects = configuration.getAttribute(ATTR_LAUNCH_PROJECTS, BugProjectUtil.getWSBugProjectNames());
 		return selectedProjects;
+	}
+
+	@Override
+	public void handleDebugEvents(DebugEvent[] arg0) {
+		DebugEvent event = arg0[0];
+		if (event.getKind() == DebugEvent.TERMINATE) {
+			if (BugConnectionManager.getInstance().removeVirtualBugConnection()) {
+				DragonflyActivator activator = DragonflyActivator.getDefault();
+				if (activator != null) {
+					activator.setVirtualBugRemovedByTerminate(true);
+				}
+			}			
+		}
 	}
 }
