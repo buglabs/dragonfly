@@ -33,7 +33,8 @@ import com.buglabs.dragonfly.ui.util.BugProjectUtil;
  * @author kgilmer
  * 
  */
-public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfiguration implements IDebugEventSetListener {
+public class BUGSimulatorLaunchConfigurationDelegate extends
+		FelixLaunchConfiguration {
 	public static final String ATTR_GPS_LOG = "GPS_LOG";
 	public static final String ATTR_IMAGES = "IMAGES";
 	public static final String ATTR_HTTP_PORT = "HTTP PORT";
@@ -55,19 +56,20 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 	public static final String APP_DIR = "app.bundle.path";
 	private ILaunchConfiguration configuration;
 
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
+	public void launch(ILaunchConfiguration configuration, String mode,
+			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
 		this.configuration = configuration;
 		int port = getHttpPort(configuration);
-		DebugPlugin.getDefault().addDebugEventListener(this);
-		
+
 		try {
 			ServerSocket socket = new ServerSocket(port);
 			socket.close();
 			super.launch(configuration, mode, launch, monitor);
 			new Timer().schedule(new TimerTask() {
 				public void run() {
-					BugConnectionManager.getInstance().addNewVirtualBugConnection();
+					BugConnectionManager.getInstance()
+							.addNewVirtualBugConnection();
 				}
 			}, 3000);
 		} catch (IOException e) {
@@ -76,16 +78,23 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 				Display.getCurrent().syncExec(new Runnable() {
 
 					public void run() {
-						MessageDialog.openInformation(new Shell(), "BUG Simulator Launch", "BUG Simulator is already running. Please close it and launch again.");
+						MessageDialog
+								.openInformation(new Shell(),
+										"BUG Simulator Launch",
+										"BUG Simulator is already running. Please close it and launch again.");
 					}
 				});
 			}
 		}
 	}
 
-	private static String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
+	private static String getSystemProperty(ILaunchConfiguration configuration,
+			String prop, String defaultValue) throws CoreException {
 
-		Map properties = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+		Map properties = configuration
+				.getAttribute(
+						BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES,
+						new HashMap());
 		String val = (String) properties.get(prop);
 
 		if (val != null)
@@ -93,14 +102,17 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 		return defaultValue;
 	}
 
-	private int getHttpPort(ILaunchConfiguration configuration) throws CoreException {
-		String val = getSystemProperty(configuration, PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
+	private int getHttpPort(ILaunchConfiguration configuration)
+			throws CoreException {
+		String val = getSystemProperty(configuration, PROP_HTTP_PORT,
+				DragonflyActivator.getDefault().getHttpPort());
 		return Integer.parseInt((String) val);
 	}
 
 	@Override
 	protected String getSourceDir() throws Exception {
-		return com.buglabs.dragonfly.simulator.Activator.getDefault().getBUGBundleLocation();
+		return com.buglabs.dragonfly.simulator.Activator.getDefault()
+				.getBUGBundleLocation();
 	}
 
 	@Override
@@ -115,28 +127,18 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 		m.put("org.osgi.framework.processor", "armv7l");
 		m.put(PROP_VBUG, "true");
 		m.put(APP_DIR, getLaunchDirectory().toOSString());
-		
+
 		return m;
 	}
 
 	@Override
 	protected List<String> getWorkspaceBundles() throws CoreException {
 		List selectedProjects = BugProjectUtil.getWSBugProjectNames();
-		String launchAll = getSystemProperty(configuration, PROP_LAUNCH_ALL, "true");
+		String launchAll = getSystemProperty(configuration, PROP_LAUNCH_ALL,
+				"true");
 		if (!launchAll.equals("true"))
-			selectedProjects = configuration.getAttribute(ATTR_LAUNCH_PROJECTS, BugProjectUtil.getWSBugProjectNames());
+			selectedProjects = configuration.getAttribute(ATTR_LAUNCH_PROJECTS,
+					BugProjectUtil.getWSBugProjectNames());
 		return selectedProjects;
-	}
-
-	public void handleDebugEvents(DebugEvent[] arg0) {
-		DebugEvent event = arg0[0];
-		if (event.getKind() == DebugEvent.TERMINATE) {
-			if (BugConnectionManager.getInstance().removeVirtualBugConnection()) {
-				DragonflyActivator activator = DragonflyActivator.getDefault();
-				if (activator != null) {
-					activator.setVirtualBugRemovedByTerminate(true);
-				}
-			}			
-		}
 	}
 }
