@@ -23,15 +23,15 @@ public class Client {
 	public static final String CMD_MODULE_LIST = "ML";
 	public static final String CMD_GOODBYE = "GB";
 	
-	private Socket socket;
+	/*private Socket socket;
 	private PrintWriter out;
-	private BufferedReader in;
+	private BufferedReader in;*/
+	private final String host;
+	private final int port;
 
 	private Client(String host, int port) throws UnknownHostException, IOException {
-		socket = new Socket(host, port);
-		out = new PrintWriter(socket.getOutputStream(), true);
-		in = new BufferedReader(new InputStreamReader(
-		                            socket.getInputStream()));
+		this.host = host;
+		this.port = port;
 	}
 	
 	/**
@@ -78,10 +78,14 @@ public class Client {
 	}
 	
 	private String getResponse(String cmd) throws IOException {
-		System.out.println("+++ Client sending " + cmd);
+		Socket socket = new Socket(host, port);
+		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+		                            socket.getInputStream()));
+		
 		out.println(cmd);
 		String response = in.readLine();
-		System.out.println("+++ Client received " + response);
+		socket.close();
 		
 		return response;
 	}
@@ -90,11 +94,7 @@ public class Client {
 	 * Terminate connection to server.
 	 */
 	public void dispose() {
-		out.close();
-		try {
-			socket.close();
-		} catch (IOException e) {			
-		}
+		
 	}
 	
 	/**
