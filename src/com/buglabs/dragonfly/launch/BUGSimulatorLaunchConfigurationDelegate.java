@@ -128,7 +128,6 @@ public class BUGSimulatorLaunchConfigurationDelegate extends FelixLaunchConfigur
 		return selectedProjects;
 	}
 
-	@Override
 	public void handleDebugEvents(DebugEvent[] arg0) {
 		DebugEvent event = arg0[0];
 		if (event.getKind() == DebugEvent.TERMINATE) {
