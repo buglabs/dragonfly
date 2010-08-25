@@ -51,6 +51,7 @@ public class Server extends Thread {
 			try {
 				Thread.sleep(REQUEST_LOOP_SLEEP_INTERVAL_MILLIS);
 				if (Thread.interrupted()) {
+					System.out.println("+++ Server was interrupted, exiting.");
 					exit = true;
 					return;
 				}
