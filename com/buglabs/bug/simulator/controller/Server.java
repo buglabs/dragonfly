@@ -47,8 +47,9 @@ public class Server extends Thread {
 	@Override
 	public void run() {
 		boolean exit = false;
-		while (!exit) {
-			try {
+		try {
+			while (!exit) {
+
 				Thread.sleep(REQUEST_LOOP_SLEEP_INTERVAL_MILLIS);
 				if (Thread.interrupted()) {
 					System.out.println("+++ Server was interrupted, exiting.");
@@ -66,39 +67,40 @@ public class Server extends Thread {
 				String inputLine, outputLine;
 				ControllerProtocol protocol = new ControllerProtocol(context);
 
-				while ((inputLine = in.readLine()) != null) {
-					try {
-						System.out.println("+++ Server Recieved: " + inputLine);
-						outputLine = protocol.processInput(inputLine);
+				inputLine = in.readLine();
 
-						if (outputLine.equals(ControllerProtocol.CMD_GOODBYE)) {
-							clientSocket.close();
-							break;
-						}
-						System.out.println("+++ Server responding with: "
-								+ outputLine.trim());
-						out.println(outputLine.trim());
-						System.out.println("+++ Server response complete.");
-					} catch (Exception e) {
-						out.println(ControllerProtocol.CMD_ERROR_RESPONSE);
-					}
-				}
-			} catch (InterruptedException e) {
-				log.log(LogService.LOG_INFO,
-						"Controller server has been shutdown.");
-			} catch (IOException e) {
-				log.log(LogService.LOG_ERROR,
-						"An IO error occurred in the controller server.", e);
-			} finally {
 				try {
-					exit = true;
-					serverSocket.close();
-					serverSocket = null;
-					log.log(LogService.LOG_INFO, "Shutdown of "
-							+ this.getClass().getName() + " complete.");
-					return;
-				} catch (IOException e) {
+					System.out.println("+++ Server Recieved: " + inputLine);
+					outputLine = protocol.processInput(inputLine);
+
+					if (outputLine.equals(ControllerProtocol.CMD_GOODBYE)) {
+						clientSocket.close();
+						break;
+					}
+					System.out.println("+++ Server responding with: "
+							+ outputLine.trim());
+					out.println(outputLine.trim());
+					System.out.println("+++ Server response complete.");
+					out.close();
+					clientSocket.close();
+				} catch (Exception e) {
+					out.println(ControllerProtocol.CMD_ERROR_RESPONSE);
 				}
+			}
+		} catch (InterruptedException e) {
+			log.log(LogService.LOG_INFO, "Controller server has been shutdown.");
+		} catch (IOException e) {
+			log.log(LogService.LOG_ERROR,
+					"An IO error occurred in the controller server.", e);
+		} finally {
+			try {
+				exit = true;
+				serverSocket.close();
+				serverSocket = null;
+				log.log(LogService.LOG_INFO, "Shutdown of "
+						+ this.getClass().getName() + " complete.");
+				return;
+			} catch (IOException e) {
 			}
 		}
 	}
