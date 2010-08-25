@@ -78,8 +78,10 @@ public class Client {
 	}
 	
 	private String getResponse(String cmd) throws IOException {
+		System.out.println("+++ Client sending " + cmd);
 		out.println(cmd);
 		String response = in.readLine();
+		System.out.println("+++ Client received " + response);
 		
 		return response;
 	}
