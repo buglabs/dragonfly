@@ -57,9 +57,7 @@ public class Server extends Thread {
 					return;
 				}
 
-				System.out.println("+++ Server waiting for a client.");
 				Socket clientSocket = serverSocket.accept();
-				System.out.println("+++ Server accepted a client.");
 				PrintWriter out = new PrintWriter(
 						clientSocket.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -70,17 +68,15 @@ public class Server extends Thread {
 				inputLine = in.readLine();
 
 				try {
-					System.out.println("+++ Server Recieved: " + inputLine);
 					outputLine = protocol.processInput(inputLine);
 
 					if (outputLine.equals(ControllerProtocol.CMD_GOODBYE)) {
 						clientSocket.close();
 						break;
 					}
-					System.out.println("+++ Server responding with: "
-							+ outputLine.trim());
+
 					out.println(outputLine.trim());
-					System.out.println("+++ Server response complete.");
+					
 					out.close();
 					clientSocket.close();
 				} catch (Exception e) {
