@@ -14,15 +14,21 @@ import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.util.LogServiceUtil;
 
 public class GPSActivator implements BundleActivator, IModletFactory {
+	private static GPSActivator inst;
+
 	private ServiceRegistration sr;
 
 	private LogService logService;
 
+	private BundleContext context;
+
 	public void start(BundleContext context) throws Exception {
+		this.context = context;
 		Dictionary dict = new Hashtable();
 		dict.put("Modlet Provider", getName());
 		dict.put("Module", getModuleId());
-
+		inst = this;
+		
 		sr = context.registerService(IModletFactory.class.getName(), this, dict);
 		logService = LogServiceUtil.getLogService(context);
 	}
@@ -53,4 +59,11 @@ public class GPSActivator implements BundleActivator, IModletFactory {
 		return "2.0.0";
 	}
 
+	public static GPSActivator getInstance() {
+		return inst;
+	}
+
+	public BundleContext getBundleContext() {	
+		return context;
+	}
 }
