@@ -53,7 +53,7 @@ public class Client {
 	}
 	
 	/**
-	 * Add specifid module to slot.
+	 * Add specified module to slot.
 	 * @param module
 	 * @param slot
 	 * @return
@@ -77,6 +77,12 @@ public class Client {
 		return resp != null && resp.equals("OK");
 	}
 	
+	/**
+	 * Connect to the service, pass command and return the response.
+	 * @param cmd
+	 * @return
+	 * @throws IOException
+	 */
 	private String getResponse(String cmd) throws IOException {
 		Socket socket = new Socket(host, port);
 		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
