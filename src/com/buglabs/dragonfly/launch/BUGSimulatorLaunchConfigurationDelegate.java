@@ -17,8 +17,10 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TreeItem;
 
 import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
@@ -120,13 +122,17 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		Map m = new Hashtable();
 
 		m.put("bug.os.version", "2009.X-stable");
-		m.put("app.bundle.path", "/usr/share/java/apps");
 		m.put("org.osgi.service.http.port", "8082");
 		m.put("org.osgi.framework.storage.clean", "onFirstInit");
 		m.put("org.osgi.framework.os.name", "linux");
 		m.put("org.osgi.framework.processor", "armv7l");
 		m.put(PROP_VBUG, "true");
-		m.put(APP_DIR, getLaunchDirectory().toOSString());
+		
+		//This method generates a path should not be valid for Windows File class but actually is.
+		//Also the forward slash isn't magically stripped as the backslash is when the property is passed
+		//to the felix runtime.
+		String s = getLaunchDirectory().toPortableString();
+		m.put(APP_DIR, s);
 
 		return m;
 	}
