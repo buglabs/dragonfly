@@ -45,7 +45,7 @@ public class ConvertProjectActionDelegate implements IActionDelegate {
 
 			//Enable this action for BUG projects that do not have the PDE nature.  This should be all pre-2.0 BUG project types.
 			try {
-				if (!project.hasNature("org.eclipse.pde.PluginNature")) {
+				if (project != null && !project.hasNature("org.eclipse.pde.PluginNature")) {
 					action.setEnabled(true);
 					return;
 				}
