@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.buglabs.dragonfly.feature_2.0.6.qualifier.jar" id="com.buglabs.dragonfly.feature" version="2.0.6.qualifier">
+   <feature url="features/com.buglabs.dragonfly.cdt.feature_2.0.7.qualifier.jar" id="com.buglabs.dragonfly.cdt.feature" version="2.0.7.qualifier">
+      <category name="Optional Components"/>
+   </feature>
+   <feature url="features/com.buglabs.dragonfly.dm.feature_2.0.7.qualifier.jar" id="com.buglabs.dragonfly.dm.feature" version="2.0.7.qualifier">
+      <category name="Optional Components"/>
+   </feature>
+   <feature url="features/com.buglabs.dragonfly.feature_2.0.7.qualifier.jar" id="com.buglabs.dragonfly.feature" version="2.0.7.qualifier">
       <category name="Dragonfly SDK"/>
-   </feature>
-   <feature url="features/com.buglabs.dragonfly.cdt.feature_2.0.6.qualifier.jar" id="com.buglabs.dragonfly.cdt.feature" version="2.0.6.qualifier">
-      <category name="Optional Components"/>
-   </feature>
-   <feature url="features/com.buglabs.dragonfly.dm.feature_2.0.6.qualifier.jar" id="com.buglabs.dragonfly.dm.feature" version="2.0.6.qualifier">
-      <category name="Optional Components"/>
    </feature>
    <category-def name="Dragonfly SDK" label="Dragonfly SDK"/>
    <category-def name="Optional Components" label="Optional Components (Alpha)"/>
