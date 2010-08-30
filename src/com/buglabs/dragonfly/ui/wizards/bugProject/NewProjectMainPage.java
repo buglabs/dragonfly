@@ -68,7 +68,7 @@ public class NewProjectMainPage extends WizardPage {
 				if (cs[i] == ' ' || cs[i] == '_') {
 					continue;
 				}
-				if (!Character.isLetterOrDigit(cs[i])) {
+				if (!Character.isLetterOrDigit(cs[i]) && cs[i] != '.') {
 					setErrorMessage("Invalid project name.");
 					return false;
 				}
