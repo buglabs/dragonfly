@@ -3,6 +3,7 @@ package com.buglabs.bug.sysfs;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -13,6 +14,8 @@ import java.io.IOException;
 public abstract class SysfsNode {
 
 	protected final File root;
+	private static final String CRLF = System.getProperty("line.separator");
+	//private static final LogService log = LogServiceUtil.getLogService(Activator.getDefault().getBundleContext());
 
 	public SysfsNode(File root) {
 		if (!root.exists() || !root.isDirectory()) {
@@ -20,7 +23,6 @@ public abstract class SysfsNode {
 		}
 		
 		this.root = root;
-		throw new RuntimeException(this.getClass().getName() + " is not available in Bug Simulator.");
 	}
 	
 	/**
@@ -109,6 +111,19 @@ public abstract class SysfsNode {
 			//Just ignore errors and return null;
 			return null;
 		}
+	}
 	
+
+	/**
+	 * Write a line to a file.
+	 * @param file
+	 * @param line
+	 * @throws IOException
+	 */
+	protected void println(File file, String line) throws IOException {
+		//TODO consider caching here.
+		FileWriter fos = new FileWriter(file);
+		fos.write(line);
+		fos.close();
 	}
 }
