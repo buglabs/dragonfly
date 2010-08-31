@@ -27,14 +27,31 @@
  *******************************************************************************/
 package com.buglabs.bug.input.pub;
 
+import org.osgi.service.log.LogService;
+
 import com.buglabs.device.IButtonEventListener;
 import com.buglabs.device.IButtonEventProvider;
 
-public class InputEventProvider implements IButtonEventProvider {
+/**
+ * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * @author kgilmer
+ *
+ */
+public class InputEventProvider extends Thread implements IButtonEventProvider {
 
+	public InputEventProvider(String inputDevice, LogService log) {
+		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	}
+	
 	public void addListener(IButtonEventListener listener) {		
+		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
 	}
 
-	public void removeListener(IButtonEventListener listener) {		
+	public void removeListener(IButtonEventListener listener) {
+		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	}
+	
+	public void tearDown() {
+		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
 	}
 }
