@@ -32,12 +32,9 @@ import com.buglabs.device.IButtonEventProvider;
 
 public class InputEventProvider implements IButtonEventProvider {
 
-	@Override
 	public void addListener(IButtonEventListener listener) {		
 	}
 
-	@Override
 	public void removeListener(IButtonEventListener listener) {		
 	}
-
 }
