@@ -6,6 +6,7 @@ import java.io.IOException;
  * Provides control of BUGbase LEDs.
  * 
  * @author aroman
+ * @deprecated
  * 
  */
 public interface IBUGBaseControl {

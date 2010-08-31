@@ -28,24 +28,37 @@
 package com.buglabs.bug.base.pub;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
- * @deprecated
- *
+ * Provides control of BUGbase 20 LEDs.
+ * 
  */
-public interface IBaseAudioPlayer {
+public interface IBUG20BaseControl {
+	public static int COLOR_BLUE = 0;
+	public static int COLOR_RED = 1;
+	public static int COLOR_GREEN = 2;
+
+	public static int LED_BATTERY = 0;
+	public static int LED_POWER = 1;
+	public static int LED_WLAN = 2;
+	public static int LED_BLUETOOTH = 3;
+	
 	/**
-	 * Plays a wave InputStream at the specified location.
+	 * Turn on or off a specific color on a multi color LED.
 	 * 
-	 * @param wavInputStream is a wav-encoded input stream
-	 * 			   to play.  Must be encoded as 44100 hz, stereo, 16 bit, big-endian
-	 * As it is the only format that the base audio driver supports 
-	 */ 
-
-	public void play(InputStream wavInputStream) throws IOException;
+	 * @param led IBUGBaseControl.LED_*
+	 * @param color  IBUGBaseControl.COLOR_*
+	 * @param on TRUE if LED is to be on, false otherwise.
+	 * @throws IOException is thrown if invalid LED or color value is passed
+	 */
+	public void setLEDColor(int led, int color, boolean on) throws IOException;
 	
-	
-	
-
+	/**
+	 * Set brightness level for PWM-controlled LED.
+	 * 
+	 * @param led IBUGBaseControl.LED_*
+	 * @param brightness 0 - 255
+	 * @throws IOException is thrown if invalid LED value is passed.
+	 */
+	public void setLEDBrightness(int led, int brightness) throws IOException;
 }
