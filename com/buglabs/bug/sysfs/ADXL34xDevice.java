@@ -34,10 +34,9 @@ public class ADXL34xDevice extends SysfsNode {
 	/**
 	 * @param root file root in sysfs for device entry.
 	 */
-	protected ADXL34xDevice(File root) {
+	public ADXL34xDevice(File root) {
 		super(root);
 		slot = Integer.parseInt(root.getName().substring(0, 1)) - 4;	
-		throw new RuntimeException(this.getClass().getName() + " is not available in Bug Simulator.");
 	}
 	
 	/**
