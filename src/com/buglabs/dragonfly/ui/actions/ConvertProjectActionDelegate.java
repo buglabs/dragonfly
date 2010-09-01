@@ -30,6 +30,7 @@ import org.eclipse.ui.IActionDelegate;
 
 import com.buglabs.dragonfly.felix.ConciergeUtils;
 import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.util.UIUtils;
 
 public class ConvertProjectActionDelegate implements IActionDelegate {
 
@@ -50,8 +51,7 @@ public class ConvertProjectActionDelegate implements IActionDelegate {
 					return;
 				}
 			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				UIUtils.handleNonvisualError("Unable to determine action enablement.", e);
 			}
 		}
 	}
