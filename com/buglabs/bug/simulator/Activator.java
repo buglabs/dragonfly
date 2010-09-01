@@ -51,6 +51,7 @@ import com.buglabs.application.ServiceTrackerHelper;
 import com.buglabs.bug.base.ShellService;
 import com.buglabs.bug.base.SupportServlet;
 import com.buglabs.bug.base.VBUGSupportInfo;
+import com.buglabs.bug.base.pub.IBUG20BaseControl;
 import com.buglabs.bug.base.pub.IShellService;
 import com.buglabs.bug.base.pub.ITimeProvider;
 import com.buglabs.bug.bmi.PipeReader;
@@ -127,6 +128,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private VHActivator vhActivator;
 
 	private CameraActivator cameraActivator;
+
+	private ServiceRegistration baseControlReg;
 
 	public void start(final BundleContext context) throws Exception {
 		//Basic setup ********************************************
@@ -205,11 +208,14 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		} catch (BindException e) {
 			logService.log(LogService.LOG_ERROR, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
 		}
+		
+		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, null);
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		controllerServer.shutdown();
 		shellCommandReg.unregister();
+		baseControlReg.unregister();
 		
 		if (cameraActivator != null) {
 			cameraActivator.stop(context);

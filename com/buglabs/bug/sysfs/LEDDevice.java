@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.buglabs.bug.sysfs.SysfsNode;
 
 /**
- * A class to control a single-color or multi-color LED.  
+ * A class to control a single-color or multi-color LED.
  * 
  * @author kgilmer
  * 
@@ -26,7 +26,7 @@ public class LEDDevice extends SysfsNode {
 	 * Constant for single color LED
 	 */
 	public static final int COLOR_MONO = 0;
-	
+
 	/**
 	 * Color constants for tri color LEDs.
 	 */
@@ -35,31 +35,18 @@ public class LEDDevice extends SysfsNode {
 	public static final int COLOR_BLUE = 2;
 
 	/**
-	 * Used in the construction of file paths for LED sysfs API in Linux .
-	 */
-	private static final String FILE_BRIGHTNESS = "brightness";
-	private static final String FILE_TRIGGER = "trigger";
-	private static final String FILE_MAX_BRIGHTNESS = "max_brightness";
-	private static final String PLATFORM_NAME = "omap3bug";
-
-	/**
 	 * Name of LED in sysfs
 	 */
 	private final String name;
-	
+
 	/**
 	 * Number of colors LED supports
 	 */
 	private final int type;
-	
-	
-	/**
-	 * Arrays to access files to control and read LED state.
-	 */
-	private final File[] ledBase;
-	private final File[] ledBrightness;
-	private final File[] ledMaxBrightness;
-	private final File[] ledTrigger;
+	private int[] brightness;
+	private int[] maxBrightness;
+	private String[] trigger;
+	private int ledCount;
 
 	/**
 	 * Constructor for mono LED.
@@ -73,17 +60,16 @@ public class LEDDevice extends SysfsNode {
 		this.name = name;
 		this.type = TYPE_MONO_COLOR;
 
-		ledBase = new File[1];
-		ledBase[0] = new File(root, createLEDFilename(name, color));
+		ledCount = 1;
 
-		ledBrightness = new File[1];
-		ledBrightness[0] = new File(ledBase[0], FILE_BRIGHTNESS);
+		this.brightness = new int[ledCount];
+		this.brightness[0] = 0;
 
-		ledMaxBrightness = new File[1];
-		ledMaxBrightness[0] = new File(ledBase[0], FILE_MAX_BRIGHTNESS);
+		this.maxBrightness = new int[ledCount];
+		this.maxBrightness[0] = 255;
 
-		ledTrigger = new File[1];
-		ledTrigger[0] = new File(ledBase[0], FILE_TRIGGER);
+		this.trigger = new String[ledCount];
+		this.trigger[0] = "none";
 	}
 
 	/**
@@ -97,25 +83,22 @@ public class LEDDevice extends SysfsNode {
 		this.name = name;
 		this.type = TYPE_TRI_COLOR;
 
-		ledBase = new File[3];
-		ledBase[COLOR_RED] = new File(root, createLEDFilename(name, "red"));
-		ledBase[COLOR_GREEN] = new File(root, createLEDFilename(name, "green"));
-		ledBase[COLOR_BLUE] = new File(root, createLEDFilename(name, "blue"));
+		ledCount = 3;
 
-		ledBrightness = new File[3];
-		ledBrightness[COLOR_RED] = new File(ledBase[COLOR_RED], FILE_BRIGHTNESS);
-		ledBrightness[COLOR_GREEN] = new File(ledBase[COLOR_GREEN], FILE_BRIGHTNESS);
-		ledBrightness[COLOR_BLUE] = new File(ledBase[COLOR_BLUE], FILE_BRIGHTNESS);
-		
-		ledMaxBrightness = new File[3];
-		ledMaxBrightness[COLOR_RED] = new File(ledBase[COLOR_RED], FILE_MAX_BRIGHTNESS);
-		ledMaxBrightness[COLOR_GREEN] = new File(ledBase[COLOR_GREEN], FILE_MAX_BRIGHTNESS);
-		ledMaxBrightness[COLOR_BLUE] = new File(ledBase[COLOR_BLUE], FILE_MAX_BRIGHTNESS);
+		this.brightness = new int[ledCount];
+		this.brightness[0] = 0;
+		this.brightness[1] = 0;
+		this.brightness[2] = 0;
 
-		ledTrigger = new File[3];
-		ledTrigger[COLOR_RED] = new File(ledBase[COLOR_RED], FILE_TRIGGER);
-		ledTrigger[COLOR_GREEN] = new File(ledBase[COLOR_GREEN], FILE_TRIGGER);
-		ledTrigger[COLOR_BLUE] = new File(ledBase[COLOR_BLUE], FILE_TRIGGER);
+		this.maxBrightness = new int[ledCount];
+		this.maxBrightness[0] = 255;
+		this.maxBrightness[1] = 255;
+		this.maxBrightness[2] = 255;
+
+		this.trigger = new String[ledCount];
+		this.trigger[0] = "none";
+		this.trigger[1] = "none";
+		this.trigger[2] = "none";
 	}
 
 	/**
@@ -124,7 +107,7 @@ public class LEDDevice extends SysfsNode {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @return type of LED
 	 */
@@ -133,22 +116,14 @@ public class LEDDevice extends SysfsNode {
 	}
 
 	/**
-	 * @param n
-	 * @param color
-	 * @return String representing directory name for LED control.
-	 */
-	private String createLEDFilename(String n, String color) {
-		return PLATFORM_NAME + ":" + color + ":" + n;
-	}
-
-	/**
 	 * Set the brightness for the specified LED.
+	 * 
 	 * @param color
 	 * @param brightness
 	 * @throws IOException
 	 */
 	public void setBrightness(int color, int brightness) throws IOException {
-		println(ledBrightness[color], "" + brightness);
+		this.brightness[color] = brightness;
 	}
 
 	/**
@@ -156,59 +131,46 @@ public class LEDDevice extends SysfsNode {
 	 * @return the current brightness of the specified LED.
 	 */
 	public int getBrightness(int color) {
-		return Integer.parseInt(getFirstLineofFile(ledBrightness[color]));
+		return this.brightness[color];
 	}
 
 	/**
 	 * Set a trigger on a LED.
+	 * 
 	 * @param color
 	 * @param trigger
 	 * @throws IOException
 	 */
 	public void setTrigger(int color, String trigger) throws IOException {
-		println(ledTrigger[color], trigger);
+		this.trigger[color] = trigger;
 	}
 
 	/**
 	 * @param color
-	 * @return The LED trigger that is currently set.  "none" means no trigger is active.
+	 * @return The LED trigger that is currently set. "none" means no trigger is
+	 *         active.
 	 * @throws IOException
 	 */
 	public String getLEDTrigger(int color) throws IOException {
-		String line = getFirstLineofFile(ledTrigger[color]);
-
-		String[] elems = line.split("[");
-		elems = elems[1].split("]");
-
-		return elems[0];
+		return this.trigger[color];
 	}
 
 	/**
-	 * Get the Trigger types this LED supports.  These trigger types can be set using setLEDTrigger.
+	 * Get the Trigger types this LED supports. These trigger types can be set
+	 * using setLEDTrigger.
+	 * 
 	 * @param color
 	 * @return
 	 * @throws IOException
 	 */
 	public String[] getLEDTriggers(int color) throws IOException {
-		String line = getFirstLineofFile(ledTrigger[color]);
-
-		String[] elems = line.split(" ");
-
-		for (int i = 0; i < elems.length; ++i) {
-			if (elems[i].startsWith("[")) {
-				elems[i] = elems[i].substring(1, elems[i].length() - 1);
-				// Only one trigger is set, so we only have to strip this once.
-				break;
-			}
-		}
-
-		return elems;
+		return "none nand-disk bq27200-0-charging-or-full bq27200-0-charging bq27200-0-full mmc0 mmc1 mmc2 phy0rx phy0tx phy0assoc".split(" ");
 	}
-	
+
 	/**
-	 * @return The number of colors this LED supports.  Zero based.
+	 * @return The number of colors this LED supports. Zero based.
 	 */
 	public int getColorCount() {
-		return ledBase.length;
+		return ledCount;
 	}
 }

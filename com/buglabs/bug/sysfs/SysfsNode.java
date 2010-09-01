@@ -13,16 +13,12 @@ import java.io.IOException;
  */
 public abstract class SysfsNode {
 
-	protected final File root;
+	protected File root;
 	private static final String CRLF = System.getProperty("line.separator");
 	//private static final LogService log = LogServiceUtil.getLogService(Activator.getDefault().getBundleContext());
 
 	public SysfsNode(File root) {
-		if (!root.exists() || !root.isDirectory()) {
-			throw new IllegalArgumentException("Invalid sysfs directory: " + root.getAbsolutePath());
-		}
-		
-		this.root = root;
+	
 	}
 	
 	/**
