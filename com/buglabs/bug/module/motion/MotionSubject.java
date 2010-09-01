@@ -7,6 +7,9 @@ import java.util.List;
 import com.buglabs.bug.module.motion.pub.IMotionObserver;
 import com.buglabs.bug.module.motion.pub.IMotionSubject;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class MotionSubject implements IMotionSubject {
 
 	private List motionObservers;

@@ -36,6 +36,9 @@ import com.buglabs.util.IStreamMultiplexerListener;
 import com.buglabs.util.RemoteOSGiServiceConstants;
 import com.buglabs.util.StreamMultiplexerEvent;
  
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleControl, IStreamMultiplexerListener, IModuleLEDController {
 
 	private BundleContext context;

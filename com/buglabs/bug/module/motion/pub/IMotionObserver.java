@@ -5,6 +5,7 @@ package com.buglabs.bug.module.motion.pub;
  * notified when motion events occur.
  * 
  * @author aroman
+ * @deprecated This module is not supported in BUG 2.0
  * 
  */
 public interface IMotionObserver {

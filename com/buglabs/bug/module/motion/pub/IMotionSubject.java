@@ -3,6 +3,7 @@ package com.buglabs.bug.module.motion.pub;
 /**
  * Register for notification on motion events.
  * @author aroman
+ * @deprecated This module is not supported in BUG 2.0
  *
  */
 public interface IMotionSubject {

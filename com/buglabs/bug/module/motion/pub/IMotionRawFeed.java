@@ -3,6 +3,9 @@ package com.buglabs.bug.module.motion.pub;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public interface IMotionRawFeed {
 
 	/**

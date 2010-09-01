@@ -10,6 +10,7 @@ import com.buglabs.bug.module.audio.pub.IModuleAudioPlayer;
 
 /**
  * This is a stub audio player with no functionality.
+ * @deprecated This module is not supported in BUG 2.0
  * @author kgilmer
  *
  */

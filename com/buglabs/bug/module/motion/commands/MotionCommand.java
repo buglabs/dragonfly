@@ -8,6 +8,9 @@ import org.osgi.framework.BundleContext;
 import com.buglabs.bug.module.motion.MotionSubject;
 import com.buglabs.osgi.shell.ICommand;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class MotionCommand implements ICommand {
 
 	MotionSubject motionSubject;

@@ -38,6 +38,10 @@ import com.buglabs.bug.module.pub.BMIModuleProperties;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0
+ *
+ */
 public class AudioActivator implements BundleActivator, IModletFactory {
 
 	private BundleContext context;

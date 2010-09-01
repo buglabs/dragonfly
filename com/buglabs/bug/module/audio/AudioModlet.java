@@ -52,6 +52,10 @@ import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.util.LogServiceUtil;
 import com.buglabs.util.RemoteOSGiServiceConstants;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0
+ *
+ */
 public class AudioModlet implements IModlet, IModuleControl {
 
     protected static final String PROPERTY_MODULE_NAME = "moduleName";

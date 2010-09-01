@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import com.buglabs.module.IModuleLEDController;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public interface IAudioModuleControl extends IModuleLEDController  {
 	public int setLEDGreen(boolean state) throws IOException;
 

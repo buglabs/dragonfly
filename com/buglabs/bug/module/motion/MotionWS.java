@@ -12,6 +12,9 @@ import com.buglabs.services.ws.WSResponse;
 import com.buglabs.util.SelfReferenceException;
 import com.buglabs.util.XmlNode;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class MotionWS implements PublicWSProvider2, IMotionObserver {
 	private Date lastMotion;
 	private String serviceName = "Motion";

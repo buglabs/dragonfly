@@ -11,7 +11,7 @@ import com.buglabs.util.XmlNode;
 /**
  * A class that exposes WS API for audio module
  * @author akravets
- *
+ * @deprecated This module is not supported in BUG 2.0
  */
 public class AudioWS implements PublicWSProvider2 {
 

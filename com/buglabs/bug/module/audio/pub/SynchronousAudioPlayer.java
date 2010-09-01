@@ -35,7 +35,7 @@ import java.io.InputStream;
  * service provided by an Audio Module.
  * 
  * @author kgilmer
- * 
+ * @deprecated This module is not supported in BUG 2.0
  */
 public class SynchronousAudioPlayer {
 

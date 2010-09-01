@@ -179,14 +179,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		gsmActivator = new GSMActivator();
 		gsmActivator.start(context);
 		
-		//com.buglabs.bug.module.audio ***********************
-		audioActivator = new AudioActivator();
-		audioActivator.start(context);
-		
-		//com.buglabs.bug.module.motion ***********************
-		motionActivator = new MotionActivator();
-		motionActivator.start(context);
-		
 		//com.buglabs.bug.module.lcd ***********************
 		lcdActivator = new LCDActivator();
 		lcdActivator.start(context);

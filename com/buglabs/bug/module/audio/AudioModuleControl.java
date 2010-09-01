@@ -36,7 +36,7 @@ import com.buglabs.module.IModuleLEDController;
 
 /**
  * Current implementation of AudioModuleControl just prints log information
- * 
+ * @deprecated This module is not supported in BUG 2.0
  * @author brian
  *
  */

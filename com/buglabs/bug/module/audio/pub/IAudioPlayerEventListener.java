@@ -30,6 +30,7 @@ package com.buglabs.bug.module.audio.pub;
 /**
  * Listeners for audio events.
  * @author kgilmer
+ * @deprecated This module is not supported in BUG 2.0
  *
  */
 public interface IAudioPlayerEventListener {

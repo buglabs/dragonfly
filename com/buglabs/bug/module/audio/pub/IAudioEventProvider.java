@@ -19,6 +19,7 @@ import com.buglabs.device.IButtonEventProvider;
  * for more information.
  * 
  * @author jconnolly
+  * @deprecated This module is not supported in BUG 2.0
  * 
  */
 public interface IAudioEventProvider extends IButtonEventProvider {

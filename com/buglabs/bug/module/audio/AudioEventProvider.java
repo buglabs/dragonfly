@@ -37,6 +37,9 @@ import com.buglabs.bug.module.audio.pub.IAudioEventProvider;
 import com.buglabs.device.ButtonEvent;
 import com.buglabs.device.IButtonEventListener;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class AudioEventProvider implements IAudioEventProvider, KeyListener {
     
     private List buttonEventListeners;

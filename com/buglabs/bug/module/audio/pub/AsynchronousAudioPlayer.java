@@ -32,7 +32,7 @@ import java.io.InputStream;
 
 /**
  * This audio player plays audio streams asynchronously.  
- * 
+ * @deprecated This module is not supported in BUG 2.0
  * @author kgilmer
  * 
  */

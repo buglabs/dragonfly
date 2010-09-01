@@ -1,5 +1,8 @@
 package com.buglabs.bug.module.motion.pub;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class InputEvent {
 	public TimeVal time;
 	public int type;

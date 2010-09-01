@@ -6,6 +6,9 @@ import java.util.List;
 import com.buglabs.bug.module.motion.MotionSubject;
 import com.buglabs.osgi.shell.IShellCommandProvider;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class MotionShellCommandProvider implements IShellCommandProvider {
 
 	MotionSubject subject;

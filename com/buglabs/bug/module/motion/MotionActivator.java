@@ -13,6 +13,9 @@ import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.util.LogServiceUtil;
 
+/**
+ * @deprecated This module is not supported in BUG 2.0 *
+ */
 public class MotionActivator implements BundleActivator, IModletFactory {
 	private BundleContext context;
 
