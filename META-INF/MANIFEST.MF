@@ -12,7 +12,8 @@ Export-Package:
  com.buglabs.bug.module.vonhippel.pub, 
  com.buglabs.bug.module.camera.pub,
  com.buglabs.bug.input.pub,
- com.buglabs.bug.jni.common
+ com.buglabs.bug.jni.common,
+ com.buglabs.bug.sysfs
 Bundle-Vendor: Bug Labs, Inc.
 Manifest-Version: 1.0
 Bundle-Version: 1.0.0
