@@ -244,6 +244,10 @@ and
 limitations under the License.
    </license>
 
+   <requires>
+      <import feature="org.eclipse.cdt" version="7.0.0.201006141710" match="compatible"/>
+   </requires>
+
    <plugin
          id="com.buglabs.dragonfly.cdt"
          download-size="0"
