@@ -22,6 +22,8 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.ManhattanConnectionRouter;
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
@@ -36,6 +38,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -360,7 +363,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 
 		Figure centerFigure = new Figure();
 
-		baseUnitFigure = new BugSelectableFigure();
+		baseUnitFigure = new BugSelectableFigure("Base");
 		if (isBUGConnected()) {
 			baseUnitFigure.setImage(imageRegistry.get(Activator.IMAGE_KEY_BASE_UNIT));
 			baseUnitFigure.setSelectedImage(imageRegistry.get(Activator.IMAGE_KEY_BASE_UNIT_SELECTED));
@@ -376,11 +379,11 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		moduleToFigure.put(bug, baseUnitFigure);
 
 		if (modules[0] != null) {
-			BugSelectableFigure moduleSlot0Figure = new BugSelectableFigure();
+			final BugSelectableFigure moduleSlot0Figure = new BugSelectableFigure("Slot0");
 			moduleSlot0Figure.setImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_0));
 			moduleSlot0Figure.setSelectedImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_0_SELECTED));
 			moduleSlot0Figure.setModel(modules[0]);
-			topLayer.add(moduleSlot0Figure, new RelativeLocator(baseUnitFigure, 0.327, 0.203));
+			topLayer.add(moduleSlot0Figure, new RelativeLocator(baseUnitFigure, 0.326, 0.190));
 			moduleToFigure.put(modules[0], moduleSlot0Figure);
 			moduleSlot0Figure.setName("Slot 0");
 			Label lblFigure = new Label(labelprovider.getText(modules[0]));
@@ -389,6 +392,19 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[0]));
+			lblFigure.addMouseListener(new MouseListener() {
+				public void mousePressed(MouseEvent me) {
+					if (me.button == 1) {
+						CanvasSelectionProvider.getDefault().setSelection(new StructuredSelection(moduleSlot0Figure));
+					}
+				}
+
+				public void mouseReleased(MouseEvent me) {
+				}
+
+				public void mouseDoubleClicked(MouseEvent me) {
+				}
+			});
 			lblFigure.setIconTextGap(5);
 			labelLayer.add(lblFigure, new RelativeLocator(moduleSlot0Figure, 0.1, -0.3));
 
@@ -405,12 +421,12 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		}
 
 		if (modules[1] != null) {
-			BugSelectableFigure moduleSlot1Figure = new BugSelectableFigure();
+			final BugSelectableFigure moduleSlot1Figure = new BugSelectableFigure("Slot1");
 			moduleSlot1Figure.setImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_1));
 			moduleSlot1Figure.setSelectedImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_1_SELECTED));
 			moduleSlot1Figure.setModel(modules[1]);
 
-			topLayer.add(moduleSlot1Figure, new RelativeLocator(baseUnitFigure, 0.674, 0.4295));
+			topLayer.add(moduleSlot1Figure, new RelativeLocator(baseUnitFigure, 0.670, 0.444));
 			moduleToFigure.put(modules[1], moduleSlot1Figure);
 
 			Label lblFigure = new Label(labelprovider.getText(modules[1]));
@@ -420,6 +436,19 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[1]));
+			lblFigure.addMouseListener(new MouseListener() {
+				public void mousePressed(MouseEvent me) {
+					if (me.button == 1) {
+						CanvasSelectionProvider.getDefault().setSelection(new StructuredSelection(moduleSlot1Figure));
+					}
+				}
+
+				public void mouseReleased(MouseEvent me) {
+				}
+
+				public void mouseDoubleClicked(MouseEvent me) {
+				}
+			});
 
 			PolylineConnection connection = new PolylineConnection();
 			connection.setLineWidth(2);
@@ -434,11 +463,11 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		}
 
 		if (modules[2] != null) {
-			BugSelectableFigure moduleSlot2Figure = new BugSelectableFigure();
+			final BugSelectableFigure moduleSlot2Figure = new BugSelectableFigure("Slot2");
 			moduleSlot2Figure.setImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_2));
 			moduleSlot2Figure.setSelectedImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_2_SELECTED));
 			moduleSlot2Figure.setModel(modules[2]);
-			bottomLayer.add(moduleSlot2Figure, new RelativeLocator(centerFigure, 0.328, .59));
+			bottomLayer.add(moduleSlot2Figure, new RelativeLocator(centerFigure, 0.329, .59));
 			moduleToFigure.put(modules[2], moduleSlot2Figure);
 			Label lblFigure = new Label(labelprovider.getText(modules[2]));
 			labelLayer.add(lblFigure, new RelativeLocator(moduleSlot2Figure, 0.1, 1.3));
@@ -446,6 +475,19 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[2]));
+			lblFigure.addMouseListener(new MouseListener() {
+				public void mousePressed(MouseEvent me) {
+					if (me.button == 1) {
+						CanvasSelectionProvider.getDefault().setSelection(new StructuredSelection(moduleSlot2Figure));
+					}
+				}
+
+				public void mouseReleased(MouseEvent me) {
+				}
+
+				public void mouseDoubleClicked(MouseEvent me) {
+				}
+			});
 
 			PolylineConnection connection = new PolylineConnection();
 			connection.setLineWidth(2);
@@ -460,11 +502,11 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		}
 
 		if (modules[3] != null) {
-			BugSelectableFigure moduleSlot3Figure = new BugSelectableFigure();
+			final BugSelectableFigure moduleSlot3Figure = new BugSelectableFigure("Slot3");
 			moduleSlot3Figure.setImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_3));
 			moduleSlot3Figure.setSelectedImage(imageRegistry.get(Activator.IMAGE_KEY_MODULE_SLOT_3_SELECTED));
 			moduleSlot3Figure.setModel(modules[3]);
-			bottomLayer.add(moduleSlot3Figure, new RelativeLocator(centerFigure, 0.668, 0.82));
+			bottomLayer.add(moduleSlot3Figure, new RelativeLocator(centerFigure, 0.670, 0.849));
 			moduleToFigure.put(modules[3], moduleSlot3Figure);
 
 			Label lblFigure = new Label(labelprovider.getText(modules[3]));
@@ -473,6 +515,19 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 			lblFigure.setBackgroundColor(ColorConstants.white);
 			lblFigure.setOpaque(true);
 			lblFigure.setIcon(labelprovider.getImage(modules[3]));
+			lblFigure.addMouseListener(new MouseListener() {
+				public void mousePressed(MouseEvent me) {
+					if (me.button == 1) {
+						CanvasSelectionProvider.getDefault().setSelection(new StructuredSelection(moduleSlot3Figure));
+					}
+				}
+
+				public void mouseReleased(MouseEvent me) {
+				}
+
+				public void mouseDoubleClicked(MouseEvent me) {
+				}
+			});
 
 			PolylineConnection connection = new PolylineConnection();
 			connection.setLineWidth(2);
@@ -605,10 +660,11 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		if (selection instanceof IStructuredSelection) {
 			Object obj = ((IStructuredSelection) selection).getFirstElement();
 
+			System.out.println(obj.getClass().getName());
 			if (obj instanceof BaseTreeNode) {
 				BaseTreeNode mod = (BaseTreeNode) obj;
 				if (moduleToFigure != null) {
-					clearAllFigures();
+					clearAllFigureSelections();
 					BugSelectableFigure fig = (BugSelectableFigure) moduleToFigure.get(mod);
 					if (fig != null) {
 						fig.setFocus(true);
@@ -619,7 +675,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		}
 	}
 
-	private void clearAllFigures() {
+	private void clearAllFigureSelections() {
 		Iterator keys = moduleToFigure.keySet().iterator();
 		while (keys.hasNext()) {
 			BugSelectableFigure fig = (BugSelectableFigure) moduleToFigure.get(keys.next());

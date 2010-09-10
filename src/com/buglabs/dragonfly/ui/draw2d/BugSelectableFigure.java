@@ -28,7 +28,8 @@ public class BugSelectableFigure extends Figure implements ISelectionFigure {
 
 	private String name;
 
-	public BugSelectableFigure() {
+	public BugSelectableFigure(String name) {
+		this.name = name;
 		addMouseListener(new MouseListener() {
 
 			public void mousePressed(MouseEvent me) {
@@ -58,7 +59,6 @@ public class BugSelectableFigure extends Figure implements ISelectionFigure {
 	}
 
 	public boolean containsPoint(int x, int y) {
-
 		Point t = new Point(x, y);
 
 		translateFromParent(t);
@@ -69,6 +69,7 @@ public class BugSelectableFigure extends Figure implements ISelectionFigure {
 
 		if (id != null) {
 			int alpha = id.getPixel(t.x, t.y);
+
 			if (alpha != 0) {
 				return true;
 			}

@@ -36,27 +36,27 @@ import com.buglabs.dragonfly.util.UIUtils;
 
 public class Activator extends AbstractUIPlugin {
 
-	public static final String IMAGE_KEY_BASE_UNIT_SELECTED = "images/baseUnitSelected.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_BASE_UNIT_SELECTED = "images/BaseUnit_selected.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_BASE_UNIT = "images/baseUnit.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_BASE_UNIT = "images/BaseUnit.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_BASE_UNIT_DISCONNECTED = "images/baseUnitDisconnected.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_BASE_UNIT_DISCONNECTED = "images/BaseUnit_disconnected.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_MODULE_SLOT_0 = "images/upperLeftModule.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_MODULE_SLOT_0 = "images/Module.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_MODULE_SLOT_2 = "images/lowerLeftModule.gif"; //$NON-NLS-1$	
+	public static final String IMAGE_KEY_MODULE_SLOT_2 = "images/Module.png"; //$NON-NLS-1$	
 
-	public static final String IMAGE_KEY_MODULE_SLOT_1 = "images/upperRightModule.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_MODULE_SLOT_1 = "images/Module.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_MODULE_SLOT_3 = "images/lowerRightModule.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_MODULE_SLOT_3 = "images/Module.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_MODULE_SLOT_0_SELECTED = "images/upperLeftModuleSelected.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_MODULE_SLOT_0_SELECTED = "images/Module_selected.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_MODULE_SLOT_2_SELECTED = "images/lowerLeftModuleSelected.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_MODULE_SLOT_2_SELECTED = "images/Module_selected.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_MODULE_SLOT_1_SELECTED = "images/upperRightModuleSelected.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_MODULE_SLOT_1_SELECTED = "images/Module_selected.png"; //$NON-NLS-1$
 
-	public static final String IMAGE_KEY_MODULE_SLOT_3_SELECTED = "images/lowerRightModuleSelected.gif"; //$NON-NLS-1$
+	public static final String IMAGE_KEY_MODULE_SLOT_3_SELECTED = "images/Module_selected.png"; //$NON-NLS-1$
 
 	public static final String IMAGE_KEY_RATING_FULL = "icons/rating_full.gif"; //$NON-NLS-1$
 
@@ -307,13 +307,13 @@ public class Activator extends AbstractUIPlugin {
 		imageRegistry.put(IMAGE_KEY_BASE_UNIT_DISCONNECTED, getImageDescriptor(IMAGE_KEY_BASE_UNIT_DISCONNECTED).createImage());
 		imageRegistry.put(IMAGE_KEY_BASE_UNIT_SELECTED, getImageDescriptor(IMAGE_KEY_BASE_UNIT_SELECTED).createImage());
 		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_0, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_0).createImage());
-		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_1, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_1).createImage());
-		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_2, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_2).createImage());
-		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_3, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_3).createImage());
+		//imageRegistry.put(IMAGE_KEY_MODULE_SLOT_1, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_1).createImage());
+		//imageRegistry.put(IMAGE_KEY_MODULE_SLOT_2, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_2).createImage());
+		//imageRegistry.put(IMAGE_KEY_MODULE_SLOT_3, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_3).createImage());
 		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_0_SELECTED, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_0_SELECTED).createImage());
-		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_1_SELECTED, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_1_SELECTED).createImage());
-		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_2_SELECTED, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_2_SELECTED).createImage());
-		imageRegistry.put(IMAGE_KEY_MODULE_SLOT_3_SELECTED, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_3_SELECTED).createImage());
+		//imageRegistry.put(IMAGE_KEY_MODULE_SLOT_1_SELECTED, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_1_SELECTED).createImage());
+		//imageRegistry.put(IMAGE_KEY_MODULE_SLOT_2_SELECTED, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_2_SELECTED).createImage());
+		//imageRegistry.put(IMAGE_KEY_MODULE_SLOT_3_SELECTED, getImageDescriptor(IMAGE_KEY_MODULE_SLOT_3_SELECTED).createImage());
 		imageRegistry.put(IMAGE_KEY_LEFT_MODULE_SELECTED, getImageDescriptor(IMAGE_PATH_LEFT_MODULE_SELECTED).createImage());
 		imageRegistry.put(IMAGE_KEY_RIGHT_MODULE_SELECTED, getImageDescriptor(IMAGE_PATH_RIGHT_MODULE_SELECTED).createImage());
 		imageRegistry.put(IMAGE_COLOR_APP, getImageDescriptor(IMAGE_COLOR_APP).createImage());
