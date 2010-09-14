@@ -155,7 +155,7 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		}
 
 		if (is == null) {
-			is = LCDModlet.class.getResourceAsStream("accelerometer.log");
+			is = LCDModlet.class.getResourceAsStream("accelerometer.out");
 		}
 		
 		return is;
