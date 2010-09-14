@@ -176,20 +176,20 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		gpsActivator.start(context);
 		
 		//com.buglabs.bug.module.sierra ***********************
-		gsmActivator = new GSMActivator();
-		gsmActivator.start(context);
+		//gsmActivator = new GSMActivator();
+		//gsmActivator.start(context);
 		
 		//com.buglabs.bug.module.lcd ***********************
 		lcdActivator = new LCDActivator();
 		lcdActivator.start(context);
 		
 		//com.buglabs.bug.module.vonhippel ***********************
-		vhActivator = new VHActivator();
-		vhActivator.start(context);
+		//vhActivator = new VHActivator();
+		//vhActivator.start(context);
 		
-		//com.buglabs.bug.module.vonhippel ***********************
-		cameraActivator = new CameraActivator();
-		cameraActivator.start(context);
+		//com.buglabs.bug.module.camera ***********************
+		//cameraActivator = new CameraActivator();
+		//cameraActivator.start(context);
 		
 		//UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
