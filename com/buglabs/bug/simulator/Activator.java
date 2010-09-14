@@ -103,7 +103,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	private String pipeFilename;
 
-	private LogService logService;
+	private static LogService logService;
 
 	private Map modletFactories;
 
@@ -390,5 +390,9 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	protected Map getActiveModlets() {
 		return activeModlets;
+	}
+	
+	public static LogService getLogService() {
+		return logService;
 	}
 }

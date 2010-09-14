@@ -3,6 +3,9 @@ package com.buglabs.bug.sysfs;
 import java.io.File;
 import java.io.IOException;
 
+import org.osgi.service.log.LogService;
+
+import com.buglabs.bug.simulator.Activator;
 import com.buglabs.bug.sysfs.SysfsNode;
 
 /**
@@ -47,6 +50,7 @@ public class LEDDevice extends SysfsNode {
 	private int[] maxBrightness;
 	private String[] trigger;
 	private int ledCount;
+	private LogService log;
 
 	/**
 	 * Constructor for mono LED.
@@ -57,6 +61,7 @@ public class LEDDevice extends SysfsNode {
 	 */
 	public LEDDevice(File root, String name, String color) {
 		super(root);
+		this.log = Activator.getLogService();
 		this.name = name;
 		this.type = TYPE_MONO_COLOR;
 
@@ -124,6 +129,7 @@ public class LEDDevice extends SysfsNode {
 	 */
 	public void setBrightness(int color, int brightness) throws IOException {
 		this.brightness[color] = brightness;
+		log.log(LogService.LOG_DEBUG, "LED " + this.name + " color " + color + " brightness set to: " + brightness);
 	}
 
 	/**
@@ -143,6 +149,7 @@ public class LEDDevice extends SysfsNode {
 	 */
 	public void setTrigger(int color, String trigger) throws IOException {
 		this.trigger[color] = trigger;
+		log.log(LogService.LOG_DEBUG, "LED " + this.name + " color " + color + " trigger set to: " + trigger);
 	}
 
 	/**
