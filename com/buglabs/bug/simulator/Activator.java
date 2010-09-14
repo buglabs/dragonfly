@@ -168,7 +168,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		context.addServiceListener(this, "(" + Constants.OBJECTCLASS + "=" + IModletFactory.class.getName() + ")");
 		registerExistingModletFactories(context);
 
-		//Intialize the bmi manager.
+		//Initialize the bmi manager.
 		Manager bmiManager = Manager.getManager(context, logService, modletFactories, activeModlets);
 		
 		//com.buglabs.bug.module.gps ***********************
