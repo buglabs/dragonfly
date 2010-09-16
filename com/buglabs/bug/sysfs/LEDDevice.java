@@ -9,7 +9,7 @@ import com.buglabs.bug.simulator.Activator;
 import com.buglabs.bug.sysfs.SysfsNode;
 
 /**
- * A class to control a single-color or multi-color LED.
+ * A class to control a single-color or multi-color LED for BUG Simulator.
  * 
  * @author kgilmer
  * 
@@ -85,6 +85,7 @@ public class LEDDevice extends SysfsNode {
 	 */
 	public LEDDevice(File root, String name) {
 		super(root);
+		this.log = Activator.getLogService();
 		this.name = name;
 		this.type = TYPE_TRI_COLOR;
 

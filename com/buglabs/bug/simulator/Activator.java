@@ -134,7 +134,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	public void start(final BundleContext context) throws Exception {
 		//Basic setup ********************************************
 		this.context = context;
-		this.logService = LogServiceUtil.getLogService(context);
+		Activator.logService = LogServiceUtil.getLogService(context);
 		
 		//com.buglabs.bug.base services **************************
 		timeReg = context.registerService(ITimeProvider.class.getName(), this, null);
