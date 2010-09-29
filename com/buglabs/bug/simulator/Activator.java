@@ -184,8 +184,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		lcdActivator.start(context);
 		
 		//com.buglabs.bug.module.vonhippel ***********************
-		//vhActivator = new VHActivator();
-		//vhActivator.start(context);
+		vhActivator = new VHActivator();
+		vhActivator.start(context);
 		
 		//com.buglabs.bug.module.camera ***********************
 		//cameraActivator = new CameraActivator();
