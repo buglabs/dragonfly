@@ -660,7 +660,6 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 		if (selection instanceof IStructuredSelection) {
 			Object obj = ((IStructuredSelection) selection).getFirstElement();
 
-			System.out.println(obj.getClass().getName());
 			if (obj instanceof BaseTreeNode) {
 				BaseTreeNode mod = (BaseTreeNode) obj;
 				if (moduleToFigure != null) {
