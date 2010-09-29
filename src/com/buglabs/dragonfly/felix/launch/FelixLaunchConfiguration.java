@@ -73,7 +73,6 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			
 			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, monitor);
 			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, monitor);
-			exportProjectsAsjars(getWorkspaceBundles(), launchDir.append(REL_BUNDLE_DIR).toFile());
 			
 			vmconfig.setVMArguments(getVMArgs(confFile, felixPluginBase));
 			
@@ -161,19 +160,6 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		cp.add(felixPluginBase + FELIX_FRAMEWORK_REL_PATH);
 	
 		return (String[]) cp.toArray(new String[cp.size()]);
-	}
-	
-	private void exportProjectsAsjars(List workspaceBundles, File destinationDirectory) throws CoreException, IOException {
-		List cgProjects = ProjectUtils.getWSCGProjects();
-		Iterator projIter = cgProjects.iterator();
-
-		while (projIter.hasNext()) {
-			IProject proj = (IProject) projIter.next();
-
-			if (proj.isOpen() && workspaceBundles.contains(proj.getName())) {
-				ProjectUtils.exporToJar(destinationDirectory, proj, true);
-			}
-		}
 	}
 	
 	/**
