@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			Creating a Basic Application
+		</title>
+		<!-- ########### /INSERT PAGE TITLE HERE ########## -->
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			<a id="top" name="top"></a>
+
+			<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				Creating a Basic Application
+				<!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- bodytext -->
+				<p>
+					Create a basic application for BUG that displays a message on the system output console.
+				</p>
+				<ol>
+					<li> If Eclipse, switch perspective to the Dragonfly perspective. (Hint: Go to Window &gt; Open Perspective &gt; Other)
+					</li>
+					<li> Select the <b>New BUG Project</b> icon <img alt="BugProject.gif" src="../images/bugProject.gif" width="16" height="16" /> in the toolbar.
+					</li>
+					<li>In the New BUG Project window, in the Name field, type: <tt>HelloWorld</tt>
+					</li>
+					<li>Click <b>Finish</b>.
+					</li>
+					<li>In left-side Project Explorer view, expand the node for the Hello World application
+					</li>
+					<li>Expand the node for the helloworld package
+					</li>
+					<li>Double-click on Activator.java to edit it
+					</li>
+					<li>In the Java editor, in the start method of activator class, type: <tt>System.out.println("Hello World&nbsp;:)");</tt><br />
+						so that it looks like this:
+					</li>
+				</ol>
+				<pre>
+package helloworld;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+
+public class Activator implements BundleActivator {
+
+    public void start(BundleContext context) throws Exception {
+        // TODO Auto-generated method stub
+        System.out.println("Hello World :)");
+    }
+
+    public void stop(BundleContext context) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+ }
+</pre>
+				<ol start="9">
+					<li>Go to File &gt; Save to save Activator.java.
+					</li>
+					<li>Click Run, Run As Virtual BUG to launch your application in the Virtual BUG.
+					</li>
+					<li>Watch the output on the Console tab in Eclipse/Dragonfly for your "Hello World&nbsp;:)" message. The text is highlighted in the screen shot below.
+					</li>
+				</ol>
+				<p>
+				<img alt="HelloWorld screen.JPG" src="../images/HelloWorld_screen.JPG" width="1024" height="768" />
+				
+				</p>
+				<div class="printfooter">
+					Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:Creating_a_Basic_Application">http://wiki.buglabs.net/index.php/Tutorial:Creating_a_Basic_Application</a>"
+				</div><!-- /bodytext -->
+
+				<!-- ########### END OF INSERTED CONTENT ########## -->
+
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
+</html>

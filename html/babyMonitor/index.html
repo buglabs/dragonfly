@@ -1,0 +1,932 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			Baby Monitor BUGapp Tutorial
+		</title>
+		<!-- ########### /INSERT PAGE TITLE HERE ########## -->
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			<a id="top" name="top"></a>
+
+			<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				Baby Monitor BUGapp Tutorial
+				<!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- ### Copy everything between bodytext comments in printable page source here -->
+				<!-- bodytext -->
+
+								<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+				<ul>
+				<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-2"><a href="#Intended_Audience"><span class="tocnumber">1.1</span> <span class="toctext">Intended Audience</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-3"><a href="#Pre-requisites"><span class="tocnumber">2</span> <span class="toctext">Pre-requisites</span></a>
+
+				<ul>
+				<li class="toclevel-2 tocsection-4"><a href="#BUG_Modules"><span class="tocnumber">2.1</span> <span class="toctext">BUG Modules</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-5"><a href="#The_Basics:_Take_a_Picture.2C_Expose_it_as_a_Web_Service"><span class="tocnumber">3</span> <span class="toctext">The Basics: Take a Picture, Expose it as a Web Service</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-6"><a href="#Create_the_Project"><span class="tocnumber">3.1</span> <span class="toctext">Create the Project</span></a></li>
+				<li class="toclevel-2 tocsection-7"><a href="#Side_Step:_A_Brief_Tour_of_a_BUG_project"><span class="tocnumber">3.2</span> <span class="toctext">Side Step: A Brief Tour of a BUG project</span></a>
+
+				<ul>
+				<li class="toclevel-3 tocsection-8"><a href="#PhoneME_Advanced_Classpath_Container_.23.23UPDATE_OR_REMOVE.23.23"><span class="tocnumber">3.2.1</span> <span class="toctext">PhoneME Advanced Classpath Container ##UPDATE OR REMOVE##</span></a></li>
+				<li class="toclevel-3 tocsection-9"><a href="#Concierge_Classpath_Container"><span class="tocnumber">3.2.2</span> <span class="toctext">Concierge Classpath Container</span></a></li>
+				<li class="toclevel-3 tocsection-10"><a href="#BUG_Libraries_Classpath_Container"><span class="tocnumber">3.2.3</span> <span class="toctext">BUG Libraries Classpath Container</span></a></li>
+				<li class="toclevel-3 tocsection-11"><a href="#OSGi_Bundle_Classpath_Container"><span class="tocnumber">3.2.4</span> <span class="toctext">OSGi Bundle Classpath Container</span></a></li>
+
+				<li class="toclevel-3 tocsection-12"><a href="#Java_Sources"><span class="tocnumber">3.2.5</span> <span class="toctext">Java Sources</span></a></li>
+				<li class="toclevel-3 tocsection-13"><a href="#META-INF:_Where_the_Manifest_File_is"><span class="tocnumber">3.2.6</span> <span class="toctext">META-INF: Where the Manifest File is</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-14"><a href="#Finding_BUG_Services"><span class="tocnumber">3.3</span> <span class="toctext">Finding BUG Services</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-15"><a href="#The_OSGi_Service_Registry"><span class="tocnumber">3.3.1</span> <span class="toctext">The OSGi Service Registry</span></a></li>
+
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-16"><a href="#Binding_to_ICameraDevice_service_with_a_ServiceTracker"><span class="tocnumber">3.4</span> <span class="toctext">Binding to ICameraDevice service with a ServiceTracker</span></a></li>
+				<li class="toclevel-2 tocsection-17"><a href="#Periodically_Taking_a_Picture"><span class="tocnumber">3.5</span> <span class="toctext">Periodically Taking a Picture</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-18"><a href="#Side_Step:_Debugging_in_Eclipse"><span class="tocnumber">3.5.1</span> <span class="toctext">Side Step: Debugging in Eclipse</span></a></li>
+				</ul>
+				</li>
+
+				<li class="toclevel-2 tocsection-19"><a href="#Uh.2C_it.27s_not_working_and_I_have_an_error_in_the_console"><span class="tocnumber">3.6</span> <span class="toctext">Uh, it's not working and I have an error in the console</span></a></li>
+				<li class="toclevel-2 tocsection-20"><a href="#Showing_the_Picture_via_a_Web_Service"><span class="tocnumber">3.7</span> <span class="toctext">Showing the Picture via a Web Service</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-21"><a href="#Registering_the_Web_Service"><span class="tocnumber">3.7.1</span> <span class="toctext">Registering the Web Service</span></a></li>
+				<li class="toclevel-3 tocsection-22"><a href="#Take_it_for_a_spin"><span class="tocnumber">3.7.2</span> <span class="toctext">Take it for a spin</span></a></li>
+
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-23"><a href="#Conclusion"><span class="tocnumber">3.8</span> <span class="toctext">Conclusion</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-24"><a href="#Triggering_the_Photo_with_Motion"><span class="tocnumber">4</span> <span class="toctext">Triggering the Photo with Motion</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-25"><a href="#Finding_the_Motion_Service"><span class="tocnumber">4.1</span> <span class="toctext">Finding the Motion Service</span></a></li>
+
+				<li class="toclevel-2 tocsection-26"><a href="#Augmenting_our_ServiceTracker"><span class="tocnumber">4.2</span> <span class="toctext">Augmenting our ServiceTracker</span></a></li>
+				<li class="toclevel-2 tocsection-27"><a href="#Listening_for_Motion"><span class="tocnumber">4.3</span> <span class="toctext">Listening for Motion</span></a></li>
+				<li class="toclevel-2 tocsection-28"><a href="#Adding_the_Motion_service_namespace_to_the_OSGi_Manifest"><span class="tocnumber">4.4</span> <span class="toctext">Adding the Motion service namespace to the OSGi Manifest</span></a></li>
+				<li class="toclevel-2 tocsection-29"><a href="#Take_it_for_a_spin_2"><span class="tocnumber">4.5</span> <span class="toctext">Take it for a spin</span></a></li>
+				</ul>
+
+				</li>
+				<li class="toclevel-1 tocsection-30"><a href="#Respond_to_Sound"><span class="tocnumber">5</span> <span class="toctext">Respond to Sound</span></a></li>
+				<li class="toclevel-1 tocsection-31"><a href="#Email_Me"><span class="tocnumber">6</span> <span class="toctext">Email Me</span></a></li>
+				<li class="toclevel-1 tocsection-32"><a href="#Launch_with_an_Icon"><span class="tocnumber">7</span> <span class="toctext">Launch with an Icon</span></a></li>
+				<li class="toclevel-1 tocsection-33"><a href="#Advanced_Remote_Access"><span class="tocnumber">8</span> <span class="toctext">Advanced Remote Access</span></a></li>
+
+				<li class="toclevel-1 tocsection-34"><a href="#Resources"><span class="tocnumber">9</span> <span class="toctext">Resources</span></a></li>
+				<li class="toclevel-1 tocsection-35"><a href="#Footnotes"><span class="tocnumber">10</span> <span class="toctext">Footnotes</span></a></li>
+				</ul>
+				</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+				<h1> <span class="mw-headline" id="Overview"> Overview </span></h1>
+
+				<p>Unlike most tutorials on the Bug wiki, this tutorial will cover an application with multiple modules and functions, and will cover many aspects of BUG application development in Java.  The final application will be a functional baby monitor.  I chose this app because it's something I need right now. &nbsp;:)
+				</p>
+				<h2> <span class="mw-headline" id="Intended_Audience"> Intended Audience </span></h2>
+				<p>This tutorial is written for folks that are looking to get their hands dirty with BUG app development.  You will need to be comfortable (but not a genius) with the Java programming language and have some experience with development in general.  We'll go easy and introduce things like <a href="http://en.wikipedia.org/wiki/OSGi" class="external text" rel="nofollow">OSGi</a> and <a href="http://en.wikipedia.org/wiki/Representational_State_Transfer" class="external text" rel="nofollow">RESTful web services</a> along the way.  Don't be afraid!  Worst case scenario is that you glaze over and forget this ever happened.  Read on!
+				</p>
+				<h1> <span class="mw-headline" id="Pre-requisites"> Pre-requisites </span></h1>
+
+				<p>This tutorial assumes you already have a BUG, and have the <a href="http://buglabs.net/downloads" class="external text" rel="nofollow">latest version of the BUG SDK</a> (also called Dragonfly) <a href="/index.php?title=SDK_Install_Guide&amp;action=edit&amp;redlink=1" class="new" title="SDK Install Guide (page does not exist)"> installed</a> on your computer.  Additionally you've followed <a href="http://buglabs.net/start" class="external text" rel="nofollow">this guide</a> and have everything working properly.
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><img alt="" src="../images/Bbm_eclipse_fresh.png" width="640" height="474" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The Dragonfly SDK ~ Fresh Install</div></div></div></div>
+				<h2> <span class="mw-headline" id="BUG_Modules"> BUG Modules </span></h2>
+
+				<p>The modules used in this tutorial are <i><b>not</b></i> required.  Yes, you'll have a hard time monitoring a real baby without them, but the Virtual BUG can be used, and even <a href="http://buglabs.net/applications/BabyCamera" class="external text" rel="nofollow">virtual modules</a> can be added to a real BUG in place of having the actual hardware.  In any case, these are the modules that will be used somewhere in this tutorial:
+				</p>
+				<table><tr><td><div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><img alt="" src="../images/Module_camera.png" width="250" height="208" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The Camera</div></div></div></div>
+				</td><td><div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><img alt="" src="../images/Module_motion.png" width="250" height="208" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The MDACC Module</div></div></div></div></td><td><div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><img alt="" src="../images/Sc_m.png" width="250" height="188" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The BabyCamera Virtual Module</div></div></div></div></td></tr></table>
+				<h1> <span class="mw-headline" id="The_Basics:_Take_a_Picture.2C_Expose_it_as_a_Web_Service"> The Basics: Take a Picture, Expose it as a Web Service </span></h1>
+
+				<p>Let's start out with our baby monitor by simply taking a picture with the camera, and exposing that photo as a web service.  This will let us connect to the BUG from other devices with a Browser to see what's going on. The complete source code for the version of our app covered in this section is available <a href="http://buglabs.net/program_version/download/714" class="external text" rel="nofollow">here on BUGnet</a>.
+				</p>
+				<h2> <span class="mw-headline" id="Create_the_Project"> Create the Project </span></h2>
+				<p>We'll start by launching the BUG app project creation wizard from the toolbar as seen below.  If your running copy of Eclipse looks different, be sure that you are in the <b>Dragonfly Perspective</b>.  The windowing will look different based on your operating system and other desktop settings.
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:642px;"><img alt="" src="../images/Bbm_eclipse_new_proj_icon.png" width="640" height="474" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The Dragonfly SDK ~ Create Project</div></div></div></div>
+				<p>On the first page of the wizard give your new app a name and of course give yourself credit for the (future) masterpiece!
+				</p>
+
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:601px;"><img alt="" src="../images/Bbm_eclipse_wizard_1.png" width="599" height="453" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The Dragonfly SDK ~ Create Project Wizard</div></div></div></div>
+				<p>At this point you can click <b>Finish</b>.  We won't bother with the rest of the wizard, as we want to write all of the code ourselves!
+				</p>
+				<h2> <span class="mw-headline" id="Side_Step:_A_Brief_Tour_of_a_BUG_project"> Side Step: A Brief Tour of a BUG project </span></h2>
+				<p>Before getting our hands dirty writing our application, let's take a look at the project that was generated.  We can learn a lot about how a BUG project is put together, how it compiles, and how it gets built by looking at the project structure.  This section can be skipped if you're feverishly excited to write code.
+				</p><p>The Eclipse project that was generated contains some <i>classpath containers</i> that hold compiled Java code that can be referenced by your application.
+				</p>
+
+				<h3> <span class="mw-headline" id="PhoneME_Advanced_Classpath_Container_.23.23UPDATE_OR_REMOVE.23.23"> PhoneME Advanced Classpath Container ##UPDATE OR REMOVE## </span></h3>
+				<div class="thumb tright"><div class="thumbinner" style="width:182px;"><img alt="" src="../images/Bbm_phoneme_cp.png" width="180" height="176" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The PhoneME Classpath Container</div></div></div>
+				<p>The BUG of course contains a JVM that runs all our BUG apps.  The JVM that ships by default on the BUG is PhoneME Advanced Personal Profile.  This is a rather long name but essentially is just a solid, fast, open-source JVM from Sun.  While it doesn't support all the features of OpenJDK or other more modern JVMs you may be familiar with, it happens to be a good compromise for smaller computers like BUG.  Opening up this classpath container will allow you to see all the core Java classes that are available for you to use in your application.  If you look carefully you'll find some things like String.split() which is one of my favorites.
+				</p>
+				<h3> <span class="mw-headline" id="Concierge_Classpath_Container"> Concierge Classpath Container </span></h3>
+				<div class="thumb tleft"><div class="thumbinner" style="width:182px;"><img alt="" src="../images/Bbm_concierge_cp.png" width="180" height="176" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The Concierge Classpath Container</div></div></div>
+				<p><a href="http://concierge.sourceforge.net/" class="external text" rel="nofollow">Concierge</a>, an OSGi framework, is the runtime environment that hosts BUG apps.  This is a topic all unto itself, and we will talk much more about Concierge coming up.  For now all we need to know is there are some more classes and interfaces that our applications can use from this classpath container.
+
+				</p>
+				<h3> <span class="mw-headline" id="BUG_Libraries_Classpath_Container"> BUG Libraries Classpath Container </span></h3>
+				<p>This one is my favorite!  These classes and interfaces are provided by Bug Labs, and make doing things like taking pictures, writing to the base LCD, and providing simple web services very easy.  There are many jars in here, but if you spend a few minutes looking through them you may find a pattern.  Essentially there are 2 jars (called <a href="http://bugcommunity.com/development/javadoc/r1.4/bug/org/osgi/framework/Bundle.html" class="external text" rel="nofollow">bundles</a> in OSGi-speak)  for each BUG hardware module, and other bundles for things like web services and communicating with the SDK.  We'll get more into these classes later as well.
+				</p>
+				<h3> <span class="mw-headline" id="OSGi_Bundle_Classpath_Container"> OSGi Bundle Classpath Container </span></h3>
+				<p>This is a dynamic classpath container.  Without getting into it too deeply, OSGi allows bundles, which can be thought of as components, to share classes among each other.  This class sharing is defined in the <i>manifest file</i> for each bundle.  The OSGi Bundle Classpath Container will dynamically find classes your application needs from other bundles in your workspace.
+
+				</p>
+				<h3> <span class="mw-headline" id="Java_Sources"> Java Sources </span></h3>
+				<p>If you're not familiar with Eclipse, the first child element of your project, in this case entitled <tt>bugbabymonitor</tt>, is a package.  We'll write some Java classes that will be contained within this package.  The BUG app creation wizard generated one class for us, <tt>Activator.java</tt>, which implements the OSGi interface <a href="http://www.osgi.org/javadoc/r3/org/osgi/framework/BundleActivator.html" class="external text" rel="nofollow">BundleActivator</a>.
+				</p>
+				<h3> <span class="mw-headline" id="META-INF:_Where_the_Manifest_File_is"> META-INF: Where the Manifest File is </span></h3>
+
+				<p>This file is read by Concierge, the OSGi framework.  The manifest file controls how code can get into and out of a running bundle.  Additionally the manifest file contains some basic metadata, such as the app name and author.  We'll dig into this file more later on.
+				</p>
+				<h2> <span class="mw-headline" id="Finding_BUG_Services"> Finding BUG Services </span></h2>
+				<p>A way we can begin writing our application is to consider <i>what hardware devices do I want to use?</i>  In our case, of course we need the camera to take a photo of the baby.  So, that's the first thing we need.  By checking the <a href="http://bugcommunity.com/development/javadoc/r1.4/bug/" class="external text" rel="nofollow">javadoc</a> or browsing the BUG libraries classpath container, we happen across the <tt>com.buglabs.bug.module.camera</tt><sup><a href="#Foot1"> 1</a></sup> bundle.  This looks promising, and in fact inside that bundle we see a service called <tt><a href="http://bugcommunity.com/development/javadoc/r1.4/bug/com/buglabs/bug/module/camera/pub/ICameraDevice.html" class="external text" rel="nofollow">ICameraDevice</a></tt>.  This is the ticket!
+
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><img alt="" src="../images/Bbm_camera_svc.png" width="800" height="593" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The Camera Device Service</div></div></div></div>
+				<p>Armed with the knowledge of the service (which may be referred to as an OSGi service as well) we are able to now tell our application we want to get access to it with a <tt><a href="http://www.osgi.org/javadoc/r3/org/osgi/util/tracker/ServiceTracker.html" class="external text" rel="nofollow">ServiceTracker</a></tt>
+				</p>
+				<h3> <span class="mw-headline" id="The_OSGi_Service_Registry"> The OSGi Service Registry </span></h3>
+				<div class="thumb tright"><div class="thumbinner" style="width:242px;"><img alt="" src="../images/Osgi_framework.svg.png" width="240" height="178" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>OSGi Service Gateway Architecture</div></div></div>
+				<p>When running on the BUG, our application will be hosted by Concierge, the OSGi framework implementation.  In the simplest case, Java programs are loaded by the JVM on the command-line like this:
+				</p>
+
+				<pre>$ java -jar myjar.jar
+				</pre>
+				<p>This starts the JVM and executes your program.  On the BUG, a single JVM instance is executed when the OS starts.  This instance runs the Concierge runtime.  Within Concierge, OSGi bundles, or BUGapps, are loaded and run.  In summary, when a BUGapp runs on a BUG, it is not an isolated program running inside a JVM.  Instead, it shares a JVM with other apps and services.  As a side track, this page describes a publisher and consumer application that utilize the OSGi service registry: <a href="/index.php?title=Create_an_application_that_publishes_an_OSGi_service&amp;action=edit&amp;redlink=1" class="new" title="Create an application that publishes an OSGi service (page does not exist)">Create_an_application_that_publishes_an_OSGi_service</a>.
+				</p><p>One function of Concierge is to keep track of OSGi services.  As previously mentioned, <tt>ICameraDevice</tt> is an <i>OSGi service</i>.  What does this mean?  Well two things primarily:
+				</p>
+				<ol><li> An OSGi service is always a Java interface.  A service is abstract.  OSGi bundles may provide implementations of services.
+				</li><li> An OSGi service represents an implementation provided by some other bundle, or component in the running JVM instance.
+				</li></ol>
+
+				<p>In our case, <tt>ICameraDevice</tt> is a service defined by the <tt>com.buglabs.bug.module.camera</tt> bundle.  An implementation is made available when we run our app on a BUG or when we run a Virtual BUG.
+				</p><p>The <a href="http://gravity.sourceforge.net/servicebinder/osginutshell.html" class="external text" rel="nofollow">OSGi Service Registery</a> is a global list of all OSGi services available.  The list contains all of the interfaces (OSGi services) available and a dictionary for each service describing any properties that may be associated with it.  There may be 0 or many instances of a given OSGi service in a specific runtime environment.  A client application, wanting to get access to a service provided by another bundle, has several ways of doing this.  We'll focus on the ServiceTracker, a standard approach to accessing OSGi services.
+				</p>
+				<h2> <span class="mw-headline" id="Binding_to_ICameraDevice_service_with_a_ServiceTracker"> Binding to <tt>ICameraDevice</tt> service with a <tt>ServiceTracker</tt> </span></h2>
+
+				<p>Now let's go to the <tt>Activator.java</tt> class that the SDK generated for us.  Assuming you didn't change anything, your code should look like this:
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"> <span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+				&nbsp;
+				 <span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleActivator</span><span class="sy0">;</span>
+
+				 <span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleContext</span><span class="sy0">;</span>
+				&nbsp;
+				 <span class="kw1">public</span> <span class="kw1">class</span> <span class="kw3">Activator</span> <span class="kw1">implements</span> BundleActivator <span class="br0">&#123;</span>
+
+				&nbsp;
+				 	<span class="kw1">public</span> <span class="kw4">void</span> start<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+				 		<span class="co1">// TODO Auto-generated method stub</span>
+
+				&nbsp;
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				 	<span class="kw1">public</span> <span class="kw4">void</span> stop<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+
+				 		<span class="co1">// TODO Auto-generated method stub</span>
+				&nbsp;
+				 	<span class="br0">&#125;</span>
+				 <span class="br0">&#125;</span></pre></div></div>
+				</div>
+				<p>Since our app is an OSGi bundle, the Activator serves as the entry and exit point for our application.  Essentially, Concierge will call <tt>Activator.start()</tt> when our app starts up, and <tt>Activator.stop()</tt> when our app shuts down.  Since our application does not run like a standard Java program, a <tt>static main()</tt> method will have no effect.
+
+				</p><p>Now, let's create a ServiceTracker and start it.  Refer to the <a href="http://www.osgi.org/javadoc/r3/org/osgi/util/tracker/ServiceTracker.html" class="external text" rel="nofollow">ServiceTracker</a> and <a href="http://www.osgi.org/javadoc/r3/org/osgi/util/tracker/ServiceTrackerCustomizer.html" class="external text" rel="nofollow">ServiceTrackerCustomizer</a> javadoc for background information on how to use this class.  Here is <tt>Activator.java</tt> after adding our <tt>ServiceTracker</tt>:
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"> <span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+
+				&nbsp;
+				 <span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleActivator</span><span class="sy0">;</span>
+				 <span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleContext</span><span class="sy0">;</span>
+				 <span class="kw1">import</span> <span class="co2">org.osgi.framework.ServiceReference</span><span class="sy0">;</span>
+
+				 <span class="kw1">import</span> <span class="co2">org.osgi.util.tracker.ServiceTracker</span><span class="sy0">;</span>
+				 <span class="kw1">import</span> <span class="co2">org.osgi.util.tracker.ServiceTrackerCustomizer</span><span class="sy0">;</span>
+				&nbsp;
+				 <span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.camera.pub.ICameraDevice</span><span class="sy0">;</span>
+
+				&nbsp;
+				 <span class="kw1">public</span> <span class="kw1">class</span> <span class="kw3">Activator</span> <span class="kw1">implements</span> BundleActivator <span class="br0">&#123;</span>
+				&nbsp;
+				 	<span class="kw1">private</span> ServiceTracker st<span class="sy0">;</span>
+
+				 	<span class="kw1">private</span> BundleContext context<span class="sy0">;</span>
+				&nbsp;
+				 	<span class="kw1">public</span> <span class="kw4">void</span> start<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+
+				 		<span class="kw1">this</span>.<span class="me1">context</span> <span class="sy0">=</span> context<span class="sy0">;</span>
+				 		st <span class="sy0">=</span> <span class="kw1">new</span> ServiceTracker<span class="br0">&#40;</span>context, ICameraDevice.<span class="kw1">class</span>.<span class="me1">getName</span><span class="br0">&#40;</span><span class="br0">&#41;</span>, <span class="kw1">new</span> BabyTrackerCustomizer<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+				 		st.<span class="me1">open</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				 	<span class="kw1">public</span> <span class="kw4">void</span> stop<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+
+				 		st.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				 	<span class="kw1">private</span> <span class="kw1">class</span> BabyTrackerCustomizer <span class="kw1">implements</span> ServiceTrackerCustomizer <span class="br0">&#123;</span>
+
+				&nbsp;
+				 		<span class="kw1">private</span> ICameraDevice camera<span class="sy0">;</span>
+				&nbsp;
+				 		<span class="kw1">public</span> <span class="kw3">Object</span> addingService<span class="br0">&#40;</span>ServiceReference reference<span class="br0">&#41;</span> <span class="br0">&#123;</span>	
+				 			camera <span class="sy0">=</span> <span class="br0">&#40;</span>ICameraDevice<span class="br0">&#41;</span> context.<span class="me1">getService</span><span class="br0">&#40;</span>reference<span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+				 			<span class="kw1">return</span> camera<span class="sy0">;</span>
+				 		<span class="br0">&#125;</span>
+				&nbsp;
+				 		<span class="kw1">public</span> <span class="kw4">void</span> modifiedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span>              <span class="br0">&#123;</span> 			
+				 		<span class="br0">&#125;</span>
+
+				&nbsp;
+				 		<span class="kw1">public</span> <span class="kw4">void</span> removedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+				&nbsp;
+				 		<span class="br0">&#125;</span>
+				&nbsp;
+
+				 	<span class="br0">&#125;</span>
+				 <span class="br0">&#125;</span></pre></div></div>
+				</div>
+				<p>Let's break this down and be clear about what the code is doing.  The following illustrates the <tt>ServiceTracker</tt> lifecycle.  When our BUG app bundle is started by Concierge, the Activator.start() method is called.  Here we create and open a ServiceTracker, and pass it in the constructor a new instance of a <tt>ServiceTrackerCustomizer</tt>.
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><img alt="" src="../images/Bbm_st_lifecycle.png" width="800" height="655" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The ServiceTracker lifecycle</div></div></div></div>
+				<p>Now let's take a look at the <tt>BabyTrackerCustomizer</tt> class we created.  For now I wrote it as a private inner class of Activator, but there is no reason it can't be in it's own file.  The <tt>addingService()</tt> method of this class is called by the ServiceTracker when our service (as passed in the constructor) <tt>ICameraDevice</tt> is available.  Also, should the <tt>ICameraDevice</tt> service go away, say for example if the Camera module is unplugged from the BUG, then the <tt>removedService()</tt> method will be called.  Using these two methods, we can write our app and get access to the camera in a reliable, safe way.
+
+				</p>
+				<h2> <span class="mw-headline" id="Periodically_Taking_a_Picture"> Periodically Taking a Picture </span></h2>
+				<p>Complements of the <tt>ServiceTracker</tt>, we now can write some code that works with the camera and be assured it will only run if a camera is available.  To start simple, let's create a thread and just take a picture every 30 seconds.  This won't be streaming video, but will provide a details snapshot of what the little baby (I hope she isn't crying...) is up to.  First let's move BabyTrackerCustomizer into its own file, then add our code as so:
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"> <span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+				&nbsp;
+
+				 <span class="kw1">import</span> <span class="co2">java.io.FileOutputStream</span><span class="sy0">;</span>
+				 <span class="kw1">import</span> <span class="co2">java.io.IOException</span><span class="sy0">;</span>
+				&nbsp;
+				 <span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleContext</span><span class="sy0">;</span>
+
+				 <span class="kw1">import</span> <span class="co2">org.osgi.framework.ServiceReference</span><span class="sy0">;</span>
+				 <span class="kw1">import</span> <span class="co2">org.osgi.util.tracker.ServiceTrackerCustomizer</span><span class="sy0">;</span>
+				&nbsp;
+				 <span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.camera.pub.ICameraDevice</span><span class="sy0">;</span>
+
+				&nbsp;
+				 <span class="kw1">public</span> <span class="kw1">class</span> BabyTrackerCustomizer <span class="kw1">extends</span> <span class="kw3">Thread</span> <span class="kw1">implements</span> ServiceTrackerCustomizer <span class="br0">&#123;</span>
+				&nbsp;
+				 	<span class="kw1">private</span> <span class="kw1">final</span> BundleContext context<span class="sy0">;</span>
+
+				 	<span class="kw1">private</span> ICameraDevice camera<span class="sy0">;</span>
+				&nbsp;
+				 	BabyTrackerCustomizer<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+				 		<span class="kw1">this</span>.<span class="me1">context</span> <span class="sy0">=</span> context<span class="sy0">;</span>
+
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				 	<span class="kw1">public</span> <span class="kw4">void</span> run<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+				 		<span class="kw1">try</span> <span class="br0">&#123;</span>
+				 			<span class="kw1">while</span> <span class="br0">&#40;</span><span class="sy0">!</span><span class="kw3">Thread</span>.<span class="me1">interrupted</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+				 				<span class="kw4">byte</span> <span class="br0">&#91;</span><span class="br0">&#93;</span> image <span class="sy0">=</span> camera.<span class="me1">getImage</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				&nbsp;
+				 				writeToFile<span class="br0">&#40;</span>image, <span class="st0">&quot;/tmp/camera.jpg&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+				 				sleep<span class="br0">&#40;</span><span class="nu0">30000</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				 			<span class="br0">&#125;</span>
+				 		<span class="br0">&#125;</span> <span class="kw1">catch</span> <span class="br0">&#40;</span><span class="kw3">InterruptedException</span> e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+				&nbsp;
+				 		<span class="br0">&#125;</span> <span class="kw1">catch</span> <span class="br0">&#40;</span><span class="kw3">IOException</span> e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+				 			e.<span class="me1">printStackTrace</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				 		<span class="br0">&#125;</span>
+
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				 	<span class="kw1">private</span> <span class="kw4">void</span> writeToFile<span class="br0">&#40;</span><span class="kw4">byte</span><span class="br0">&#91;</span><span class="br0">&#93;</span> image, <span class="kw3">String</span> filename<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">IOException</span> <span class="br0">&#123;</span>
+
+				 		<span class="kw3">FileOutputStream</span> fos <span class="sy0">=</span> <span class="kw1">new</span> <span class="kw3">FileOutputStream</span><span class="br0">&#40;</span>filename<span class="br0">&#41;</span><span class="sy0">;</span>
+				&nbsp;
+				 		fos.<span class="me1">write</span><span class="br0">&#40;</span>image<span class="br0">&#41;</span><span class="sy0">;</span>
+
+				 		fos.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				 	<span class="kw1">public</span> <span class="kw3">Object</span> addingService<span class="br0">&#40;</span>ServiceReference reference<span class="br0">&#41;</span> <span class="br0">&#123;</span>	
+				 		camera <span class="sy0">=</span> <span class="br0">&#40;</span>ICameraDevice<span class="br0">&#41;</span> context.<span class="me1">getService</span><span class="br0">&#40;</span>reference<span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+				 		<span class="kw1">this</span>.<span class="me1">start</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				&nbsp;
+				 		<span class="kw1">return</span> camera<span class="sy0">;</span>
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+
+				  	<span class="kw1">public</span> <span class="kw4">void</span> modifiedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span>  <span class="br0">&#123;</span> 			
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				  	<span class="kw1">public</span> <span class="kw4">void</span> removedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+				 		<span class="kw1">this</span>.<span class="me1">interrupt</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				 	<span class="br0">&#125;</span>
+				&nbsp;
+				 <span class="br0">&#125;</span></pre></div></div>
+				</div>
+				<p>As you can see here we're subclassing from <tt>Thread</tt>.  When we get a reference to a <tt>ICameraDevice</tt> service, we start our thread.  In the <tt>run()</tt> method we loop taking a picture and saving it to a file.  This happens until some error occurs, or our camera goes away.
+
+				</p><p>But wait!  There is a shutdown issue.  What if Concierge calls <tt>stop()</tt> on our Activator while the thread is running?  Well the thread will keep running.  Let's update the Activator such that the thread gets interrupted of the <tt>stop()</tt> method is called.
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:729px;"><img alt="" src="../images/Bbm_shutdown_thread_code.png" width="727" height="432" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>Shutting down our thread properly.</div></div></div></div>
+				<h3> <span class="mw-headline" id="Side_Step:_Debugging_in_Eclipse"> Side Step: Debugging in Eclipse </span></h3>
+				<p>Let's run our application in the Virtual BUG and see how things go.  If you're not familiar with Eclipse, it has a great interactive debugger.  This lets you step through your program as it runs, as well as allowing variables to be checked and even code to be modified in the running program.  First, set a breakpoint on the first line of the <tt>Activator.start()</tt> method.  You can set breakpoint(s) on any lind of code where you suspect interesting things might happen.  
+
+				</p><p>This can be done by double-clicking in the left-most part of the Java editor in Eclipse (in the gray vertical bar sometimes called the "gutter").  A blue dot will appear to indicate that a breakpoint has been set.  Once the breakpoint has been set, launch the Virtual BUG via the toolbar icon.  You should see Eclipse change into a configuration like this:
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><img alt="" src="../images/Bbm_eclipse_debug_1.png" width="800" height="655" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>Debugging our BUG app</div></div></div></div>
+				<h2> <span class="mw-headline" id="Uh.2C_it.27s_not_working_and_I_have_an_error_in_the_console"> Uh, it's not working and I have an error in the console </span></h2>
+				<p>Well yes!  This is quite common, in fact I just did it!  You may recall earlier, OSGi uses a manifest file to track code imports and exports.  We covered this manifest file briefly in a previous section.  If you run your app and get an error like this in the console, read on!
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><img alt="" src="../images/Bbm_debug_error.png" width="800" height="725" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The party is over: RED ERROR text!</div></div></div></div>
+				<p>Essentially what Concierge is saying with this error is that our BUGapp (OSGi Bundle) is trying to load a class it doesn't have access to, in this case <tt>com.buglabs.bug.module.camera.pub.ICameraDevice</tt>.  How can this be!?  Eclipse finds the class just fine!  Well this is one of those cases where the <i>design time</i> is not the same as the <i>run time</i>.  The manifest file controls the run time environment.  Behind the scenes in the SDK, we ignore this and happily let any class access any other publicly available class that can be found.  But this carefree attitude changes drastically once we try to run our code.  
+
+				</p><p>In order to fix this problem we have to tell Concierge that we want to import the package namespace for the <tt>ICameraDevice</tt> service.  The namespace is everything before the name.  We add this in the manifest with the Import-Package header.  Here is the updated <tt>manifest.mf</tt> file:
+				</p>
+				<pre>Manifest-Version: 1.0
+				Bundle-Name: BugBabyMonitor
+				Bundle-Activator: bugbabymonitor.Activator
+				Bundle-SymbolicName: BugBabyMonitor
+				Bundle-Version: 1.0.0
+				Bundle-Vendor: kgilmer
+				Bug-Bundle-Type: Application
+				<b>Import-Package: com.buglabs.bug.module.camera.pub</b>
+				</pre>
+				<p><br />
+				Well what about all the other classes, like FileOutputstream?  Well, glad you asked.  OSGi, as per the spec, automatically imports the common Java and OSGi classes for each bundle, so it doesn't have to be explicitly imported for each bundle.
+				</p>
+				<h2> <span class="mw-headline" id="Showing_the_Picture_via_a_Web_Service"> Showing the Picture via a Web Service </span></h2>
+
+				<p>Well as of yet things are not really too exciting.  Yes we have a picture, but it's trapped in the <tt>tmp</tt> directory!  How can we get up-to-the-second details on our little baby?  We need some way of getting that image to a remote device.  Well, assuming your BUG is connected to a network <sup><a href="#Foot2"> 2</a></sup>, this can be achieved in a variety of ways.  We'll take the easy way out and use the built-in web service framework to expose the image to any web clients.  So, if you happen to have an iPhone or PC connected to your local network getting the latest image should be easy!  Let's start by writing an implementation of <tt>com.buglabs.services.ws.<b>PublicWSProvider2</b></tt> in our application.  I'll call it <tt>ImageWebService.java</tt>:
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"><span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">java.io.File</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">java.io.FileInputStream</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">java.io.FileNotFoundException</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">java.util.List</span><span class="sy0">;</span>
+
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">com.buglabs.services.ws.IWSResponse</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.services.ws.PublicWSDefinition</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.services.ws.PublicWSProvider2</span><span class="sy0">;</span>
+				&nbsp;
+
+				<span class="kw1">public</span> <span class="kw1">class</span> ImageWebService <span class="kw1">implements</span> PublicWSProvider2 <span class="br0">&#123;</span>
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw3">String</span> name <span class="sy0">=</span> <span class="st0">&quot;baby&quot;</span><span class="sy0">;</span>
+
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> setPublicName<span class="br0">&#40;</span><span class="kw3">String</span> name<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">this</span>.<span class="me1">name</span> <span class="sy0">=</span> name<span class="sy0">;</span>
+
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> PublicWSDefinition discover<span class="br0">&#40;</span><span class="kw4">int</span> operation<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">if</span> <span class="br0">&#40;</span>operation <span class="sy0">==</span> PublicWSProvider2.<span class="me1">GET</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+							<span class="kw1">return</span> <span class="kw1">new</span> PublicWSDefinition<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+				&nbsp;
+								<span class="kw1">public</span> <span class="kw3">List</span> getParameters<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+									<span class="kw1">return</span> <span class="kw2">null</span><span class="sy0">;</span>
+								<span class="br0">&#125;</span>
+				&nbsp;
+								<span class="kw1">public</span> <span class="kw3">String</span> getReturnType<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+									<span class="kw1">return</span> <span class="st0">&quot;image/jpg&quot;</span><span class="sy0">;</span>
+								<span class="br0">&#125;</span>
+							<span class="br0">&#125;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+						<span class="kw1">return</span> <span class="kw2">null</span><span class="sy0">;</span>
+
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> IWSResponse execute<span class="br0">&#40;</span><span class="kw4">int</span> operation, <span class="kw3">String</span> input<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">if</span> <span class="br0">&#40;</span>operation <span class="sy0">==</span> PublicWSProvider2.<span class="me1">GET</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+							<span class="kw1">return</span> <span class="kw1">new</span> ImageResponse<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+						<span class="kw1">return</span> <span class="kw2">null</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw3">String</span> getDescription<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">return</span> <span class="st0">&quot;What is that baby up to?&quot;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw3">String</span> getPublicName<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">return</span> name<span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw1">class</span> ImageResponse <span class="kw1">implements</span> IWSResponse <span class="br0">&#123;</span>
+				&nbsp;
+						<span class="kw1">public</span> <span class="kw3">Object</span> getContent<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+				&nbsp;
+							<span class="kw1">try</span> <span class="br0">&#123;</span>
+								<span class="kw1">return</span> <span class="kw1">new</span> <span class="kw3">FileInputStream</span><span class="br0">&#40;</span><span class="st0">&quot;/tmp/camera.jpg&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+							<span class="br0">&#125;</span> <span class="kw1">catch</span> <span class="br0">&#40;</span><span class="kw3">FileNotFoundException</span> e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+								e.<span class="me1">printStackTrace</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+							<span class="br0">&#125;</span>
+				&nbsp;
+							<span class="kw1">return</span> <span class="kw2">null</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+
+						<span class="kw1">public</span> <span class="kw4">int</span> getErrorCode<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							<span class="kw1">return</span> <span class="nu0">0</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+
+						<span class="kw1">public</span> <span class="kw3">String</span> getErrorMessage<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							<span class="kw1">return</span> <span class="st0">&quot;/tmp/camera.jpg does not exist&quot;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+
+						<span class="kw1">public</span> <span class="kw3">String</span> getMimeType<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							<span class="kw1">return</span> <span class="st0">&quot;image/jpg&quot;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+
+						<span class="kw1">public</span> <span class="kw4">boolean</span> isError<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							<span class="kw3">File</span> f <span class="sy0">=</span> <span class="kw1">new</span> <span class="kw3">File</span><span class="br0">&#40;</span><span class="st0">&quot;/tmp/camera.jpg&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+							<span class="kw1">if</span> <span class="br0">&#40;</span>f.<span class="me1">exists</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="sy0">&amp;&amp;</span> f.<span class="me1">isFile</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+								<span class="kw1">return</span> <span class="kw2">false</span><span class="sy0">;</span>
+
+							<span class="br0">&#125;</span>
+				&nbsp;
+							<span class="kw1">return</span> <span class="kw2">true</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+					<span class="br0">&#125;</span>
+				<span class="br0">&#125;</span></pre></div></div>
+				</div>
+				<p>This looks like a lot of code but is actually pretty simple.  The <tt>PublicWSProvider2</tt> interface implementation defines the name of the web service, provides a discovery mechanism via <tt>public PublicWSDefinition discover(int operation)</tt>, and then let's you pass your data to the client in the <tt>public IWSResponse execute(int operation, String input)</tt> method.  Here we are simply creating an <tt>InputStream</tt> on the file object and telling the client what type it is.  But we also check to see if the file we are trying to pass actually exists, and if not we throw an HTTP error.
+
+				</p>
+				<h3> <span class="mw-headline" id="Registering_the_Web_Service"> Registering the Web Service </span></h3>
+				<p>Before our web service becomes live on the BUG we must register it with the <tt>com.buglabs.services.ws.<b>PublicWSAdmin</b></tt> service.  This is an OSGi service that runs in the background and serves up web services from a variety of servers.  However, we cannot guarantee that this service is available.  In OSGi, because services are dynamic, we cannot count on them always being there.  What do we do?  Well we could wing it and just get a reference to it and fail if we can't find it.  We would probably want to add the code in our <tt>Activator.start()</tt> method so we can register our service when we first startup. The code for that would look like:
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1">        <span class="kw1">public</span> <span class="kw4">void</span> start<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+
+						<span class="co1">// ...</span>
+				&nbsp;
+						ServiceReference sr <span class="sy0">=</span> context.<span class="me1">getServiceReference</span><span class="br0">&#40;</span>PublicWSAdmin.<span class="kw1">class</span>.<span class="me1">getName</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+						PublicWSAdmin admin <span class="sy0">=</span> <span class="br0">&#40;</span>PublicWSAdmin<span class="br0">&#41;</span> context.<span class="me1">getService</span><span class="br0">&#40;</span>sr<span class="br0">&#41;</span><span class="sy0">;</span>
+
+					<span class="br0">&#125;</span></pre></div></div>
+				</div>
+				<p>But, if we look back at our activator we're already tracking the <tt>ICameraDevice service</tt>.  If we add the PublicWSAdmin along for the ride, then we can say to the OSGi runtime, "<i>I only want to run if the camera and WS admin are available</i>".  And indeed this makes sense, if either of these services are not available there is no point in running, right?  So let's do that.  Here is our new Activator that is tracking both <tt>ICameraDevice</tt> and <tt>PublicWSAdmin</tt>:
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"><span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleActivator</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleContext</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.Filter</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.util.tracker.ServiceTracker</span><span class="sy0">;</span>
+
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.camera.pub.ICameraDevice</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.services.ws.PublicWSAdmin</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.util.ServiceFilterGenerator</span><span class="sy0">;</span>
+				&nbsp;
+
+				<span class="kw1">public</span> <span class="kw1">class</span> <span class="kw3">Activator</span> <span class="kw1">implements</span> BundleActivator <span class="br0">&#123;</span>
+				&nbsp;
+					<span class="kw1">private</span> ServiceTracker st<span class="sy0">;</span>
+
+					BundleContext context<span class="sy0">;</span>
+					<span class="kw1">private</span> BabyTrackerCustomizer babyTracker<span class="sy0">;</span>
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw3">String</span> <span class="br0">&#91;</span><span class="br0">&#93;</span> services <span class="sy0">=</span> <span class="br0">&#123;</span>
+
+							ICameraDevice.<span class="kw1">class</span>.<span class="me1">getName</span><span class="br0">&#40;</span><span class="br0">&#41;</span>, 
+							PublicWSAdmin.<span class="kw1">class</span>.<span class="me1">getName</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+							<span class="br0">&#125;</span><span class="sy0">;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> start<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+
+						babyTracker <span class="sy0">=</span> <span class="kw1">new</span> BabyTrackerCustomizer<span class="br0">&#40;</span>context<span class="br0">&#41;</span><span class="sy0">;</span>
+						Filter f <span class="sy0">=</span> ServiceFilterGenerator.<span class="me1">generateServiceFilter</span><span class="br0">&#40;</span>context, services<span class="br0">&#41;</span><span class="sy0">;</span>
+
+						st <span class="sy0">=</span> <span class="kw1">new</span> ServiceTracker<span class="br0">&#40;</span>context, f, babyTracker<span class="br0">&#41;</span><span class="sy0">;</span>
+						st.<span class="me1">open</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> stop<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+						st.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+						<span class="kw1">if</span> <span class="br0">&#40;</span>babyTracker.<span class="me1">isAlive</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							babyTracker.<span class="me1">interrupt</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+					<span class="br0">&#125;</span>
+
+				<span class="br0">&#125;</span></pre></div></div>
+				</div>
+				<p>Notice here in the start method I'm creating a <tt>Filter</tt>.  There is some handy code that takes an array of service names and generates the filter.  You can do it manually if you like, check out the <a href="http://www.osgi.org/javadoc/r3/org/osgi/framework/Filter.html" class="external text" rel="nofollow">JavaDoc for the <tt>Filter</tt> class</a> for more details.
+				</p><p>And now in our <tt>BabyTrackerCustomizer</tt> class, we need to handle the case where we get the <tt>PublicWSAdmin</tt> service and then register our web service there.  Here is that update:
+
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"><span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">java.io.FileOutputStream</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">java.io.IOException</span><span class="sy0">;</span>
+
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleContext</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.ServiceReference</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.util.tracker.ServiceTrackerCustomizer</span><span class="sy0">;</span>
+				&nbsp;
+
+				<span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.camera.pub.ICameraDevice</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.services.ws.PublicWSAdmin</span><span class="sy0">;</span>
+				&nbsp;
+				<span class="kw1">public</span> <span class="kw1">class</span> BabyTrackerCustomizer <span class="kw1">extends</span> <span class="kw3">Thread</span> <span class="kw1">implements</span> ServiceTrackerCustomizer <span class="br0">&#123;</span>
+
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw1">final</span> BundleContext context<span class="sy0">;</span>
+					<span class="kw1">private</span> ICameraDevice camera<span class="sy0">;</span>
+					<span class="kw1">private</span> PublicWSAdmin wsAdmin<span class="sy0">;</span>
+
+					<span class="kw1">private</span> ImageWebService ws<span class="sy0">;</span>
+				&nbsp;
+					BabyTrackerCustomizer<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">this</span>.<span class="me1">context</span> <span class="sy0">=</span> context<span class="sy0">;</span>
+
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> run<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">try</span> <span class="br0">&#123;</span>
+							<span class="kw1">while</span> <span class="br0">&#40;</span><span class="sy0">!</span><span class="kw3">Thread</span>.<span class="me1">interrupted</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+								<span class="kw4">byte</span> <span class="br0">&#91;</span><span class="br0">&#93;</span> image <span class="sy0">=</span> camera.<span class="me1">getImage</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				&nbsp;
+								writeToFile<span class="br0">&#40;</span>image, <span class="st0">&quot;/tmp/camera.jpg&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+								sleep<span class="br0">&#40;</span><span class="nu0">30000</span><span class="br0">&#41;</span><span class="sy0">;</span>
+							<span class="br0">&#125;</span>
+						<span class="br0">&#125;</span> <span class="kw1">catch</span> <span class="br0">&#40;</span><span class="kw3">InterruptedException</span> e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+				&nbsp;
+						<span class="br0">&#125;</span> <span class="kw1">catch</span> <span class="br0">&#40;</span><span class="kw3">IOException</span> e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							e.<span class="me1">printStackTrace</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw4">void</span> writeToFile<span class="br0">&#40;</span><span class="kw4">byte</span><span class="br0">&#91;</span><span class="br0">&#93;</span> image, <span class="kw3">String</span> filename<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">IOException</span> <span class="br0">&#123;</span>
+
+						<span class="kw3">FileOutputStream</span> fos <span class="sy0">=</span> <span class="kw1">new</span> <span class="kw3">FileOutputStream</span><span class="br0">&#40;</span>filename<span class="br0">&#41;</span><span class="sy0">;</span>
+				&nbsp;
+						fos.<span class="me1">write</span><span class="br0">&#40;</span>image<span class="br0">&#41;</span><span class="sy0">;</span>
+
+						fos.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw3">Object</span> addingService<span class="br0">&#40;</span>ServiceReference reference<span class="br0">&#41;</span> <span class="br0">&#123;</span>	
+						<span class="kw3">Object</span> o <span class="sy0">=</span> context.<span class="me1">getService</span><span class="br0">&#40;</span>reference<span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+						<span class="kw1">if</span> <span class="br0">&#40;</span>o <span class="kw1">instanceof</span> ICameraDevice<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							camera <span class="sy0">=</span> <span class="br0">&#40;</span>ICameraDevice<span class="br0">&#41;</span> o<span class="sy0">;</span>
+
+						<span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+							wsAdmin <span class="sy0">=</span> <span class="br0">&#40;</span>PublicWSAdmin<span class="br0">&#41;</span> o<span class="sy0">;</span>
+							ws <span class="sy0">=</span> <span class="kw1">new</span> ImageWebService<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+							wsAdmin.<span class="me1">registerService</span><span class="br0">&#40;</span>ws<span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+						<span class="kw1">if</span> <span class="br0">&#40;</span>camera <span class="sy0">!=</span> <span class="kw2">null</span> <span class="sy0">&amp;&amp;</span> wsAdmin <span class="sy0">!=</span> <span class="kw2">null</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+							<span class="kw1">this</span>.<span class="me1">start</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+						<span class="kw1">return</span> o<span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> modifiedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span> <span class="br0">&#123;</span>			
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> removedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+						wsAdmin.<span class="me1">unregisterService</span><span class="br0">&#40;</span>ws<span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="kw1">this</span>.<span class="me1">interrupt</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+				&nbsp;
+				<span class="br0">&#125;</span></pre></div></div>
+				</div>
+
+				<p>Last and certainly most forgotton, we need to update the manifest file with references to the PublicWSAdmin package and the buglabs util package, as we used the helper method to generate our <tt>Filter</tt> instance in <tt>Activator.java</tt>:
+				</p>
+				<pre>Manifest-Version: 1.0
+				Bundle-Name: BugBabyMonitor
+				Bundle-Activator: bugbabymonitor.Activator
+				Bundle-SymbolicName: BugBabyMonitor
+				Bundle-Version: 1.0.0
+				Bundle-Vendor: kgilmer
+				Bug-Bundle-Type: Application
+				Import-Package: com.buglabs.bug.module.camera.pub,
+				 <b>com.buglabs.util,
+				 com.buglabs.services.ws</b>,
+				org.osgi.util.tracker
+				</pre>
+				<h3> <span class="mw-headline" id="Take_it_for_a_spin"> Take it for a spin </span></h3>
+				<p>Now let's run the code on the BUG (or Virtual BUG if you prefer).  I'm gonna run it in the Virtual BUG, so the URL for my BUG is going to be <tt><a href="http://localhost:8082" class="external free" rel="nofollow">http://localhost:8082</a></tt>.  My real BUG is at <tt><a href="http://10.10.10.10/" class="external free" rel="nofollow">http://10.10.10.10/</a></tt>  Let's go to the Virtual BUG now:
+
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:720px;"><img alt="" src="../images/Bbm_firefox_ws_base.png" width="718" height="681" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The BUG Root Page</div></div></div></div>
+				<p>Well this is nice but I don't see a baby.  Let's click on the <u>BUG Web Services</u> link, that looks promising:
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:720px;"><img alt="" src="../images/Bbm_firefox_wsdiscovery.png" width="718" height="681" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>The BUG WS Discovery Page</div></div></div></div>
+				<p>Ah, now we see the service!  This page is rendered from the discovery information that was provided in <tt>PublicWSProvider2.discover()</tt> method.  Also, if you are looking in the SDK you might also find some evidence of your new service:
+				</p>
+
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><img alt="" src="../images/Bbm_eclipse_baby_service.png" width="800" height="665" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>Our web service in the SDK</div></div></div></div>
+				<p>Well, let's go to the actual service and see what happens.  As you can tell from the XML, our service happily supports HTTP GET so we can just go there in the browser:
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:654px;"><img alt="" src="../images/Bbm_firefox_ws_baby.png" width="652" height="627" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>Our web service response</div></div></div></div>
+				<p>And there you have it, a web-service enabled baby monitor!
+				</p>
+				<h2> <span class="mw-headline" id="Conclusion"> Conclusion </span></h2>
+				<p>Well, that is all it takes for a simple BUG app that uses hardware and web services!  There is a whole lot more to BUG development and we'll get into some of that next, but this is really the core of it.  Moving along, we'll add more modules and richer functionality to our baby monitor app and learn more about the BUG platform along the way!
+				</p>
+				<h1> <span class="mw-headline" id="Triggering_the_Photo_with_Motion"> Triggering the Photo with Motion </span></h1>
+
+				<p>Well it's all good and fine to be able to see what the little creature is up to via a HTTP GET request, but it's kind of silly just to loop every 30 seconds and take a picture.  It would be better to simply take a photo when motion is detected.  Well, we do happen have this motion sensing module.  Let's put it to use!  The complete source code for the version of our app covered in this section is available <a href="http://buglabs.net/program_version/download/715" class="external text" rel="nofollow">here on BUGnet</a>.
+				</p>
+				<h2> <span class="mw-headline" id="Finding_the_Motion_Service"> Finding the Motion Service </span></h2>
+				<p>Let's go back to the <tt>BUG Libraries</tt> classpath container in our Eclipse project.  Since we're looking for some service relating to the detection of motion, it makes sense that that service would be defined in the motion module's bundle.  And sure enough we uncover something called <tt>IMotionSubject</tt> which looks like an API that can be used to register ourselves as listeners to:
+				</p>
+				<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><img alt="" src="../images/Bbm_eclipse_motion_api.png" width="800" height="588" class="thumbimage" />  <div class="thumbcaption"><div class="magnify"><img src="/skins/common/images/magnify-clip.png" width="15" height="11" alt="" /></div>Some Motion API in the SDK</div></div></div></div>
+
+				<h2> <span class="mw-headline" id="Augmenting_our_ServiceTracker"> Augmenting our ServiceTracker </span></h2>
+				<p>Now that we know what server we need, let's update our ServiceTracker so it will look for the motion sensing service in addition to the camera service and the WS service:
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"><span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleActivator</span><span class="sy0">;</span>
+
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleContext</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.Filter</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.util.tracker.ServiceTracker</span><span class="sy0">;</span>
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.camera.pub.ICameraDevice</span><span class="sy0">;</span>
+
+				<span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.motion.pub.IMotionSubject</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.services.ws.PublicWSAdmin</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.util.ServiceFilterGenerator</span><span class="sy0">;</span>
+				&nbsp;
+				<span class="kw1">public</span> <span class="kw1">class</span> <span class="kw3">Activator</span> <span class="kw1">implements</span> BundleActivator <span class="br0">&#123;</span>
+
+				&nbsp;
+					<span class="kw1">private</span> ServiceTracker st<span class="sy0">;</span>
+					BundleContext context<span class="sy0">;</span>
+					<span class="kw1">private</span> BabyTrackerCustomizer babyTracker<span class="sy0">;</span>
+
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw3">String</span> <span class="br0">&#91;</span><span class="br0">&#93;</span> services <span class="sy0">=</span> <span class="br0">&#123;</span>
+							ICameraDevice.<span class="kw1">class</span>.<span class="me1">getName</span><span class="br0">&#40;</span><span class="br0">&#41;</span>, 
+							PublicWSAdmin.<span class="kw1">class</span>.<span class="me1">getName</span><span class="br0">&#40;</span><span class="br0">&#41;</span>,
+							IMotionSubject.<span class="kw1">class</span>.<span class="me1">getName</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+
+							<span class="br0">&#125;</span><span class="sy0">;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> start<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+
+						babyTracker <span class="sy0">=</span> <span class="kw1">new</span> BabyTrackerCustomizer<span class="br0">&#40;</span>context<span class="br0">&#41;</span><span class="sy0">;</span>
+						Filter f <span class="sy0">=</span> ServiceFilterGenerator.<span class="me1">generateServiceFilter</span><span class="br0">&#40;</span>context, services<span class="br0">&#41;</span><span class="sy0">;</span>
+
+						st <span class="sy0">=</span> <span class="kw1">new</span> ServiceTracker<span class="br0">&#40;</span>context, f, babyTracker<span class="br0">&#41;</span><span class="sy0">;</span>
+						st.<span class="me1">open</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> stop<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">Exception</span> <span class="br0">&#123;</span>
+						st.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+						babyTracker.<span class="me1">removedService</span><span class="br0">&#40;</span><span class="kw2">null</span>, <span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+				<span class="br0">&#125;</span></pre></div></div>
+				</div>
+				<h2> <span class="mw-headline" id="Listening_for_Motion"> Listening for Motion </span></h2>
+				<p>And now in our <tt>BabyTrackerCustomizer</tt> class we want to move from a polling strategy to an event-based strategy.  To do this we remove the Thread code, as we no longer need it.  Then, when we are notified by the <tt>ServiceTracker</tt> that the motion service is available, we register ourselves as a listener.  Then, when we get called, we take a picture and save it to the filesystem.  You'll find that this code is slightly simpler than when having to deal with a thread. BabyTrackerCustomizer.java:
+
+				</p>
+				<div class="source">
+				<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="java source-java"><pre class="de1"><span class="kw1">package</span> <span class="co2">bugbabymonitor</span><span class="sy0">;</span>
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">java.io.FileOutputStream</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">java.io.IOException</span><span class="sy0">;</span>
+
+				&nbsp;
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.BundleContext</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.framework.ServiceReference</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">org.osgi.util.tracker.ServiceTrackerCustomizer</span><span class="sy0">;</span>
+				&nbsp;
+
+				<span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.camera.pub.ICameraDevice</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.motion.pub.IMotionObserver</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.bug.module.motion.pub.IMotionSubject</span><span class="sy0">;</span>
+				<span class="kw1">import</span> <span class="co2">com.buglabs.services.ws.PublicWSAdmin</span><span class="sy0">;</span>
+
+				&nbsp;
+				<span class="kw1">public</span> <span class="kw1">class</span> BabyTrackerCustomizer <span class="kw1">implements</span> ServiceTrackerCustomizer, IMotionObserver <span class="br0">&#123;</span>
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw1">final</span> BundleContext context<span class="sy0">;</span>
+
+					<span class="kw1">private</span> ICameraDevice camera<span class="sy0">;</span>
+					<span class="kw1">private</span> PublicWSAdmin wsAdmin<span class="sy0">;</span>
+					<span class="kw1">private</span> ImageWebService ws<span class="sy0">;</span>
+
+					<span class="kw1">private</span> IMotionSubject motionService<span class="sy0">;</span>
+				&nbsp;
+					BabyTrackerCustomizer<span class="br0">&#40;</span>BundleContext context<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+						<span class="kw1">this</span>.<span class="me1">context</span> <span class="sy0">=</span> context<span class="sy0">;</span>
+
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">private</span> <span class="kw4">void</span> writeToFile<span class="br0">&#40;</span><span class="kw4">byte</span><span class="br0">&#91;</span><span class="br0">&#93;</span> image, <span class="kw3">String</span> filename<span class="br0">&#41;</span> <span class="kw1">throws</span> <span class="kw3">IOException</span> <span class="br0">&#123;</span>
+
+						<span class="kw3">FileOutputStream</span> fos <span class="sy0">=</span> <span class="kw1">new</span> <span class="kw3">FileOutputStream</span><span class="br0">&#40;</span>filename<span class="br0">&#41;</span><span class="sy0">;</span>
+				&nbsp;
+						fos.<span class="me1">write</span><span class="br0">&#40;</span>image<span class="br0">&#41;</span><span class="sy0">;</span>
+
+						fos.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw3">Object</span> addingService<span class="br0">&#40;</span>ServiceReference reference<span class="br0">&#41;</span> <span class="br0">&#123;</span>	
+						<span class="kw3">Object</span> o <span class="sy0">=</span> context.<span class="me1">getService</span><span class="br0">&#40;</span>reference<span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+						<span class="kw1">if</span> <span class="br0">&#40;</span>o <span class="kw1">instanceof</span> ICameraDevice<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							camera <span class="sy0">=</span> <span class="br0">&#40;</span>ICameraDevice<span class="br0">&#41;</span> o<span class="sy0">;</span>
+
+						<span class="br0">&#125;</span> 
+				&nbsp;
+						<span class="kw1">if</span> <span class="br0">&#40;</span>o <span class="kw1">instanceof</span> PublicWSAdmin<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							wsAdmin <span class="sy0">=</span> <span class="br0">&#40;</span>PublicWSAdmin<span class="br0">&#41;</span> o<span class="sy0">;</span>
+
+							ws <span class="sy0">=</span> <span class="kw1">new</span> ImageWebService<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+							wsAdmin.<span class="me1">registerService</span><span class="br0">&#40;</span>ws<span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+
+				&nbsp;
+						<span class="kw1">if</span> <span class="br0">&#40;</span>o <span class="kw1">instanceof</span> IMotionSubject<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							motionService <span class="sy0">=</span> <span class="br0">&#40;</span>IMotionSubject<span class="br0">&#41;</span> o<span class="sy0">;</span>
+
+							motionService.<span class="me1">register</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span>
+						<span class="br0">&#125;</span>
+				&nbsp;
+						<span class="kw1">return</span> o<span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> modifiedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span> <span class="br0">&#123;</span>			
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> removedService<span class="br0">&#40;</span>ServiceReference reference, <span class="kw3">Object</span> service<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+						wsAdmin.<span class="me1">unregisterService</span><span class="br0">&#40;</span>ws<span class="br0">&#41;</span><span class="sy0">;</span>
+						motionService.<span class="me1">unregister</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="br0">&#125;</span>
+				&nbsp;
+					<span class="kw1">public</span> <span class="kw4">void</span> motionDetected<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+						<span class="kw1">if</span> <span class="br0">&#40;</span>camera <span class="sy0">!=</span> <span class="kw2">null</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+							<span class="kw4">byte</span> <span class="br0">&#91;</span><span class="br0">&#93;</span> image <span class="sy0">=</span> camera.<span class="me1">getImage</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+
+				&nbsp;
+							<span class="kw1">try</span> <span class="br0">&#123;</span>
+								writeToFile<span class="br0">&#40;</span>image, <span class="st0">&quot;/tmp/camera.jpg&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+							<span class="br0">&#125;</span> <span class="kw1">catch</span> <span class="br0">&#40;</span><span class="kw3">IOException</span> e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+
+								<span class="co1">// TODO Auto-generated catch block</span>
+								e.<span class="me1">printStackTrace</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+							<span class="br0">&#125;</span>
+						<span class="br0">&#125;</span>
+					<span class="br0">&#125;</span>
+				&nbsp;
+				<span class="br0">&#125;</span></pre></div></div>
+				</div>
+
+				<h2> <span class="mw-headline" id="Adding_the_Motion_service_namespace_to_the_OSGi_Manifest"> Adding the Motion service namespace to the OSGi Manifest </span></h2>
+				<p>Before we can run our application, we need to tell Concierge (the OSGi framework) that we want to import classes from the Motion bundle.  Here is our new manifest:
+				</p>
+				<pre>Manifest-Version: 1.0
+				Bundle-Name: BugBabyMonitor
+				Bundle-Activator: bugbabymonitor.Activator
+				Bundle-SymbolicName: BugBabyMonitor
+				Bundle-Version: 1.0.0
+				Bundle-Vendor: kgilmer
+				Bug-Bundle-Type: Application
+				Import-Package: com.buglabs.bug.module.camera.pub,
+				 com.buglabs.util,
+				 com.buglabs.services.ws,
+				 org.osgi.util.tracker,
+				 <b>com.buglabs.bug.module.motion.pub</b>
+				</pre>
+				<h2> <span class="mw-headline" id="Take_it_for_a_spin_2"> Take it for a spin </span></h2>
+				<p>Now that our app is ready to go, let's install it on the BUG (or Virtual BUG).  You'll be seeing some photos on the web page, but now they should only update when motion is detected!  Be sure you have the real or virtual motion module attached to your BUG!
+				</p>
+				<h1> <span class="mw-headline" id="Respond_to_Sound"> Respond to Sound </span></h1>
+
+				<pre>This section isn't ready yet!
+				</pre>
+				<h1> <span class="mw-headline" id="Email_Me"> Email Me </span></h1>
+				<pre>This section isn't ready yet!
+				</pre>
+				<h1> <span class="mw-headline" id="Launch_with_an_Icon"> Launch with an Icon </span></h1>
+				<pre>This section isn't ready yet!
+				</pre>
+				<h1> <span class="mw-headline" id="Advanced_Remote_Access"> Advanced Remote Access </span></h1>
+
+				<pre>This section isn't ready yet!
+				</pre>
+				<h1> <span class="mw-headline" id="Resources"> Resources </span></h1>
+				<p>The source code for BUG Baby Monitor can be found <a href="http://buglabs.net/applications/BugBabyMonitor" class="external text" rel="nofollow">here</a> on BUGnet, the place to go for all sorts of BUG applications.
+				</p>
+				<h1> <span class="mw-headline" id="Footnotes"> Footnotes </span></h1>
+				<p><span id="Foot1"><sup>1 </sup> The actual bundle we see in the SDK is <tt>com.buglabs.bug.emulator.module.camera</tt>.  This is because in the SDK we are not running the native Java code, but the APIs are exactly the same.</span>
+
+				</p><p><span id="Foot1"><sup>2 </sup> The BUG can be connected to a network in a variety of ways.  The yet unreleased Wifi/BT module is a good one.  Also USBNET is a simple way, if you have another PC within USB cable range.  Also, Linux-compatible Wifi USB dongles will work with the BUG via the von Hippel USB port.</span>
+				</p>
+				<!-- 
+				NewPP limit report
+				Preprocessor node count: 230/1000000
+				Post-expand include size: 0/2097152 bytes
+				Template argument size: 0/2097152 bytes
+				Expensive parser function count: 0/100
+				-->
+
+				<!-- Saved in parser cache with key wiki:pcache:idhash:340-0!1!0!!en!2!printable=1 and timestamp 20100925161147 -->
+				<div class="printfooter">
+				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:Baby_Monitor_BUGapp_Tutorial">http://wiki.buglabs.net/index.php/Tutorial:Baby_Monitor_BUGapp_Tutorial</a>"</div>
+								<!-- /bodytext -->
+
+
+				<!-- ########### END OF INSERTED CONTENT ########## -->
+
+				<div class="toc">
+				Need more examples?
+				<ul>
+					<li><a href="../anatomyOfBUGApplication/index.html">Basic Application</a></li>
+					<li><a href="../callWebServicesApp/index.html">Web Services Application</a></li>
+				</ul>
+				</div>
+
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
+</html>

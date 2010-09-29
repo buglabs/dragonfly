@@ -1,17 +1,3 @@
-
-/*******************************************************************************
- * Copyright (c) 2001, 2005 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
-
-@import "../PRODUCT_PLUGIN/book.css";
-
 /* Framework */
 html,
 body {
@@ -33,7 +19,7 @@ li, td, span, code {color:#636363;}
 }
 /* Footer */
 #footer {
-	margin-left: 1em;
+	margin-left: 13em;
 	margin-top: 5em;
 	padding: 0.75em;
   border-left: 10px solid #eee;
@@ -75,6 +61,26 @@ body.ltr #footer #footer-places {
 	margin-right: 1em;
 	line-height: 2em;
 }
+/* Logo */
+#p-logo {
+	display:none; 
+  /*
+  position: absolute;
+	top: -160px;
+	left: 0;
+	width: 10em;
+	height: 160px; */
+}
+#p-logo a {
+  /*
+	display: block;
+	width: 10em;
+	height: 160px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	text-decoration: none; */
+}
+
 /*
  * 
  * The following code is highly modified from monobook. It would be nice if the
@@ -82,6 +88,112 @@ body.ltr #footer #footer-places {
  * howerver this would require backporting the other skins.
  */
 
+/* Preferences */
+#preftoc {
+	/* Tabs */
+	width: 100%;
+	float: left;
+	clear: both;
+	margin: 0 !important;
+	padding: 0 !important;
+	background-image: url(images/preferences-break.png);
+	background-position: bottom left;
+	background-repeat: no-repeat;
+}
+	#preftoc li {
+		/* Tab */
+		float: left;
+		margin: 0;
+		padding: 0;
+		padding-right: 1px;
+		height: 2.25em;
+		white-space: nowrap;
+		list-style-type: none;
+		list-style-image: none;
+		background-image: url(images/preferences-break.png);
+		background-position: bottom right;
+		background-repeat: no-repeat;
+	}
+	/* IGNORED BY IE6 */
+	#preftoc li:first-child {
+		margin-left: 1px;
+	}
+	#preftoc a,
+	#preftoc a:active {
+		display: inline-block;
+		position: relative;
+		color: #0c97c5;
+		padding: 0.5em;
+		text-decoration: none;
+		background-image: none;
+		font-size: 0.9em;
+	}
+	#preftoc a:hover {
+		text-decoration: underline;
+	}
+	#preftoc li.selected a {
+		background-image: url(images/preferences-fade.png);
+		background-position: bottom;
+		background-repeat: repeat-x;
+		color: #333333;
+		text-decoration: none;
+	}
+#preferences {
+	float: left;
+	width: 100%;
+	margin: 0;
+	margin-top: -2px;
+	clear: both;
+	border: solid 1px #cccccc;
+	background-color: #f9f9f9;
+	background-image: url(images/preferences-base.png);
+}
+#preferences fieldset.prefsection {
+	border: none;
+	padding: 0;
+	margin: 1em;
+}
+#preferences fieldset.prefsection fieldset {
+	border: none;
+	border-top: solid 1px #cccccc;
+}
+#preferences legend {
+	color: #666666;
+}
+#preferences fieldset.prefsection legend.mainLegend {
+	display: none;
+}
+#preferences td {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+#preferences td.htmlform-tip {
+	font-size: x-small;
+	padding: .2em 2em;
+	color: #666666;
+}
+#preferences div.mw-prefs-buttons {
+	padding: 1em;
+}
+#preferences div.mw-prefs-buttons input {
+	margin-right: 0.25em;
+}
+
+/* 
+ * Styles for the user login and create account forms
+ */
+#userlogin, #userloginForm {
+	border: solid 1px #cccccc;
+	padding: 1.2em;
+	margin: .5em;
+	float: left;
+}
+
+#userlogin {
+	min-width: 20em;
+	max-width: 90%;
+	width: 40em;
+}
 
 /*
  * 
@@ -92,7 +204,7 @@ body.ltr #footer #footer-places {
 	line-height: 1.5em;
 }
 #bodyContent {
-	font-size: 0.9em;
+	font-size: 0.8em;
 }
 /* Links */
 a {
@@ -215,7 +327,6 @@ code {
 }
 pre {
 	padding: 1em;
-	text-align:left;
 	border: 0px dashed #2f6fab;
 	color: black;
 	background-color: #eee;

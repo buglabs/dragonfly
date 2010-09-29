@@ -1,136 +1,158 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			Using the Virtual BUG
+		</title>
+		<!-- ########### /INSERT PAGE TITLE HERE ########## -->
 
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>Using the Virtual BUG</title>
-	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
-</head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			<a id="top" name="top"></a>
 
-<body bgcolor="#ffffff">
-<p>
-<h1>Using the Virtual BUG</h1><br>
+			<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				Using the Virtual BUG
+				<!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
 
-The Virtual BUG is a software application written in Java that aims to emulate the BUG Runtime environment from the JVM up. 
-Java applications and OSGi bundles that run on the Virtual BUG should work without modification on the real BUGbase unit. 
-While the Virtual BUG is a good way to get familiar with how a real hardware unit works, it is by no means identical to a physical BUG. 
-All the APIs that are used for modules are identical, but how the software modules behave is different than how a real module will behave.
-For example, our camera module in the Virtual BUG is configured to send you images stored on the hard drive as it does not take pictures.
-<br><br>
-To launch the Virtual BUG select the Virtual BUG icon <img src="../images/virtual_bug.gif"> from the Toolbar.<br>
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- ### Copy everything between bodytext comments in printable page source here -->
 
-<br>
-Tips:
-<br><br>
-Virtual BUG Web Services:<br>
-<ul>
-	<li>After you launch the Virtual BUG navigate to <a href="http://localhost:8082/">http://localhost:8082/</a> in a web browser.</li>
-</ul>
+												<!-- bodytext -->
+								<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
 
-Accessing the OSGi console on the Virtual BUG:
-<ul>
-	<li>While using the Virtual BUG simply type commands in the Console view.</li>
-	<li>Type 'help' in the Console to review the valid command usage.</li>
-</ul>
-When to use the Virtual BUG:
-<ol>
-<li>Prototyping BUG OSGi applications.</li>
-<li>Experimenting with hardware modules.</li>
-<li>Testing out BUG applications from other users.</li>
-<li>Running and testing Java code.</li>
-<li>Test driving a new module before purchasing. </li>
-</ol>
-When the Virtual BUG is not going to be of help:
-<ol>
-<li>Prototyping Linux drivers for BUG.</li>
-<li>Compiling Linux C programs for use on BUG.</li>
-<li>Experimenting with the low-level configuration of BUG. </li>
-</ol>
+				<ul>
+				<li class="toclevel-1 tocsection-1"><a href="#Virtual_BUG"><span class="tocnumber">1</span> <span class="toctext">Virtual BUG</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-2"><a href="#Virtual_BUG_Web_Services:"><span class="tocnumber">1.1</span> <span class="toctext">Virtual BUG Web Services:</span></a></li>
+				<li class="toclevel-2 tocsection-3"><a href="#Accessing_the_OSGi_console_on_the_Virtual_BUG:"><span class="tocnumber">1.2</span> <span class="toctext">Accessing the OSGi console on the Virtual BUG:</span></a></li>
+				<li class="toclevel-2 tocsection-4"><a href="#When_to_use_the_Virtual_BUG:"><span class="tocnumber">1.3</span> <span class="toctext">When to use the Virtual BUG:</span></a></li>
 
-</p>
+				<li class="toclevel-2 tocsection-5"><a href="#When_the_Virtual_BUG_is_not_going_to_be_of_help:"><span class="tocnumber">1.4</span> <span class="toctext">When the Virtual BUG is not going to be of help:</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-6"><a href="#Virtual_BUG_Interface"><span class="tocnumber">2</span> <span class="toctext">Virtual BUG Interface</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-7"><a href="#Hot_Key_Buttons"><span class="tocnumber">2.1</span> <span class="toctext">Hot Key Buttons</span></a></li>
+				<li class="toclevel-2 tocsection-8"><a href="#BUGbase_LCD"><span class="tocnumber">2.2</span> <span class="toctext">BUGbase LCD</span></a></li>
 
-<p>
+				<li class="toclevel-2 tocsection-9"><a href="#Navigation_joystick_and_Select_button"><span class="tocnumber">2.3</span> <span class="toctext">Navigation joystick and Select button</span></a></li>
+				<li class="toclevel-2 tocsection-10"><a href="#Modules"><span class="tocnumber">2.4</span> <span class="toctext">Modules</span></a></li>
+				<li class="toclevel-2 tocsection-11"><a href="#Menu"><span class="tocnumber">2.5</span> <span class="toctext">Menu</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-12"><a href="#Default_Structure"><span class="tocnumber">2.5.1</span> <span class="toctext">Default Structure</span></a></li>
 
-<h2>Virtual BUG Interface</h2>
+				</ul>
+				</li>
+				</ul>
+				</li>
+				</ul>
+				</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+				<h2> <span class="mw-headline" id="Virtual_BUG">Virtual BUG</span></h2>
+				<p>The Virtual BUG is a software application written in Java that aims to emulate the BUG Runtime environment from the JVM up. Java applications and OSGi bundles that run on the Virtual BUG should work without modification on the real BUGbase unit. While the Virtual BUG is a good way to get familiar with how a real hardware unit works, it is by no means identical to a physical BUG. All the APIs that are used for modules are identical, but how the software modules behave is different than how a real module will behave. For example, our camera module in the Virtual BUG is configured to send you images stored on the hard drive as it does not take pictures.
+				</p><p>To launch the Virtual BUG select the Virtual BUG icon <a href="/index.php/File:StaticConnection.gif" class="image"><img alt="StaticConnection.gif" src="/images/3/30/StaticConnection.gif" width="16" height="16" /></a> from the Toolbar.
+				</p><p>Tips:
+				</p>
+				<h3> <span class="mw-headline" id="Virtual_BUG_Web_Services:">Virtual BUG Web Services:</span></h3>
 
-The Virtual BUG is a window application that attempts to resemble a physical BUG unit. This is subject to change.
+				<ul><li> After you launch the Virtual BUG navigate to <a href="http://localhost:8082/" class="external free" rel="nofollow">http://localhost:8082/</a> in a web browser.
+				</li></ul>
+				<h3> <span class="mw-headline" id="Accessing_the_OSGi_console_on_the_Virtual_BUG:">Accessing the OSGi console on the Virtual BUG:</span></h3>
+				<ul><li> While using the Virtual BUG simply type commands in the Console view.
+				</li><li> Type 'help' in the Console to review the valid command usage.
+				</li></ul>
+				<h3> <span class="mw-headline" id="When_to_use_the_Virtual_BUG:">When to use the Virtual BUG:</span></h3>
 
-<br><br>The window shows the BUG from the side which contains four hot keys, a small LCD screen, a navigation joystick, and a select button. 
-On the top and bottom of the window are BUGmodule connectors. Clicking on a Virtual BUG button will trigger press/depress actions as if on a real BUG. 
-To quit the Virtual BUG, press the Esc key when the Virtual BUG window is selected.
+				<ol><li> Prototyping BUG OSGi applications.
+				</li><li> Experimenting with hardware modules.
+				</li><li> Testing out BUG applications from other users.
+				</li><li> Running and testing Java code.
+				</li><li> Test driving a new module before purchasing.
+				</li></ol>
+				<h3> <span class="mw-headline" id="When_the_Virtual_BUG_is_not_going_to_be_of_help:">When the Virtual BUG is not going to be of help:</span></h3>
+				<ol><li> Prototyping Linux drivers for BUG.
+				</li><li> Compiling Linux C programs for use on BUG.
 
+				</li><li> Experimenting with the low-level configuration of BUG.
+				</li></ol>
+				<h2> <span class="mw-headline" id="Virtual_BUG_Interface">Virtual BUG Interface</span></h2>
+				<p>The Virtual BUG is a window application that attempts to resemble a physical BUG unit. This is subject to change.
+				</p><p>The window shows the BUG from the side which contains four hot keys, a small LCD screen, a navigation joystick, and a select button. On the top and bottom of the window are BUGmodule connectors. Clicking on a Virtual BUG button will trigger press/depress actions as if on a real BUG. To quit the Virtual BUG, press the Esc key when the Virtual BUG window is selected.
+				</p>
+				<h3> <span class="mw-headline" id="Hot_Key_Buttons">Hot Key Buttons</span></h3>
+				<p>The buttons to the left of the LCD display are configurable hot key buttons. Applications can listen to these buttons to start an action, such as taking a picture or scanning a product code.
+				</p>
+				<h3> <span class="mw-headline" id="BUGbase_LCD">BUGbase LCD</span></h3>
 
+				<p>The BUGbase LCD screen is used to display status information as well as let users view and modify configuration information. When the BUG is at rest, the Status Bar is toggled and displays information provided by the base unit as well as by each connected module, if applicable. For example, a connected GPS module will add basic location data to the Status Bar.
+				</p><p>By default, the LCD screen displays the current time and any module icons for modules that are attached. User applications can also contribute information to the LCD screen.
+				</p>
+				<h3> <span class="mw-headline" id="Navigation_joystick_and_Select_button">Navigation joystick and Select button</span></h3>
+				<p>The navigation joystick provides a way of using a simple menu on BUG. The BUG menu is divided into sections, and is similar to a standard desktop menu in that it is composed of lists of lists. An element can be a container, containing another list, or an action that when selected causes some behavior change on BUG.
+				</p><p>Clicking the right Joystick direction will cause the Status Bar to stop and the top level of menu ('Access') to be displayed. Use the select button to initiate a menu action (if available). Users can add lists and actions to the navigation menu. See Menu Extender for an example of how this is done.
+				</p>
+				<h3> <span class="mw-headline" id="Modules">Modules</span></h3>
+				<p>On the Virtual BUG, modules can be added/removed by clicking on the Virtual BUG image near the module connectors or by pressing 1-4 on your keyboard while the Virtual BUG is the active window. A dialog box gives the user a choice of available modules to connect to the base unit, as well as EMPTY for no module. Selecting a module and clicking 'Ok' will change the rendering of the Virtual BUG, showing hardware attached to the module connector.
+				</p><p>Pressing the 'c' key when the Virtual BUG window is selected will set all module connectors to empty.
+				</p>
+				<h3> <span class="mw-headline" id="Menu">Menu</span></h3>
 
-<h3>Hot Key Buttons</h3>
+				<p>The Menu system is essentially a tree that is navigated with joystick on the BUG. Upon selection, container nodes yield their children, and leaf nodes 'execute'. User programs are able to extend the Menu for their own purposes.
+				</p>
+				<h4> <span class="mw-headline" id="Default_Structure">Default Structure</span></h4>
+				<ul><li> Access
+				<ul><li> (enable/disable services on BUG)
+				</li></ul>
+				</li><li> Modules
+				<ul><li> (list of all modules connected to BUG)
+				</li></ul>
+				</li><li> Programs
 
-The buttons to the left of the LCD display are configurable hot key buttons. 
-Applications can listen to these buttons to start an action, such as taking a picture or scanning a product code.
+				<ul><li> (list of all applications running on BUG)
+				</li></ul>
+				</li><li> Services
+				<ul><li> (list of all services on BUG)
+				</li></ul>
+				</li><li> Settings
+				<ul><li> (About, Backlight, Shutdown)
+				</li></ul>
+				</li></ul>
 
+				<!-- 
+				NewPP limit report
+				Preprocessor node count: 46/1000000
+				Post-expand include size: 0/2097152 bytes
+				Template argument size: 0/2097152 bytes
+				Expensive parser function count: 0/100
+				-->
 
+				<!-- Saved in parser cache with key wiki:pcache:idhash:407-0!1!0!!en!2!printable=1 and timestamp 20100925154013 -->
+				<div class="printfooter">
+				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:Using_the_Virtual_BUG">http://wiki.buglabs.net/index.php/Tutorial:Using_the_Virtual_BUG</a>"</div>
+								<!-- /bodytext -->
 
-<h3>BUGbase LCD</h3>
+				<!-- ########### END OF INSERTED CONTENT ########## -->
 
-The BUGbase LCD screen is used to display status information as well as let users view and modify configuration information. When the BUG is at rest, the Status Bar is toggled and displays information provided by the base unit as well as by each connected module, if applicable. 
-For example, a connected GPS module will add basic location data to the Status Bar.
+				<div class="toc">
+				Need more examples?
+				<ul>
+					<li><a href="../anatomyOfBUGApplication/index.html">Basic Application</a></li>
+					<li><a href="../callWebServicesApp/index.html">Web Services Application</a></li>
+				</ul>
+				</div>
 
-<br><br>By default, the LCD screen displays the current time and any module icons for modules that are attached. User applications can also contribute information to the LCD screen.
-
-
-
-<h3>Navigation joystick and Select button</h3>
-
-The navigation joystick provides a way of using a simple menu on BUG. The BUG menu is divided into
-sections, and is similar to a standard desktop menu in that it is composed of
-lists of lists. An element can be a container, containing another list, or an
-action that when selected causes some behavior change on BUG.
-
-<br><br>Clicking the right Joystick direction will cause the Status Bar to stop and the top level of menu ('Access') to be displayed. 
-Use the select button to initiate a menu action (if available).
-Users can add lists and actions to the navigation menu. See <a href="http://buglabs.net/applications/Menu%20Extender">Menu Extender</a> 
-for an example of how this is done.
-
-
-
-<h3>Modules</h3>
-
-On the Virtual BUG, modules can be added/removed by clicking on the Virtual BUG image near the module connectors or by pressing 1-4 on your keyboard while the Virtual BUG is the active window.
-A dialog box gives the user a choice of available modules to connect to the base unit, as well as EMPTY for no module. 
-Selecting a module and clicking 'Ok' will change the rendering of the Virtual BUG, showing hardware attached to the module connector.
-<br><br>
-Pressing the 'c' key when the Virtual BUG window is selected will set all module connectors to empty.
-
-</p>
-
-<p>
-<h3>Menu</h3>
-
-The Menu system is essentially a tree that is navigated with joystick on the BUG. 
-Upon selection, container nodes yield their children, and leaf nodes 'execute'. User programs are able to extend the Menu for their own purposes.
-
-
-<br><br><b>Default Structure</b>
-<ul>
-    <li>Access</li>
-    	<ul>
-    		<li>(enable/disable services on BUG)</li>
-    	</ul>
-    <li>Modules</li>
-        <ul>
-    	    <li>(list of all modules connected to BUG) </li>
-    	</ul>   
-    <li>Programs</li>
-    	<ul>
-    	    <li>(list of all applications running on BUG) </li>
-    	</ul>
-	<li>Services</li>
-        <ul>
-    	    <li>(list of all services on BUG) </li>
-    	</ul>
-    <li>Settings</li>
-    	<ul>
-    		<li>(About, Backlight, Shutdown)</li>
-    	</ul>
-</ul>
-</p>
-</body>
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
 </html>

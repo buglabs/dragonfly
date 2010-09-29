@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+<!-- This is the old toc format.  Now trying to consolidate all topics in one file. -->
+<toc label="Dragonfly SDK" topic="html/overview.html">   
+	<topic label="Getting Started">
+ 	  <anchor id="createBUGProject"/>	
+      <anchor id="creatingABasicApplication"/>
+      <anchor id="callWebServicesApp"/>       
+      <anchor id="debugAnApp"/>
+      <anchor id="babyMonitor"/>
+   	</topic>
+	<topic label="Configure and Run Apps">
+      <anchor id="interactingWithMyBUGsView"/>
+      <anchor id="SendAppToBUG"/>  
+      <anchor id="usingVirtualBug"/>        
+      <anchor id="savingVirtualBUG"/>        
+      <anchor id="launchConfiguration"/>                              
+   	</topic>
+	<topic label="BUGnet Community">
+      <anchor id="interactingWithBUGnetView"/>      
+      <anchor id="downloadApplication"/>
+      <anchor id="uploadApplication"/>
+   	</topic>
+</toc>

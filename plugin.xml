@@ -7,7 +7,7 @@
             file="toc.xml"
             primary="true">
       </toc>
-      <toc file="tocCreateBUGProject.xml"/>
+      <!-- <toc file="tocCreateBUGProject.xml"/>
 	  <toc file="tocAnatomyOfBUGApplication.xml"/>
 	  <toc file="tocCallWebServicesApp.xml"/>
 	  <toc file="tocDebugAnApp.xml"/>
@@ -16,7 +16,7 @@
 	  <toc file="tocUploadApplication.xml"/>
 	  <toc file="tocSendAppToBUG.xml"/>
 	  <toc file="tocUsingVirtualBug.xml"/>
-	  <toc file="tocLaunchConfiguration.xml"/>	  
+	  <toc file="tocLaunchConfiguration.xml"/>	   -->
    </extension>
 
 </plugin>

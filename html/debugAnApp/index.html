@@ -1,31 +1,73 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			Tutorial:Debug an Application
+		</title>
+		<!-- ########### /INSERT PAGE TITLE HERE ########## -->
 
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<title>Debug an Application</title>
-	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css">
-</head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			<a id="top" name="top"></a>
 
-<body bgcolor="#ffffff">
-<h1> Debug an Application</h1>
-<p>
-To create a breakpoint in a BUG application and step through code:
-<ol>
-<li>These steps assume you have created a <a href="../anatomyOfBUGApplication/index.html">Basic Application</a>.
-<li>In the Project Explorer view in Dragonfly, open the Hello World > hello_world node and double-click the Activator.java file to edit it.</li>
-<li>Locate the line of code that reads: <code>System.out.println("Hello World :)");</code> Right-click on the line's left margin and select 
-'Toggle Breakpoint'. A blue dot appears in the margin to indicate an enabled breakpoint.</li>
-<li>In the Project Explorer view, right-click on the
-Hello World project and select Debug As > Virtual BUG. Eclipse displays a
-dialog box asking if you want to switch perspectives.</li>
-<li>Click Yes.
-      In the Debug Perspective, the Java editor highlights the breakpointed line and stops the application.</li>
-<li>Press F8 to step through the code.</li>
-<li>Confirm that the application output displays in the Console view.</li>
-</ol>
-</p>
-</body>
+			<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				Tutorial:Debug an Application
+				<!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- bodytext -->
+				<p>These steps use the Hello World application created in the "Create a Basic Application" tutorial as an example.  
+
+				</p><p>To create a breakpoint in a BUG application and step through code:
+				</p>
+				<ol><li> In Dragonfly, in the Project Explorer, open the Hello World &gt; helloworld node and double-click the Activator.java file to edit it.
+				</li><li> In the line of code:<br /><tt>System.out.println("Hello World&nbsp;:)");</tt><br />right-click in the line's left margin and select <b>Toggle Breakpoint</b>.<br />A blue dot appears in margin to indicate a toggled breakpoint.
+				</li><li> In the Project Explorer, right-click on Hello World project and select <b>Debug As</b> &gt; <b>Virtual BUG</b>.<br />Eclipse displays a dialog box asking if you want to switch perspectives.
+
+				</li><li> Click <b>Yes</b>.<br />In the Debug Perspective, the Java editor highlights the breakpointed line.
+				</li><li> Press F8.
+				</li><li> Confirm that the application output in the Console view.
+				</li></ol>
+				<ul><li> For more help with Debugging in Eclipse, please read <a href="http://www-128.ibm.com/developerworks/library/os-ecbug/" class="external text" rel="nofollow">the IBM developerWorks article</a>.
+				</li></ul>
+				<h2> <span class="mw-headline" id="Setting_up_debug_session_in_Eclipse">Setting up debug session in Eclipse</span></h2>
+
+
+				<ul><li> ##Needs Work##
+				</li></ul>
+				<p>To launch a Virtual BUG with UI, a JVM parameter needs to be passed that adds the SWT libraries to the classpath:
+				</p>
+				<pre>-Djava.library.path=[workspace path]/com.buglabs.bug.emulator/libs/swt
+				</pre>
+				<!-- 
+				NewPP limit report
+				Preprocessor node count: 3/1000000
+				Post-expand include size: 0/2097152 bytes
+				Template argument size: 0/2097152 bytes
+				Expensive parser function count: 0/100
+				-->
+
+				<!-- Saved in parser cache with key wiki:pcache:idhash:171-0!1!0!!en!2 and timestamp 20100924180155 -->
+				<div class="printfooter">
+				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:Debugging_an_Application">http://wiki.buglabs.net/index.php/Tutorial:Debugging_an_Application</a>"</div>
+
+		<!-- /bodytext -->
+
+				<!-- ########### END OF INSERTED CONTENT ########## -->
+
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
 </html>
-
-
