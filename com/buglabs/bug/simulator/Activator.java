@@ -98,7 +98,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	protected HttpService httpService;
 
 	private ServiceRegistration shellServiceReg;
-	
+
 	private PipeReader pipeReader;
 
 	private String pipeFilename;
@@ -132,11 +132,11 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private ServiceRegistration baseControlReg;
 
 	public void start(final BundleContext context) throws Exception {
-		//Basic setup ********************************************
+		// Basic setup ********************************************
 		this.context = context;
 		Activator.logService = LogServiceUtil.getLogService(context);
-		
-		//com.buglabs.bug.base services **************************
+
+		// com.buglabs.bug.base services **************************
 		timeReg = context.registerService(ITimeProvider.class.getName(), this, null);
 		shellServiceReg = context.registerService(IShellService.class.getName(), new ShellService(), null);
 		httpST = ServiceTrackerHelper.createAndOpen(context, new String[] { HttpService.class.getName() }, new RunnableWithServices() {
@@ -154,61 +154,70 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 					logService.log(LogService.LOG_ERROR, "Unable to register info servlet.", e);
 				}
 			}
+
 			public void serviceUnavailable(IServiceProvider serviceProvider, ServiceReference sr, Object service) {
 				if (httpService != null) {
 					httpService.unregister(INFO_SERVLET_ALIAS);
 				}
 			}
 		});
-		
-		//com.buglabs.bug.bmi services ********************************
+
+		// com.buglabs.bug.bmi services ********************************
 		modletFactories = new Hashtable();
 		activeModlets = new Hashtable();
-		
+
 		context.addServiceListener(this, "(" + Constants.OBJECTCLASS + "=" + IModletFactory.class.getName() + ")");
 		registerExistingModletFactories(context);
 
-		//Initialize the bmi manager.
+		// Initialize the bmi manager.
 		Manager bmiManager = Manager.getManager(context, logService, modletFactories, activeModlets);
-		
-		//com.buglabs.bug.module.gps ***********************
+
+		// com.buglabs.bug.module.gps ***********************
 		gpsActivator = new GPSActivator();
 		gpsActivator.start(context);
-		
-		//com.buglabs.bug.module.sierra ***********************
-		//gsmActivator = new GSMActivator();
-		//gsmActivator.start(context);
-		
-		//com.buglabs.bug.module.lcd ***********************
+
+		// com.buglabs.bug.module.sierra ***********************
+		// gsmActivator = new GSMActivator();
+		// gsmActivator.start(context);
+
+		// com.buglabs.bug.module.lcd ***********************
 		lcdActivator = new LCDActivator();
 		lcdActivator.start(context);
-		
-		//com.buglabs.bug.module.vonhippel ***********************
+
+		// com.buglabs.bug.module.vonhippel ***********************
 		vhActivator = new VHActivator();
 		vhActivator.start(context);
-		
-		//com.buglabs.bug.module.camera ***********************
-		//cameraActivator = new CameraActivator();
-		//cameraActivator.start(context);
-		
-		//UI stuff ***********************************************
+
+		// com.buglabs.bug.module.camera ***********************
+		// cameraActivator = new CameraActivator();
+		// cameraActivator.start(context);
+
+		// UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
-		
-		//Module Controller *************************************
+
+		// Module Controller *************************************
 		try {
 			controllerServer = Server.startServer(BUG_SIMULATOR_CONTROLLER_PORT, logService, context);
 		} catch (BindException e) {
 			logService.log(LogService.LOG_ERROR, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
 		}
-		
+
 		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, null);
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		controllerServer.shutdown();
-		shellCommandReg.unregister();
-		baseControlReg.unregister();
-		
+		if (controllerServer != null) {
+			controllerServer.shutdown();
+		}
+
+		if (shellCommandReg != null) {
+			shellCommandReg.unregister();
+		}
+
+		if (baseControlReg != null) {
+			baseControlReg.unregister();
+		}
+
 		if (cameraActivator != null) {
 			cameraActivator.stop(context);
 		}
@@ -216,27 +225,27 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		if (vhActivator != null) {
 			vhActivator.stop(context);
 		}
-		
+
 		if (lcdActivator != null) {
 			lcdActivator.stop(context);
 		}
-		
+
 		if (motionActivator != null) {
 			motionActivator.stop(context);
 		}
-		
+
 		if (gpsActivator != null) {
 			gpsActivator.stop(context);
 		}
-		
+
 		if (gsmActivator != null) {
 			gsmActivator.stop(context);
 		}
-		
+
 		if (audioActivator != null) {
 			audioActivator.stop(context);
 		}
-		
+
 		try {
 			if (httpST != null) {
 				httpST.close();
@@ -249,7 +258,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		}
 		timeReg.unregister();
 		shellServiceReg.unregister();
-		
+
 		// com.buglabs.bug.bmi ****************************
 		context.removeServiceListener(this);
 		stopModlets(activeModlets);
@@ -262,7 +271,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		modletFactories.clear();
 		activeModlets.clear();
 	}
-	
+
 	private void registerExistingModletFactories(BundleContext context2) throws InvalidSyntaxException {
 		ServiceReference sr[] = context2.getServiceReferences(null, "(" + Constants.OBJECTCLASS + "=" + IModletFactory.class.getName() + ")");
 
@@ -273,11 +282,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		}
 	}
 
-	
 	public Date getTime() {
 		return Calendar.getInstance().getTime();
 	}
-	
+
 	/**
 	 * Stop all active modlets.
 	 * 
@@ -391,7 +399,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	protected Map getActiveModlets() {
 		return activeModlets;
 	}
-	
+
 	public static LogService getLogService() {
 		return logService;
 	}
