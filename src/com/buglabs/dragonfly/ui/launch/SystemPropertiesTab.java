@@ -69,7 +69,7 @@ import com.buglabs.dragonfly.ui.Activator;
  */
 public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
-	private static final String SYSTEM_PROPERTIES_KEY = "SYSTEM_PROPERTIES";
+	public static final String SYSTEM_PROPERTIES_KEY = "SYSTEM_PROPERTIES";
 
 	private Map systemProps;
 

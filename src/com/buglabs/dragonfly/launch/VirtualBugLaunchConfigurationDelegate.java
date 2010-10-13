@@ -35,10 +35,8 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	public static final String ATTR_GPS_LOG = "GPS_LOG";
 	public static final String ATTR_IMAGES = "IMAGES";
 	public static final String ATTR_HTTP_PORT = "HTTP PORT";
-	public static final String ATTR_LAUNCH_PROJECTS = "Bug Projects to Launch";
 	public static final String SHELL_BUNDLE = "com.buglabs.osgi.shell";
 	public static final String CG_SHELL_BUNDLE = "shell.jar";
-	public static final String PROP_LAUNCH_ALL = "com.buglabs.dragonfly.launch.launchAllProjects";
 	public static final String PROP_HTTP_PORT = "org.osgi.service.http.port";
 	public static final String PROP_VBUG = "com.buglabs.virtual.bug";
 	public static final String PROP_CAMERA_SNAPSHOTS = "com.buglabs.bug.emulator.module.camera.snapshots";
@@ -74,12 +72,11 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	 */
 	@Override
 	protected StringBuffer getSystemPropertiesContents(ILaunchConfiguration configuration) throws CoreException {
-
 		StringBuffer sb = super.getSystemPropertiesContents(configuration);
 
 		Map props = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new Hashtable());
 		sb.append(generateSystemPropertiesContents(props));
-
+	
 		return sb;
 	}
 
@@ -183,6 +180,8 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	 * Project names.
 	 * 
 	 */
+	/*
+	
 	@Override
 	protected List<String> getWorkspaceBundles(ILaunchConfiguration configuration) throws CoreException {
 		List selectedProjects = BugProjectUtil.getWSBugProjectNames();
@@ -191,6 +190,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 			selectedProjects = configuration.getAttribute(ATTR_LAUNCH_PROJECTS, BugProjectUtil.getWSBugProjectNames());
 		return selectedProjects;
 	}
+	*/
 
 	private static String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
 
@@ -206,16 +206,4 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 		String val = getSystemProperty(configuration, PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
 		return Integer.parseInt((String) val);
 	}
-
-	private List getJarNames(List jars) {
-		Vector names = new Vector();
-		Iterator jarsIter = jars.iterator();
-		while (jarsIter.hasNext()) {
-			File jarFile = (File) jarsIter.next();
-			String jarName = jarFile.getName().substring(0, jarFile.getName().length() - 4);
-			names.add(jarName);
-		}
-		return names;
-	}
-
 }

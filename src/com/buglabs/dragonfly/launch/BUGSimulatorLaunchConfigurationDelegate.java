@@ -26,6 +26,7 @@ import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
 import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.ui.launch.SystemPropertiesTab;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 
 /**
@@ -133,7 +134,29 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		//to the felix runtime.
 		String s = getLaunchDirectory().toPortableString();
 		m.put(APP_DIR, s);
+		
 
+		try {
+			Object x = configuration.getAttribute(
+					BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES,
+					new HashMap());
+			if (x instanceof Map) {
+				m.putAll(((Map) x));
+			}
+			
+			x = configuration.getAttribute(
+					SystemPropertiesTab.SYSTEM_PROPERTIES_KEY,
+					new HashMap());
+			if (x instanceof Map) {
+				m.putAll(((Map) x));
+			}
+			
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
 		return m;
 	}
 
@@ -146,5 +169,12 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 			selectedProjects = configuration.getAttribute(ATTR_LAUNCH_PROJECTS,
 					BugProjectUtil.getWSBugProjectNames());
 		return selectedProjects;
+	}
+
+	@Override
+	protected String[] getVMArgs() throws CoreException {
+		String s = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, new String());
+		
+		return s.split(" ");
 	}
 }
