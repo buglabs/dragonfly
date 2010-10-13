@@ -42,13 +42,13 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	private Text txtGpsLog;
 	private Text txtAccelerometerLog;
 	private Text txtImages;
-	private VirtualBugLaunchProjectsSectionDrawer projects_drawer;
 
 	public VirtualBugTab() {
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getName()
 	 */
 	public String getName() {
@@ -57,7 +57,10 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#createControl(org.eclipse.swt.widgets.Composite)
+	 * 
+	 * @see
+	 * org.eclipse.debug.ui.ILaunchConfigurationTab#createControl(org.eclipse
+	 * .swt.widgets.Composite)
 	 */
 	public void createControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -126,22 +129,16 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		txtImages = new Text(composite, SWT.BORDER);
 		createLog(composite, gdText, txtImages, gdButton);
 
-		projects_drawer = new VirtualBugLaunchProjectsSectionDrawer();
-		projects_drawer.draw(composite);
-		projects_drawer.addChangeListener(new ILaunchProjectSelectionListener() {
-			public void projectSelectionChanged() {
-				setDirty(true);
-				updateLaunchConfigurationDialog();
-			}
-		});
-
 		setControl(composite);
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.AbstractLaunchConfigurationTab#isValid(org.eclipse.debug.core.ILaunchConfiguration)
+	 * 
+	 * @see
+	 * org.eclipse.debug.ui.AbstractLaunchConfigurationTab#isValid(org.eclipse
+	 * .debug.core.ILaunchConfiguration)
 	 */
 	public boolean isValid(ILaunchConfiguration launchConfig) {
 		httpPortValue = httpPort.getText();
@@ -173,15 +170,16 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(org.eclipse.debug.core.ILaunchConfiguration)
+	 * 
+	 * @see
+	 * org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(org.eclipse
+	 * .debug.core.ILaunchConfiguration)
 	 */
 	public void initializeFrom(ILaunchConfiguration configuration) {
 
 		// listen to the port as defined in SDK preferences
 		httpPortValue = DragonflyActivator.getDefault().getPluginPreferences().getString(DragonflyActivator.PREF_DEFAULT_BUGPORT);
 		httpPort.setText(String.valueOf(httpPortValue));
-
-		initializeProjectsDrawer(configuration);
 
 		try {
 			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""); //$NON-NLS-1$
@@ -206,7 +204,10 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+	 * 
+	 * @see
+	 * org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.
+	 * debug.core.ILaunchConfigurationWorkingCopy)
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		try {
@@ -215,25 +216,26 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 			e1.printStackTrace();
 			UIUtils.handleNonvisualError(e1.getMessage(), e1);
 		}
-
-		configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_LAUNCH_PROJECTS, BugProjectUtil.getWSBugProjectNames());
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+	 * 
+	 * @see
+	 * org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(org.eclipse
+	 * .debug.core.ILaunchConfigurationWorkingCopy)
 	 */
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 
 		try {
-			// here make a new copy of the config hash and save the copy so revert button works
+			// here make a new copy of the config hash and save the copy so
+			// revert button works
 			Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 			Map<String, String> propertiesCopy = new HashMap<String, String>(properties);
 			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
 			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
 			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
 			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, "" + projects_drawer.getLaunchAllProjectsFlag());
 			configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -241,43 +243,6 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 		}
 
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_DEFAULT_BUGPORT, httpPortValue);
-
-		configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_LAUNCH_PROJECTS, projects_drawer.getSelectedProjects());
-	}
-
-	/**
-	 * projects_drawer is a helper that draws the Launch Projects Selection
-	 * Section This method initializes the data after projects_drawer has been
-	 * drawn
-	 * 
-	 * @param configuration
-	 */
-	private void initializeProjectsDrawer(ILaunchConfiguration configuration) {
-		// Get a list of the projects we want to launch from config
-		List launchProjects = null;
-		try {
-			// if no config, default to all in workspace
-			launchProjects = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_LAUNCH_PROJECTS, BugProjectUtil.getWSBugProjectNames());
-		} catch (CoreException e) {
-			e.printStackTrace();
-			UIUtils.handleNonvisualError(e.getMessage(), e);
-		}
-		if (launchProjects == null)
-			launchProjects = BugProjectUtil.getWSBugProjectNames();
-
-		projects_drawer.setSelectedProjects(launchProjects);
-
-		// Get out config property that says if we should launch with all projects
-		// from list or not.  This affects whether or not the project table is grayed
-		String val = "true";
-		try {
-			val = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_LAUNCH_ALL, "true");
-		} catch (CoreException e) {
-			e.printStackTrace();
-			UIUtils.handleNonvisualError(e.getMessage(), e);
-		}
-
-		projects_drawer.setLaunchAllProjectsFlag(val.toLowerCase().equals("true"));
 
 	}
 
