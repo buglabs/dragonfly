@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -116,11 +117,19 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		}
 	}
 
-	private String[] getVMArgs(File confFile, String felixPluginBase) throws MalformedURLException {
-		return new String[] { 
-				"-Dfelix.config.properties=" + confFile.toURI().toURL().toString(),
-				};
+	private String[] getVMArgs(File confFile, String felixPluginBase) throws MalformedURLException, CoreException {
+		String [] cs = getVMArgs();
+		
+		List l = Arrays.asList(cs);
+		List l2 = new ArrayList(l);
+		String s = confFile.toURI().toURL().toString();
+		
+		l2.add("-Dfelix.config.properties=" + s);
+		
+		return (String[]) l2.toArray(new String[l.size()]);
 	}
+	
+	protected abstract String[] getVMArgs() throws CoreException;
 
 	private File createFelixConfFile(ILaunchConfiguration configuration, IPath launchDir, String felixPluginBase, Map<String, String> props) throws IOException {		
 		File configFile = new File(launchDir.toOSString(), "config.properties");
