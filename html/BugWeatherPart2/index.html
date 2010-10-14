@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			BugWeather App Part 2 - Running BUG Simulator
+		</title>
+		<!-- ########### /INSERT PAGE TITLE HERE ########## -->
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			<a id="top" name="top"></a>
+
+			<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				BugWeather App Part 2 - Running BUG Simulator
+				<!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- ### Copy everything between bodytext comments in printable page source here -->
+												<!-- bodytext -->
+								<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+
+				<ul>
+				<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-2"><a href="#Topics_Covered"><span class="tocnumber">1.1</span> <span class="toctext">Topics Covered</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-3"><a href="#Step-by-Step_Guide"><span class="tocnumber">2</span> <span class="toctext">Step-by-Step Guide</span></a>
+				<ul>
+
+				<li class="toclevel-2 tocsection-4"><a href="#Editing_the_Manifest_File"><span class="tocnumber">2.1</span> <span class="toctext">Editing the Manifest File</span></a></li>
+				<li class="toclevel-2 tocsection-5"><a href="#Send_to_BUG"><span class="tocnumber">2.2</span> <span class="toctext">Send to BUG</span></a></li>
+				<li class="toclevel-2 tocsection-6"><a href="#My_BUGs_View"><span class="tocnumber">2.3</span> <span class="toctext">My BUGs View</span></a></li>
+				<li class="toclevel-2 tocsection-7"><a href="#BUG_Simulator_View"><span class="tocnumber">2.4</span> <span class="toctext">BUG Simulator View</span></a>
+				<ul>
+
+				<li class="toclevel-3 tocsection-8"><a href="#Adding_the_LCD_Module"><span class="tocnumber">2.4.1</span> <span class="toctext">Adding the LCD Module</span></a></li>
+				<li class="toclevel-3 tocsection-9"><a href="#LCD_Display_Window"><span class="tocnumber">2.4.2</span> <span class="toctext">LCD Display Window</span></a></li>
+				</ul>
+				</li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-10"><a href="#Next_Steps"><span class="tocnumber">3</span> <span class="toctext">Next Steps</span></a></li>
+				</ul>
+
+				</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+				<h1> <span class="mw-headline" id="Introduction">Introduction</span></h1>
+				<p>This is the second in a series of tutorials for the BugWeather app.  In the first tutorial, we went through all the basic steps of creating an app and writing the basic code needed to interact with the BUGview2 LCD module.  That required a little AWT Programming.
+				</p><p>In this tutorial, we will try out our app in the BUG Simulator.  This is an important step and yet, we are still just getting started.  We will run our basic GUI app on the BUG Simulator.  And in the next tutorial, we will actually get some real weather data.  
+				</p>
+				<h3> <span class="mw-headline" id="Topics_Covered">Topics Covered</span></h3>
+				<ul><li> Editing the MANIFEST.MF file
+				</li><li> Sending an app to BUG
+				</li><li> My BUGs view
+
+				</li><li> BUG Simulator configuration
+				</li><li> Running an app in BUG Simulator
+				</li></ul>
+				<h1> <span class="mw-headline" id="Step-by-Step_Guide">Step-by-Step Guide</span></h1>
+				<p>This is a step-by-step guide for running your app in the BUG Simulator. It's not just a matter of clicking on a button.  There are 1 or 2 preliminary steps and a few things you should know. 
+				</p>
+				<h2> <span class="mw-headline" id="Editing_the_Manifest_File">Editing the Manifest File</span></h2>
+				<p>One of the essential things you need to do before running or deploying an app is to declare the packages to import.  This is done in the <b>MANIFEST.MF</b> file which can be found in the <b>META-INF</b> folder in the Eclipse Project Explorer.  (see below)
+
+				</p><p>In the right side of the example below, note the line highlighted in yellow.  The line above has an entry for "com.buglabs.bug.base.pub" which was automatically inserted here since we chose the IBUG20BaseControl in the previous tutorial.  Since we added the LCD service manually, we also need to add an entry here for <b>com.buglabs.bug.base.pub</b> which is the package that contains the IModuleDisplay class that we used.  
+				</p><p><br />
+				</p><p><img alt="BugWeatherApp manifest.png" src="../images/BugWeatherApp_manifest.png" width="749" height="287" />
+				</p>
+				<h2> <span class="mw-headline" id="Send_to_BUG">Send to BUG</span></h2>
+				<p>Now we are ready to send the app to the BUG Simulator.  If you right-click on the project (e.g. BugWeatherApp) in the Project Explorer, a context menu will appear.  Near the bottom is <b>Send to BUG</b>, which does exactly what it says.  By executing this command, the application code is copied over to the running BUG Simulator.  If you are updating an app that you had previously run, the "Upload to BUG" dialog appears asking you to confirm the action.  Click Yes to overwrite the existing app.
+				</p>
+				<h2> <span class="mw-headline" id="My_BUGs_View">My BUGs View</span></h2>
+
+				<p>In the Dragonfly perspective in Eclipse, there usually is a tab called "My BUGs" somewhere.  If you don't see it, go to the menu bar and select <b>Window &gt; Show View &gt; Other...</b> and look for the Dragonfly SDK... My BUGs view.  When it is opened and visible, you will see something like this:
+				</p><p><br />
+				</p><p><img alt="BUGWeatherApp MyBUGs.png" src="../images/BUGWeatherApp_MyBUGs.png" width="269" height="211" />
+				</p><p>Since you executed the "Send to BUG" command only a moment ago, it is possible that you will not see the "BugWeatherApp" listed in the Applications folder.  If so, click on the refresh icon <img alt="Refresh.gif" src="../images/Refresh.gif" width="16" height="16" /> near the top of My BUGs view.  
+				</p>
+				<h2> <span class="mw-headline" id="BUG_Simulator_View">BUG Simulator View</span></h2>
+
+				<p>While you can see the different components and apps that are installed on the BUG Simulator, what you really want to see is the BUG in action (or at least, simulated action).  Double click on the <b>BUG Simulator</b> item at the top of the My BUGs view to show the BUG Simulator view.  Example: 
+				</p><p><br />
+				</p><p><img alt="BUGsimulator base.png" src="../images/BUGsimulator_base.png" width="511" height="272" />
+				</p><p>In the simulator, you will see an image of a BUGbase.  There are slots at the top and bottom that are designed to hold external modules that are plugged in.  Right now, the simulator does not have anything plugged in.  And that's a lot like how your physical BUG hardware starts.  So, the next step is to plug in some hardware.  Specifically the LCD module.
+				</p>
+				<h3> <span class="mw-headline" id="Adding_the_LCD_Module">Adding the LCD Module</span></h3>
+				<p>To plug in some virtual hardware, right click on the BUGbase image and navigate to the menu item:  BUG Simulator &gt; Slot 1 &gt; LCD
+				</p><p><br />
+
+				<img alt="BUGsimulator slot1 LCD.png" src="../images/BUGsimulator_slot1_LCD.png" />
+				</p>
+				<h3> <span class="mw-headline" id="LCD_Display_Window">LCD Display Window</span></h3>
+				<p>Recall for a moment that the BUG Simulator is already running and the code we wrote relies on OSGi to detect and handle hardware that is added (or removed).  As soon as you add the LCD module to Slot 0, the Simulator will execute the BugWeather code.  In the LCDApp class, we told it to create a new AWT frame and add a Label to display "Current Weather".  You should see something like the image below.  The AWT window will run as a separate Java program on your computer and render the content.
+				</p><p><br />
+				<img alt="BugWeatherApp simulator gui.png" src="../images/BugWeatherApp_simulator_gui.png" width="1014" height="380" />
+				</p>
+				<h1> <span class="mw-headline" id="Next_Steps">Next Steps</span></h1>
+				<p>Now that we have run our BugWeather app in the simulator, we are ready to get some weather data to display.  This will involve calling a web service to get weather data, parsing the XML, and displaying the text and images on the LCD.  Coming soon.
+				</p>
+				<!-- 
+				NewPP limit report
+				Preprocessor node count: 38/1000000
+				Post-expand include size: 0/2097152 bytes
+				Template argument size: 0/2097152 bytes
+				Expensive parser function count: 0/100
+				-->
+
+				<!-- Saved in parser cache with key wiki:pcache:idhash:444-0!1!0!!en!2!printable=1 and timestamp 20101008021921 -->
+
+				<div class="printfooter">
+				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:BugWeather_App_Part2--Running_BUG_Simulator">http://wiki.buglabs.net/index.php/Tutorial:BugWeather_App_Part2--Running_BUG_Simulator</a>"</div>
+								<!-- /bodytext -->
+
+
+				<!-- ########### END OF INSERTED CONTENT ########## -->
+
+				<div class="toc">
+				Need more examples?
+				<ul>
+					<li><a href="../BugWeatherPart1/index.html">BugWeather Part 1-Getting Started</a></li>
+					<li><a href="../BugWeatherPart3/index.html">BugWeather Part 3-Calling a REST Web Service</a></li>
+				</ul>
+				</div>
+
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
+</html>

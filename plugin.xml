@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
-<plugin>
+<!-- NOTE: The plugin id should help URLs like this to redirect correctly 
+FROM: /help/content/PLUGINS_ROOT/com.buglabs.dragonfly.help/book.css
+TO: /help/content/com.buglabs.dragonfly.help/book.css -->
+<plugin id="com.buglabs.dragonfly.help">
 
    <extension point="org.eclipse.help.toc">
       <toc
@@ -18,5 +21,9 @@
 	  <toc file="tocUsingVirtualBug.xml"/>
 	  <toc file="tocLaunchConfiguration.xml"/>	   -->
    </extension>
+<!-- KEEP THIS FOR LATER.  See also: http://www.keycontent.org/Eclipse+Help+System -->
+	<!-- <extension point="org.eclipse.help.index">
+	  <index file="index.xml"/>
+	</extension> -->
 
 </plugin>

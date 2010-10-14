@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			BugWeather App Part 1 - Getting Started
+		</title>
+		<!-- ########### /INSERT PAGE TITLE HERE ########## -->
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			<a id="top" name="top"></a>
+
+			<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				BugWeather App Part 1 - Getting Started
+				<!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- ### Copy everything between bodytext comments in printable page source here -->
+
+
+												<!-- bodytext -->
+								<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+
+				<ul>
+				<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-2"><a href="#About_the_BugWeather_App"><span class="tocnumber">1.1</span> <span class="toctext">About the BugWeather App</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-3"><a href="#Topics_Covered"><span class="tocnumber">1.1.1</span> <span class="toctext">Topics Covered</span></a></li>
+				<li class="toclevel-3 tocsection-4"><a href="#Prerequisites.2FNotes"><span class="tocnumber">1.1.2</span> <span class="toctext">Prerequisites/Notes</span></a></li>
+
+				</ul>
+				</li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-5"><a href="#Creating_a_New_Dragonfly_Project"><span class="tocnumber">2</span> <span class="toctext">Creating a New Dragonfly Project</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-6"><a href="#New_Project_Window"><span class="tocnumber">2.1</span> <span class="toctext">New Project Window</span></a></li>
+				<li class="toclevel-2 tocsection-7"><a href="#New_Project:_Service_Definition"><span class="tocnumber">2.2</span> <span class="toctext">New Project: Service Definition</span></a></li>
+
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-8"><a href="#Dragonfly_Project_Overview"><span class="tocnumber">3</span> <span class="toctext">Dragonfly Project Overview</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-9"><a href="#Activator"><span class="tocnumber">3.1</span> <span class="toctext">Activator</span></a></li>
+				<li class="toclevel-2 tocsection-10"><a href="#BugWeatherAppServiceTracker"><span class="tocnumber">3.2</span> <span class="toctext">BugWeatherAppServiceTracker</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-11"><a href="#Modify_initServices"><span class="tocnumber">3.2.1</span> <span class="toctext">Modify initServices</span></a></li>
+
+				<li class="toclevel-3 tocsection-12"><a href="#Add_IModuleDisplay_Variable"><span class="tocnumber">3.2.2</span> <span class="toctext">Add IModuleDisplay Variable</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-13"><a href="#LCDApp"><span class="tocnumber">3.3</span> <span class="toctext">LCDApp</span></a></li>
+				</ul>
+				</li>
+				</ul>
+				</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+				<h1> <span class="mw-headline" id="Introduction">Introduction</span></h1>
+
+				<p>This is the first in a series of tutorials for the BugWeather app (not to be confused with WeatherBug).  Each of the tutorials will take you through some of the basic development tasks in Dragonfly SDK 2.0 that you will need to master.  Even if you have experience with the older Dragonfly SDK, these tutorials will help you make the transition to the new code architecture.
+				</p><p>In this first tutorial, we will walk through the steps of setting up a BUG project in Eclipse and building something like "Hello World", but more useful for our BugWeather app. 
+				</p>
+				<h2> <span class="mw-headline" id="About_the_BugWeather_App">About the BugWeather App</span></h2>
+				<p>The main objective of the BugWeather app is to display information about the local weather.  At first, we will create a basic app that uses the LCD module to set the stage for some real weather data. In the following tutorials, we will run the app on BUG Simulator, and later integrate the app with a REST web service to get and display weather data.  
+				</p>
+				<h3> <span class="mw-headline" id="Topics_Covered">Topics Covered</span></h3>
+				<ul><li> Creating an app with Dragonfly SDK 2.0
+				</li><li> Understanding the Activator and ServiceTracker and how they are used
+				</li><li> Calling the LCD module and displaying GUI content using AWT*
+
+				</li></ul>
+				<h3> <span class="mw-headline" id="Prerequisites.2FNotes">Prerequisites/Notes</span></h3>
+				<ul><li> Installed Dragonfly SDK 2.0
+				</li></ul>
+				<ul><li> BUG hardware: Not necessary
+				</li></ul>
+				<h1> <span class="mw-headline" id="Creating_a_New_Dragonfly_Project">Creating a New Dragonfly Project</span></h1>
+				<p>The first step is to create a Dragonfly project in Eclipse that has the basic code for creating and running a Dragonfly app.  
+				</p>
+				<h2> <span class="mw-headline" id="New_Project_Window">New Project Window</span></h2>
+
+				<ol><li> If necessary, switch perspectives in Eclipse to the Dragonfly perspective. (Hint: Go to Window &gt; Open Perspective &gt; Other)
+				</li><li> In the toolbar, select the 'Launch Virtual BUG' icon <img alt="Virtual bug.gif" src="../images/Virtual_bug.gif" width="16" height="16" />
+				</li><li> Go to File &gt; New &gt; Project<br />Or, click the <b>New BUG Project</b> icon <img alt="BugProject.gif" src="../images/BugProject.gif" width="16" height="16" /> in the toolbar.
+
+				</li><li> In the New BUG Project window:<br />In the Name field, type: <tt>BugWeatherApp</tt> and click "Next"
+				</li></ol>
+				<p><br />
+				<img alt="BugWeatherApp new.png" src="../images/BugWeatherApp_new.png" width="591" height="406" />
+				</p><p><br />
+				</p>
+				<h2> <span class="mw-headline" id="New_Project:_Service_Definition">New Project: Service Definition</span></h2>
+				<ol><li> After that, the "Service Definition" window is displayed, where you need to select the target BUG device.  If the BUG device list is empty or if the BUG simulator row is missing, click on "Start BUG Simulator".  This will startup the built-in BUG Simulator, which you can then select. 
+				</li><li> After selecting a BUG device, the lower part of the window will display a list of OSGI services that are availalble for the select BUG.  If you do not find the device you are looking for, it helps to select one anyway, since this will generate much of the basic code you need in building a BUG app.  
+
+				<ul><li> We are looking for the LCD module.  Since it is not currently in this list, we select the checkbox next to the first entry for IBUG20BaseControl.  
+				</li><li> After completing your selections, click on the "Finish" button.
+				</li></ul>
+				</li></ol>
+				<p><img alt="BugWeatherApp service def.png" src="../images/BugWeatherApp_service_def.png" width="602" height="711" />
+				</p>
+				<h1> <span class="mw-headline" id="Dragonfly_Project_Overview">Dragonfly Project Overview</span></h1>
+				<h2> <span class="mw-headline" id="Activator">Activator</span></h2>
+				<p>The new project wizard will automatically create a two Java files: Activator.java and BugWeatherAppServiceTracker.java.  In the screenshot below, you will notice that these are in different packages.  Also note the Activator stub code sample on the right side.  A private BugWeatherAppServiceTracker member is instantiated in the start method.  
+				</p><p>The Activator class implements org.osgi.framework.BundleActivator, which means it handles the starting and stopping of OSGi services (when hardware is added or removed). Through the Activator, the BugWeatherAppServiceTracker instance will handle start and stop events for each device it manages.
+				</p><p><img alt="BugWeather Activator.png" src="../images/BugWeather_Activator.png" width="1081" height="546" />
+
+				</p>
+				<h2> <span class="mw-headline" id="BugWeatherAppServiceTracker">BugWeatherAppServiceTracker</span></h2>
+				<p>Since we had selected the IBUG20BaseControl service in the New Project wizard, the Dragonfly SDK created a basic ServiceTracker class that extends AbstractServiceTracker. If we had not selected a service, this class would not have been created.  
+				</p><p><img alt="BugWeatherAppServiceTracker.png" src="../images/BugWeatherAppServiceTracker.png" width="878" height="531" />
+				</p>
+				<h3> <span class="mw-headline" id="Modify_initServices">Modify initServices</span></h3>
+				<p>If you scroll to the bottom of the BugWeatherAppServiceTracker class, you will see the initServices method.  Here, you can see the fully-qualified name (FQN) of the IBUG20BaseControl.  You can modify this method to add or remove services that you need.
+				</p>
+				<pre>
+				     public void initServices() {
+				            getServices().add(&quot;com.buglabs.bug.base.pub.IBUG20BaseControl&quot;);
+				     }
+
+				</pre>
+				<p>For the purposes of this tutorial, we really want a service for interacting with the LCD display and not the BUGbase.  To make that change, we need to determine the FQN of the desired module.  Sometimes, it is helpful to browse the BUG Libraries found in the Project Explorer.  Specifically, the com.buglabs.bug.simulator.jar has the collection of device services that you can use in the BUG Simulator.  
+				</p><p>Exploring through the list, we zero in on the "lcd" packages.  The package that ends in "lcd.pub" is expanded in the image below and you can see two interface classes.  We will choose the IModuleDisplay class.  
+				</p><p><img alt="Simulator jar browse.png" src="../images/Simulator_jar_browse.png" width="322" height="366" />
+				</p><p>You can copy the entire FQN for IModuleDisplay by right clicking on it and selecting "Copy Qualified Name" and pasting it into the initServices code.  
+				</p>
+				<h3> <span class="mw-headline" id="Add_IModuleDisplay_Variable">Add IModuleDisplay Variable</span></h3>
+				<p>Since we will need a member variable for IModuleDisplay, we should at it at the beginning of the class code like this.
+				</p>
+				<pre>
+
+				     private IModuleDisplay display;
+
+				</pre>
+				<p>And inside of the doStart() method, we need to instantiate our display like this:
+
+				</p>
+				<pre>
+				     /**
+				      * If canStart returns true
+				     * this method is called to start the application.
+				     * Place your fun logic here.
+				      */
+				     public void doStart() {
+				          System.out.println(&quot;BugWeatherAppServiceTracker: start&quot;);
+				          display = (IModuleDisplay) getService(IModuleDisplay.class);
+				          LCDApp app = new LCDApp(display);
+				     }
+
+				</pre>
+				<p>LCDApp?!  Where does that come from?  It is a new class we need to create that will take the IModuleDisplay service and use AWT to write objects and content to the LCD.
+				</p>
+				<h2> <span class="mw-headline" id="LCDApp">LCDApp</span></h2>
+				<p>We are going to put our LCDApp class in a new package called bugweatherapp.app (and suddenly I wish that I named the project "BugWeather").  Go ahead and create a new package with this name (Hint: Go to File &gt; New &gt; Other and look for Java &gt; Package).  
+
+				</p><p>Next, create a new Java class here called LCDApp.  Here's the entire code for LCDApp.  You can add more bells and whistles if you're really awesome with AWT programming.  
+				</p>
+				<pre>
+
+				public class BugWeatherAppServiceTracker extends AbstractServiceTracker {    
+
+				     public BugWeatherAppServiceTracker(BundleContext context) {
+				          super(context);
+				     }
+
+				     /**
+				      * Determines if the application can start.
+				      */
+				     public boolean canStart() {
+				          return super.canStart();
+				     }
+
+				     /**
+				      * If canStart returns true
+				     * this method is called to start the application.
+				     * Place your fun logic here.
+				      */
+				     public void doStart() {
+				          System.out.println(&quot;BugWeatherAppServiceTracker: start&quot;);
+				     }
+
+
+				     /**
+				      * Called when a service that this application depends is unregistered.
+				      */
+				     public void doStop() {
+				          System.out.println(&quot;BugWeatherAppServiceTracker: stop&quot;);
+				     }
+
+				     /**
+				      * Allows the user to set the service dependencies by
+				     * adding them to services list returned by getServices().
+				     * i.e.nl getServices().add(MyService.class.getName());
+				      */
+				     public void initServices() {
+				            getServices().add(&quot;com.buglabs.bug.base.pub.IBUG20BaseControl&quot;);
+				     }
+				}
+
+				</pre>
+				<p>Now that we have a LCDApp class, we can organize the imports in BugWeatherAppServiceTracker and fix the compiler error.  In the next tutorial, we will show you how to use the BUG Simulator and see whether this code works.  Fingers crossed!
+				</p>
+				<!-- 
+				NewPP limit report
+				Preprocessor node count: 80/1000000
+				Post-expand include size: 0/2097152 bytes
+				Template argument size: 0/2097152 bytes
+				Expensive parser function count: 0/100
+				-->
+
+				<!-- Saved in parser cache with key wiki:pcache:idhash:436-0!1!0!!en!2!printable=1 and timestamp 20101008023001 -->
+
+				<div class="printfooter">
+				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:BugWeather_App_Part1--Getting_Started">http://wiki.buglabs.net/index.php/Tutorial:BugWeather_App_Part1--Getting_Started</a>"</div>
+								<!-- /bodytext -->
+
+
+				<!-- ########### END OF INSERTED CONTENT ########## -->
+
+				<div class="toc">
+				Need more examples?
+				<ul>
+					<li><a href="../BugWeatherPart2/index.html">BugWeather Part 2-Running BUG Simulator</a></li>
+					<li><a href="../BugWeatherPart3/index.html">BugWeather Part 3-Calling a REST Web Service</a></li>
+				</ul>
+				</div>
+
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
+</html>

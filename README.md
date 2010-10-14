@@ -38,7 +38,7 @@ If there are images in the page, you will notice that Mediawiki has its own way 
 1. Remove a tags surrounding images:  
 Mediawiki has a funny need to link to the image page for an uploaded file. And we need to get rid of these.
 FIND:    \<a [^\>]*\>(\<img [^\>]*\>)</a>
-REPLACE: 
+REPLACE: $1
 
 2. Fix image paths
 You also need to replace these with the "../images/" path used throughout the html files here.  Example: Mediawiki image paths look like this src="/images/7/70/Bug.gif" and we need to fix them so they look like this src="../images/Bug.gif".

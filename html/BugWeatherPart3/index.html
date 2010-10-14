@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			BugWeatherApp Part 3-Calling a REST Web Service
+		</title>
+		<!-- ########### /INSERT PAGE TITLE HERE ########## -->
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			<a id="top" name="top"></a>
+
+			<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				BugWeatherApp Part 3-Calling a REST Web Service
+				<!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- ### Copy everything between bodytext comments in printable page source here -->
+												<!-- bodytext -->
+								<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+
+				<ul>
+				<li class="toclevel-1 tocsection-1"><a href="#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-2"><a href="#Topics_Covered"><span class="tocnumber">1.1</span> <span class="toctext">Topics Covered</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-3"><a href="#Step-by-Step_Guide"><span class="tocnumber">2</span> <span class="toctext">Step-by-Step Guide</span></a>
+				<ul>
+
+				<li class="toclevel-2 tocsection-4"><a href="#SimpleRESTClient"><span class="tocnumber">2.1</span> <span class="toctext">SimpleRESTClient</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-5"><a href="#Create_fetchWeatherDataXml_method"><span class="tocnumber">2.1.1</span> <span class="toctext">Create fetchWeatherDataXml method</span></a></li>
+				<li class="toclevel-3 tocsection-6"><a href="#Other_Notes"><span class="tocnumber">2.1.2</span> <span class="toctext">Other Notes</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-7"><a href="#Parse_the_Weather_XML_Response"><span class="tocnumber">2.2</span> <span class="toctext">Parse the Weather XML Response</span></a>
+
+				<ul>
+				<li class="toclevel-3 tocsection-8"><a href="#Weather_XML_Format"><span class="tocnumber">2.2.1</span> <span class="toctext">Weather XML Format</span></a></li>
+				<li class="toclevel-3 tocsection-9"><a href="#Create_Weather_class"><span class="tocnumber">2.2.2</span> <span class="toctext">Create Weather class</span></a></li>
+				<li class="toclevel-3 tocsection-10"><a href="#Create_parseWeatherXml_method"><span class="tocnumber">2.2.3</span> <span class="toctext">Create parseWeatherXml method</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-11"><a href="#Displaying_the_Weather_Data"><span class="tocnumber">2.3</span> <span class="toctext">Displaying the Weather Data</span></a>
+
+				<ul>
+				<li class="toclevel-3 tocsection-12"><a href="#Create_displayWeather_method"><span class="tocnumber">2.3.1</span> <span class="toctext">Create displayWeather method</span></a></li>
+				<li class="toclevel-3 tocsection-13"><a href="#Refactor_the_LCDApp_constructor"><span class="tocnumber">2.3.2</span> <span class="toctext">Refactor the LCDApp constructor</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-14"><a href="#Build.2C_Deploy_and_Test"><span class="tocnumber">2.4</span> <span class="toctext">Build, Deploy and Test</span></a>
+				<ul>
+				<li class="toclevel-3 tocsection-15"><a href="#Updating_MANIFEST.MF"><span class="tocnumber">2.4.1</span> <span class="toctext">Updating MANIFEST.MF</span></a></li>
+
+				<li class="toclevel-3 tocsection-16"><a href="#The_Results"><span class="tocnumber">2.4.2</span> <span class="toctext">The Results</span></a></li>
+				</ul>
+				</li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-17"><a href="#Extra_Credit"><span class="tocnumber">3</span> <span class="toctext">Extra Credit</span></a></li>
+				</ul>
+
+				</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+				<h1> <span class="mw-headline" id="Introduction">Introduction</span></h1>
+				<p>This is the third in a series of tutorials for the BugWeather app.  In the first tutorial, we went through all the basic steps of creating an app and writing the basic code needed to interact with the BUGview2 LCD module.  In the second one, we learned how to run the app on the BUG Simulator.  
+				</p><p>In this tutorial, we will finally get some real weather data in our app and display it in the BUG Simulator.  To do this, we are going to use Google's <a href="http://blog.programmableweb.com/2010/02/08/googles-secret-weather-api/" class="external text" rel="nofollow">secret and unofficial Weather API</a>.  Just because it's there.
+				</p>
+				<h3> <span class="mw-headline" id="Topics_Covered">Topics Covered</span></h3>
+				<ul><li> Using the SimpleRESTClient to call remote web services
+				</li><li> Parsing XML using XPath
+
+				</li><li> More AWT Programming
+				</li></ul>
+				<h1> <span class="mw-headline" id="Step-by-Step_Guide">Step-by-Step Guide</span></h1>
+				<p>This is a step-by-step guide for calling a remote web service, parsing the XML response, and displaying the desired data in the BUG Simulator LCD.  You can take a sneak peek at Google's weather API by hitting this URL: <a href="http://www.google.com/ig/api?weather=New+York,+NY" class="external free" rel="nofollow">http://www.google.com/ig/api?weather=New+York,+NY</a>.  You can also add the country in the query string parameter if you need it, or you can just use a zip code (probably U.S. only).
+				</p><p><br />
+				</p>
+				<h2> <span class="mw-headline" id="SimpleRESTClient">SimpleRESTClient</span></h2>
+				<p>Our first objective is to call a remote web service, so we need a client library for making URL connections.  Before you start rolling your own java.net.URLConnection utilities, you should know that BUG already has a nice SimpleRESTClient library.  It's pretty full-featured, and it's not heavy or obtuse like the Apache HttpClient. 
+				</p><p>In prior Dragonfly SDK versions, you had to get the library from BUGnet and add it to your Eclipse build properties.  Here's the <a href="http://www.buglabs.net/applications/SimpleRESTClient" class="external text" rel="nofollow">BUGnet link</a>.  However, I was pleasantly surprised to find that SimpleRESTClient is built into the current SDK.  Still, it is useful to review the online docs for SimpleRESTClient to understand how to use it.  While you are there, check out the other apps and libraries shared by the BUG community.
+
+				</p><p><br />
+				</p><p><img alt="SimpleRESTClient.png" src="../images/SimpleRESTClient.png" width="904" height="502" />
+				</p><p><br />
+				</p>
+				<h3> <span class="mw-headline" id="Create_fetchWeatherDataXml_method">Create fetchWeatherDataXml method</span></h3>
+				<p>Now it's time to revisit our BugWeatherApp code and implement the SimpleRESTClient.  If you recall, the LCDApp class was responsible for displaying content on the LCD.  So far, we have a bland title "Current Weather" displayed on-screen.  
+				</p><p>For convenience, we will add all of the code we need in this tutorial in the LCDApp class.  The following is a copy of our new method.  Note how the connection instance is created as a DefaultConnectionProvider.  
+				</p>
+				<pre>
+				     protected String fetchWeatherDataXml(String location) throws Exception {
+
+				          String xml = null;
+				          String url = WEATHER_HOST + WEATHER_LOOKUP_URL + location;
+				          System.out.println(&quot;url=&quot; + url);
+
+				          try {
+				               IConnectionProvider connection = new DefaultConnectionProvider();
+				               HTTPRequest request = new HTTPRequest(connection);
+				               HTTPResponse response = request.get(url);
+
+				               xml = response.getString();
+
+				               System.out.println(xml);
+				               return xml;
+
+				          } catch (HTTPException e) {
+				               throw e;
+				          } catch (IOException e) {
+				               throw e;
+				          } catch (Exception e) {
+				               throw e;
+				          }
+				     }
+
+				</pre> 
+
+				<p>The static variables WEATHER_HOST and WEATHER_LOOKUP_URL are declared at the top of the class as:
+				</p>
+				<pre>
+				     private static final String WEATHER_HOST = &quot;http://www.google.com&quot;;
+				     private static final String WEATHER_LOOKUP_URL = &quot;/ig/api?weather=&quot;;
+
+				</pre>
+				<h3> <span class="mw-headline" id="Other_Notes">Other Notes</span></h3>
+				<ul><li> If you need to send username and password credentials in the request, take a look at the <b>BasicAuthenticationConnectionProvider</b> class.  
+
+				</li><li> If you are expecting a larger volume of data in the HTTPResponse, you can also get an InputStream using <b>response.getStream()</b> instead of response.getString()
+				</li></ul>
+				<h2> <span class="mw-headline" id="Parse_the_Weather_XML_Response">Parse the Weather XML Response</span></h2>
+				<p>Assuming our fetchWeatherDataXml method works, we can go ahead and write the code to parse the XML. 
+				</p>
+				<h3> <span class="mw-headline" id="Weather_XML_Format">Weather XML Format</span></h3>
+				<p>Here's a truncated sample of the weather XML response returned by this url: <a href="http://www.google.com/ig/api?weather=New+York,+NY" class="external free" rel="nofollow">http://www.google.com/ig/api?weather=New+York,+NY</a>.  Note that the primary information we are interested in is located in <b>current_conditions</b> element.  
+
+				</p><p><br />
+				<img alt="Google weather xml.png" src="../images/Google_weather_xml.png" width="703" height="448" />
+				</p>
+				<h3> <span class="mw-headline" id="Create_Weather_class">Create Weather class</span></h3>
+				<p>Next, we should create a new class to hold the weather data that we extract from the XML.  I chose to create an inner Weather class (at the bottom of LCDApp.class) that looks like this. 
+				</p>
+				<pre>
+				     private class Weather {
+				          // public fields because we don't need the noise 
+				          public String condition;
+				          public String temp_f;
+				          public String temp_c;
+				          public String humidity;
+				          public String icon;
+				          public String wind;
+				     }
+				</pre>
+				<h3> <span class="mw-headline" id="Create_parseWeatherXml_method">Create parseWeatherXml method</span></h3>
+				<p>Our parseWeatherXml method will take a String xml parameter and return a Weather object, so this is where the XML parsing happens.  Again, we are happy to discover that the BUG SDK provides a simple implementation of a XML DOM parser.  You can read more about it in <a href="/index.php/Tutorial:BUG_XML_HOWTO" title="Tutorial:BUG XML HOWTO"> this tutorial</a>.
+
+				</p><p>Here's the code:
+				</p>
+				<pre>
+				     protected Weather parseWeatherXml(String xml) throws Exception {
+				          Weather weather = new Weather();
+				          try {
+				               XmlNode root = XmlParser.parse(xml);
+				               XmlNode node = root.getChild(&quot;weather&quot;).getChild(&quot;current_conditions&quot;);
+				               XmlNode dataNode = null;
+
+				               if (node&nbsp;!= null) {
+				                    // TODO: create helper method to read nodes, check nulls, get attribute
+				                    dataNode = node.getChild(&quot;condition&quot;);
+				                    weather.condition = dataNode.getAttribute(&quot;data&quot;);
+				                    dataNode = node.getChild(&quot;temp_f&quot;);
+				                    weather.temp_f = dataNode.getAttribute(&quot;data&quot;);
+				                    dataNode = node.getChild(&quot;temp_c&quot;);
+				                    weather.temp_c = dataNode.getAttribute(&quot;data&quot;);
+				                    dataNode = node.getChild(&quot;humidity&quot;);
+				                    weather.humidity = dataNode.getAttribute(&quot;data&quot;);
+				                    dataNode = node.getChild(&quot;icon&quot;);
+				                    weather.icon = dataNode.getAttribute(&quot;data&quot;);
+				                    dataNode = node.getChild(&quot;wind_condition&quot;);
+				                    weather.wind = dataNode.getAttribute(&quot;data&quot;);
+				               } else {
+				                    System.out.println(&quot;current_conditions node not found&quot;);
+				               }
+				          } catch (IOException e) {
+				               throw e;
+				          } catch (Exception e) {
+				               throw e;
+				          }
+				          return weather;
+				     }
+
+				</pre>
+				<p><b>See Also:</b> <a href="/index.php/Tutorial:BUG_XML_HOWTO" title="Tutorial:BUG XML HOWTO">Tutorial:BUG_XML_HOWTO</a>
+				</p>
+				<h2> <span class="mw-headline" id="Displaying_the_Weather_Data">Displaying the Weather Data</span></h2>
+				<p>Previously, we had all the AWT code in the constructor and that is no longer practical.  We need to do a bit of refactoring so that we can simply call a new method called <b>displayWeather</b> after we have fetched and parsed the weather xml data.  
+				</p>
+				<h3> <span class="mw-headline" id="Create_displayWeather_method">Create displayWeather method</span></h3>
+
+				<p>Our new displayWeather method will take a Weather object as a parameter and execute the AWT code to render the content on the LCD display.  We also want to organize the content better and make it somewhat pretty.  Here, we chose to use a GridLayout instead of BorderLayout.
+				</p>
+				<pre>
+				     private void displayWeather(Weather weather) {
+
+				          // Frame declared at beginning of the class
+				          frame = display.getFrame();
+				          frame.setBackground(Color.WHITE);
+				          frame.setTitle(&quot;BUG Weather App&quot;);
+				          frame.setVisible(true);
+				          frame.setLayout(new GridLayout(6,2));
+
+				          Label label1 = new Label();
+				          label1.setText(&quot;Current Weather&quot;);
+				          label1.setBackground(Color.ORANGE);
+				          label1.setForeground(Color.BLACK);
+				          frame.add(label1);
+
+				          Label label2 = new Label();
+				          label2.setText(weather.condition);
+				          frame.add(label2);
+
+				          Label label3 = new Label();
+				          label3.setText(&quot;Temperature:&quot; + weather.temp_f + &quot; F&quot;);
+				          frame.add(label3);
+
+				          Label label4 = new Label();
+				          label4.setText(weather.humidity);
+				          frame.add(label4);
+
+				          Label label5 = new Label();
+				          label5.setText(weather.wind);
+				          frame.add(label5);
+				    }
+
+				</pre>
+				<h3> <span class="mw-headline" id="Refactor_the_LCDApp_constructor">Refactor the LCDApp constructor</span></h3>
+
+				<p>Finally, it's time to revisit the LCDApp constructor and integrate our new methods.   We can rip out all of the AWT code and just call our new methods now.  Like this:
+				</p>
+				<pre>
+				     public LCDApp(IModuleDisplay display) {
+				          super();
+				          this.display = display;
+
+				          try {
+				               location =  &quot;New York, NY&quot;;
+				               location = URLEncoder.encode(location, &quot;UTF-8&quot;);
+				               String xml = this.fetchWeatherDataXml(location);
+
+				               if (xml&nbsp;!= null) {
+				                    Weather weather = this.parseWeatherXml(xml);
+				                    this.displayWeather(weather);
+				               }
+				          } catch (Exception e) {
+				               // TODO Display or log error
+				               e.printStackTrace();
+				          }
+				     }
+
+				</pre>
+				<h2> <span class="mw-headline" id="Build.2C_Deploy_and_Test">Build, Deploy and Test</span></h2>
+				<p>At long last, we are ready to run the app in BUG Simulator.  So far, we have added 3 methods and one inner class.  In the Eclipse Project Explorer, your code base should look like this.  
+				</p><p><img alt="BugWeatherApp part3 project explorer.png" src="../images/BugWeatherApp_part3_project_explorer.png" width="340" height="403" />
+				</p><p><br />
+
+				</p><p><br />
+				</p>
+				<h3> <span class="mw-headline" id="Updating_MANIFEST.MF">Updating MANIFEST.MF</span></h3>
+				<p>If you went ahead and tried to run the app on the BUG Simulator, you may have <strike>crashed and burned</strike> discovered an OSGi configuration problem.  Hint, it's one of the library dependencies that we added.  Below is a copy of the updated and corrected MANIFEST.MF file.  A new entry for <b>com.buglabs.util.simplerestclient</b> must be added (<i>see last line</i>).  After you add this, you can deploy to the BUG Simulator using the <b>Send to BUG</b> menu command.
+
+				</p>
+				<pre>
+				Manifest-Version: 1.0
+				Bundle-Name: BugWeatherApp
+				Bundle-Activator: bugweatherapp.Activator
+				Bundle-SymbolicName: BugWeatherApp
+				Bundle-Version: 1.0.0
+				Bundle-Vendor: hlang
+				Bug-Bundle-Type: Application
+				BUG-API-Version: 1.4.4
+				Import-Package: com.buglabs.bug.base.pub,
+				 com.buglabs.bug.module.lcd.pub,
+				 org.osgi.framework,
+				 org.osgi.util.tracker,
+				 com.buglabs.application,
+				 com.buglabs.util,
+				 com.buglabs.util.simplerestclient
+				</pre>
+				<h3> <span class="mw-headline" id="The_Results">The Results</span></h3>
+				<p>After adding the LCD module in the BUG Simulator (using the right-click menu and selecting <b>BUG Simulator &gt; Slot 1 &gt; LCD</b>), you will hopefully see something like this:
+				</p><p><br />
+				<img alt="BugWeatherApp LCD beta3.png" src="../images/BugWeatherApp_LCD_beta3.png" width="320" height="200" />
+				</p><p><br />
+
+				Not too shabby.
+				</p>
+				<h1> <span class="mw-headline" id="Extra_Credit">Extra Credit</span></h1>
+				<p>If you feel like showing off, try out some of these extra credit features:
+				</p>
+				<ul><li> Display the weather image icon for current weather conditions
+				</li><li> Display the weather forecast for the next few days
+				</li><li> Add form inputs to the display to let the user set the location.
+				</li><li> Periodically update the weather data.
+				</li></ul>
+
+
+				<!-- 
+				NewPP limit report
+				Preprocessor node count: 136/1000000
+				Post-expand include size: 0/2097152 bytes
+				Template argument size: 0/2097152 bytes
+				Expensive parser function count: 0/100
+				-->
+
+				<!-- Saved in parser cache with key wiki:pcache:idhash:461-0!1!0!!en!2!printable=1 and timestamp 20101013191021 -->
+				<div class="printfooter">
+				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:BugWeatherApp_Part_3-Integrating_Remote_Web_Services">http://wiki.buglabs.net/index.php/Tutorial:BugWeatherApp_Part_3-Integrating_Remote_Web_Services</a>"</div>
+
+								<!-- /bodytext -->
+
+
+				<!-- ########### END OF INSERTED CONTENT ########## -->
+
+				<div class="toc">
+				Need more examples?
+				<ul>
+					<li><a href="../BugWeatherPart1/index.html">BugWeather Part 1-Getting Started</a></li>
+					<li><a href="../BugWeatherPart2/index.html">BugWeather Part 2-Running BUG Simulator</a></li>
+
+				</ul>
+				</div>
+
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
+</html>
