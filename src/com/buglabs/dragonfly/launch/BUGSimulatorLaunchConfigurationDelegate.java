@@ -170,6 +170,9 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	protected String[] getVMArgs() throws CoreException {
 		String s = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, new String());
 		
+		if (s == null || s.trim().length() == 0) {
+			return new String[0];
+		}
 		return s.split(" ");
 	}
 }
