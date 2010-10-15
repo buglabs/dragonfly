@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
-import com.buglabs.dragonfly.ui.launch.VirtualBugLaunchProjectsSectionDrawer.ILaunchProjectSelectionListener;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.UIUtils;
 
