@@ -17,13 +17,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
 
 import com.buglabs.dragonfly.exception.NodeNotUniqueException;
+import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.model.BaseTreeNode;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.DiscoveredBugConnection;
 import com.buglabs.dragonfly.model.IModelNode;
 import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.StaticBugConnection;
-import com.buglabs.dragonfly.model.BUGSimulatorConnection;
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
 

@@ -3,8 +3,6 @@ package com.buglabs.dragonfly.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.buglabs.dragonfly.model.ServiceProperty;
-
 /**
  * This is a unified model that is currently helping with the CodeGenerationPage
  * 
