@@ -73,7 +73,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		} catch (IOException e) {
 			if (Activator.getDefault().getLaunchErrorVisible()) {
 
-				Display.getCurrent().syncExec(new Runnable() {
+				Display.getDefault().syncExec(new Runnable() {
 
 					public void run() {
 						MessageDialog
