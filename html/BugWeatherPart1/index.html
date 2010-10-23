@@ -27,7 +27,6 @@
 				<!-- ########### START OF INSERTED CONTENT ########## -->
 				<!-- ### Copy everything between bodytext comments in printable page source here -->
 
-
 												<!-- bodytext -->
 								<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
 
@@ -63,10 +62,11 @@
 				<li class="toclevel-2 tocsection-13"><a href="#LCDApp"><span class="tocnumber">3.3</span> <span class="toctext">LCDApp</span></a></li>
 				</ul>
 				</li>
+				<li class="toclevel-1 tocsection-14"><a href="#See_Also"><span class="tocnumber">4</span> <span class="toctext">See Also</span></a></li>
 				</ul>
+
 				</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
 				<h1> <span class="mw-headline" id="Introduction">Introduction</span></h1>
-
 				<p>This is the first in a series of tutorials for the BugWeather app (not to be confused with WeatherBug).  Each of the tutorials will take you through some of the basic development tasks in Dragonfly SDK 2.0 that you will need to master.  Even if you have experience with the older Dragonfly SDK, these tutorials will help you make the transition to the new code architecture.
 				</p><p>In this first tutorial, we will walk through the steps of setting up a BUG project in Eclipse and building something like "Hello World", but more useful for our BugWeather app. 
 				</p>
@@ -75,9 +75,9 @@
 				</p>
 				<h3> <span class="mw-headline" id="Topics_Covered">Topics Covered</span></h3>
 				<ul><li> Creating an app with Dragonfly SDK 2.0
+
 				</li><li> Understanding the Activator and ServiceTracker and how they are used
 				</li><li> Calling the LCD module and displaying GUI content using AWT*
-
 				</li></ul>
 				<h3> <span class="mw-headline" id="Prerequisites.2FNotes">Prerequisites/Notes</span></h3>
 				<ul><li> Installed Dragonfly SDK 2.0
@@ -85,13 +85,13 @@
 				<ul><li> BUG hardware: Not necessary
 				</li></ul>
 				<h1> <span class="mw-headline" id="Creating_a_New_Dragonfly_Project">Creating a New Dragonfly Project</span></h1>
+
 				<p>The first step is to create a Dragonfly project in Eclipse that has the basic code for creating and running a Dragonfly app.  
 				</p>
 				<h2> <span class="mw-headline" id="New_Project_Window">New Project Window</span></h2>
-
 				<ol><li> If necessary, switch perspectives in Eclipse to the Dragonfly perspective. (Hint: Go to Window &gt; Open Perspective &gt; Other)
-				</li><li> In the toolbar, select the 'Launch Virtual BUG' icon <img alt="Virtual bug.gif" src="../images/Virtual_bug.gif" width="16" height="16" />
-				</li><li> Go to File &gt; New &gt; Project<br />Or, click the <b>New BUG Project</b> icon <img alt="BugProject.gif" src="../images/BugProject.gif" width="16" height="16" /> in the toolbar.
+				</li><li> In the toolbar, select the 'Launch Virtual BUG' icon <img alt="Bug simulator button.gif" src="../images/Bug_simulator_button.gif" width="16" height="16" />
+				</li><li> Go to File &gt; New &gt; Project<br />Or, click the <b>New BUG Project</b> icon <img alt="Bug project button.gif" src="../images/Bug_project_button.gif" width="16" height="16" /> in the toolbar.
 
 				</li><li> In the New BUG Project window:<br />In the Name field, type: <tt>BugWeatherApp</tt> and click "Next"
 				</li></ol>
@@ -124,9 +124,9 @@
 				<p>If you scroll to the bottom of the BugWeatherAppServiceTracker class, you will see the initServices method.  Here, you can see the fully-qualified name (FQN) of the IBUG20BaseControl.  You can modify this method to add or remove services that you need.
 				</p>
 				<pre>
-				     public void initServices() {
-				            getServices().add(&quot;com.buglabs.bug.base.pub.IBUG20BaseControl&quot;);
-				     }
+public void initServices() {
+       getServices().add(&quot;com.buglabs.bug.base.pub.IBUG20BaseControl&quot;);
+}
 
 				</pre>
 				<p>For the purposes of this tutorial, we really want a service for interacting with the LCD display and not the BUGbase.  To make that change, we need to determine the FQN of the desired module.  Sometimes, it is helpful to browse the BUG Libraries found in the Project Explorer.  Specifically, the com.buglabs.bug.simulator.jar has the collection of device services that you can use in the BUG Simulator.  
@@ -139,23 +139,23 @@
 				</p>
 				<pre>
 
-				     private IModuleDisplay display;
+private IModuleDisplay display;
 
 				</pre>
 				<p>And inside of the doStart() method, we need to instantiate our display like this:
 
 				</p>
 				<pre>
-				     /**
-				      * If canStart returns true
-				     * this method is called to start the application.
-				     * Place your fun logic here.
-				      */
-				     public void doStart() {
-				          System.out.println(&quot;BugWeatherAppServiceTracker: start&quot;);
-				          display = (IModuleDisplay) getService(IModuleDisplay.class);
-				          LCDApp app = new LCDApp(display);
-				     }
+/**
+ * If canStart returns true
+* this method is called to start the application.
+* Place your fun logic here.
+ */
+public void doStart() {
+     System.out.println(&quot;BugWeatherAppServiceTracker: start&quot;);
+     display = (IModuleDisplay) getService(IModuleDisplay.class);
+     LCDApp app = new LCDApp(display);
+}
 
 				</pre>
 				<p>LCDApp?!  Where does that come from?  It is a new class we need to create that will take the IModuleDisplay service and use AWT to write objects and content to the LCD.
@@ -166,62 +166,37 @@
 				</p><p>Next, create a new Java class here called LCDApp.  Here's the entire code for LCDApp.  You can add more bells and whistles if you're really awesome with AWT programming.  
 				</p>
 				<pre>
+package bugweatherapp.app;
 
-				public class BugWeatherAppServiceTracker extends AbstractServiceTracker {    
+public class LCDApp {
 
-				     public BugWeatherAppServiceTracker(BundleContext context) {
-				          super(context);
-				     }
+	private IModuleDisplay display;
 
-				     /**
-				      * Determines if the application can start.
-				      */
-				     public boolean canStart() {
-				          return super.canStart();
-				     }
+	public LCDApp(IModuleDisplay display) {
+		super();
+		this.display = display;
 
-				     /**
-				      * If canStart returns true
-				     * this method is called to start the application.
-				     * Place your fun logic here.
-				      */
-				     public void doStart() {
-				          System.out.println(&quot;BugWeatherAppServiceTracker: start&quot;);
-				     }
+		Label label1 = new Label();
+		label1.setBounds(10,60, 300, 30);
+		label1.setText(&quot;Current Weather&quot;);
+		label1.setVisible(true);
+		label1.setAlignment(Label.CENTER);
 
-
-				     /**
-				      * Called when a service that this application depends is unregistered.
-				      */
-				     public void doStop() {
-				          System.out.println(&quot;BugWeatherAppServiceTracker: stop&quot;);
-				     }
-
-				     /**
-				      * Allows the user to set the service dependencies by
-				     * adding them to services list returned by getServices().
-				     * i.e.nl getServices().add(MyService.class.getName());
-				      */
-				     public void initServices() {
-				            getServices().add(&quot;com.buglabs.bug.base.pub.IBUG20BaseControl&quot;);
-				     }
-				}
+		Frame frame = display.getFrame();
+		frame.setTitle(&quot;BUG Weather App&quot;);
+		frame.setVisible(true);
+		frame.setLayout(new BorderLayout());
+		frame.add(label1, BorderLayout.NORTH);
+	}
+}
 
 				</pre>
-				<p>Now that we have a LCDApp class, we can organize the imports in BugWeatherAppServiceTracker and fix the compiler error.  In the next tutorial, we will show you how to use the BUG Simulator and see whether this code works.  Fingers crossed!
+				<p>Now that we have a LCDApp class, we can organize the imports in BugWeatherAppServiceTracker and fix the compiler error.  In the next tutorial, we will show you how to use the BUG Simulator and see whether this code works.  Fingers crossed! 
 				</p>
-				<!-- 
-				NewPP limit report
-				Preprocessor node count: 80/1000000
-				Post-expand include size: 0/2097152 bytes
-				Template argument size: 0/2097152 bytes
-				Expensive parser function count: 0/100
-				-->
 
-				<!-- Saved in parser cache with key wiki:pcache:idhash:436-0!1!0!!en!2!printable=1 and timestamp 20101008023001 -->
-
+				<!-- Saved in parser cache with key wiki:pcache:idhash:436-0!1!0!!en!2!printable=1 and timestamp 20101023010117 -->
 				<div class="printfooter">
-				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:BugWeather_App_Part1--Getting_Started">http://wiki.buglabs.net/index.php/Tutorial:BugWeather_App_Part1--Getting_Started</a>"</div>
+				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:BugWeatherApp_Part_1-Getting_Started">http://wiki.buglabs.net/index.php/Tutorial:BugWeatherApp_Part_1-Getting_Started</a>"</div>
 								<!-- /bodytext -->
 
 
