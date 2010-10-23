@@ -26,101 +26,169 @@
 			<div id="bodyContent">
 
 				<!-- ########### START OF INSERTED CONTENT ########## -->
+
 												<!-- bodytext -->
 								<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
 
 				<ul>
 				<li class="toclevel-1 tocsection-1"><a href="#My_BUGs_View"><span class="tocnumber">1</span> <span class="toctext">My BUGs View</span></a>
 				<ul>
-				<li class="toclevel-2 tocsection-2"><a href="#You_can:"><span class="tocnumber">1.1</span> <span class="toctext">You can:</span></a></li>
+				<li class="toclevel-2 tocsection-2"><a href="#Connection_Types"><span class="tocnumber">1.1</span> <span class="toctext">Connection Types</span></a></li>
+				<li class="toclevel-2 tocsection-3"><a href="#Actions_in_My_BUGs_View"><span class="tocnumber">1.2</span> <span class="toctext">Actions in My BUGs View</span></a></li>
 				</ul>
 				</li>
-				<li class="toclevel-1 tocsection-3"><a href="#BUG_Connection"><span class="tocnumber">2</span> <span class="toctext">BUG Connection</span></a>
-				<ul>
+				<li class="toclevel-1 tocsection-4"><a href="#Launching_BUG_Simulator"><span class="tocnumber">2</span> <span class="toctext">Launching BUG Simulator</span></a>
 
-				<li class="toclevel-2 tocsection-4"><a href="#Creating_a_New_BUG_Connection"><span class="tocnumber">2.1</span> <span class="toctext">Creating a New BUG Connection</span></a></li>
-				<li class="toclevel-2 tocsection-5"><a href="#Right_Click_on_BUG_Connection_Menu"><span class="tocnumber">2.2</span> <span class="toctext">Right Click on BUG Connection Menu</span></a></li>
+				<ul>
+				<li class="toclevel-2 tocsection-5"><a href="#Interacting_with_BUG_Simulator"><span class="tocnumber">2.1</span> <span class="toctext">Interacting with BUG Simulator</span></a></li>
 				</ul>
 				</li>
-				<li class="toclevel-1 tocsection-6"><a href="#Physical_Editor_Window"><span class="tocnumber">3</span> <span class="toctext">Physical Editor Window</span></a></li>
+				<li class="toclevel-1 tocsection-6"><a href="#Using_Modules_in_BUG_Simulator"><span class="tocnumber">3</span> <span class="toctext">Using Modules in BUG Simulator</span></a>
+				<ul>
+				<li class="toclevel-2 tocsection-7"><a href="#Adding_a_Module"><span class="tocnumber">3.1</span> <span class="toctext">Adding a Module</span></a></li>
+				<li class="toclevel-2 tocsection-8"><a href="#Using_the_BUG_Simulator_When_Creating_a_New_BUG_Project"><span class="tocnumber">3.2</span> <span class="toctext">Using the BUG Simulator When Creating a New BUG Project</span></a>
+
+				<ul>
+				<li class="toclevel-3 tocsection-9"><a href="#Adding_Services_Manually_in_Code"><span class="tocnumber">3.2.1</span> <span class="toctext">Adding Services Manually in Code</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-2 tocsection-10"><a href="#Using_the_BUG_Simulator_When_Testing_an_App"><span class="tocnumber">3.3</span> <span class="toctext">Using the BUG Simulator When Testing an App</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-11"><a href="#BUG_Connection"><span class="tocnumber">4</span> <span class="toctext">BUG Connection</span></a>
+
+				<ul>
+				<li class="toclevel-2 tocsection-12"><a href="#Creating_a_New_BUG_Connection"><span class="tocnumber">4.1</span> <span class="toctext">Creating a New BUG Connection</span></a></li>
+				<li class="toclevel-2 tocsection-13"><a href="#Right_Click_on_BUG_Connection_Menu"><span class="tocnumber">4.2</span> <span class="toctext">Right Click on BUG Connection Menu</span></a></li>
+				</ul>
+				</li>
+				<li class="toclevel-1 tocsection-14"><a href="#Physical_Editor_Properties_View"><span class="tocnumber">5</span> <span class="toctext">Physical Editor Properties View</span></a></li>
+				<li class="toclevel-1 tocsection-15"><a href="#See_Also"><span class="tocnumber">6</span> <span class="toctext">See Also</span></a></li>
+
 				</ul>
 				</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
-
 				<h2> <span class="mw-headline" id="My_BUGs_View">My BUGs View</span></h2>
-				<p>The My BUGs view displays any BUG Connections that are available to the SDK and allows you to interact with them. There are 3 connection types you will see in this window:
-				</p>
-				<ul><li> <img alt="Virtual bug.gif" src="../images/virtual_bug.gif" width="16" height="16" /> Virtual BUG Connection.
-				</li><li> <img alt="StaticConnection.gif" src="../images/StaticConnection.gif" width="16" height="16" /> Static Connection (Manual).
-				</li><li> <img alt="SlpBUG.gif" src="../images/slpBUG.gif" width="16" height="16" /> Discovered BUG Connection (Physical BUG).
-				</li></ul>
-				<h3> <span class="mw-headline" id="You_can:">You can:</span></h3>
+				<p>The Eclipse view called <b>My BUGs</b> is usually found in the Dragonfly perspective.  If it is not visible, you can display it by going to:  <b>Window &gt; Show View &gt; Other &gt; Dragonfly &gt; BUGnet</b>.  
 
-				<ul><li> Click the New BUG Connection button <img alt="StaticConnection.gif" src="../images/StaticConnection.gif" width="16" height="16" /> to manually create a BUG Connection. This button is available via the Toolbar, My BUGs view title bar, and by right clicking in the My BUGs view.
+				</p><p><img alt="BUGWeatherApp MyBUGs.png" src="../images/BUGWeatherApp_MyBUGs.png" width="269" height="211" />
+				</p>
+				<h3> <span class="mw-headline" id="Connection_Types">Connection Types</span></h3>
+				<p>The My BUGs view displays any BUG Connections that are available to the SDK and allows you to interact with them.  There are 3 connection types you will see in this window:
+				</p>
+				<ul><li> <img alt="Virtual bug.gif" src="../images/Virtual_bug.gif" width="16" height="16" /> BUG Simulator Connection.
+				</li><li> <img alt="StaticConnection.gif" src="../images/StaticConnection.gif" width="16" height="16" /> Static Connection (Manual).
+				</li><li> <img alt="SlpBUG.gif" src="../images/SlpBUG.gif" width="16" height="16" /> Discovered BUG Connection (Physical BUG).
+				</li></ul>
+
+				<p>Sometimes, My BUGs view has not refreshed to show new connections.  To refresh My BUGs, click on the refresh icon <img alt="Refresh.gif" src="../images/Refresh.gif" width="16" height="16" /> near the top of My BUGs view.  
+				</p><p><br />
+				</p>
+				<h3> <span class="mw-headline" id="Actions_in_My_BUGs_View">Actions in My BUGs View</span></h3>
+				<ul><li> Browse any BUG Connection's Applications, Modules, or Services nodes.
 				</li><li> Double click the node on a BUG Connection to bring up a Physical Editor window for the Connection.
-				</li><li> Browse any BUG Connection's Applications, Modules, or Services nodes.
 				</li><li> Right click a BUG Connection to bring up a menu (see the Right Click Menu section below for details and options).
 				</li><li> Right click on an application in the BUG Connection Applications folder (see the Right Click Menu section below for details and options).
 				</li></ul>
-				<p>If you accidentally close this view you can go to Window &gt; Show View &gt; Other &gt; Dragonfly &gt; BUGnet to display it again.
 
+				<h2> <span class="mw-headline" id="Launching_BUG_Simulator">Launching BUG Simulator</span></h2>
+				<p>If BUG Simulator is currently running, you will see it listed in My BUGs view.  The BUG Simulator button <img alt="Bug simulator button.gif" src="../images/Bug_simulator_button.gif" width="16" height="16" /> also shows whether the BUG Simulator is running.  If the button icon is red, this means that the simulator is probably not running.  If it is blank, the simulator is already running.
+				</p><p><b>Hint:</b> To stop a running instance of BUG Simulator, go to the Console view in Eclipse and click on the red <b>Terminate</b> button <img alt="Eclipse terminate button.png" src="../images/Eclipse_terminate_button.png" width="12" height="12" />.
 				</p>
+				<h3> <span class="mw-headline" id="Interacting_with_BUG_Simulator">Interacting with BUG Simulator</span></h3>
+
+				<p>As noted above, you can open the BUG Simulator window from My BUGs view.  Double click on the <b>BUG Simulator</b> element at the top of the My BUGs view to open the BUG Simulator window.  You should see something like this. 
+				</p><p><img alt="BUGsimulator base.png" src="../images/BUGsimulator_base.png" width="511" height="272" />
+				</p><p>In the simulator, you will see an image of a BUGbase.  There are slots at the top and bottom that are designed to hold external modules that are plugged in.  Right now, the simulator does not have anything plugged in.  And that's a lot like how your physical BUG hardware starts.
+				</p>
+				<h2> <span class="mw-headline" id="Using_Modules_in_BUG_Simulator">Using Modules in BUG Simulator</span></h2>
+				<p>The modules that you add in BUG Simulator are important, since they define the services that are available when creating applications AND when running them.  
+				</p>
+				<ul><li> When you create a new BUG project, you should first add the modules in BUG Simulator first.
+				</li><li> When running and testing an app in BUG Simulator, your app will wait until you add the modules it expects to use.
+				</li></ul>
+
+				<p><br />
+				</p>
+				<h3> <span class="mw-headline" id="Adding_a_Module">Adding a Module</span></h3>
+				<p>The next step is to plug in some hardware.  In this example, we will use the LCD module.  To plug in the virtual LCD, right click on the BUGbase image and navigate to the menu item:  <b>BUG Simulator &gt; Slot 1 &gt; LCD</b>
+				</p><p><img alt="BUGSimulator Slot1 LCD menus.png" src="../images/BUGSimulator_Slot1_LCD_menus.png" width="696" height="232" />
+				</p><p><br />
+				</p>
+				<h3> <span class="mw-headline" id="Using_the_BUG_Simulator_When_Creating_a_New_BUG_Project">Using the BUG Simulator When Creating a New BUG Project</span></h3>
+
+				<p>When you are creating a new BUG project to run on the BUG Simulator, only the currently installed modules are listed in the Service Definition window.  If you added the LCD module in BUG Simulator, then you will see the <b>ILCDModuleControl</b> in the list of available services like in the example below:
+				</p><p><img alt="NewProject ServiceDef LCD.png" src="../images/NewProject_ServiceDef_LCD.png" width="594" height="714" />
+				</p>
+				<h4> <span class="mw-headline" id="Adding_Services_Manually_in_Code">Adding Services Manually in Code</span></h4>
+				<p>If you did not add the LCD module or other module(s) that you need or if you used the <b>Start BUG Simulator</b> button in this window, then these modules will not appear in this list.  However, this does not prevent you from manually adding the services you require.  Refer to the <a href="/index.php/Tutorial:BugWeatherApp_Part_1-Getting_Started" title="Tutorial:BugWeatherApp Part 1-Getting Started">Tutorial:BugWeatherApp_Part_1-Getting_Started</a> for more information.
+				</p>
+
+				<h3> <span class="mw-headline" id="Using_the_BUG_Simulator_When_Testing_an_App">Using the BUG Simulator When Testing an App</span></h3>
+				<p>When you are building and testing apps in BUG Simulator, you often have to start or restart the BUG Simulator and use the <b>Send to BUG</b> command to deploy the app.  Your code that depends on hardware modules will only execute when the modules are present.  So you will frequently need to perform the following steps to run and test your app:
+				</p>
+				<ol><li> If BUG Simulator is already running, you may need to terminate the running instance first.  To do this, look for the <b>Console</b> view in Eclipse and click on the red <b>Terminate</b> button <img alt="Eclipse terminate button.png" src="../images/Eclipse_terminate_button.png" width="12" height="12" />.  (Note: You can often redeploy an app into a running BUG Simulator without stopping and starting the simulator)
+
+				</li><li> Click on the <b>Launch BUG Simulator</b> button <img alt="Bug simulator button.gif" src="../images/Bug_simulator_button.gif" width="16" height="16" />
+				</li><li> Right-click on your BUG project in Eclipse and select <b>Send to BUG</b><br /><br /><img alt="Menu sendtobug.png" src="../images/Menu_sendtobug.png" width="307" height="525" /><br /><br />
+				</li><li> Open <b>My BUGs</b> view  and open the <b>BUG Simulator</b> window by double-clicking on the BUG Simulator listed in My BUGs.
+
+				</li><li> Right-click on the BUG base and add the required modules (as shown above)
+				</li></ol>
 				<h2> <span class="mw-headline" id="BUG_Connection">BUG Connection</span></h2>
-				<p>When the Virtual BUG is launched it will automatically appear in the My BUGs view. The same should happen for a physical BUG when it is connected to your computer via USB or connected to your Network. (If you are having trouble please see <a href="http://buglabs.net/start" class="external free" rel="nofollow">http://buglabs.net/start</a>).
+				<p>When BUG Simulator is launched, it will automatically appear in the My BUGs view. The same should happen for a physical BUG when it is connected to your Network. In some casees, it is necessary to create the connection manually. (If you are having trouble please see <a href="http://buglabs.net/start" class="external free" rel="nofollow">http://buglabs.net/start</a>).
 				</p>
 				<h3> <span class="mw-headline" id="Creating_a_New_BUG_Connection">Creating a New BUG Connection</span></h3>
-				<p>In some cases it may be necessary to create a BUG Connection manually.
-				</p>
-				<ol><li> Clicking on a New BUG Connection icon <img alt="StaticConnection.gif" src="../images/StaticConnection.gif" width="16" height="16" /> will bring up the wizard:
-				</li>
-				</ol>
-				<p><img alt="Bug con.gif" src="../images/bug_con.gif" width="525" height="433" />
-				</p>
-				<ol><li> After you enter a Name and Address the Test Connection and Finish buttons will become active (the following screen uses the Virtual BUG address):
-				</li></ol>
-				<p><img alt="Bug con test.gif" src="../images/Bug_con_test.gif" width="525" height="433" />
-				</p>
-				<ol><li> Click Test Connection to validate the Connection or click Finish to add it to the My BUGs view.
-				</li></ol>
-				<h3> <span class="mw-headline" id="Right_Click_on_BUG_Connection_Menu">Right Click on BUG Connection Menu</span></h3>
-				<ul><li> 
-				</li></ul>
-				<p><img alt="StaticConnection.gif" src="../images/StaticConnection.gif" width="16" height="16" /> New BUG Connection button - Opens New BUG Connection Wizard
+				<p>1. Click the New BUG Connection button <img alt="StaticConnection.gif" src="../images/StaticConnection.gif" width="16" height="16" /> to manually create a BUG Connection. This button is available via the My BUGs view title bar, and by right clicking in the My BUGs view.
+				</p><p><img alt="New bug connection.png" src="../images/New_bug_connection.png" width="438" height="412" />
 
+				</p><p><br />
+				2. After you enter a Name and Address the Test Connection and Finish buttons will become active.
+				</p><p><img alt="New bug connection address.png" src="../images/New_bug_connection_address.png" width="438" height="412" />
+				</p><p><br />
+				3. Click Test Connection to validate the Connection or click Finish to add it to the My BUGs view.
 				</p>
-				<ul><li> 
-				</li></ul>
-				<p><img alt="DeleteBug.gif" src="../images/DeleteBug.gif" width="17" height="16" /> Delete BUG Connection button - Only active for Manually created Connections
-				</p>
-				<ul><li> <img alt="Refresh.gif" src="../images/Refresh.gif" width="16" height="16" />Refresh BUG Connection button
+				<h3> <span class="mw-headline" id="Right_Click_on_BUG_Connection_Menu">Right Click on BUG Connection Menu</span></h3>
+				<ul><li> <img alt="StaticConnection.gif" src="../images/StaticConnection.gif" width="16" height="16" /> New BUG Connection button - Opens New BUG Connection Wizard
+				</li><li> <img alt="DeleteBug.gif" src="../images/DeleteBug.gif" width="17" height="16" /> Delete BUG Connection button - Only active for Manually created Connections
+				</li><li> <img alt="Refresh.gif" src="../images/Refresh.gif" width="16" height="16" />Refresh BUG Connection button
+
 				</li><li> Properties - Update BUG Connection Address
 				</li><li> Additional menu options are available when right clicking on an application in the Applications folder.
 				<ul><li> <img alt="App remove.gif" src="../images/App_remove.gif" width="16" height="16" /> Remove application button (Note: If you right click on the Applications folder this button is "Remove All applications')
 				</li><li> <img alt="App import.gif" src="../images/App_import.gif" width="16" height="16" /> Import into Dragonfly SDK button
+				</li></ul>
+				</li></ul>
+				<h2> <span class="mw-headline" id="Physical_Editor_Properties_View">Physical Editor Properties View</span></h2>
+				<p>'When you click on the BUGbase or any Module name tag in the Physical Editor, it will be highlighted blue and the Properties view will populate with specific information for the component.  Some of these properties can be changed. For example, on the BUGbase you can enable/disable Services.
+				</p><p><img alt="BUGsimulator base properties.png" src="../images/BUGsimulator_base_properties.png" width="639" height="610" />
 
-				</li></ul>
-				</li></ul>
-				<h2> <span class="mw-headline" id="Physical_Editor_Window">Physical Editor Window</span></h2>
-				<p>Double clicking a BUG Connection opens the Physical Editor for the BUG Connection:
-				</p><p><img alt="Physical editor.gif" src="../images/physical_editor.gif" width="1100" height="821" />
-				</p><p>When you click on the BUGbase or any module in the Physical Editor it will be highlighted in blue and the Properties view will populate with specific information for the component (Note: Selecting the BUGbase in the Physical Editor will enable the Applications by Modules section in the BUGnet view).
-				</p><p><img alt="Physical editor prop.gif" src="../images/physical_editor_prop.gif" width="1100" height="821" />
-				</p><p>Some of these properties can be changed. For example on the BUGbase you can enable/disable Services.
-				</p><p><img alt="Physical editor prop edit.gif" src="../images/physical_editor_prop_edit.gif" width="1100" height="821" />
 				</p>
+				<h1> <span class="mw-headline" id="See_Also">See Also</span></h1>
+				<ul>
+				<li><a href="/index.php/Tutorial:Interacting_with_My_BUGs_in_Dragonfly_SDK" title="Tutorial:Interacting with My BUGs in Dragonfly SDK">Interacting with My BUGs in Dragonfly SDK</a></li> 
+				 <li><a href="/index.php/Tutorial:BugWeatherApp_Part_1-Getting_Started" title="Tutorial:BugWeatherApp Part 1-Getting Started">BugWeatherApp Part 1-Getting Started</a></li> 
+				 <li><a href="/index.php/Tutorial:BugWeatherApp_Part_2-Running_BUG_Simulator" title="Tutorial:BugWeatherApp Part 2-Running BUG Simulator">BugWeatherApp Part 2-Running BUG Simulator</a></li> 
+				 <li><a href="/index.php/Tutorial:Creating_a_Basic_Application" title="Tutorial:Creating a Basic Application">Creating a Basic Application</a></li> 
+				 <li><a href="/index.php/Tutorial:Connecting_to_BUG_with_VNC" title="Tutorial:Connecting to BUG with VNC">Connecting to BUG with VNC</a></li> 
+				 <li><a href="/index.php/Tutorial:BugWeatherApp_Part_3-Calling_REST_Web_Services" title="Tutorial:BugWeatherApp Part 3-Calling REST Web Services">BugWeatherApp Part 3-Calling REST Web Services</a></li> 
+				 <li><a href="/index.php/Tutorial:Create_an_App_That_Publishes_an_OSGi_Service" title="Tutorial:Create an App That Publishes an OSGi Service">Create an App That Publishes an OSGi Service</a></li> 
+				 <li><a href="/index.php/Tutorial:Start_Guide_Putting_it_All_Together" title="Tutorial:Start Guide Putting it All Together">Start Guide Putting it All Together</a></li> 
+				 <li><a href="/index.php/Tutorial:Upload_an_Application_to_BUGnet" title="Tutorial:Upload an Application to BUGnet">Upload an Application to BUGnet</a></li> 
+				 <li><a href="/index.php/Tutorial:Interacting_with_BUGnet" title="Tutorial:Interacting with BUGnet">Interacting with BUGnet</a></li> 
+				 <li><a href="/index.php/Tutorial:Download_an_Application_from_BUGnet" title="Tutorial:Download an Application from BUGnet">Download an Application from BUGnet</a></li></ul>
+
 				<!-- 
 				NewPP limit report
-				Preprocessor node count: 23/1000000
+				Preprocessor node count: 61/1000000
 				Post-expand include size: 0/2097152 bytes
 				Template argument size: 0/2097152 bytes
 				Expensive parser function count: 0/100
 				-->
 
-				<!-- Saved in parser cache with key wiki:pcache:idhash:391-0!1!0!!en!2!printable=1 and timestamp 20100924202522 -->
+				<!-- Saved in parser cache with key wiki:pcache:idhash:391-0!1!0!!en!2!printable=1 and timestamp 20101023233409 -->
 				<div class="printfooter">
 				Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:Interacting_with_My_BUGs_in_Dragonfly_SDK">http://wiki.buglabs.net/index.php/Tutorial:Interacting_with_My_BUGs_in_Dragonfly_SDK</a>"</div>
-
 								<!-- /bodytext -->
-
 
 				<!-- ########### END OF INSERTED CONTENT ########## -->
 
