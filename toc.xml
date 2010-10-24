@@ -15,10 +15,11 @@
    	</topic>
 	<topic label="Configure and Run Apps">
       <topic label="Interacting with My BUGs View" href="html/interactingWithMyBUGsView/index.html"/>
+      <topic label="Using Modules in BUG Simulator" href="html/UsingModulesInBugSim/index.html"/>
       <topic label="Send Application to BUG" href="html/SendAppToBUG/index.html"/>  
-      <topic label="Using Virtual BUG" href="html/usingVirtualBug/index.html"/>        
-      <topic label="Saving State of Virtual BUG" href="html/savingVirtualBUG/index.html"/>        
-      <topic label="Virtual BUG Launch Configuration" href="html/launchConfiguration/index.html"/>                              
+      <!-- <topic label="Using Virtual BUG" href="html/usingVirtualBug/index.html"/>         -->
+      <!-- <topic label="Saving State of Virtual BUG" href="html/savingVirtualBUG/index.html"/>         -->
+      <!-- <topic label="Virtual BUG Launch Configuration" href="html/launchConfiguration/index.html"/>                               -->
    	</topic>
 	<topic label="BUGnet Community">
       <topic label="Interacting with BUGnet View" href="html/interactingWithBUGnetView/index.html"/>      

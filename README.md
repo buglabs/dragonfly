@@ -37,7 +37,7 @@ If there are images in the page, you will notice that Mediawiki has its own way 
 
 1. Remove a tags surrounding images:  
 Mediawiki has a funny need to link to the image page for an uploaded file. And we need to get rid of these.
-FIND:    \<a [^\>]*\>(\<img [^\>]*\>)</a>
+FIND:    \<a [^\>]*\>(\<img [^\>]*\>)\</a\>
 REPLACE: $1
 
 2. Fix image paths

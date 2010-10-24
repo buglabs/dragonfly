@@ -161,7 +161,7 @@ private class Weather {
 }
 				</pre>
 				<h3> <span class="mw-headline" id="Create_parseWeatherXml_method">Create parseWeatherXml method</span></h3>
-				<p>Our parseWeatherXml method will take a String xml parameter and return a Weather object, so this is where the XML parsing happens.  Again, we are happy to discover that the BUG SDK provides a simple implementation of a XML DOM parser.  You can read more about it in <a href="/index.php/Tutorial:BUG_XML_HOWTO" title="Tutorial:BUG XML HOWTO"> this tutorial</a>.
+				<p>Our parseWeatherXml method will take a String xml parameter and return a Weather object, so this is where the XML parsing happens.  Again, we are happy to discover that the BUG SDK provides a simple implementation of a XML DOM parser.  You can read more about it in <a href="http://wiki.buglabs.net/index.php/Tutorial:BUG_XML_HOWTO" title="Tutorial:BUG XML HOWTO"> this tutorial</a>.
 
 				</p><p>Here's the code:
 				</p>
@@ -199,7 +199,7 @@ protected Weather parseWeatherXml(String xml) throws Exception {
 }
 
 				</pre>
-				<p><b>See Also:</b> <a href="/index.php/Tutorial:BUG_XML_HOWTO" title="Tutorial:BUG XML HOWTO">Tutorial:BUG_XML_HOWTO</a>
+				<p><b>See Also:</b> <a href="http://wiki.buglabs.net/index.php/Tutorial:BUG_XML_HOWTO" title="Tutorial:BUG XML HOWTO">Tutorial:BUG_XML_HOWTO</a>
 				</p>
 				<h2> <span class="mw-headline" id="Displaying_the_Weather_Data">Displaying the Weather Data</span></h2>
 				<p>Previously, we had all the AWT code in the constructor and that is no longer practical.  We need to do a bit of refactoring so that we can simply call a new method called <b>displayWeather</b> after we have fetched and parsed the weather xml data.  
