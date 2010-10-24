@@ -7,7 +7,7 @@
       <topic label="BugWeather App Part1 - Getting Started" href="html/BugWeatherPart1/index.html"/>
       <topic label="BugWeather App Part2 - Running BUG Simulator" href="html/BugWeatherPart2/index.html"/>
       <topic label="BugWeather App Part3 - Calling a REST Web Service" href="html/BugWeatherPart3/index.html"/>
-      <topic label="Debug an Application" href="html/debugAnApp/index.html"/>
+      <!-- <topic label="Debug an Application" href="html/debugAnApp/index.html"/> -->
  	  <!-- <topic label="Create a BUG Project" href="html/createBUGProject/index.html"/>	 -->
       <!-- <topic label="Creating a Basic Application" href="html/creatingABasicApplication/index.html"/>
       <topic label="Call a Web Service in an Application" href="html/callWebServicesApp/index.html"/>       
