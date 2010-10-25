@@ -50,7 +50,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	private static final String REL_BUNDLE_DIR = "bundle";
 	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-3.0.4.jar";
 	private IPath launchDir;
-	private boolean debug = true;
+	private boolean debug = false;
 	
 	public FelixLaunchConfiguration() {
 		launchDir = Activator.getDefault().getStateLocation();
