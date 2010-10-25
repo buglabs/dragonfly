@@ -31,6 +31,8 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.TreeItem;
 
 import com.buglabs.dragonfly.felix.Activator;
 
@@ -48,6 +50,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	private static final String REL_BUNDLE_DIR = "bundle";
 	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-3.0.1.jar";
 	private IPath launchDir;
+	private boolean debug = true;
 	
 	public FelixLaunchConfiguration() {
 		launchDir = Activator.getDefault().getStateLocation();
@@ -60,19 +63,27 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			URL localURL = FileLocator.toFileURL(relativeURL);
 			String felixPluginBase = Path.fromPortableString(localURL.getPath()).toOSString();
 			
+			debugPrint("Felix plugin base: " + felixPluginBase);
+			
 			deleteBundleCacheDir(launchDir.append(REL_BUNDLE_DIR), monitor);
 			String launchClass = FELIX_MAIN_CLASS;
+			debugPrint("Felix launch class: " + launchClass);
 			String bootClasspath[] = loadBootClasspath(felixPluginBase);
+			debugPrint("Felix boot classpath: " + printStrArray(bootClasspath));
 
 			VMRunnerConfiguration vmconfig = new VMRunnerConfiguration(launchClass, bootClasspath);
 		
 			File confFile = createFelixConfFile(configuration, launchDir, felixPluginBase, getLaunchProperties());
+			debugPrint("Felix configuration: " + confFile.toString());
 			
 			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, monitor);
 			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, monitor);
 			
-			vmconfig.setVMArguments(getVMArgs(confFile, felixPluginBase));
+			String[] args = getVMArgs(confFile, felixPluginBase);
+			debugPrint("Felix boot classpath: " + printStrArray(args));
+			vmconfig.setVMArguments(args);
 			
+			debugPrint("Felix workingdir: " + launchDir.toOSString());
 			vmconfig.setWorkingDirectory(launchDir.toOSString());
 			
 			IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
@@ -81,6 +92,23 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		} catch (Exception e) {
 			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to launch BUG Simulator", e));
 		} 
+	}
+
+	private String printStrArray(String [] array) {
+		StringBuffer sb = new StringBuffer();
+		
+		for (int i = 0; i < array.length; ++i) {
+			sb.append(array[i]);
+			sb.append('\n');
+		}
+		
+		return sb.toString();
+	}
+
+	private void debugPrint(String s) {
+		if (debug) {
+			System.out.println(s);
+		}
 	}
 
 	/**
