@@ -189,8 +189,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		vhActivator.start(context);
 
 		// com.buglabs.bug.module.camera ***********************
-		// cameraActivator = new CameraActivator();
-		// cameraActivator.start(context);
+		cameraActivator = new CameraActivator();
+		cameraActivator.start(context);
 
 		// UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
