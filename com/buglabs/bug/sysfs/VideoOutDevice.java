@@ -1,6 +1,5 @@
 package com.buglabs.bug.sysfs;
 
-import java.awt.Point;
 import java.io.File;
 
 /**
@@ -11,19 +10,36 @@ import java.io.File;
  *
  */
 public final class VideoOutDevice extends BMIDevice {
-
-	private static final File OUTPUT_FILE = new File("videoout");
+	private boolean dviSet = true;
 	
 	public VideoOutDevice(File directory, int slot) {
 		super(directory, slot);
 	}
 
-	public String getVideoOutput() {
-		//hypothetical
-		return this.getFirstLineofFile(OUTPUT_FILE);
+	/*
+	 * resolution
+	 */
+
+	public String getResolution() {
+		// TODO: really read it when exposed by driver
+		return "1280x1024";
+	}
+
+	public boolean isVGA() {
+		return !dviSet;
+	}
+
+	public boolean isDVI() {
+		return dviSet;
 	}
 	
-	public Point getResolution() {
-		return null;
+	public boolean setVGA() {
+		dviSet = false;
+		return true;
+	}
+	
+	public boolean setDVI() {
+		dviSet = true;
+		return true;
 	}
 }
