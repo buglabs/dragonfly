@@ -252,6 +252,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		if (audioActivator != null) {
 			audioActivator.stop(context);
 		}
+		
+		if (videoActivator != null) {
+			videoActivator.stop(context);
+		}
 
 		try {
 			if (httpST != null) {

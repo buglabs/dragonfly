@@ -19,7 +19,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.module.camera.pub.ICameraButtonEventProvider;
-import com.buglabs.bug.module.camera.pub.ICameraDevice;
+import com.buglabs.bug.module.camera.pub.ICamera2Device;
 import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.device.ButtonEvent;
@@ -43,7 +43,7 @@ import com.buglabs.util.RemoteOSGiServiceConstants;
  * @author kgilmer
  * 
  */
-public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, PublicWSProvider, IModuleControl, ICameraButtonEventProvider, IShellCommandProvider {
+public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2, PublicWSProvider, IModuleControl, ICameraButtonEventProvider, IShellCommandProvider {
 	private ServiceRegistration wsRef;
 
 	private int megapixels;
@@ -139,7 +139,7 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 		cameraModuleControl = context.registerService(ICameraModuleControl.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
 		ledControl = context.registerService(IModuleLEDController.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
 
-		cameraService = context.registerService(ICameraDevice.class.getName(), this, createRemotableProperties(null));
+		cameraService = context.registerService(ICamera2Device.class.getName(), this, createRemotableProperties(null));
 
 		if (context.getServiceReferences(IButtonEventProvider.class.getName(), "(ButtonsProvided=Camera)") == null) {
 			buttonEventProvider = context.registerService(ICameraButtonEventProvider.class.getName(), this, createRemotableProperties(getButtonServiceProperties()));
@@ -219,7 +219,7 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 		return false;
 	}
 
-	public byte[] getImage() {
+	private byte[] getImage() {
 		InputStream pic = getImageInputStream();
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -239,7 +239,7 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 		return os.toByteArray();
 	}
 
-	public InputStream getImageInputStream() {
+	private InputStream getImageInputStream() {
 		InputStream pic = null;
 
 		if (camera == null) {
@@ -383,5 +383,47 @@ public class CameraModlet implements IModlet, ICameraDevice, PublicWSProvider2, 
 			return "Simulates button presses on camera module.";
 		}
 
+	}
+
+	@Override
+	public int bug_camera_open(String media_node, int slot_num, int full_height, int full_width, int preview_height, int preview_width) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int bug_camera_open_default() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int bug_camera_close() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int bug_camera_start() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int bug_camera_stop() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean bug_camera_grab_preview(int[] pixelBuffer) {
+		//TODO add code that populates the int array with a preview.
+		return false;
+	}
+
+	@Override
+	public byte[] bug_camera_grab_full() {
+		
+		return getImage();
 	}
 }
