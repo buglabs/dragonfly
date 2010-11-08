@@ -64,6 +64,7 @@ import com.buglabs.bug.module.motion.MotionActivator;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.bug.module.sierra.GSMActivator;
+import com.buglabs.bug.module.video.VideoActivator;
 import com.buglabs.bug.module.vonhippel.VHActivator;
 import com.buglabs.bug.simulator.controller.Server;
 import com.buglabs.bug.simulator.ui.SimulatorModuleCommands;
@@ -131,6 +132,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	private ServiceRegistration baseControlReg;
 
+	private VideoActivator videoActivator;
+
 	public void start(final BundleContext context) throws Exception {
 		// Basic setup ********************************************
 		this.context = context;
@@ -191,6 +194,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		// com.buglabs.bug.module.camera ***********************
 		cameraActivator = new CameraActivator();
 		cameraActivator.start(context);
+		
+		// com.buglabs.bug.module.camera ***********************
+		videoActivator = new VideoActivator();
+		videoActivator.start(context);
 
 		// UI stuff ***********************************************
 		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
