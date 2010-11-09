@@ -368,60 +368,60 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 			return "button.camera";
 		}
 
-		@Override
+		
 		public boolean isValid() {
 			return this.arguments.size() == 1;
 		}
 
-		@Override
+		
 		public String getUsage() {
 			return "[shutter | in | out]";
 		}
 
-		@Override
+		
 		public String getDescription() {
 			return "Simulates button presses on camera module.";
 		}
 
 	}
 
-	@Override
+	
 	public int bug_camera_open(String media_node, int slot_num, int full_height, int full_width, int preview_height, int preview_width) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
+	
 	public int bug_camera_open_default() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
+	
 	public int bug_camera_close() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
+	
 	public int bug_camera_start() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
+	
 	public int bug_camera_stop() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
+	
 	public boolean bug_camera_grab_preview(int[] pixelBuffer) {
 		//TODO add code that populates the int array with a preview.
 		return false;
 	}
 
-	@Override
+	
 	public byte[] bug_camera_grab_full() {
 		
 		return getImage();
