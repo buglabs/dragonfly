@@ -273,7 +273,7 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		return videoOutDevice.setDVI();
 	}
 
-	@Override
+	
 	public PublicWSDefinition discover(int operation) {
 		if (operation == PublicWSProvider2.GET) {
 			return new PublicWSDefinition() {
@@ -291,13 +291,13 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		return null;
 	}
 
-	@Override
+	
 	public IWSResponse execute(int operation, String input) {
 		// not called because we implement the extended one below
 		return null;
 	}
 
-	@Override
+	
 	public IWSResponse execute(int operation, String input, Map get, Map post) {
 		if (get.containsKey("suspend")) {
 			videoOutDevice.suspend();
@@ -326,18 +326,18 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		return null;
 	}
 
-	@Override
+	
 	public String getPublicName() {
 		return serviceName;
 	}
 
-	@Override
+	
 	public String getDescription() {
 		return "This service can return video display information.";
 
 	}
 
-	@Override
+	
 	public void setPublicName(String name) {
 		serviceName = name;
 	}
@@ -354,7 +354,7 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		return root.toString();
 	}
 
-	@Override
+	
 	public String getResolution() {
 		return videoOutDevice.getResolution();
 	}
