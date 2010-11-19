@@ -110,9 +110,10 @@
 	<target name="copyEmulatorJars">
 		<!-- we need to build the BUG Simulator, which is not an eclipse plugin -->
 		<property name="virtualBugJarTargetDir" value="${buildDirectory}/plugins/com.buglabs.dragonfly.simulator/bundles" />
-		<echo message="Copying BUG Simulator jars from directory: ${base.build.dir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/ to ${virtualBugJarTargetDir}"/>
+		<echo message="Copying BUG Simulator jars from directory: ${basBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/ to ${virtualBugJarTargetDir}"/>
+		<echo message="KG basBuildDir: ${basBuildDir}"/>
 		<copy todir="${virtualBugJarTargetDir}">
-			<fileset dir="${base.build.dir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/" />
+			<fileset dir="${basBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/" />
 			<!--
 			<fileset dir="${basBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/" />
 			-->
