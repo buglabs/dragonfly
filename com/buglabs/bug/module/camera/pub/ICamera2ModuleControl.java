@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009 Bug Labs, Inc.
+ * Copyright (c) 2010 Bug Labs, Inc.
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -27,43 +27,67 @@
  *******************************************************************************/
 package com.buglabs.bug.module.camera.pub;
 
-import java.io.IOException;
-
-/**
- * Provides hardware control of the Camera Module
- * 
- * @author Angel Roman
- */
-public interface ICameraModuleControl {
+public interface ICamera2ModuleControl {
 	/**
-	 * Sets the beam intensity
-	 * 
-	 * @param intensity
-	 *            The intensity of the beam. 0 = low, 1 = high
-	 * @return negative value if request was not successful.
+	 * @return test pattern setting or negative value if error
 	 */
-	public int setFlashBeamIntensity(int intensity) throws IOException;
+	public int getTestPattern();
+	/**
+	 * Set camera's test pattern:
+	 *
+	 * @param testPattern 0=Disabled, 1=Walking 1's
+	 * @return 0 if successful, negative value otherwise.
+	 */
+	public int setTestPattern(int testPattern);
 
 	/**
-	 * Turns Flash LED off
 	 * 
-	 * @return negative value if request was not successful.
+	 * @return color effects setting or negative value if error
 	 */
-	public int setLEDFlash(boolean state) throws IOException;
-
+	public int getColorEffects();
 	/**
-	 * Selects a camera based on slot number.
+	 * Set camera's color effects
 	 * 
-	 * @param slot
-	 *            the slot number of the desired camera.
-	 * @return negative value if request was not sucessful.
+	 * @param colorEffects 0=Disabled, 1=Black & White, 2=Sepia, 3=Negative, 4=Solarize
+	 * @return 0 if successful, negative value otherwise.
 	 */
-	public int setSelectedCamera(int slot) throws IOException;
+	public int setColorEffects(int colorEffects);
 	
 	/**
-	 * Returns the slot number of the selected camera.
 	 * 
-	 * @return negative value if request was not successful.
+	 * @return vertical flip setting or negative value if error
 	 */
-	public int getSelectedCamera() throws IOException;
+	public int getVerticalFlip();
+	/**
+	 * Set vertical flip.
+	 * 
+	 * @param verticalFlip 0=Disabled, 1=Flipped
+	 * @return 0 if successful, negative value otherwise.
+	 */
+	public int setVerticalFlip(int verticalFlip);
+
+	/**
+	 * 
+	 * @return horizontal mirror setting or negative value if error
+	 */
+	public int getHorizontalMirror();
+	/**
+	 * Set horizontal mirror.
+	 * 
+	 * @param horizontalMirror 0=Disabled, 1=Mirrored
+	 * @return 0 if successful, negative value otherwise.
+	 */
+	public int setHorizontalMirror(int horizontalMirror);
+	
+	/**
+	 * 
+	 * @return exposure level or negative value if error
+	 */
+	public int getExposureLevel();
+	/**
+	 * Set exposure level.
+	 * @param exposureLevel in the range 0-255 (default is 55)
+	 * @return
+	 */
+	public int setExposureLevel(int exposureLevel);
 }

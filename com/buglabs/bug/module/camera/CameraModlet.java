@@ -18,8 +18,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.camera.pub.ICameraButtonEventProvider;
 import com.buglabs.bug.module.camera.pub.ICamera2Device;
+import com.buglabs.bug.module.camera.pub.ICameraButtonEventProvider;
 import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.device.ButtonEvent;
@@ -387,37 +387,31 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 
 	
 	public int bug_camera_open(String media_node, int slot_num, int full_height, int full_width, int preview_height, int preview_width) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	
 	public int bug_camera_open_default() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	
 	public int bug_camera_close() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	
 	public int bug_camera_start() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	
 	public int bug_camera_stop() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	
 	public boolean bug_camera_grab_preview(int[] pixelBuffer) {
-		//TODO add code that populates the int array with a preview.
 		return false;
 	}
 
@@ -425,5 +419,13 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 	public byte[] bug_camera_grab_full() {
 		
 		return getImage();
+	}
+
+	public boolean is_camera_open() {
+		return false;
+	}
+
+	public boolean is_camera_started() {
+		return false;
 	}
 }
