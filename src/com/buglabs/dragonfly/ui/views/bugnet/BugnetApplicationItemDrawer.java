@@ -80,6 +80,7 @@ public class BugnetApplicationItemDrawer {
 	private static final int USERNAMES_LENGTH = 21;
 	private static final int LINE_WIDTH_HINT = 200;
 	private static final int LINE_HEIGHT_HINT = 17;
+	private static final int DESCRIPTION_TOOLTIP_MAX_LENGTH = 250;
 	private static final int DOWNLOAD_BUTTON_WIDTH = 15;
 	private static final int DOWNLOAD_BUTTON_HEIGHT = 15;
 	private static final String DISPOSED_ERROR = "The resource has been disposed.";
@@ -357,6 +358,7 @@ public class BugnetApplicationItemDrawer {
 
 		// Draw Description
 		String desc = item.getDescription().trim();
+		
 		if (!desc.equals("")) { //$NON-NLS-1$
 			String shortenedDesc = UIUtils.truncateString(desc, DESCRIPTION_LENGTH);
 			Label descLabel = toolkit.createLabel(comp, shortenedDesc, SWT.NONE);
@@ -372,7 +374,7 @@ public class BugnetApplicationItemDrawer {
 			descLabel.setLayoutData(gd);
 			descLabel.setBackground(backgroundColor);
 			descLabel.setForeground(colorRegistry.get(DESCRIPTIONCOLOR));
-			descLabel.setToolTipText(desc);
+			descLabel.setToolTipText(UIUtils.truncateString(desc, DESCRIPTION_TOOLTIP_MAX_LENGTH ));
 		}
 
 		createContextMenu(comp, item);
