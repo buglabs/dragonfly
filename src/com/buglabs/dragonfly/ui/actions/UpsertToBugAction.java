@@ -67,7 +67,6 @@ public class UpsertToBugAction extends Action {
 				job.addJobChangeListener(jobListener);
 			}
 
-			job.setUser(true); // gives us a progress dialog
 			job.schedule();
 		}
 	}
