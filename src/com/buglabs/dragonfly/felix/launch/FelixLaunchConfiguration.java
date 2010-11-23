@@ -31,8 +31,6 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.TreeItem;
 
 import com.buglabs.dragonfly.felix.Activator;
 
