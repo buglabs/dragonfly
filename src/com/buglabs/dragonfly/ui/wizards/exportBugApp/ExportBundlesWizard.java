@@ -59,7 +59,7 @@ public class ExportBundlesWizard extends Wizard implements IExportWizard {
 	BundleExportInfo expinfo;
 	private ProjectAndDestinationPage page1;
 	private IDialogSettings settings;
-	private String natureID = "com.buglabs.osgi.concierge.natures.ConciergeProjectNature";
+	private String natureID = null;
 
 	public ExportBundlesWizard() {
 		settings = Activator.getDefault().getDialogSettings().getSection(this.getClass().getName());
@@ -85,6 +85,10 @@ public class ExportBundlesWizard extends Wizard implements IExportWizard {
 	 */
 	protected void setNatureID(String natureID) {
 		this.natureID = natureID;
+	}
+	
+	public String getNatureID() {
+		return natureID;
 	}
 
 	public void addPages() {
