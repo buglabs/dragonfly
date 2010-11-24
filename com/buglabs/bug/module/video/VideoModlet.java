@@ -43,8 +43,6 @@ import org.osgi.service.log.LogService;
 import com.buglabs.bug.module.pub.BMIModuleProperties;
 import com.buglabs.bug.module.pub.IModlet;
 import com.buglabs.bug.module.video.pub.IVideoModuleControl;
-import com.buglabs.bug.sysfs.BMIDeviceHelper;
-import com.buglabs.bug.sysfs.VideoOutDevice;
 import com.buglabs.module.IModuleControl;
 import com.buglabs.module.IModuleProperty;
 import com.buglabs.module.ModuleProperty;
@@ -84,8 +82,8 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 	protected static final String PROPERTY_MODULE_NAME = "moduleName";
 	private final BMIModuleProperties properties;
 	private ServiceRegistration wsReg;
+	private boolean isVga;
 	
-	private final VideoOutDevice videoOutDevice;
 	
 	public VideoModlet(BundleContext context, int slotId, String moduleId) {
 		this.context = context;
@@ -95,8 +93,6 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		this.properties = null;
 		this.moduleName = "VIDEO";
 		this.log = LogServiceUtil.getLogService(context);
-		System.out.println("Asking for video out device");
-		this.videoOutDevice = (VideoOutDevice) BMIDeviceHelper.getDevice(slotId);
 	}
 
 	public VideoModlet(BundleContext context, int slotId, String moduleId, BMIModuleProperties properties) {
@@ -105,9 +101,7 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		this.moduleId = moduleId;
 		this.properties = properties;
 		this.moduleName = "VIDEO";
-		this.log = LogServiceUtil.getLogService(context);
-		System.out.println("Asking for video out device");
-		this.videoOutDevice = (VideoOutDevice) BMIDeviceHelper.getDevice(slotId);
+		this.log = LogServiceUtil.getLogService(context);	
 	}
 
 	public void setup() throws Exception {
@@ -234,11 +228,11 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 	}
 
 	public int resume() throws IOException {
-		return videoOutDevice.resume() ? 1 : 0;
+		return 1;
 	}
 
 	public int suspend() throws IOException {
-		return videoOutDevice.suspend() ? 1 : 0;
+		return 1;
 	}
 	
 	public Frame getFrame() {
@@ -258,21 +252,20 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 	}
 
 	public boolean isVGA() {
-		return videoOutDevice.isVGA();
+		return isVga;
 	}
 
 	public boolean isDVI() {
-		return videoOutDevice.isDVI();
+		return !isVga;
 	}
 
 	public boolean setVGA() {
-		return videoOutDevice.setVGA();
+		return (isVga = true);
 	}
 
 	public boolean setDVI() {
-		return videoOutDevice.setDVI();
+		return !(isVga = false);
 	}
-
 	
 	public PublicWSDefinition discover(int operation) {
 		if (operation == PublicWSProvider2.GET) {
@@ -290,26 +283,24 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 
 		return null;
 	}
-
 	
 	public IWSResponse execute(int operation, String input) {
 		// not called because we implement the extended one below
 		return null;
 	}
-
 	
 	public IWSResponse execute(int operation, String input, Map get, Map post) {
 		if (get.containsKey("suspend")) {
-			videoOutDevice.suspend();
+			log.log(LogService.LOG_INFO, "suspend called on Video device.");
 		}
 		if (get.containsKey("resume")) {
-			videoOutDevice.resume();
+			log.log(LogService.LOG_INFO, "resume called on Video device.");
 		}
 		if (get.containsKey("dvi")) {
-			videoOutDevice.setDVI();
+			log.log(LogService.LOG_INFO, "dvi set on Video device.");
 		}
 		if (get.containsKey("vga")) {
-			videoOutDevice.setVGA();
+			log.log(LogService.LOG_INFO, "vga set on Video device.");
 		}
 		
 		for (Object key : get.keySet()) {
@@ -325,7 +316,6 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		}
 		return null;
 	}
-
 	
 	public String getPublicName() {
 		return serviceName;
@@ -337,7 +327,6 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 
 	}
 
-	
 	public void setPublicName(String name) {
 		serviceName = name;
 	}
@@ -354,9 +343,8 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		return root.toString();
 	}
 
-	
 	public String getResolution() {
-		return videoOutDevice.getResolution();
+		return LCD_WIDTH + "x" + LCD_HEIGHT;
 	}
 
 }

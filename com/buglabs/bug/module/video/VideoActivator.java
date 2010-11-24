@@ -64,7 +64,7 @@ public class VideoActivator implements BundleActivator, IModletFactory {
 	}
 
 	public String getModuleId() {
-		return "000D";
+		return "Video";
 	}
 
 	public String getName() {
