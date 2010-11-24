@@ -400,7 +400,7 @@
             class="com.buglabs.dragonfly.ui.wizards.exportBugApp.BugApplicationExportWizard"
             icon="icons/color/app_export.gif"
             id="com.buglabs.dragonfly.ui.wizards.exportBugApp"
-            name="BUG Application"/>
+            name="BUG Application or OSGi Bundle"/>
    </extension>
    <extension
          point="org.eclipse.debug.core.sourceLocators">

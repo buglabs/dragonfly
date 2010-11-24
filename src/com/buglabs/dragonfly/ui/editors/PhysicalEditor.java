@@ -282,7 +282,7 @@ public class PhysicalEditor extends EditorPart implements IModelChangeListener, 
 	 * @return true if a given module id (name) is for the video module slot.
 	 */
 	private boolean isVideoModule(String modName) {
-		return modName.equals("LCD") || modName.equals("VIDEO");
+		return modName.toUpperCase().equals("LCD") || modName.toUpperCase().equals("VIDEO");
 	}
 
 	/**
