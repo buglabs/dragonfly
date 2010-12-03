@@ -30,29 +30,30 @@ package com.buglabs.bug.module.gps.pub;
 import com.buglabs.nmea.sentences.RMC;
 
 /**
- * Provides access methods to NMEA data from gps devices.
+ * Provides access methods to NMEA data from GPS devices.
+ * 
+ * If a GPS device is attached, a INMEASentenceProvider service will be accessible to clients via
+ * the OSGi service registry.  This service is appropriate for clients wishing to poll for NEMA
+ * sentences at specific times.
  * 
  * @author Angel Roman
  */
 public interface INMEASentenceProvider {
 	/**
-	 * Provides the latest RMC sentence read from the GPS Device, or null if no
-	 * information is available.
-	 * 
+	 * Provides the latest RMC sentence read from the GPS Device, or null if no information is available.
 	 * @deprecated
 	 * @return RMC sentence object
 	 */
 	public RMC getRMC();
-
+	
 	/**
-	 * @return Last parsed RMC NMEA sentence, or null if no sentence has been
-	 *         received.
+	 * @return Last parsed RMC NMEA sentence, or null if no sentence with location information has been received.
 	 */
 	public com.buglabs.nmea2.RMC getLastRMC();
-
+	
 	/**
-	 * @return the index of the RMC value currently available. Useful for
-	 *         determining if new RMC is available.
+	 * @return the index of the RMC value currently available.
+	 * Useful for determining if new RMC is available.
 	 */
 	public int getIndex();
 }
