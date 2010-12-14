@@ -39,8 +39,8 @@ public interface ICamera2Device {
 	 */
 	public final static String DEFAULT_MEDIA_NODE = "/dev/media0";
 	
-	public boolean is_camera_open();
-	public boolean is_camera_started();
+	public boolean isCameraOpen();
+	public boolean isCameraStarted();
 	
 	/**
 	 * Opens a connection with a camera module and configure it.
@@ -53,7 +53,7 @@ public interface ICamera2Device {
 	 * @param preview_width width in pixels to capture preview images at
 	 * @return 0 if open was successful
 	 */
-	public int bug_camera_open(
+	public int cameraOpen(
 			final String media_node,
 			int slot_num,
 			int full_height,
@@ -66,26 +66,26 @@ public interface ICamera2Device {
 	 * (DEFAULT_MEDIA_NODE, -1, 2048, 1536, 320, 240)
 	 * @return 0 if open was successful
 	 */
-	public int bug_camera_open_default();
+	public int openDefault();
 	
 	/**
 	 * Closes the camera - allowing other processes to access it.
 	 * @return 0 if open was successful
 	 */
-	public int bug_camera_close();
+	public int cameraClose();
 
 	/**
 	 *  Start acquiring frames.
 	 *  Must be called before the grab methods may be called. 
 	 *  @return 0 if start was successful
 	 */
-	public int bug_camera_start();
+	public int cameraStart();
 	
 	/**
 	 * Stop acquiring frames.
 	 * @return 0 if stop was successful.
 	 */
-	public int bug_camera_stop();
+	public int cameraStop();
 
 	/**
 	 * Grabs a raw RGB-encoded preview image. 
@@ -94,7 +94,7 @@ public interface ICamera2Device {
 	 *        the call to bug_camera_open
 	 * @return true if grab succeeded
 	 */
-	public boolean bug_camera_grab_preview(int [] pixelBuffer);
+	public boolean grabPreview(int [] pixelBuffer);
 	
 
 	/**
@@ -102,5 +102,5 @@ public interface ICamera2Device {
 	 * bug_camera_open() and bug_camera_start() must already have been called.
 	 * @return
 	 */
-	public byte[] bug_camera_grab_full();
+	public byte[] grabFull();
 }

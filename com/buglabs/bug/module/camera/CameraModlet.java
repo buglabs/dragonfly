@@ -386,46 +386,46 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 	}
 
 	
-	public int bug_camera_open(String media_node, int slot_num, int full_height, int full_width, int preview_height, int preview_width) {
+	public int cameraOpen(String media_node, int slot_num, int full_height, int full_width, int preview_height, int preview_width) {
 		return 0;
 	}
 
 	
-	public int bug_camera_open_default() {
+	public int openDefault() {
 		return 0;
 	}
 
 	
-	public int bug_camera_close() {
+	public int cameraClose() {
 		return 0;
 	}
 
 	
-	public int bug_camera_start() {
+	public int cameraStart() {
 		return 0;
 	}
 
 	
-	public int bug_camera_stop() {
+	public int cameraStop() {
 		return 0;
 	}
 
 	
-	public boolean bug_camera_grab_preview(int[] pixelBuffer) {
+	public boolean grabPreview(int[] pixelBuffer) {
 		return false;
 	}
 
 	
-	public byte[] bug_camera_grab_full() {
+	public byte[] grabFull() {
 		
 		return getImage();
 	}
 
-	public boolean is_camera_open() {
+	public boolean isCameraOpen() {
 		return false;
 	}
 
-	public boolean is_camera_started() {
+	public boolean isCameraStarted() {
 		return false;
 	}
 }
