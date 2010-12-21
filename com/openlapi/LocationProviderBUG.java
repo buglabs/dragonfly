@@ -21,13 +21,11 @@ import java.io.InputStream;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 
+import thinktank.j2me.TTUtils;
 
 import com.buglabs.bug.module.gps.GPSActivator;
 import com.buglabs.bug.module.gps.pub.INMEARawFeed;
-
-import thinktank.j2me.TTUtils;
 
 /**
  * Implementation of {@link LocationProvider} that uses BUG GPS module for input.

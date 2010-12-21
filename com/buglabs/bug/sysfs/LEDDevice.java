@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.simulator.Activator;
-import com.buglabs.bug.sysfs.SysfsNode;
 
 /**
  * A class to control a single-color or multi-color LED for BUG Simulator.

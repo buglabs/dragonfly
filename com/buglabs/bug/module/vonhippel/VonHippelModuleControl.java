@@ -34,8 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-//import javax.microedition.io.CommConnection;
-
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl;
