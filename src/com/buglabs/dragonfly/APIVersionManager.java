@@ -15,7 +15,7 @@ public class APIVersionManager {
 	 * This will only be set on some sort of error. This is the first version to
 	 * contain this functionality
 	 */
-	private static final String DEFAULT_API_VERSION = "1.4.3";
+	private static final String DEFAULT_API_VERSION = "2.0.1";
 	private static String sdk_api_version = null;
 
 	public static String getSDKAPIVersion() {
