@@ -51,7 +51,7 @@ public class CameraActivator implements BundleActivator, IModletFactory {
 	}
 
 	public String getName() {
-		return "com.buglabs.bug.emulator.module.camera";
+		return "com.buglabs.bug.module.camera";
 	}
 
 	public String getVersion() {

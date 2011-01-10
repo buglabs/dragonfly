@@ -48,7 +48,7 @@ public class VHActivator implements BundleActivator, IModletFactory {
 	}
 
 	public String getName() {
-		return "com.buglabs.bug.emulator.module.vonhippel";
+		return "com.buglabs.bug.module.vonhippel";
 	}
 
 	public String getVersion() {
