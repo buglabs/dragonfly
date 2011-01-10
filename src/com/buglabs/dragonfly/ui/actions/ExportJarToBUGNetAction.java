@@ -138,7 +138,11 @@ public class ExportJarToBUGNetAction extends Action {
 				}
 
 				location = BugnetWSHelper.addProgram(jar, project.getName());
-
+				
+				if (location == null) {
+					//A silent bugnet error occurred.  Probably a permissions issue.
+					throw new IOException("An error occured while uploading application to BUGnet.");
+				}
 			} catch (BugnetAuthenticationException e2) {
 				String myMessage = errorMessage + "  An application of the same name may already exist."; //$NON-NLS-1$
 				job.removeJobChangeListener(jobListener);
@@ -156,7 +160,6 @@ public class ExportJarToBUGNetAction extends Action {
 
 			return okStatus;
 		}
-
 	}
 
 	protected IStatus createErrorStatus(String message, Exception e) {
