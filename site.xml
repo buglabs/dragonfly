@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
+   <description name="Dragonfly SDK Updatesite" url="http://buglabs.net/sdk">
+      The updatesite for Bug Labs SDK for BUG devices.
+   </description>
    <feature url="features/com.buglabs.dragonfly.cdt.feature_2.0.16.qualifier.jar" id="com.buglabs.dragonfly.cdt.feature" version="2.0.16.qualifier">
       <category name="Optional Components"/>
    </feature>
