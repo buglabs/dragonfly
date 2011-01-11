@@ -33,7 +33,6 @@ import com.buglabs.dragonfly.felix.ConciergeUtils;
 import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.generators.jet.Activator;
 import com.buglabs.dragonfly.generators.jet.Application;
-import com.buglabs.dragonfly.generators.jet.ServiceTrackerCustomizer;
 import com.buglabs.dragonfly.jdt.BugClasspathContainerInitializer;
 import com.buglabs.dragonfly.model.BugProjectInfo;
 import com.buglabs.dragonfly.model.ServicePropertyHelper;
@@ -86,7 +85,6 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
 
 		if (getBugProjectInfo().getServices().size() > 0) {
-			createServiceTracker(monitor);
 			if (getBugProjectInfo().isShouldGenerateApplicationLoop()) {
 				createApplication(monitor);
 			}
@@ -260,7 +258,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	protected void createServiceTracker(IProgressMonitor monitor) throws CoreException {
+	/*protected void createServiceTracker(IProgressMonitor monitor) throws CoreException {
 		BugProjectInfo pinfo = getBugProjectInfo();
 		String projectName = pinfo.getProjectName();
 
@@ -280,14 +278,14 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 
 		String contents = getServiceTrackerContents().toString();
 		writeContents(serviceTracker, contents, monitor);
-	}
+	}*/
 
 	/**
 	 * Generate the service tracker code
 	 * 
 	 * @return
 	 */
-	protected StringBuffer getServiceTrackerContents() {
+	/*protected StringBuffer getServiceTrackerContents() {
 		StringBuffer sb = new StringBuffer();
 		BugProjectInfo pinfo = getBugProjectInfo();
 		String projectName = pinfo.getProjectName();
@@ -302,7 +300,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 				pinfo.isShouldGenerateApplicationLoop(), usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
 
 		return sb;
-	}
+	}*/
 
 	/**
 	 * Helper to return the current bug project from the workspace
@@ -332,8 +330,14 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 			// for v1.5 of SDK (which will be built against R1.4.3 or greater of
 			// BUG)
 			// Use false otherwise
-			sb.append(new Activator().generate(BugProjectUtil.formatProjectNameAsClassName(projectName), BugProjectUtil.formatProjectNameAsPackage(projectName),
-					getServiceTrackerPackageName(projectName), usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
+			sb.append(new Activator().generate(
+					BugProjectUtil.formatProjectNameAsClassName(projectName), 
+					BugProjectUtil.formatProjectNameAsPackage(projectName),
+					getServiceTrackerPackageName(projectName), 
+					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap()),
+					getBugProjectInfo().getServices(),
+					getBugProjectInfo().isShouldGenerateApplicationLoop(),
+					convertHelperMapToMapofStrings(getBugProjectInfo().getServicePropertyHelperMap())));
 			return sb;
 		}
 
