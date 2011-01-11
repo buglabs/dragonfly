@@ -1,8 +1,7 @@
 <%@jet package="com.buglabs.osgi.concierge.templates" 
 	   class="GeneratorActivator"
-	   imports="com.buglabs.osgi.concierge.ui.info.ProjectInfo"
+	   imports="com.buglabs.dragonfly.model.BugProjectInfo"
 	   skeleton="GeneratorActivator.skeleton"%>
-<%//Author: Angel Roman - roman@mdesystems.com%>
 <%
 if(projInfo.getActivatorPackage().length() > 0) {
 %>
