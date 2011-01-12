@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Simulator
 Bundle-SymbolicName: com.buglabs.dragonfly.simulator;singleton:=true
-Bundle-Version: 2.0.16.qualifier
+Bundle-Version: 2.1.0.qualifier
 Bundle-Activator: com.buglabs.dragonfly.simulator.Activator
 Bundle-Vendor: Bug Labs, Inc.
 Require-Bundle: org.eclipse.core.runtime
