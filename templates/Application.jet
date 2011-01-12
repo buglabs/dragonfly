@@ -1,4 +1,4 @@
-<%@ jet package="com.buglabs.dragonfly.generators.jet" imports="java.util.*" class="Application" skeleton="Application.skeleton" %>
+<%@ jet package="com.buglabs.dragonfly.generators.jet" imports="java.util.* com.buglabs.dragonfly.model.BugProjectInfo" class="Application" skeleton="Application.skeleton" %>
 package <%=packageName%>;
 
 import java.util.Map;
@@ -14,7 +14,9 @@ import <%=sname%>;
 %>
 
 import com.buglabs.application.ServiceTrackerHelper.ManagedRunnable;
-
+<% if (projInfo.getGenerateLogMethod()) { %>
+import org.osgi.service.log.LogService;
+<% } %>
 /**
  * This class represents the running application when all service dependencies are fulfilled.
  * 
@@ -48,12 +50,19 @@ public class <%=appName%> implements ManagedRunnable {
 	}
 %>
 		// TODO Use services here.
-
+<% if (projInfo.getGenerateLogMethod()) { %>
+		
+		Activator.getLogger().log(LogService.LOG_INFO, this.getClass().getName() + " has started!");
+<% } else if (projInfo.getGenerateDebugStatements()) { %>
+		System.out.println("DEBUG (" + this.getClass().getName() + "): Application Run");
+<% } %>
 	}
 
 	@Override
 	public void shutdown() {
 		// TODO Add shutdown code here if necessary.
-
+<% if (projInfo.getGenerateDebugStatements()) { %>
+		System.out.println("DEBUG (" + this.getClass().getName() + "): Application Shutdown");
+<% } %>
 	}
 }

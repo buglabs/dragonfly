@@ -20,7 +20,7 @@ public class CLASS
           return serviceFilterArrayDef;
     }
     
-   public String generate(String appName, String packageName, String moduleTrackerPackageName, boolean usesPropertyFilters, List services, boolean createApplication, Map propertyMap)
+   public String generate(String appName, String packageName, String moduleTrackerPackageName, boolean usesPropertyFilters, List services, boolean createApplication, Map propertyMap, BugProjectInfo projInfo)
    {
      return "";
    }
