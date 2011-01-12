@@ -29,7 +29,7 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		this.pinfo = pinfo;
 	}
 
-	@Override
+	
 	public void createControl(Composite parent) {
 		Composite mainComposite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(1, false);
@@ -56,12 +56,12 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		btnAddLogCode.setText("Generate static logging method in Activator.");
 		btnAddLogCode.addSelectionListener(new SelectionListener() {
 			
-			@Override
+			
 			public void widgetSelected(SelectionEvent arg0) {	
 				pinfo.setGenerateLogMethod(btnAddLogCode.getSelection());
 			}
 			
-			@Override
+			
 			public void widgetDefaultSelected(SelectionEvent arg0) {				
 			}
 		});
@@ -73,18 +73,18 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		btnAddDebugCode.setText("Generate debug statements.");
 		btnAddDebugCode.addSelectionListener(new SelectionListener() {
 			
-			@Override
+			
 			public void widgetSelected(SelectionEvent arg0) {	
 				pinfo.setGenerateDebugStatements(btnAddDebugCode.getSelection());
 			}
 			
-			@Override
+			
 			public void widgetDefaultSelected(SelectionEvent arg0) {				
 			}
 		});
 	}
 
-	@Override
+	
 	public void setVisible(boolean visible) {
 		if (visible) {
 			boolean codeEnabled = pinfo.getServices() != null && pinfo.getServices().size() > 0;
@@ -145,7 +145,7 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		});
 	}
 
-	@Override
+	
 	public void handleDebugEvents(DebugEvent[] arg0) {
 		// TODO Auto-generated method stub
 		
