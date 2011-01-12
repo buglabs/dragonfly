@@ -17,6 +17,9 @@ public class BugProjectInfo {
 
 	private Vector services;
 	private Hashtable<String, List<ServicePropertyHelper>> service_property_helpers;
+	private String bundleDescription;
+	private boolean generateLogMethod;
+	private boolean generateDebugStatements;
 
 	public BugProjectInfo() {
 		version = "1.0.0";
@@ -133,5 +136,29 @@ public class BugProjectInfo {
 
 	public void setExecutionEnvironment(String executionEnvironment) {
 		this.executionEnvironment = executionEnvironment;
+	}
+
+	public void setDescription(String text) {
+		this.bundleDescription = text;
+	}
+	
+	public String getDescription() {
+		return bundleDescription;
+	}
+
+	public void setGenerateLogMethod(boolean selection) {
+		this.generateLogMethod = selection;
+	}
+	
+	public boolean getGenerateLogMethod() {
+		return generateLogMethod;
+	}
+
+	public void setGenerateDebugStatements(boolean selection) {
+		this.generateDebugStatements = selection;	
+	}
+	
+	public boolean getGenerateDebugStatements() {
+		return generateDebugStatements;
 	}
 }
