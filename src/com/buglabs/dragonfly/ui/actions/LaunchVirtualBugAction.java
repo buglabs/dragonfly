@@ -45,6 +45,10 @@ public class LaunchVirtualBugAction implements IWorkbenchWindowActionDelegate, I
 			BUGSimulatorLaunchShortCut launchSC = new BUGSimulatorLaunchShortCut();
 			ILaunch launch = launchSC.launch(ILaunchManager.DEBUG_MODE);
 
+			if (launch == null) {
+				//User selected 'cancel' from launch configuration dialog.
+				return;
+			}
 			IProcess[] launchedProcesses = launch.getProcesses();
 			launchedProcesses[0].setAttribute(TYPE, VIRTUAL_BUG);
 
