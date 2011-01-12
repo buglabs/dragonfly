@@ -52,7 +52,8 @@ public class NewBugProjectWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		pg1 = new NewProjectMainPage(pinfo);
 		addPage(pg1);
-		addPage(new CodeGenerationPage(pinfo));
+		addPage(new ServiceBindingPage(pinfo));
+		addPage(new CodeGenerationOptionsPage(pinfo));
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

@@ -39,6 +39,7 @@ public class NewProjectMainPage extends WizardPage {
 	private Text txtAuthorName;
 	private BugProjectInfo pinfo;
 	private int projectNameSize;
+	private Text txtDescription;
 
 	public NewProjectMainPage(BugProjectInfo pinfo) {
 		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
@@ -152,6 +153,18 @@ public class NewProjectMainPage extends WizardPage {
 				txtAuthorName.setText(username);
 			}
 		}
+		
+		Label lblDescription = new Label(comp, SWT.NONE);
+		lblDescription.setText("Description:");
+		
+		txtDescription = new Text(comp, SWT.BORDER);
+		txtDescription.setLayoutData(gdFillH);
+		txtDescription.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				pinfo.setDescription(((Text) e.widget).getText());
+				setPageComplete(true);
+			}
+		});
 
 		txtName.setFocus();
 

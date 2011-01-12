@@ -184,24 +184,28 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		buffer.append("Manifest-Version: 1.0\n");
 		buffer.append("Bundle-Name: " + projInfo.getProjectName() + "\n");
 
-		if (!projInfo.getActivator().trim().equals("") && projInfo.isGenerateActivator()) {
+		if (hasContents(projInfo.getActivator()) && projInfo.isGenerateActivator()) {
 			buffer.append("Bundle-Activator: " + projInfo.getActivator() + "\n");
 		}
 
-		if (!projInfo.getSymbolicName().trim().equals("")) {
+		if (hasContents(projInfo.getSymbolicName())) {
 			buffer.append("Bundle-SymbolicName: " + ProjectUtils.formatName(projInfo.getSymbolicName()) + "\n");
 		}
 
-		if (!projInfo.getVersion().trim().equals("")) {
+		if (hasContents(projInfo.getVersion())) {
 			buffer.append("Bundle-Version: " + projInfo.getVersion() + "\n");
 		}
 
-		if (!projInfo.getVendor().trim().equals("")) {
+		if (hasContents(projInfo.getVendor())) {
 			buffer.append("Bundle-Vendor: " + projInfo.getVendor() + "\n");
 		}
 
-		if (!projInfo.getExecutionEnvironment().trim().equals("")) {
+		if (hasContents(projInfo.getExecutionEnvironment())) {
 			buffer.append("Bundle-RequiredExecutionEnvironment: " + projInfo.getExecutionEnvironment() + "\n");
+		}
+		
+		if (hasContents(projInfo.getDescription())) {
+			buffer.append("Bundle-Description: " + projInfo.getDescription() + "\n");
 		}
 
 		StringBuffer manifestContents = buffer;
@@ -236,6 +240,14 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		}
 
 		return manifestContents;
+	}
+	
+	private boolean hasContents(String s) {
+		if (s == null || s.trim().length() == 0) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	/*
@@ -337,7 +349,8 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap()),
 					getBugProjectInfo().getServices(),
 					getBugProjectInfo().isShouldGenerateApplicationLoop(),
-					convertHelperMapToMapofStrings(getBugProjectInfo().getServicePropertyHelperMap())));
+					convertHelperMapToMapofStrings(getBugProjectInfo().getServicePropertyHelperMap()),
+					getBugProjectInfo()));
 			return sb;
 		}
 
@@ -397,8 +410,11 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		BugProjectInfo pinfo = getBugProjectInfo();
 		String projectName = pinfo.getProjectName();
 
-		String appContents = new Application().generate(BugProjectUtil.formatProjectNameAsClassName(projectName) + "Application",
-				BugProjectUtil.formatProjectNameAsPackage(projectName), pinfo.getServices());
+		String appContents = new Application().generate(
+				BugProjectUtil.formatProjectNameAsClassName(projectName) + "Application",
+				BugProjectUtil.formatProjectNameAsPackage(projectName), 
+				pinfo.getServices(),
+				pinfo);
 
 		return appContents;
 	}

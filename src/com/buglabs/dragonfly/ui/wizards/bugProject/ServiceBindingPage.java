@@ -92,7 +92,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author akravets and then... bballantine!
  * 
  */
-public class CodeGenerationPage extends WizardPage implements IDebugEventSetListener {
+public class ServiceBindingPage extends WizardPage implements IDebugEventSetListener {
 
 	// titles, labels, tooltips, etc
 	private static final String BUGLABS_EMULATOR_BUNDLE_NAME = "com.buglabs.bug.emulator";
@@ -121,11 +121,11 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	private static final String LAUNCH_VBUG_MESSAGE = "Launch BUG Simulator to select services that this project will consume.";
 	private static final String SELECT_BUG_MESSAGE = "Select a BUG from Target BUG List to choose services that this project will consume.";
 	private static final String SVCS_INSTRUCTIONS_TEXT = "Selecting a service will add it to the list of services required to run your project.  Double click the service to add required properties.";
-	private static final int BUGS_VIEWER_HEIGHT_HINT = 100;
-	private static final int SERVICES_GROUP_HEIGHT_HINT = 350;
+	private static final int BUGS_VIEWER_HEIGHT_HINT = 66;
+	private static final int SERVICES_GROUP_HEIGHT_HINT = 300;
 	private static final int SERVICES_GROUP_WIDTH_HINT = 550;
-	private static final int DEPENDENCY_VIEWER_HEIGHT_HINT = 200;
-	private static final int SERVICE_DESCRIPTION_AREA_HEIGHT = 100;
+	private static final int DEPENDENCY_VIEWER_HEIGHT_HINT = 154;
+	private static final int SERVICE_DESCRIPTION_AREA_HEIGHT = 33;
 
 	// UI elements
 	private TableViewer bugsViewer;
@@ -133,7 +133,6 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	private CheckboxTableViewer servicePropertiesViewer;
 	private Text serviceDescriptionArea;
 	private Button btnStartVBUG;
-	private Button btnGenerateThreadApp;
 	private Button refreshServiceDefintions;
 
 	// instance vars to keep track of stuff
@@ -147,7 +146,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 	private ISelection currentBugSelection = null;
 	private String pageMessage = "";
 
-	protected CodeGenerationPage(BugProjectInfo pinfo) {
+	protected ServiceBindingPage(BugProjectInfo pinfo) {
 		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
 		setMessage(pageMessage);
 		this.pinfo = pinfo;
@@ -165,8 +164,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 		createTargetArea(mainComposite);
 		// where you choose the services
 		createServicesSection(mainComposite);
-		// checkbox for creating application loop
-		createApplicationLoop(mainComposite);
+		
 		setControl(mainComposite);
 	}
 
@@ -472,28 +470,7 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 
 	}
 
-	/**
-	 * Creates application loop button
-	 * 
-	 * @param mainComposite
-	 */
-	private void createApplicationLoop(Composite mainComposite) {
-		btnGenerateThreadApp = new Button(mainComposite, SWT.CHECK);
-		GridData genAppGD = new GridData(GridData.FILL_HORIZONTAL);
-		genAppGD.horizontalSpan = 2;
-		genAppGD.heightHint = 30;
-		btnGenerateThreadApp.setLayoutData(genAppGD);
-		btnGenerateThreadApp.setText("Generate application skeleton code.");
-		btnGenerateThreadApp.setEnabled(false);
-		btnGenerateThreadApp.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {/*unused here*/
-			}
-
-			public void widgetSelected(SelectionEvent e) {
-				pinfo.setShouldGenerateApplicationLoop(((Button) e.widget).getSelection());
-			}
-		});
-	}
+	
 
 	/* HELPER METHODS */
 
@@ -601,11 +578,11 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 					servicePropertyOptionsMap.get(detail.getServiceName()).addAll(ServicePropertyHelper.createHelperList(properties));
 			}
 
-			setInputForDepndencyViewer();
+			setInputForDependencyViewer();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			servicePropertyOptionsMap.clear();
-			setInputForDepndencyViewer();
+			setInputForDependencyViewer();
 		}
 	}
 
@@ -616,17 +593,12 @@ public class CodeGenerationPage extends WizardPage implements IDebugEventSetList
 		List checkedServices = Arrays.asList(dependencyViewer.getCheckedElements());
 		pinfo.getServices().clear();
 		pinfo.getServices().addAll(checkedServices);
-		if (checkedServices.size() > 0) {
-			btnGenerateThreadApp.setEnabled(true);
-		} else {
-			btnGenerateThreadApp.setEnabled(false);
-		}
 	}
 
 	/**
 	 * Called to set the input for the dependencyViewer component
 	 */
-	private void setInputForDepndencyViewer() {
+	private void setInputForDependencyViewer() {
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				dependencyViewer.setInput(servicePropertyOptionsMap);
