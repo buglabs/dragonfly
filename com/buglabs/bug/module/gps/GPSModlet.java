@@ -38,6 +38,7 @@ import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.WSResponse;
+import com.buglabs.util.ConfigAdminUtil;
 import com.buglabs.util.LogServiceUtil;
 import com.buglabs.util.RemoteOSGiServiceConstants;
 import com.buglabs.util.SelfReferenceException;
@@ -107,26 +108,20 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 			if (ca != null) {
 				Configuration c;
 				try {
-					c = ca.getConfiguration(getModuleName());
-					logService.log(LogService.LOG_DEBUG, "GPSModlet getReadDelay: got configuration");
-					String key = "ReadDelay";
+					c = ca.getConfiguration(getModuleName());				
+					Dictionary properties = ConfigAdminUtil.getPropertiesSafely(c);
 					
-					Dictionary properties = c.getProperties();
-					Enumeration keys = properties.keys();
-					while (keys.hasMoreElements()) {
-						Object _key = keys.nextElement();
-
-					}
-					Object obj = c.getProperties().get(key);
+					logService.log(LogService.LOG_DEBUG, "GPSModlet getReadDelay: got configuration");
+					String key = "ReadDelay";					
+					
+					Object obj = properties.get(key);
 					if (obj != null) {
 						read_delay = Long.parseLong((String) obj);
 						logService.log(logService.LOG_DEBUG, "GPSModlet getReadDelay: got delay: " + read_delay);
 					} else {
-						c.getProperties().put(key, Long.toString(read_delay));
-						c.update(c.getProperties());
+						properties.put(key, Long.toString(read_delay));
+						c.update(properties);
 						logService.log(logService.LOG_DEBUG, "GPSModlet getReadDelay: wrote delay into cm");
-
-						Object object = c.getProperties().get(key);
 					}
 				} catch (IOException e) {
 					logService.log(logService.LOG_ERROR, "Problem retrieving data from cm:", e);
