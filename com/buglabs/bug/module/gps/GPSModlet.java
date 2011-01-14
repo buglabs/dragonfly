@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
@@ -111,8 +110,7 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 					c = ca.getConfiguration(getModuleName());
 					logService.log(LogService.LOG_DEBUG, "GPSModlet getReadDelay: got configuration");
 					String key = "ReadDelay";
-					Configuration[] listConfigurations = ca.listConfigurations("");
-					String factoryPid = c.getPid();
+					
 					Dictionary properties = c.getProperties();
 					Enumeration keys = properties.keys();
 					while (keys.hasMoreElements()) {
@@ -132,8 +130,6 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 					}
 				} catch (IOException e) {
 					logService.log(logService.LOG_ERROR, "Problem retrieving data from cm:", e);
-				} catch (InvalidSyntaxException e) {
-					logService.log(logService.LOG_ERROR, "Syntax Exception.", e);
 				}
 			}
 		}
