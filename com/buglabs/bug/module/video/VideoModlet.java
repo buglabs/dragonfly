@@ -124,7 +124,9 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 
 	public void stop() throws Exception {
 		moduleRef.unregister();
+		videoControlServReg.unregister();
 		moduleDisplayServReg.unregister();
+		wsReg.unregister();
 	}
 
 	/**
