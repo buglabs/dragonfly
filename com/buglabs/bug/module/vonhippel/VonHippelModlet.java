@@ -23,6 +23,7 @@ import com.buglabs.module.IModuleLEDController;
 import com.buglabs.module.IModuleProperty;
 import com.buglabs.module.ModuleProperty;
 import com.buglabs.services.ws.PublicWSProvider;
+import com.buglabs.util.ConfigAdminUtil;
 import com.buglabs.util.RemoteOSGiServiceConstants;
 
 public class VonHippelModlet implements  IModlet, IModuleControl {
@@ -78,14 +79,15 @@ public class VonHippelModlet implements  IModlet, IModuleControl {
 		try {
 			// get the config
 			Configuration config = ca.getConfiguration(getModuleName());
-			if (config == null) throw new Exception("Configuration for " + getModuleName() + " wasetCommSchemeAndPaths not found.");
+			Dictionary properties = ConfigAdminUtil.getPropertiesSafely(config);
+			
 			// get or set the comm path
-			Object configValue = config.getProperties().get(STREAM_PATH_KEY);
+			Object configValue = properties.get(STREAM_PATH_KEY);
 			if (configValue == null) {
-				config.getProperties().put(STREAM_PATH_KEY, DEFAULT_STREAM_PATH);
+				properties.put(STREAM_PATH_KEY, DEFAULT_STREAM_PATH);
 			}
-			config.update(config.getProperties());
-		} catch (Exception e) {
+			config.update(properties);
+		} catch (IOException e) {
 			logService.log(LogService.LOG_ERROR, "Problem retrieving data from cm:", e);
 		}
 	}
