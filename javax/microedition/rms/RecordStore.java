@@ -14,6 +14,7 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import com.buglabs.bug.module.gps.GPSActivator;
+import com.buglabs.util.ConfigAdminUtil;
 
 
 public class RecordStore {
@@ -38,15 +39,16 @@ public class RecordStore {
 		}
 		
 		try {
-			Configuration c= ca.getConfiguration(createPid(recordStoreName));
+			Configuration c = ca.getConfiguration(createPid(recordStoreName));
+			Dictionary properties = ConfigAdminUtil.getPropertiesSafely(c);
 			
-			if (c.getProperties().get(KEYSTORE_KEY) == null && !createIfNecessary) {
+			if (properties.get(KEYSTORE_KEY) == null && !createIfNecessary) {
 				throw new RecordStoreException("Record store " + recordStoreName + " does not exist."); 
 			}
-			Dictionary keystore = (Dictionary) c.getProperties().get(KEYSTORE_KEY);
+			Dictionary keystore = (Dictionary) properties.get(KEYSTORE_KEY);
 			if (keystore == null) {
 				keystore = new Hashtable();
-				c.getProperties().put(KEYSTORE_KEY, keystore);
+				properties.put(KEYSTORE_KEY, keystore);
 			} 
 			
 			return new RecordStore(recordStoreName, keystore);
