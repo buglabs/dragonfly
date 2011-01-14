@@ -234,11 +234,13 @@ public class BugConnectionManager {
 	 * @param connectedBug
 	 */
 	public synchronized void addBugConnection(BugConnection connectedBug) {
-		try {
-			getBugConnectionsRoot().addChild(connectedBug);
-			fireBugAddedEvent(this, connectedBug);
-		} catch (NodeNotUniqueException e) {
-			UIUtils.handleNonvisualError("Bug already exists.", e);
+		if (!getBugConnectionsRoot().childExists(connectedBug)) {
+			try {
+				getBugConnectionsRoot().addChild(connectedBug);
+				fireBugAddedEvent(this, connectedBug);
+			} catch (NodeNotUniqueException e) {
+				UIUtils.handleNonvisualError("Bug already exists.", e);
+			}
 		}
 	}
 
