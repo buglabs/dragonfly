@@ -15,6 +15,11 @@ import org.eclipse.swt.widgets.Group;
 import com.buglabs.dragonfly.model.BugProjectInfo;
 import com.buglabs.dragonfly.ui.Activator;
 
+/**
+ * Wizard page for code generation options.  These options determine how the resultant BUGapp project is structured.
+ * @author kgilmer
+ *
+ */
 public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEventSetListener {
 
 	private static final String PAGE_NAME = "CodeGenerationOptionsPage";
@@ -22,7 +27,7 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 	private final BugProjectInfo pinfo;
 	
 	private Button btnCodeInActivator;
-	private Button btnGenerateThreadApp;
+	private Button btnSeparateApplicationClass;
 
 	protected CodeGenerationOptionsPage(BugProjectInfo pinfo) {
 		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
@@ -35,14 +40,16 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		GridLayout layout = new GridLayout(1, false);
 		mainComposite.setLayout(layout);
 		
-		// checkbox for creating application loop
 		createApplicationLoop(mainComposite);
-		
 		createOtherOptions(mainComposite);
 		
 		setControl(mainComposite);
 	}
 	
+	/**
+	 * Create misc code generation UI
+	 * @param mc
+	 */
 	private void createOtherOptions(Composite mc) {
 		Group g = new Group(mc, SWT.BORDER);
 		g.setLayout(new GridLayout());
@@ -89,13 +96,14 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		if (visible) {
 			boolean codeEnabled = pinfo.getServices() != null && pinfo.getServices().size() > 0;
 			btnCodeInActivator.setEnabled(codeEnabled);
-			btnGenerateThreadApp.setEnabled(codeEnabled);
+			btnSeparateApplicationClass.setEnabled(codeEnabled);
 			
 			if (codeEnabled) {
-				btnGenerateThreadApp.setSelection(true);
+				btnSeparateApplicationClass.setSelection(true);
+				pinfo.setGenerateSeparateApplicationClass(true);
 			} else {
 				btnCodeInActivator.setSelection(false);
-				btnGenerateThreadApp.setSelection(false);
+				btnSeparateApplicationClass.setSelection(false);
 			}
 		}
 		super.setVisible(visible);
@@ -112,19 +120,19 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		g.setText("Application Structure");
 		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		btnGenerateThreadApp = new Button(g, SWT.RADIO);
+		btnSeparateApplicationClass = new Button(g, SWT.RADIO);
 		GridData genAppGD = new GridData(GridData.FILL_HORIZONTAL);
 		genAppGD.horizontalSpan = 2;
 		genAppGD.heightHint = 30;
-		btnGenerateThreadApp.setLayoutData(genAppGD);
-		btnGenerateThreadApp.setText("Generate seperate application class.");
+		btnSeparateApplicationClass.setLayoutData(genAppGD);
+		btnSeparateApplicationClass.setText("Generate separate application class.");
 
-		btnGenerateThreadApp.addSelectionListener(new SelectionListener() {
+		btnSeparateApplicationClass.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {/*unused here*/
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				pinfo.setShouldGenerateApplicationLoop(true);
+				pinfo.setGenerateSeparateApplicationClass(true);
 			}
 		});
 		
@@ -140,7 +148,7 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				pinfo.setShouldGenerateApplicationLoop(false);
+				pinfo.setGenerateSeparateApplicationClass(false);
 			}
 		});
 	}
