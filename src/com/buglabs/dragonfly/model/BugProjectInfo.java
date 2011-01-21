@@ -13,7 +13,7 @@ public class BugProjectInfo {
 	private String symbolicName;
 	private String executionEnvironment;
 	private boolean generateActivator;
-	boolean shouldGenerateApplicationLoop;
+	boolean generateSeparateAppClass;
 
 	private Vector services;
 	private Hashtable<String, List<ServicePropertyHelper>> service_property_helpers;
@@ -30,7 +30,7 @@ public class BugProjectInfo {
 		generateActivator = true;
 		executionEnvironment = "";
 		
-		shouldGenerateApplicationLoop = false;
+		generateSeparateAppClass = false;
 		services = new Vector();
 		service_property_helpers = new Hashtable<String, List<ServicePropertyHelper>>();
 	}
@@ -43,12 +43,12 @@ public class BugProjectInfo {
 		return service_property_helpers;
 	}
 
-	public boolean isShouldGenerateApplicationLoop() {
-		return shouldGenerateApplicationLoop;
+	public boolean isGenerateSeparateApplicationClass() {
+		return generateSeparateAppClass;
 	}
 
-	public void setShouldGenerateApplicationLoop(boolean shouldGenerateApplicationLoop) {
-		this.shouldGenerateApplicationLoop = shouldGenerateApplicationLoop;
+	public void setGenerateSeparateApplicationClass(boolean shouldGenerateApplicationLoop) {
+		this.generateSeparateAppClass = shouldGenerateApplicationLoop;
 	}
 	
 
