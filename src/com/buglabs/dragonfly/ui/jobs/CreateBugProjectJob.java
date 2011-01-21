@@ -85,7 +85,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
 
 		if (getBugProjectInfo().getServices().size() > 0) {
-			if (getBugProjectInfo().isShouldGenerateApplicationLoop()) {
+			if (getBugProjectInfo().isGenerateSeparateApplicationClass()) {
 				createApplication(monitor);
 			}
 		}
@@ -348,7 +348,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 					getServiceTrackerPackageName(projectName), 
 					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap()),
 					getBugProjectInfo().getServices(),
-					getBugProjectInfo().isShouldGenerateApplicationLoop(),
+					getBugProjectInfo().isGenerateSeparateApplicationClass(),
 					convertHelperMapToMapofStrings(getBugProjectInfo().getServicePropertyHelperMap()),
 					getBugProjectInfo()));
 			return sb;
