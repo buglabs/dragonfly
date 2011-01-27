@@ -76,6 +76,9 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			
 			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, monitor);
 			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, monitor);
+			for (File extraBundle: getOtherLaunchBundles()) {
+				copyBundle(Path.fromPortableString(extraBundle.getAbsolutePath()), launchDir, monitor);
+			}
 			
 			String[] args = getVMArgs(confFile, felixPluginBase);
 			debugPrint("Felix boot classpath: " + printStrArray(args));
@@ -137,6 +140,18 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 				srcStores[i].copy(destStore.getChild(srcStores[i].getName()), EFS.OVERWRITE, monitor);
 			}
 		}
+	}
+	
+	private void copyBundle(IPath srcBundle, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
+		IPath destDir = launchDir.append(REL_BUNDLE_DIR);
+		
+		IFileSystem fs = EFS.getLocalFileSystem();
+		
+		IFileStore srcStore = fs.getStore(srcBundle);
+		IFileStore destStore = fs.getStore(destDir);
+		destStore = destStore.mkdir(EFS.NONE, monitor);	
+
+		srcStore.copy(destStore.getChild(srcStore.getName()), EFS.OVERWRITE, monitor);
 	}
 
 	private String[] getVMArgs(File confFile, String felixPluginBase) throws MalformedURLException, CoreException {
@@ -211,8 +226,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	protected abstract Map<String, String> getLaunchProperties();
 	
 	/**
-	 * @return A list of workspace bundles that should be compiled and added to the Felix launch configuration.
+	 * @return A list of other bundles that should be added to the Felix launch configuration.  Client should return empty list, not null if no bundles exist.
 	 * @throws Exception
 	 */
-	protected abstract List<String> getWorkspaceBundles() throws Exception;
+	protected abstract List<File> getOtherLaunchBundles() throws Exception;
 }
