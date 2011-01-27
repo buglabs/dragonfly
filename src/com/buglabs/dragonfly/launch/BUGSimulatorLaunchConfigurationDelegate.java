@@ -46,7 +46,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	public static final String PROP_CAMERA_SNAPSHOTS = "com.buglabs.bug.emulator.module.camera.snapshots";
 	public static final String PROP_GPS_LOG = "com.buglabs.bug.emulator.module.gps.log";
 	public static final String PROP_ACC_LOG = "com.buglabs.bug.emulator.module.accelerometer.log";
-	public static final String PROP_CM_STORAGE = "com.buglabs.osgi.cm.storage";
+	public static final String PROP_CM_STORAGE = "felix.cm.dir";
 	public static final String PROP_VBUG_SCROLLSPEED = "com.buglabs.bug.emulator.scrollspeed";
 	public static final String PROP_VBUG_SCROLLDELAY = "com.buglabs.bug.emulator.scrolldelay";
 	public static final String ATTR_VBUG_SYSTEM_PROPERTIES = "ATTR_VBUG_SYSTEM_PROPERTIES";
