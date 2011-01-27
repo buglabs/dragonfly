@@ -29,7 +29,7 @@ import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.UIUtils;
 
-public class VirtualBugTab extends AbstractLaunchConfigurationTab {
+public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 
 	private final static String GPS_LOG_LABEL = "GPS Log: ";
 	private final static String ACC_LOG_LABEL = "Accelerometer Log: ";
@@ -42,7 +42,7 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	private Text txtAccelerometerLog;
 	private Text txtImages;
 
-	public VirtualBugTab() {
+	public BugSimulatorMainTab() {
 	}
 
 	/*
@@ -210,7 +210,7 @@ public class VirtualBugTab extends AbstractLaunchConfigurationTab {
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		try {
-			VirtualBugLaunchConfigurationInitializer.initializeSystemProperties(configuration);
+			SimulatorLaunchConfigurationInitializer.initializeSystemProperties(configuration);
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 			UIUtils.handleNonvisualError(e1.getMessage(), e1);

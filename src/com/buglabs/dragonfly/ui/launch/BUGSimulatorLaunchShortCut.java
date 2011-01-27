@@ -99,7 +99,7 @@ public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 		ILaunchConfigurationType configType = getLaunchConfigurationType();
 		String computedName = getComputedName("BUG Simulator"); //$NON-NLS-1$
 		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, computedName);
-		VirtualBugLaunchConfigurationInitializer.initializeSystemProperties(wc);
+		SimulatorLaunchConfigurationInitializer.initializeSystemProperties(wc);
 		config = wc.doSave();
 
 		return config;

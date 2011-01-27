@@ -18,7 +18,7 @@ import com.buglabs.dragonfly.ui.Activator;
  * @author aroman
  * 
  */
-public class VirtualBugLaunchConfigurationInitializer {
+public class SimulatorLaunchConfigurationInitializer {
 	public static void initializeSystemProperties(ILaunchConfigurationWorkingCopy wc) throws CoreException {
 		Map properties = wc.getAttribute(ConciergeLaunchConfiguration.SYSTEM_PROPERTIES, new HashMap());
 		properties.put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3"); //$NON-NLS-1$
