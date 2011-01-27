@@ -63,10 +63,10 @@ public class BugConnectionManager {
 	public static final String REMOVE_BUG = "remove_bug";
 	public static final String ADD_BUG = "add_bug";
 
-	private ITreeNode bug_connections_root;
+	private ITreeNode bugConnectionsRoot;
 	// this lock is only for creation of the connected bugs_root,
 	// used in getBugConnectionsRoot()
-	private Object root_creation_lock = new Object();
+	private Object rootCreationLock = new Object();
 	private JmDNS jmdns;
 	private ServiceListener listener;
 
@@ -178,14 +178,14 @@ public class BugConnectionManager {
 	 * @return
 	 */
 	public ITreeNode getBugConnectionsRoot() {
-		if (bug_connections_root == null) {
-			synchronized (root_creation_lock) {
-				if (bug_connections_root == null) {
-					bug_connections_root = new BaseTreeNode(BUGS_ROOT_NAME);
+		if (bugConnectionsRoot == null) {
+			synchronized (rootCreationLock) {
+				if (bugConnectionsRoot == null) {
+					bugConnectionsRoot = new BaseTreeNode(BUGS_ROOT_NAME);
 				}
 			}
 		}
-		return bug_connections_root;
+		return bugConnectionsRoot;
 	}
 
 	/**
@@ -377,8 +377,13 @@ public class BugConnectionManager {
 	 * call this from plugin shutdown
 	 */
 	public synchronized void destroy() {
-		jmdns.close();
-		bug_connections_root.getChildren().clear();
+		if (jmdns != null) {
+			jmdns.close();
+		}
+		
+		if (bugConnectionsRoot != null && bugConnectionsRoot.getChildren() != null) {
+			bugConnectionsRoot.getChildren().clear();
+		}
 	}
 
 	/**
