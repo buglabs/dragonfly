@@ -13,6 +13,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -136,13 +137,13 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 
 		moduleControl = context.registerService(IModuleControl.class.getName(), this, null);
 		CameraModuleControl cameraModuleControlObj = new CameraModuleControl(slotId, logService);
-		cameraModuleControl = context.registerService(ICameraModuleControl.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
-		ledControl = context.registerService(IModuleLEDController.class.getName(), cameraModuleControlObj, createRemotableProperties(null));
+		cameraModuleControl = context.registerService(ICameraModuleControl.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
+		ledControl = context.registerService(IModuleLEDController.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
 
-		cameraService = context.registerService(ICamera2Device.class.getName(), this, createRemotableProperties(null));
+		cameraService = context.registerService(ICamera2Device.class.getName(), this, createBasicServiceProperties());
 
 		if (context.getServiceReferences(IButtonEventProvider.class.getName(), "(ButtonsProvided=Camera)") == null) {
-			buttonEventProvider = context.registerService(ICameraButtonEventProvider.class.getName(), this, createRemotableProperties(getButtonServiceProperties()));
+			buttonEventProvider = context.registerService(ICameraButtonEventProvider.class.getName(), this, getButtonServiceProperties(createBasicServiceProperties()));
 		}
 
 		buttonCmdReg = context.registerService(IShellCommandProvider.class.getName(), this, null);
@@ -159,14 +160,16 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		wsRef.unregister();
 	}
 
-	private Dictionary getButtonServiceProperties() {
-		Dictionary props = new Hashtable();
+	private Dictionary getButtonServiceProperties(Dictionary parent) {
+		if (parent == null) {
+			parent = new Hashtable();
+		}
 
-		props.put("ButtonEventProvider", this.getClass().getName());
-		props.put("ButtonsProvided", "Camera");
-		props.put("Emuluated", "true");
+		parent.put("ButtonEventProvider", this.getClass().getName());
+		parent.put("ButtonsProvided", "Camera");
+		parent.put("Emuluated", "true");
 
-		return props;
+		return parent;
 	}
 
 	public PublicWSDefinition discover(int operation) {
@@ -296,18 +299,12 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 			listener.buttonEvent(event);
 		}
 	}
-
-	/**
-	 * @return A dictionary with R-OSGi enable property.
-	 */
-	private Dictionary createRemotableProperties(Dictionary ht) {
-		if (ht == null) {
-			ht = new Hashtable();
-		}
-
-		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-
-		return ht;
+	
+	private Properties createBasicServiceProperties() {
+		Properties p = new Properties();
+		p.put("Provider", this.getClass().getName());
+		p.put("Slot", Integer.toString(slotId));
+		return p;
 	}
 
 	public byte[] getImage(int sizeX, int sizeY, int format, boolean highQuality) {

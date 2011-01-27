@@ -8,6 +8,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Properties;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -155,31 +156,18 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 		gpsd = new NMEASentenceProvider(samplingRate, gpsInputStream, context);
 		gpsd.start();
 
-		positionRef = context.registerService(IPositionProvider.class.getName(), this, createRemotableProperties(null));
-		moduleRef = context.registerService(IModuleControl.class.getName(), this, null);
-		lcdRef = context.registerService(IModuleLEDController.class.getName(), this, createRemotableProperties(null));
-		nmeaSentenceProviderRef = context.registerService(INMEASentenceProvider.class.getName(), gpsd, createRemotableProperties(null));
-		nmeaRawFeedRef = context.registerService(INMEARawFeed.class.getName(), this, createRemotableProperties(null));
-		gpsModuleControlRef = context.registerService(IGPSModuleControl.class.getName(), this, null);
+		positionRef = context.registerService(IPositionProvider.class.getName(), this, createBasicServiceProperties());
+		moduleRef = context.registerService(IModuleControl.class.getName(), this, createBasicServiceProperties());
+		lcdRef = context.registerService(IModuleLEDController.class.getName(), this, createBasicServiceProperties());
+		nmeaSentenceProviderRef = context.registerService(INMEASentenceProvider.class.getName(), gpsd, createBasicServiceProperties());
+		nmeaRawFeedRef = context.registerService(INMEARawFeed.class.getName(), this, createBasicServiceProperties());
+		gpsModuleControlRef = context.registerService(IGPSModuleControl.class.getName(), this, createBasicServiceProperties());
 
-		pwspRef = context.registerService(PublicWSProvider2.class.getName(), this, null);
+		pwspRef = context.registerService(PublicWSProvider2.class.getName(), this, createBasicServiceProperties());
 		
 
 		context.addServiceListener(gpsd, "(|(" + Constants.OBJECTCLASS + "=" + INMEASentenceSubscriber.class.getName() + ") (" + Constants.OBJECTCLASS + "="
 				+ IPositionSubscriber.class.getName() + "))");
-	}
-
-	/**
-	 * @return A dictionary with R-OSGi enable property.
-	 */
-	private Dictionary createRemotableProperties(Dictionary ht) {
-		if (ht == null) {
-			ht = new Hashtable();
-		}
-
-		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-
-		return ht;
 	}
 
 	public void stop() throws Exception {		
@@ -219,6 +207,13 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 		properties.add(new ModuleProperty("State", Boolean.toString(deviceOn), "Boolean", true));
 
 		return properties;
+	}
+	
+	private Properties createBasicServiceProperties() {
+		Properties p = new Properties();
+		p.put("Provider", this.getClass().getName());
+		p.put("Slot", Integer.toString(slotId));
+		return p;
 	}
 
 	public boolean setModuleProperty(IModuleProperty property) {

@@ -102,8 +102,8 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		p.put("Module", "Virtual LCD Module");
 
 		moduleControlRef = context.registerService(IModuleControl.class.getName(), this, null);
-		lcdModRef = context.registerService(ILCDModuleControl.class.getName(), this, createRemotableProperties(null));
-		ledControllerRef = context.registerService(IModuleLEDController.class.getName(), this, createRemotableProperties(null));
+		lcdModRef = context.registerService(ILCDModuleControl.class.getName(), this, createBasicServiceProperties());
+		ledControllerRef = context.registerService(IModuleLEDController.class.getName(), this, createBasicServiceProperties());
 
 		Dictionary props = new Hashtable();
 		props.put("width", new Integer(LCD_WIDTH));
@@ -117,31 +117,24 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		
 		acceld = new AccelerometerRawFeed(data,accControl);
 		
-		accRawFeedRef = context.registerService(IAccelerometerRawFeed.class.getName(), acceld, createRemotableProperties(createBasicServiceProperties()));
+		accRawFeedRef = context.registerService(IAccelerometerRawFeed.class.getName(), acceld, createBasicServiceProperties());
 		IAccelerometerSampleProvider asp = new AccelerometerSampleProvider(acceld, accDevice);
-		accSampleProvRef = context.registerService(IAccelerometerSampleProvider.class.getName(), asp, createRemotableProperties(createBasicServiceProperties()));
-		accSampleFeedRef = context.registerService(IAccelerometerSampleFeed.class.getName(), acceld, createRemotableProperties(createBasicServiceProperties()));
-		accControlRef = context.registerService(IAccelerometerControl.class.getName(), accControl, createRemotableProperties(createBasicServiceProperties()));
+		accSampleProvRef = context.registerService(IAccelerometerSampleProvider.class.getName(), asp, createBasicServiceProperties());
+		accSampleFeedRef = context.registerService(IAccelerometerSampleFeed.class.getName(), acceld, createBasicServiceProperties());
+		accControlRef = context.registerService(IAccelerometerControl.class.getName(), accControl, createBasicServiceProperties());
 		
 		LCDAccelerometerSampleProvider accsp = new LCDAccelerometerSampleProvider(acceld);
 		
 		AccelerationWS accWs = new AccelerationWS(accsp, LogServiceUtil.getLogService(context));
 		wsAccReg = context.registerService(PublicWSProvider.class.getName(), accWs, null);  		
 	}
-	
-	/**
-	 * @return A dictionary with R-OSGi enable property.
-	 */
-	private Dictionary createRemotableProperties(Dictionary ht) {
-		if (ht == null) {
-			ht = new Hashtable();
-		}
-		
-		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-		
-		return ht;
+	private Properties createBasicServiceProperties() {
+		Properties p = new Properties();
+		p.put("Provider", this.getClass().getName());
+		p.put("Slot", Integer.toString(slotId));
+		return p;
 	}
-
+	
 	private InputStream getAccelerometerSamples() throws IOException {
 		String prop = System.getProperty(Constants.PROPERTY_ACCELEROMETER_LOG);
 		
@@ -159,14 +152,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		}
 		
 		return is;
-	}
-
-	private Properties createBasicServiceProperties() {
-		Properties p = new Properties();
-		p.put("Provider", this.getClass().getName());
-		p.put("Slot", Integer.toString(slotId));
-		p.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-		return p;
 	}
 
 	private void configureAccelerometer() {
