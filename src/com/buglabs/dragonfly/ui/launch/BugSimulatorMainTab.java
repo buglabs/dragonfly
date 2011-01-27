@@ -165,15 +165,15 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 		externalBundleViewer.getTable().setLayoutData(gData);
 		externalBundleViewer.setContentProvider(new IStructuredContentProvider() {
 
-			@Override
+			
 			public void dispose() {				
 			}
 
-			@Override
+			
 			public void inputChanged(Viewer arg0, Object arg1, Object arg2) {				
 			}
 
-			@Override
+			
 			public Object[] getElements(Object arg0) {
 				
 				return ((List) arg0).toArray();
@@ -184,30 +184,30 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 			
 			private Image fileImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 
-			@Override
+			
 			public void removeListener(ILabelProviderListener arg0) {
 				
 			}
 			
-			@Override
+			
 			public boolean isLabelProperty(Object arg0, String arg1) {				
 				return false;
 			}
 			
-			@Override
+			
 			public void dispose() {				
 			}
 			
-			@Override
+			
 			public void addListener(ILabelProviderListener arg0) {				
 			}
 			
-			@Override
+			
 			public String getColumnText(Object arg0, int arg1) {
 				return ((File) arg0).getAbsolutePath();
 			}
 			
-			@Override
+			
 			public Image getColumnImage(Object arg0, int arg1) {			
 				return fileImage ;
 			}
@@ -258,7 +258,7 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 		removeExternalBundleButton.setEnabled(false);
 		removeExternalBundleButton.addSelectionListener(new SelectionListener() {
 			
-			@Override
+			
 			public void widgetSelected(SelectionEvent arg0) {
 				externalBundleList.remove(((IStructuredSelection) externalBundleViewer.getSelection()).getFirstElement());
 				externalBundleViewer.refresh();
@@ -266,7 +266,7 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 				setDirty(true);
 			}
 			
-			@Override
+			
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 				
 			}
@@ -274,7 +274,7 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 		
 		externalBundleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
-			@Override
+			
 			public void selectionChanged(SelectionChangedEvent arg0) {
 				if (externalBundleViewer.getSelection().isEmpty()) {
 					removeExternalBundleButton.setEnabled(false);
