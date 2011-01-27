@@ -1,7 +1,9 @@
 package com.buglabs.dragonfly.ui.launch;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -49,6 +51,7 @@ public class SimulatorLaunchConfigurationInitializer {
 		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
 		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, "");
 		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, "");
+		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
 
 		wc.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, bugprops);
 	}

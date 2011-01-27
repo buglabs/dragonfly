@@ -2,6 +2,7 @@ package com.buglabs.dragonfly.ui.launch;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,17 +13,33 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
@@ -41,9 +58,8 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 	private Text txtGpsLog;
 	private Text txtAccelerometerLog;
 	private Text txtImages;
-
-	public BugSimulatorMainTab() {
-	}
+	private List<File> externalBundleList;
+	private TableViewer externalBundleViewer;
 
 	/*
 	 * (non-Javadoc)
@@ -127,9 +143,149 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 		lblImages.setText("Images: ");
 		txtImages = new Text(composite, SWT.BORDER);
 		createLog(composite, gdText, txtImages, gdButton);
+		
+		new Label(composite, SWT.None);
 
+		Group externalBundleComposite = new Group(composite, SWT.BORDER);
+		GridLayout gd = new GridLayout(2, false);
+		externalBundleComposite.setLayout(gd);
+		gData = new GridData(GridData.FILL_HORIZONTAL);
+		gData.horizontalSpan = 3;
+		externalBundleComposite.setLayoutData(gData);
+		externalBundleComposite.setText("External Bundles");
+		
+		externalBundleViewer = new TableViewer(externalBundleComposite, SWT.FULL_SELECTION | SWT.BORDER);
+		gData = new GridData(GridData.FILL_BOTH);
+		gData.heightHint = 80;
+		TableColumn tc = new TableColumn(externalBundleViewer.getTable(), SWT.None);
+		tc.setText("Bundle Path");
+		tc.setWidth(200);
+		externalBundleViewer.getTable().setHeaderVisible(false);
+		externalBundleViewer.getTable().setLinesVisible(true);
+		externalBundleViewer.getTable().setLayoutData(gData);
+		externalBundleViewer.setContentProvider(new IStructuredContentProvider() {
+
+			@Override
+			public void dispose() {				
+			}
+
+			@Override
+			public void inputChanged(Viewer arg0, Object arg1, Object arg2) {				
+			}
+
+			@Override
+			public Object[] getElements(Object arg0) {
+				
+				return ((List) arg0).toArray();
+			}
+			
+		});
+		externalBundleViewer.setLabelProvider(new ITableLabelProvider() {
+			
+			private Image fileImage = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+
+			@Override
+			public void removeListener(ILabelProviderListener arg0) {
+				
+			}
+			
+			@Override
+			public boolean isLabelProperty(Object arg0, String arg1) {				
+				return false;
+			}
+			
+			@Override
+			public void dispose() {				
+			}
+			
+			@Override
+			public void addListener(ILabelProviderListener arg0) {				
+			}
+			
+			@Override
+			public String getColumnText(Object arg0, int arg1) {
+				return ((File) arg0).getAbsolutePath();
+			}
+			
+			@Override
+			public Image getColumnImage(Object arg0, int arg1) {			
+				return fileImage ;
+			}
+		});
+		
+		
+		final Composite buttonComp = new Composite(externalBundleComposite, SWT.NONE);
+		buttonComp.setLayout(UIUtils.StripGridLayoutMargins(new GridLayout()));
+		buttonComp.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		
+		Button addExternalBundleButton = new Button(buttonComp, SWT.None);
+		addExternalBundleButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		addExternalBundleButton.setText("Add Bundle...");
+		addExternalBundleButton.addSelectionListener(new SelectionListener() {
+
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog dialog = new FileDialog(buttonComp.getShell());
+
+				String path = dialog.open();
+
+				if (!UIUtils.stringEmpty(path)) {
+					File f = new File(path);
+					
+					if (f.isFile() && f.exists() && f.getName().toUpperCase().endsWith(".JAR")) {
+						if (!externalBundleList.contains(f)) {
+							externalBundleList.add(f);
+							
+							setDirty(true);
+							updateLaunchConfigurationDialog();
+							externalBundleViewer.refresh();
+						} else {
+							UIUtils.handleVisualError(f.getName() + " is already in the list.", null);	
+						}
+					} else {
+						UIUtils.handleVisualError(f.getName() + " is not a valid OSGi bundle.", null);
+					}
+				}
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+		});
+		
+		final Button removeExternalBundleButton = new Button(buttonComp, SWT.None);
+		removeExternalBundleButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
+		removeExternalBundleButton.setText("Remove");
+		removeExternalBundleButton.setEnabled(false);
+		removeExternalBundleButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				externalBundleList.remove(((IStructuredSelection) externalBundleViewer.getSelection()).getFirstElement());
+				externalBundleViewer.refresh();
+				updateLaunchConfigurationDialog();
+				setDirty(true);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				
+			}
+		});
+		
+		externalBundleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent arg0) {
+				if (externalBundleViewer.getSelection().isEmpty()) {
+					removeExternalBundleButton.setEnabled(false);
+				} else {
+					removeExternalBundleButton.setEnabled(true);
+				}
+			}
+			
+		});
+		
 		setControl(composite);
-
 	}
 
 	/*
@@ -182,14 +338,14 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 
 		try {
 			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""); //$NON-NLS-1$
-			txtImages.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""));
+			txtImages.setText(systemProperty);
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize images.", e);
 		}
 
 		try {
 			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""); //$NON-NLS-1$
-			txtGpsLog.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""));
+			txtGpsLog.setText(systemProperty);
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize GPS log.", e);
 		}
@@ -198,6 +354,14 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 			txtAccelerometerLog.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, ""));
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize Accelerometer log.", e);
+		}
+		
+		try {
+			String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
+			externalBundleList = delimitedStringToList(rawList);
+			externalBundleViewer.setInput(externalBundleList);
+		} catch (CoreException e) {
+			UIUtils.handleVisualError("Unable to initialize external bundle list.", e);
 		}
 	}
 
@@ -235,6 +399,7 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
 			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
 			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
+			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, listToDelimitedString(externalBundleList));
 			configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -243,6 +408,35 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_DEFAULT_BUGPORT, httpPortValue);
 
+	}
+
+	public static String listToDelimitedString(List<File> list) {
+		StringBuffer sb = new StringBuffer();
+		
+		Iterator<File> i = list.iterator();
+		
+		while (i.hasNext()) {
+			sb.append(i.next().getAbsolutePath());
+			if (i.hasNext()) {
+				sb.append(File.pathSeparator);
+			}
+		}
+		
+		return sb.toString();
+	}
+	
+	public static List<File> delimitedStringToList(String list) {
+		List<String> slist = Arrays.asList(list.split(File.pathSeparator));
+		
+		List<File> flist = new ArrayList<File>();
+		
+		for (String s: slist) {
+			if (s.trim().length() > 0) {
+				flist.add(new File(s));
+			}
+		}
+		
+		return flist;
 	}
 
 	private String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {

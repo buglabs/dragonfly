@@ -49,6 +49,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 	public static final String APP_DIR = "app.bundle.path";
 	public static final String JVM_ARGS = "com.buglabs.osgi.concierge.ui.launch.jvmArgs";
 	public static final String FELIX_LOG_LEVEL = "felix.log.level";
+	public static final String PROP_EXTERNAL_BUNDLE_LAUNCH_LIST = "com.buglabs.bug.emulator.external.bundle.launch.path";
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 

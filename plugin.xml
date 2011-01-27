@@ -365,7 +365,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="com.buglabs.dragonfly.ui.launch.VirtualBugTabGroup"
+            class="com.buglabs.dragonfly.ui.launch.SimulatorLaunchTabGroup"
             id="com.buglabs.dragonfly.ui.launch.VirtualBugTabGroup"
             type="com.buglabs.dragonfly.launch.virtualBug">
          <launchMode mode="debug"/>

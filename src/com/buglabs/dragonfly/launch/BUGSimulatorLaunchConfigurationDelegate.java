@@ -1,7 +1,9 @@
 package com.buglabs.dragonfly.launch;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -21,8 +23,8 @@ import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
 import com.buglabs.dragonfly.ui.Activator;
+import com.buglabs.dragonfly.ui.launch.BugSimulatorMainTab;
 import com.buglabs.dragonfly.ui.launch.SystemPropertiesTab;
-import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 
 /**
  * A launch configuration for BUG Simulator. Relies on FelixLaunchConfiguration
@@ -117,6 +119,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	protected Map<String, String> getLaunchProperties() {
 		Map m = new Hashtable();
 
+		//TODO confirm that these properties are what is on BUG20 rootfs.
 		m.put("bug.os.version", "2009.X-stable");
 		m.put("org.osgi.service.http.port", "8082");
 		m.put("org.osgi.framework.storage.clean", "onFirstInit");
@@ -130,7 +133,6 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		String s = getLaunchDirectory().toPortableString();
 		m.put(APP_DIR, s);
 		
-
 		try {
 			Object x = configuration.getAttribute(
 					BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES,
@@ -156,17 +158,6 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	}
 
 	@Override
-	protected List<String> getWorkspaceBundles() throws CoreException {
-		List selectedProjects = BugProjectUtil.getWSBugProjectNames();
-		String launchAll = getSystemProperty(configuration, PROP_LAUNCH_ALL,
-				"true");
-		if (!launchAll.equals("true"))
-			selectedProjects = configuration.getAttribute(ATTR_LAUNCH_PROJECTS,
-					BugProjectUtil.getWSBugProjectNames());
-		return selectedProjects;
-	}
-
-	@Override
 	protected String[] getVMArgs() throws CoreException {
 		String s = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, new String());
 		
@@ -174,5 +165,19 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 			return new String[0];
 		}
 		return s.split(" ");
+	}
+
+	@Override
+	protected List<File> getOtherLaunchBundles() throws Exception {
+		String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST,
+				"");
+		
+		List<File> l = new ArrayList<File>();
+		
+		if (rawList != null && rawList.trim().length() > 0) {
+			l = BugSimulatorMainTab.delimitedStringToList(rawList);
+		}
+		
+		return l;
 	}
 }
