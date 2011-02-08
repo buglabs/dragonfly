@@ -9,6 +9,7 @@ import com.buglabs.bug.bmi.pub.BMIMessage;
 import com.buglabs.bug.bmi.pub.Manager;
 import com.buglabs.bug.module.pub.IModletFactory;
 import com.buglabs.module.IModuleControl;
+import com.buglabs.osgi.shell.ICommand;
 import com.buglabs.osgi.shell.IShellCommandProvider;
 import com.buglabs.osgi.shell.pub.AbstractCommand;
 import com.buglabs.util.OSGiServiceLoader;
@@ -27,8 +28,8 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 		this.bmiManager = bmiManager;
 	}
 
-	public List getCommands() {
-		List l = new ArrayList();
+	public List<ICommand> getCommands() {
+		List<ICommand> l = new ArrayList<ICommand>();
 		
 		l.add(new InsertModuleCommand());
 		l.add(new ListModulesCommand());
@@ -62,6 +63,10 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 		public String getUsage() {
 			return "slot";
 		}
+		@Override
+		public String getDescription() {
+			return "Remove module from slot on BUG Simulator.";
+		}
 	}
 	
 	/**
@@ -84,6 +89,11 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 
 		public String getName() {
 			return "lsmodules";
+		}
+		
+		@Override
+		public String getDescription() {
+			return "List available modules that can be attached to BUG Simulator";
 		}
 	}
 	
