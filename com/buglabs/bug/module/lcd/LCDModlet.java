@@ -101,7 +101,7 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		Properties p = new Properties();
 		p.put("Module", "Virtual LCD Module");
 
-		moduleControlRef = context.registerService(IModuleControl.class.getName(), this, null);
+		moduleControlRef = context.registerService(IModuleControl.class.getName(), this, createBasicServiceProperties());
 		lcdModRef = context.registerService(ILCDModuleControl.class.getName(), this, createBasicServiceProperties());
 		ledControllerRef = context.registerService(IModuleLEDController.class.getName(), this, createBasicServiceProperties());
 

@@ -135,7 +135,7 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 
 		wsRef = context.registerService(PublicWSProvider.class.getName(), this, null);
 
-		moduleControl = context.registerService(IModuleControl.class.getName(), this, null);
+		moduleControl = context.registerService(IModuleControl.class.getName(), this, createBasicServiceProperties());
 		CameraModuleControl cameraModuleControlObj = new CameraModuleControl(slotId, logService);
 		cameraModuleControl = context.registerService(ICameraModuleControl.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
 		ledControl = context.registerService(IModuleLEDController.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
