@@ -122,16 +122,17 @@
             objectClass="org.eclipse.core.resources.IProject">
          <action
                class="com.buglabs.dragonfly.ui.actions.ExportJarActionDelegate"
+               enablesFor="1"
                icon="icons/color/dwnld.gif"
                id="com.buglabs.dragonfly.ui.actions.ExportJarActionDelegate"
                label="Send to BUG"
-               menubarPath="bug"/>
+               menubarPath="com.buglabs.dragonfly.ui.menu2/separator1"/>
          <action
                class="com.buglabs.dragonfly.ui.actions.ExportToBUGNetActionDelegate"
                icon="icons/color/bugnet.gif"
                id="com.buglabs.dragonfly.ui.actions.ExportToBUGNet"
                label="Send to BUGnet"
-               menubarPath="bug"/>
+               menubarPath="com.buglabs.dragonfly.ui.menu2/separator1"/>
          <visibility>
             <objectState
                   name="projectNature"
@@ -196,7 +197,7 @@
          icon="icons/color/bugProject.gif"
          id="com.buglabs.dragonfly.ui.ConvertProject"
          label="Convert project from CTE to PDE"
-         menubarPath="bug">
+         menubarPath="com.buglabs.dragonfly.ui.menu2/separator1">
    </action>
    <visibility>
       <objectState
@@ -205,22 +206,19 @@
       </objectState>
    </visibility>
 </objectContribution>
-      
-<!--      
-	  <objectContribution
-            adaptable="false"
-            id="com.buglabs.dragonfly.model.GetServiceNode"
-            objectClass="com.buglabs.dragonfly.model.GetServiceNode">
-         <action
-               class="com.buglabs.dragonfly.ui.actions.PreviewGetWSActionDelegate"
-               enablesFor="1"
-               id="com.buglabs.dragonfly.ui.previewGetWSAction"
-               label="Run Web Service"
-               menubarPath="refresh"
-               tooltip="Preview Web Service"/>
-      </objectContribution>
--->
-                  
+<objectContribution
+      id="com.buglabs.dragonfly.ui.DragonflyMenu"
+      objectClass="org.eclipse.core.resources.IProject">
+   <menu
+         icon="icons/color/dfly.gif"
+         id="com.buglabs.dragonfly.ui.menu2"
+         label="Dragonfly"
+         path="additions">
+      <separator
+            name="separator1">
+      </separator>     
+   </menu>
+</objectContribution>                
    </extension>
 <extension
          point="org.eclipse.ui.views">
