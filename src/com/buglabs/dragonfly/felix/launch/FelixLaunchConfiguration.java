@@ -76,6 +76,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			
 			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, monitor);
 			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, monitor);
+			copyBundles(Path.fromPortableString(getCompiledWorkspaceBundleDir()), launchDir, monitor);
 			for (File extraBundle: getOtherLaunchBundles()) {
 				copyBundle(Path.fromPortableString(extraBundle.getAbsolutePath()), launchDir, monitor);
 			}
@@ -94,6 +95,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to launch BUG Simulator", e));
 		} 
 	}
+
+	public abstract String getCompiledWorkspaceBundleDir();
 
 	private String printStrArray(String [] array) {
 		StringBuffer sb = new StringBuffer();
@@ -125,6 +128,10 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	}
 
 	private void copyBundles(IPath srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
+		if (srcDir == null || launchDir == null) {
+			return;
+		}
+		
 		IPath destDir = launchDir.append(REL_BUNDLE_DIR);
 		
 		IFileSystem fs = EFS.getLocalFileSystem();
