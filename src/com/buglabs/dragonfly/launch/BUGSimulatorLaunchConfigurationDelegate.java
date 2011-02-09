@@ -43,6 +43,7 @@ import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.launch.BugSimulatorMainTab;
 import com.buglabs.dragonfly.ui.launch.SystemPropertiesTab;
 import com.buglabs.dragonfly.ui.properties.BUGAppPropertyPage;
+import com.buglabs.dragonfly.util.UIUtils;
 
 /**
  * A launch configuration for BUG Simulator. Relies on FelixLaunchConfiguration
@@ -89,6 +90,9 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 			compileBUGProjects();
 			
 			super.launch(configuration, mode, launch, monitor);
+			
+			deleteBUGProjects();
+			
 			new Timer().schedule(new TimerTask() {
 				public void run() {
 					BugConnectionManager.getInstance()
@@ -111,6 +115,29 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		}
 	}
 
+	/**
+	 * Delete temp bundles generated on launch.
+	 * @throws IOException
+	 */
+	private void deleteBUGProjects() throws IOException {
+		if (hasWorkspaceBundles) {
+			File dir = Activator.getDefault().getStateLocation().append(COMPILE_BUNDLE_TMP_DIR).toFile();
+			
+			for (File cf: Arrays.asList(dir.listFiles())) {
+				if (cf.isFile()) {
+					if (!cf.delete()) {
+						throw new IOException("Unable to delete " + cf);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Compile bug projects that will be installed in BS on launch.
+	 * @throws IOException
+	 * @throws CoreException
+	 */
 	private void compileBUGProjects() throws IOException, CoreException {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		List<IProject> children = new ArrayList<IProject>();
@@ -143,7 +170,11 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		}
 		
 		for (IProject project: children) {
-			ProjectUtils.exporToJar(file, project, true);
+			try {
+				ProjectUtils.exporToJar(file, project, true);
+			} catch (CoreException e) {
+				UIUtils.handleNonvisualError("Unable to compile project " + project, e);
+			}
 		}
 		
 		hasWorkspaceBundles  = true;

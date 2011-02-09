@@ -219,7 +219,8 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 
 		Vector packages = new Vector();
 		manifestContents.append("Import-Package:");
-
+		manifestContents.append(" org.osgi.framework");
+		
 		if (services.size() > 0) {
 			Iterator serviceIter = services.iterator();
 			while (serviceIter.hasNext()) {
@@ -231,12 +232,16 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 					manifestContents.append(" " + packagename + ",\n");
 				}
 			}
-			manifestContents.append(" org.osgi.framework,\n");
+			manifestContents.append(",\n");
 			manifestContents.append(" org.osgi.util.tracker,\n");
 			manifestContents.append(" com.buglabs.application,\n");
 			manifestContents.append(" com.buglabs.util\n");
-		} else {
-			manifestContents.append(" org.osgi.framework\n");
+		} else if (pinfo.getGenerateLogMethod()) {
+			manifestContents.append(",\n");
+			manifestContents.append(" org.osgi.util.tracker,\n");
+			manifestContents.append(" com.buglabs.util\n");
+		}  else {
+			manifestContents.append("\n");
 		}
 
 		return manifestContents;
