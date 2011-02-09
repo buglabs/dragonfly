@@ -3,28 +3,46 @@ package com.buglabs.dragonfly.launch;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
+import sun.misc.IOUtils;
+
+import com.buglabs.dragonfly.BugApplicationNature;
 import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
+import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.launch.BugSimulatorMainTab;
 import com.buglabs.dragonfly.ui.launch.SystemPropertiesTab;
+import com.buglabs.dragonfly.ui.properties.BUGAppPropertyPage;
 
 /**
  * A launch configuration for BUG Simulator. Relies on FelixLaunchConfiguration
@@ -54,7 +72,9 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	public static final String ATTR_VBUG_SYSTEM_PROPERTIES = "ATTR_VBUG_SYSTEM_PROPERTIES";
 	public static final String DEFAULT_START_LEVEL = "4";
 	public static final String APP_DIR = "app.bundle.path";
+	private static final String COMPILE_BUNDLE_TMP_DIR = "workspace_compile_dir";
 	private ILaunchConfiguration configuration;
+	private boolean hasWorkspaceBundles = false;
 
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
@@ -65,6 +85,9 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		try {
 			ServerSocket socket = new ServerSocket(port);
 			socket.close();
+			
+			compileBUGProjects();
+			
 			super.launch(configuration, mode, launch, monitor);
 			new Timer().schedule(new TimerTask() {
 				public void run() {
@@ -86,6 +109,44 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 				});
 			}
 		}
+	}
+
+	private void compileBUGProjects() throws IOException, CoreException {
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		List<IProject> children = new ArrayList<IProject>();
+		
+		for (IProject project: Arrays.asList(root.getProjects())) {
+			try {
+				// TODO: Find the nature ID static String
+				if (project.isOpen() && project.hasNature(BugApplicationNature.ID)) {
+					String prop = project.getPersistentProperty(new QualifiedName("", BUGAppPropertyPage.AUTO_INSTALL_BUGAPP_PROPERTY));
+					
+					if (prop != null && Boolean.parseBoolean(prop)) {
+						children.add(project);
+					}
+				}
+			} catch (CoreException e) {
+				// Purposely do nothing
+			}
+		}
+		
+		if (children.isEmpty()) {
+			return;
+		}
+		
+		File file = Activator.getDefault().getStateLocation().append(COMPILE_BUNDLE_TMP_DIR).toFile();
+		
+		if (!file.exists()) {
+			if (!file.mkdirs()) {
+				throw new IOException("Unable to create directory " + file.getAbsolutePath());
+			}
+		}
+		
+		for (IProject project: children) {
+			ProjectUtils.exporToJar(file, project, true);
+		}
+		
+		hasWorkspaceBundles  = true;
 	}
 
 	private static String getSystemProperty(ILaunchConfiguration configuration,
@@ -179,5 +240,20 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		}
 		
 		return l;
+	}
+
+	@Override
+	public String getCompiledWorkspaceBundleDir() {
+		if (!hasWorkspaceBundles) {
+			return null;
+		}
+		
+		File f = Activator.getDefault().getStateLocation().append(COMPILE_BUNDLE_TMP_DIR).toFile();
+		
+		if (f.exists()) {
+			return Activator.getDefault().getStateLocation().append(COMPILE_BUNDLE_TMP_DIR).toFile().toString();
+		}
+		
+		return null;
 	}
 }

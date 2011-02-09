@@ -428,6 +428,17 @@
                name="projectNature"
                value="com.buglabs.dragonfly.BugNature"/>
       </page>
+      <page
+            adaptable="true"
+            class="com.buglabs.dragonfly.ui.properties.BUGAppPropertyPage"
+            id="com.buglabs.dragonfly.ui.properties.BUGAppPropertyPage"
+            name="Dragonfly"
+            objectClass="org.eclipse.core.resources.IProject">
+         <filter
+               name="projectNature"
+               value="com.buglabs.dragonfly.BugApplicationNature">
+         </filter>
+      </page>
    </extension>
    <extension
          point="org.eclipse.ui.commands">

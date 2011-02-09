@@ -347,7 +347,7 @@ public class BugnetApplicationItemDrawer {
 		Rating r = new Rating(comp, SWT.NONE);
 		r.setBackground(backgroundColor);
 		String ratingVal = item.getRating();
-		if (ratingVal.length() == 0) {
+		if (ratingVal == null || ratingVal.length() == 0) {
 			ratingVal = "0";
 		}
 		r.setRating(Double.parseDouble(ratingVal));

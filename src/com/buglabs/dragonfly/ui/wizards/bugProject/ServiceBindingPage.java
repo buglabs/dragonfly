@@ -552,7 +552,7 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 	 * @param bugConnection
 	 * @param monitor
 	 */
-	private void populateServiceList(BugConnection bugConnection, IProgressMonitor monitor) {
+	private void populateServiceList(final BugConnection bugConnection, IProgressMonitor monitor) {
 		try {
 			List<ServiceDetail> details = BugWSHelper.getAllServiceDetails(bugConnection.getProgramURL());
 
@@ -579,10 +579,15 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 			}
 
 			setInputForDependencyViewer();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (final Exception e1) {
+			UIUtils.handleNonvisualError("Failed to connect to BUG", e1);
 			servicePropertyOptionsMap.clear();
 			setInputForDependencyViewer();
+			PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					ServiceBindingPage.this.setErrorMessage("An error occured while connecting to " + bugConnection.getName() + ": " + e1.getMessage());
+				}
+			});
 		}
 	}
 
