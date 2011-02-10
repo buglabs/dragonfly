@@ -46,6 +46,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 	private static final String FELIX_MAIN_CLASS = "org.apache.felix.main.Main";
 	private static final String REL_BUNDLE_DIR = "bundle";
+	private static final String REL_APP_DIR = "apps";
 	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-3.0.4.jar";
 	private IPath launchDir;
 	private boolean debug = false;
@@ -74,11 +75,11 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			File confFile = createFelixConfFile(configuration, launchDir, felixPluginBase, getLaunchProperties());
 			debugPrint("Felix configuration: " + confFile.toString());
 			
-			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, monitor);
-			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, monitor);
-			copyBundles(Path.fromPortableString(getCompiledWorkspaceBundleDir()), launchDir, monitor);
+			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, REL_BUNDLE_DIR, monitor);
+			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, REL_BUNDLE_DIR, monitor);
+			copyBundles(Path.fromPortableString(getCompiledWorkspaceBundleDir()), launchDir, REL_APP_DIR ,monitor);
 			for (File extraBundle: getOtherLaunchBundles()) {
-				copyBundle(Path.fromPortableString(extraBundle.getAbsolutePath()), launchDir, monitor);
+				copyBundle(Path.fromPortableString(extraBundle.getAbsolutePath()), launchDir, REL_BUNDLE_DIR, monitor);
 			}
 			
 			String[] args = getVMArgs(confFile, felixPluginBase);
@@ -96,8 +97,17 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		} 
 	}
 
+	/**
+	 * Concrete subclasses need to return location of compiled bundles from workspace, or null if none exist.
+	 * @return
+	 */
 	public abstract String getCompiledWorkspaceBundleDir();
 
+	/**
+	 * Return array as a string.
+	 * @param array
+	 * @return
+	 */
 	private String printStrArray(String [] array) {
 		StringBuffer sb = new StringBuffer();
 		
@@ -109,6 +119,10 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		return sb.toString();
 	}
 
+	/**
+	 * If debug enabled, print output to sysout.
+	 * @param s
+	 */
 	private void debugPrint(String s) {
 		if (debug) {
 			System.out.println(s);
@@ -127,12 +141,21 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		target.delete(EFS.NONE, monitor);
 	}
 
-	private void copyBundles(IPath srcDir, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
+	/**
+	 * Copy files from source to launchDir + childPath
+	 * @param srcDir
+	 * @param launchDir
+	 * @param childPath
+	 * @param monitor
+	 * @throws CoreException
+	 * @throws URISyntaxException
+	 */
+	private void copyBundles(IPath srcDir, IPath launchDir, String childPath, IProgressMonitor monitor) throws CoreException, URISyntaxException {
 		if (srcDir == null || launchDir == null) {
 			return;
 		}
 		
-		IPath destDir = launchDir.append(REL_BUNDLE_DIR);
+		IPath destDir = launchDir.append(childPath);
 		
 		IFileSystem fs = EFS.getLocalFileSystem();
 		
@@ -149,8 +172,17 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		}
 	}
 	
-	private void copyBundle(IPath srcBundle, IPath launchDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
-		IPath destDir = launchDir.append(REL_BUNDLE_DIR);
+	/**
+	 * Copy file from srcBundle to launchDir + childDir
+	 * @param srcBundle
+	 * @param launchDir
+	 * @param childDir
+	 * @param monitor
+	 * @throws CoreException
+	 * @throws URISyntaxException
+	 */
+	private void copyBundle(IPath srcBundle, IPath launchDir, String childDir, IProgressMonitor monitor) throws CoreException, URISyntaxException {
+		IPath destDir = launchDir.append(childDir);
 		
 		IFileSystem fs = EFS.getLocalFileSystem();
 		
@@ -161,6 +193,14 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		srcStore.copy(destStore.getChild(srcStore.getName()), EFS.OVERWRITE, monitor);
 	}
 
+	/**
+	 * Get the VM args as specified in the launch UI.
+	 * @param confFile
+	 * @param felixPluginBase
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws CoreException
+	 */
 	private String[] getVMArgs(File confFile, String felixPluginBase) throws MalformedURLException, CoreException {
 		String [] cs = getVMArgs();
 		
@@ -173,6 +213,10 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		return (String[]) l2.toArray(new String[l.size()]);
 	}
 	
+	/**
+	 * @return
+	 * @throws CoreException
+	 */
 	protected abstract String[] getVMArgs() throws CoreException;
 
 	private File createFelixConfFile(ILaunchConfiguration configuration, IPath launchDir, String felixPluginBase, Map<String, String> props) throws IOException {		
