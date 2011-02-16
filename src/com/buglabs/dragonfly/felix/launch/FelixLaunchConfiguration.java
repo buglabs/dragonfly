@@ -77,7 +77,10 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			
 			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, REL_BUNDLE_DIR, monitor);
 			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, REL_BUNDLE_DIR, monitor);
-			copyBundles(Path.fromPortableString(getCompiledWorkspaceBundleDir()), launchDir, REL_APP_DIR ,monitor);
+			
+			if (getCompiledWorkspaceBundleDir() != null) {
+				copyBundles(Path.fromPortableString(getCompiledWorkspaceBundleDir()), launchDir, REL_APP_DIR ,monitor);
+			}
 			for (File extraBundle: getOtherLaunchBundles()) {
 				copyBundle(Path.fromPortableString(extraBundle.getAbsolutePath()), launchDir, REL_BUNDLE_DIR, monitor);
 			}
