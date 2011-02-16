@@ -28,7 +28,28 @@ public class BUGAppPropertyPage extends PropertyPage {
 		autoInstallBtn = new Button(composite, SWT.CHECK);		
 		autoInstallBtn.setText("Auto install in BUG Simulator upon start.");
 			
-		//pathValueText.setText(((IResource) getElement()).getFullPath().toString());
+		String val;
+		try {
+			val = ((IResource) getElement()).getPersistentProperty(new QualifiedName("", AUTO_INSTALL_BUGAPP_PROPERTY));
+			
+			if (val != null) {
+				autoInstallBtn.setSelection(Boolean.parseBoolean(val));
+			}
+		} catch (CoreException e) {			
+		}
+		
+		//Feature does not work in Windows, do not have ability to test so disabling.
+		if (isWindowsOS()) {
+			autoInstallBtn.setEnabled(false);
+			autoInstallBtn.setToolTipText("This feature is not available in Microsoft Windows.");
+		}
+	}
+
+	/**
+	 * @return true if running on a Windows OS.
+	 */
+	private boolean isWindowsOS() {
+		return System.getProperty("os.name").startsWith("Windows");
 	}
 
 	/**
