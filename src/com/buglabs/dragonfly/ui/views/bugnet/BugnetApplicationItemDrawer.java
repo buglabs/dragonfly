@@ -357,9 +357,9 @@ public class BugnetApplicationItemDrawer {
 		r.setLayoutData(gd);
 
 		// Draw Description
-		String desc = item.getDescription().trim();
-		
-		if (!desc.equals("")) { //$NON-NLS-1$
+		if (item.getDescription() != null && item.getDescription().trim().length() > 0) {
+			String desc = item.getDescription().trim();
+			
 			String shortenedDesc = UIUtils.truncateString(desc, DESCRIPTION_LENGTH);
 			Label descLabel = toolkit.createLabel(comp, shortenedDesc, SWT.NONE);
 			gd = new GridData(SWT.BEGINNING, SWT.TOP, true, false);
