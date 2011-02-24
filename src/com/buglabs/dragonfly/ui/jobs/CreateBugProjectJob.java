@@ -182,6 +182,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 	protected StringBuffer getManifestContents() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("Manifest-Version: 1.0\n");
+		buffer.append("Bundle-ManifestVersion: 2\n");
 		buffer.append("Bundle-Name: " + projInfo.getProjectName() + "\n");
 
 		if (hasContents(projInfo.getActivator()) && projInfo.isGenerateActivator()) {
