@@ -223,6 +223,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		manifestContents.append(" org.osgi.framework");
 		
 		if (services.size() > 0) {
+			manifestContents.append(",\n");
 			Iterator serviceIter = services.iterator();
 			while (serviceIter.hasNext()) {
 				String serviceQualified = (String) serviceIter.next();
@@ -233,7 +234,6 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 					manifestContents.append(" " + packagename + ",\n");
 				}
 			}
-			manifestContents.append(",\n");
 			manifestContents.append(" org.osgi.util.tracker,\n");
 			manifestContents.append(" com.buglabs.application,\n");
 			manifestContents.append(" com.buglabs.util\n");
@@ -269,56 +269,6 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		ConciergeUtils.addNatureToProject(proj, "org.eclipse.pde.PluginNature", monitor);
 		ConciergeUtils.addNatureToProject(proj, BugApplicationNature.ID, monitor);
 	}
-
-	/**
-	 * Called from execute to generate the service tracker code
-	 * 
-	 * @param monitor
-	 * @throws CoreException
-	 */
-	/*protected void createServiceTracker(IProgressMonitor monitor) throws CoreException {
-		BugProjectInfo pinfo = getBugProjectInfo();
-		String projectName = pinfo.getProjectName();
-
-		String trackerPath = getPackageNamePath(getServiceTrackerPackageName(projectName));
-		IFolder folder = getProject().getFolder(trackerPath);
-		String fileName = BugProjectUtil.formatProjectNameAsClassName(projectName) + "ServiceTracker.java";
-		IFile serviceTracker = folder.getFile(fileName);
-
-		if (!folder.exists()) {
-			try {
-				folder.create(true, true, new NullProgressMonitor());
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		String contents = getServiceTrackerContents().toString();
-		writeContents(serviceTracker, contents, monitor);
-	}*/
-
-	/**
-	 * Generate the service tracker code
-	 * 
-	 * @return
-	 */
-	/*protected StringBuffer getServiceTrackerContents() {
-		StringBuffer sb = new StringBuffer();
-		BugProjectInfo pinfo = getBugProjectInfo();
-		String projectName = pinfo.getProjectName();
-
-		// last param is
-		// usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
-		// for v1.5 of SDK (which will be built against R1.4.3 or greater of
-		// BUG)
-		// Just use false for v1.4 and previous
-		sb.append(new ServiceTrackerCustomizer().generate(pinfo.getServices(), convertHelperMapToMapofStrings(pinfo.getServicePropertyHelperMap()),
-				BugProjectUtil.formatProjectNameAsClassName(projectName), getServiceTrackerPackageName(projectName), BugProjectUtil.formatProjectNameAsPackage(projectName),
-				pinfo.isShouldGenerateApplicationLoop(), usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())));
-
-		return sb;
-	}*/
 
 	/**
 	 * Helper to return the current bug project from the workspace
