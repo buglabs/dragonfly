@@ -3,13 +3,13 @@
    <description name="Dragonfly SDK Updatesite" url="http://buglabs.net/sdk">
       The updatesite for Bug Labs SDK for BUG devices.
    </description>
-   <feature url="features/com.buglabs.dragonfly.cdt.feature_2.1.4.qualifier.jar" id="com.buglabs.dragonfly.cdt.feature" version="2.1.4.qualifier">
+   <feature url="features/com.buglabs.dragonfly.cdt.feature_2.1.5.qualifier.jar" id="com.buglabs.dragonfly.cdt.feature" version="2.1.5.qualifier">
       <category name="Optional Components"/>
    </feature>
-   <feature url="features/com.buglabs.dragonfly.dm.feature_2.1.4.qualifier.jar" id="com.buglabs.dragonfly.dm.feature" version="2.1.4.qualifier">
+   <feature url="features/com.buglabs.dragonfly.dm.feature_2.1.5.qualifier.jar" id="com.buglabs.dragonfly.dm.feature" version="2.1.5.qualifier">
       <category name="Optional Components"/>
    </feature>
-   <feature url="features/com.buglabs.dragonfly.feature_2.1.4.qualifier.jar" id="com.buglabs.dragonfly.feature" version="2.1.4.qualifier">
+   <feature url="features/com.buglabs.dragonfly.feature_2.1.5.qualifier.jar" id="com.buglabs.dragonfly.feature" version="2.1.5.qualifier">
       <category name="Dragonfly SDK"/>
    </feature>
    <category-def name="Dragonfly SDK" label="Dragonfly SDK"/>
