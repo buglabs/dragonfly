@@ -2,7 +2,7 @@
 <feature
       id="com.buglabs.dragonfly.dm.feature"
       label="BUG Device Management Support"
-      version="2.1.5.qualifier"
+      version="2.1.6.qualifier"
       provider-name="Bug Labs, Inc.">
 
    <description>
