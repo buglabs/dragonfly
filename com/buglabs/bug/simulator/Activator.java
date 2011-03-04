@@ -25,6 +25,7 @@ import java.net.BindException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -209,7 +210,9 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 			logService.log(LogService.LOG_ERROR, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
 		}
 
-		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, null);
+		Dictionary<String, String> d = new Hashtable<String, String>();
+		d.put("bug.base.version", "2.0");
+		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, d);
 	}
 
 	public void stop(BundleContext context) throws Exception {
