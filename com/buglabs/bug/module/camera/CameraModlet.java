@@ -44,6 +44,7 @@ import com.buglabs.util.RemoteOSGiServiceConstants;
  * @author kgilmer
  * 
  */
+@SuppressWarnings("deprecation")
 public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2, PublicWSProvider, IModuleControl, ICameraButtonEventProvider, IShellCommandProvider {
 	private ServiceRegistration wsRef;
 
@@ -387,6 +388,10 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		return 0;
 	}
 
+	
+	public int cameraOpenDefault() {
+		return 0;
+	}
 	
 	public int openDefault() {
 		return 0;
