@@ -218,12 +218,15 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		BugProjectInfo pinfo = getBugProjectInfo();
 		List services = pinfo.getServices();
 
-		Vector packages = new Vector();
+		List<String> packages = new ArrayList<String>();
 		manifestContents.append("Import-Package:");
 		manifestContents.append(" org.osgi.framework");
 		
 		if (services.size() > 0) {
 			manifestContents.append(",\n");
+			packages.add("org.osgi.util.tracker");
+			packages.add("com.buglabs.application");
+			packages.add("com.buglabs.util");
 			Iterator serviceIter = services.iterator();
 			while (serviceIter.hasNext()) {
 				String serviceQualified = (String) serviceIter.next();
