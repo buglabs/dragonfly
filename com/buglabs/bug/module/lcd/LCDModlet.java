@@ -12,12 +12,14 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.accelerometer.pub.AccelerometerConfiguration;
+import com.buglabs.bug.accelerometer.pub.AccelerometerSample;
 import com.buglabs.bug.accelerometer.pub.Constants;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerControl;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerRawFeed;
@@ -25,6 +27,7 @@ import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleFeed;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleProvider;
 import com.buglabs.bug.module.lcd.accelerometer.LCDAccelerometerSampleProvider;
 import com.buglabs.bug.module.lcd.pub.ILCDModuleControl;
+import com.buglabs.bug.module.lcd.pub.IML8953Accelerometer;
 import com.buglabs.bug.module.lcd.pub.IModuleDisplay;
 import com.buglabs.bug.module.motion.pub.AccelerationWS;
 import com.buglabs.bug.module.pub.IModlet;
@@ -38,7 +41,7 @@ import com.buglabs.util.LogServiceUtil;
 import com.buglabs.util.RemoteOSGiServiceConstants;
 import com.buglabs.util.StreamMultiplexerEvent;
 
-public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IModuleDisplay, IStreamMultiplexerListener, IModuleLEDController {
+public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IModuleDisplay, IStreamMultiplexerListener, IModuleLEDController, IML8953Accelerometer {
 
 	private final BundleContext context;
 
@@ -57,6 +60,8 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 	private AccelerometerRawFeed acceld;
 	
 	private AccelerometerControl accControl;
+	
+	private Random rng;
 	
 	private Frame frame;
 
@@ -79,12 +84,15 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 
 	private ServiceRegistration wsAccReg;
 
+	private ServiceRegistration accelRef;
+
 	public LCDModlet(BundleContext context, int slotId, String moduleName, LogService logService) {
 		this.context = context;
 		this.slotId = slotId;
 		this.moduleName = moduleName;
 		this.logService = logService;
 		activeFrames = Collections.synchronizedList(new ArrayList());
+		rng = new Random();
 	}
 
 	public String getModuleId() {
@@ -104,7 +112,8 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		moduleControlRef = context.registerService(IModuleControl.class.getName(), this, createBasicServiceProperties());
 		lcdModRef = context.registerService(ILCDModuleControl.class.getName(), this, createBasicServiceProperties());
 		ledControllerRef = context.registerService(IModuleLEDController.class.getName(), this, createBasicServiceProperties());
-
+		accelRef = context.registerService(IML8953Accelerometer.class.getName(), this, createBasicServiceProperties());
+		
 		Dictionary props = new Hashtable();
 		props.put("width", new Integer(LCD_WIDTH));
 		props.put("height", new Integer(LCD_HEIGHT));
@@ -167,6 +176,7 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 	public void stop() throws Exception {
 		wsAccReg.unregister();
 		lcdModRef.unregister();
+		accelRef.unregister();
 		moduleDisplayServReg.unregister();
 		ledControllerRef.unregister();
 		moduleControlRef.unregister();
@@ -302,5 +312,25 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 
 	public int suspend() throws IOException {
 		throw new IOException("LCDModlet suspend call is not implemented for Virtual BUG");
+	}
+
+	@Override
+	public short readX() throws IOException {	
+		return (short) rng.nextInt();
+	}
+
+	@Override
+	public short readY() throws IOException {
+		return (short) rng.nextInt();
+	}
+
+	@Override
+	public short readZ() throws IOException {
+		return (short) rng.nextInt();
+	}
+
+	@Override
+	public AccelerometerSample readSample() throws IOException {	
+		return new AccelerometerSample(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
 	}
 }
