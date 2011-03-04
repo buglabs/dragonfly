@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
@@ -69,6 +70,8 @@ import com.buglabs.bug.module.video.VideoActivator;
 import com.buglabs.bug.module.vonhippel.VHActivator;
 import com.buglabs.bug.simulator.controller.Server;
 import com.buglabs.bug.simulator.ui.SimulatorModuleCommands;
+import com.buglabs.device.IButtonEventProvider;
+import com.buglabs.osgi.shell.ICommand;
 import com.buglabs.osgi.shell.IShellCommandProvider;
 import com.buglabs.support.SupportInfoTextFormatter;
 import com.buglabs.support.SupportInfoXMLFormatter;
@@ -134,6 +137,12 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private ServiceRegistration baseControlReg;
 
 	private VideoActivator videoActivator;
+
+	private ServiceRegistration userBepReg;
+
+	private ServiceRegistration powerBepReg;
+
+	private ServiceRegistration buttonCommandReg;
 
 	public void start(final BundleContext context) throws Exception {
 		// Basic setup ********************************************
@@ -213,9 +222,43 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		Dictionary<String, String> d = new Hashtable<String, String>();
 		d.put("bug.base.version", "2.0");
 		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, d);
+		
+		ShellButtonAdapter userBtn = new ShellButtonAdapter("user");
+		ShellButtonAdapter powerBtn = new ShellButtonAdapter("power");
+		ICommand [] cmds = {userBtn, powerBtn};
+		
+		userBepReg = context.registerService(IButtonEventProvider.class.getName(), userBtn, getUserButtonProperties());
+		powerBepReg = context.registerService(IButtonEventProvider.class.getName(), powerBtn, getPowerButtonProperties());
+		buttonCommandReg = context.registerService(IShellCommandProvider.class.getName(), new ButtonCommands(cmds), null);
 	}
 
+	private Dictionary<String, String> getPowerButtonProperties() {
+		Dictionary<String, String> d = new Hashtable<String, String>();
+		d.put("Provider", this.getClass().getName());
+		d.put("Button", "Power");
+		return d;
+	}
+
+	private Dictionary<String, String> getUserButtonProperties() {
+		Dictionary<String, String> d = new Hashtable<String, String>();
+		d.put("Provider", this.getClass().getName());
+		d.put("Button", "User");
+		return d;
+	}
+	
 	public void stop(BundleContext context) throws Exception {
+		if (buttonCommandReg != null) {
+			buttonCommandReg.unregister();
+		}
+		
+		if (powerBepReg != null) {
+			powerBepReg.unregister();
+		}
+		
+		if (userBepReg != null) {
+			userBepReg.unregister();
+		}
+		
 		if (controllerServer != null) {
 			controllerServer.shutdown();
 		}
@@ -416,5 +459,19 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	public static LogService getLogService() {
 		return logService;
+	}
+	
+	private class ButtonCommands implements IShellCommandProvider {
+		private final ICommand[] cmds;
+
+		public ButtonCommands(ICommand[] cmds) {
+			this.cmds = cmds;		
+		}
+
+		@Override
+		public List getCommands() {			
+			return Arrays.asList(cmds);
+		}
+		
 	}
 }
