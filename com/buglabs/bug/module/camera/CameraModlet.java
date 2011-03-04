@@ -20,6 +20,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.module.camera.pub.ICamera2Device;
+import com.buglabs.bug.module.camera.pub.ICamera2ModuleControl;
 import com.buglabs.bug.module.camera.pub.ICameraButtonEventProvider;
 import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.bug.module.pub.IModlet;
@@ -37,7 +38,6 @@ import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.WSResponse;
-import com.buglabs.util.RemoteOSGiServiceConstants;
 
 /**
  * 
@@ -87,6 +87,8 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 	private String serviceName = "Picture";
 
 	private ServiceRegistration buttonCmdReg;
+
+	private ServiceRegistration camera2ModuleControl;
 
 	public CameraModlet(BundleContext context, int slotId, String moduleName, LogService logService) {
 		this.context = context;
@@ -139,6 +141,7 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		moduleControl = context.registerService(IModuleControl.class.getName(), this, createBasicServiceProperties());
 		CameraModuleControl cameraModuleControlObj = new CameraModuleControl(slotId, logService);
 		cameraModuleControl = context.registerService(ICameraModuleControl.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
+		camera2ModuleControl = context.registerService(ICamera2ModuleControl.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
 		ledControl = context.registerService(IModuleLEDController.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
 
 		cameraService = context.registerService(ICamera2Device.class.getName(), this, createBasicServiceProperties());
@@ -155,6 +158,7 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		cameraService.unregister();
 		moduleControl.unregister();
 		cameraModuleControl.unregister();
+		camera2ModuleControl.unregister();
 		ledControl.unregister();
 		if (buttonEventProvider != null)
 			buttonEventProvider.unregister();
@@ -305,6 +309,10 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		Properties p = new Properties();
 		p.put("Provider", this.getClass().getName());
 		p.put("Slot", Integer.toString(slotId));
+		
+		p.put("ModuleRevision", "0");
+		p.put("ModuleVendorID", "0");
+
 		return p;
 	}
 

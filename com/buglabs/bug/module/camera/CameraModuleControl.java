@@ -4,10 +4,11 @@ import java.io.IOException;
 
 import org.osgi.service.log.LogService;
 
+import com.buglabs.bug.module.camera.pub.ICamera2ModuleControl;
 import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.module.IModuleLEDController;
 
-public class CameraModuleControl implements ICameraModuleControl, IModuleLEDController {
+public class CameraModuleControl implements ICameraModuleControl, ICamera2ModuleControl, IModuleLEDController {
 
 	private int slotId;
 	private LogService logService;
@@ -47,6 +48,66 @@ public class CameraModuleControl implements ICameraModuleControl, IModuleLEDCont
 		String message = "Red LED is off";
 		if (state) message = "Red LED is on";
 		logService.log(LogService.LOG_INFO, message);
+		return 0;
+	}
+
+	@Override
+	public int getTestPattern() {
+		logService.log(LogService.LOG_INFO, "called getTestPattern()");
+		return 0;
+	}
+
+	@Override
+	public int setTestPattern(int testPattern) {
+		logService.log(LogService.LOG_INFO, "called setTestPattern(" + testPattern + ")");
+		return 0;
+	}
+
+	@Override
+	public int getColorEffects() {
+		logService.log(LogService.LOG_INFO, "called getColorEffects()");
+		return 0;
+	}
+
+	@Override
+	public int setColorEffects(int colorEffects) {
+		logService.log(LogService.LOG_INFO, "called setColorEffects(" + colorEffects + ")");
+		return 0;
+	}
+
+	@Override
+	public int getVerticalFlip() {
+		logService.log(LogService.LOG_INFO, "called getVerticalFlip()");
+		return 0;
+	}
+
+	@Override
+	public int setVerticalFlip(int verticalFlip) {
+		logService.log(LogService.LOG_INFO, "called setVerticalFlip(" + verticalFlip + ")");
+		return 0;
+	}
+
+	@Override
+	public int getHorizontalMirror() {
+		logService.log(LogService.LOG_INFO, "called getHorizontalMirror()");
+		return 0;
+	}
+
+	@Override
+	public int setHorizontalMirror(int horizontalMirror) {
+		logService.log(LogService.LOG_INFO, "called setHorizontalMirror(" + horizontalMirror + ")");
+		return 0;
+	}
+
+	@Override
+	public int getExposureLevel() {
+		logService.log(LogService.LOG_INFO, "called getExposureLevel()");
+		return 0;
+	}
+
+	@Override
+	public int setExposureLevel(int exposureLevel) {
+		logService.log(LogService.LOG_INFO, "called setExposureLevel(" + exposureLevel + ")");
 		return 0;
 	}
 
