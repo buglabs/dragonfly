@@ -32,7 +32,7 @@ public class MotionCommand implements ICommand {
 	}
 
 	public String getUsage() {
-		return "motion";
+		return "";
 	}
 
 	public void initialize(List arguments, OutputStream out, OutputStream err, BundleContext context) {

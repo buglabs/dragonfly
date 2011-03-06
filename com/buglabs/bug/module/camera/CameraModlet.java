@@ -381,7 +381,7 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 
 		
 		public String getUsage() {
-			return "[shutter | in | out]";
+			return "(shutter | in | out)";
 		}
 
 		

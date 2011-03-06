@@ -41,8 +41,8 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 	private class RemoveModuleCommand extends AbstractCommand {
 
 		public void execute() throws Exception {
-			Integer slotId = Integer.parseInt((String) this.arguments.get(0));
-			
+			Integer slotId = Integer.parseInt((String) this.arguments.get(0));				
+				
 			String module = getModuleInSlot(context, slotId);
 			
 			if (module == null) {
@@ -53,7 +53,7 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 			}
 			
 			BMIMessage removeMSG = new BMIMessage(module, "emulator", slotId, BMIMessage.EVENT_REMOVE);
-			bmiManager.processMessage(removeMSG.toString());
+			bmiManager.processMessage(removeMSG.toString());			
 		}
 
 		public String getName() {
@@ -61,11 +61,30 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 		}
 		
 		public String getUsage() {
-			return "slot";
+			return "(slot 1 - 4)";
 		}
 		@Override
 		public String getDescription() {
 			return "Remove module from slot on BUG Simulator.";
+		}
+		
+		@Override
+		public boolean isValid() {			
+			if (arguments.size() != 1) {
+				return false;
+			}
+			
+			try {
+				int index = Integer.parseInt((String) arguments.get(0)); 
+				
+				if (index < 1 || index > 4) {
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				return false;
+			}
+			
+			return true;
 		}
 	}
 	
@@ -94,6 +113,11 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 		@Override
 		public String getDescription() {
 			return "List available modules that can be attached to BUG Simulator";
+		}
+		
+		@Override
+		public boolean isValid() {		
+			return arguments.size() == 0;
 		}
 	}
 	
@@ -133,19 +157,31 @@ public class SimulatorModuleCommands implements IShellCommandProvider {
 		
 		@Override
 		public String getUsage() {
-			return "module slot";
+			return "(module name) (slot 1 - 4)";
 		}
 		
 		@Override
 		public boolean isValid() {	
-			return arguments.size() == 2;
+			if (arguments.size() != 2) {
+				return false;
+			}
+			
+			try {
+				int index = Integer.parseInt((String) arguments.get(1)); 
+				
+				if (index < 1 || index > 4) {
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				return false;
+			}
+			
+			return true;
 		}
 		
 		@Override
 		public String getDescription() {
 			return "Inserts a BUG module into the specified BMI slot.";
 		}
-		
 	}
-
 }
