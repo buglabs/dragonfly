@@ -314,22 +314,22 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		throw new IOException("LCDModlet suspend call is not implemented for Virtual BUG");
 	}
 
-	@Override
+	
 	public short readX() throws IOException {	
 		return (short) rng.nextInt();
 	}
 
-	@Override
+	
 	public short readY() throws IOException {
 		return (short) rng.nextInt();
 	}
 
-	@Override
+	
 	public short readZ() throws IOException {
 		return (short) rng.nextInt();
 	}
 
-	@Override
+	
 	public AccelerometerSample readSample() throws IOException {	
 		return new AccelerometerSample(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
 	}
