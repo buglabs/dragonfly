@@ -468,7 +468,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 			this.cmds = cmds;		
 		}
 
-		@Override
 		public List getCommands() {			
 			return Arrays.asList(cmds);
 		}

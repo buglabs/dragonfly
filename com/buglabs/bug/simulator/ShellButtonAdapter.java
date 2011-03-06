@@ -56,7 +56,7 @@ public class ShellButtonAdapter extends AbstractCommand implements IButtonEventP
 		}
 	}
 
-	@Override
+	
 	public void addListener(IButtonEventListener listener) {
 		if (listeners == null) {
 			listeners = new ArrayList<IButtonEventListener>();
@@ -67,14 +67,14 @@ public class ShellButtonAdapter extends AbstractCommand implements IButtonEventP
 		}
 	}
 
-	@Override
+	
 	public void removeListener(IButtonEventListener listener) {
 		if (listeners != null && listeners.contains(listener)) {
 			listeners.remove(listener);
 		}
 	}
 
-	@Override
+	
 	public void execute() throws Exception {
 		if (listeners != null) {
 			for (IButtonEventListener listener: listeners) {
@@ -83,12 +83,12 @@ public class ShellButtonAdapter extends AbstractCommand implements IButtonEventP
 		}
 	}
 
-	@Override
+	
 	public String getName() {		
 		return "btn-" + name;
 	}
 	
-	@Override
+	
 	public String getDescription() {
 		return "Trigger the " + name + " button.";
 	}
