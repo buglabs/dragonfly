@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dragonfly UI Plug-in
 Bundle-SymbolicName: com.buglabs.dragonfly.ui; singleton:=true
-Bundle-Version: 2.1.6.qualifier
+Bundle-Version: 2.1.7.qualifier
 Bundle-Activator: com.buglabs.dragonfly.ui.Activator
 Bundle-Vendor: Bug Labs, Inc.
 Bundle-Localization: plugin
