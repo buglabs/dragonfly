@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dragonfly Generators Plug-in
 Bundle-SymbolicName: com.buglabs.dragonfly.generators
-Bundle-Version: 2.1.6.qualifier
+Bundle-Version: 2.1.7.qualifier
 Bundle-Activator: com.buglabs.dragonfly.generators.Activator
 Bundle-Vendor: Bug Labs, Inc.
 Bundle-Localization: plugin
