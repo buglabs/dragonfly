@@ -54,7 +54,7 @@
             extensions="html"
             icon="icons/bugnet.gif"
             id="com.buglabs.dragonfly.ui.editors.BrowserEditor"
-            name="Browser"/>
+            name="Dragonfly Content Browser"/>
       <editor
             class="com.buglabs.dragonfly.ui.editors.PhysicalEditor"
             default="false"
