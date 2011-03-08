@@ -371,24 +371,6 @@
       </launchConfigurationTabGroup>
    </extension>
    <extension
-         point="org.eclipse.debug.ui.launchShortcuts">
-      <shortcut
-            class="com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut"
-            icon="icons/color/virtual_bug.gif"
-            id="com.buglabs.dragonfly.ui.launch.BUGSimulatorLaunchShortCut"
-            label="BUG Simulator"
-            modes="run, debug">
-         <perspective id="com.buglabs.dragonfly.ui.perspective"/>
-         <contextualLaunch>
-            <enablement>
-               <with variable="selection">
-                  <count value="*"/>
-               </with>
-            </enablement>
-         </contextualLaunch>
-      </shortcut>
-   </extension>
-   <extension
          point="org.eclipse.ui.exportWizards">
       <category
             id="com.buglabs.dragonfly.ui.exportWizards"
