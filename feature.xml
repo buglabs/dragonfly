@@ -2,7 +2,7 @@
 <feature
       id="com.buglabs.dragonfly.cdt.feature"
       label="Dragonfly C/C++ SDK"
-      version="2.1.6.qualifier"
+      version="2.1.7.qualifier"
       provider-name="Bug Labs, Inc.">
 
    <description>
