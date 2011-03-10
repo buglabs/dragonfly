@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -21,18 +20,11 @@ import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.module.camera.pub.ICamera2Device;
 import com.buglabs.bug.module.camera.pub.ICamera2ModuleControl;
-import com.buglabs.bug.module.camera.pub.ICameraButtonEventProvider;
-import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.device.ButtonEvent;
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
 import com.buglabs.module.IModuleControl;
 import com.buglabs.module.IModuleLEDController;
 import com.buglabs.module.IModuleProperty;
 import com.buglabs.module.ModuleProperty;
-import com.buglabs.osgi.shell.IShellCommandProvider;
-import com.buglabs.osgi.shell.pub.AbstractCommand;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
@@ -44,8 +36,7 @@ import com.buglabs.services.ws.WSResponse;
  * @author kgilmer
  * 
  */
-@SuppressWarnings("deprecation")
-public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2, PublicWSProvider, IModuleControl, ICameraButtonEventProvider, IShellCommandProvider {
+public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2, PublicWSProvider, IModuleControl {
 	private ServiceRegistration wsRef;
 
 	private int megapixels;
@@ -74,8 +65,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 
 	public static final String MODULE_ID = "CAMERA";
 
-	private List listeners;
-
 	private File fprops;
 
 	private String currentImageFile;
@@ -95,7 +84,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		this.slotId = slotId;
 		this.moduleName = moduleName;
 		this.logService = logService;
-		listeners = new ArrayList();
 	}
 
 	public String getModuleId() {
@@ -140,17 +128,10 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 
 		moduleControl = context.registerService(IModuleControl.class.getName(), this, createBasicServiceProperties());
 		CameraModuleControl cameraModuleControlObj = new CameraModuleControl(slotId, logService);
-		cameraModuleControl = context.registerService(ICameraModuleControl.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
 		camera2ModuleControl = context.registerService(ICamera2ModuleControl.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
 		ledControl = context.registerService(IModuleLEDController.class.getName(), cameraModuleControlObj, createBasicServiceProperties());
 
 		cameraService = context.registerService(ICamera2Device.class.getName(), this, createBasicServiceProperties());
-
-		if (context.getServiceReferences(IButtonEventProvider.class.getName(), "(ButtonsProvided=Camera)") == null) {
-			buttonEventProvider = context.registerService(ICameraButtonEventProvider.class.getName(), this, getButtonServiceProperties(createBasicServiceProperties()));
-		}
-
-		buttonCmdReg = context.registerService(IShellCommandProvider.class.getName(), this, null);
 	}
 
 	public void stop() throws Exception {
@@ -163,18 +144,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		if (buttonEventProvider != null)
 			buttonEventProvider.unregister();
 		wsRef.unregister();
-	}
-
-	private Dictionary getButtonServiceProperties(Dictionary parent) {
-		if (parent == null) {
-			parent = new Hashtable();
-		}
-
-		parent.put("ButtonEventProvider", this.getClass().getName());
-		parent.put("ButtonsProvided", "Camera");
-		parent.put("Emuluated", "true");
-
-		return parent;
 	}
 
 	public PublicWSDefinition discover(int operation) {
@@ -285,25 +254,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 	public String getDescription() {
 		return "Retrieves image from camera module.";
 	}
-
-	public synchronized void addListener(IButtonEventListener listener) {
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
-		}
-	}
-
-	public synchronized void removeListener(IButtonEventListener listener) {
-		listeners.remove(listener);
-	}
-
-	private void fireEvent(ButtonEvent event) {
-		Iterator iter = listeners.iterator();
-
-		while (iter.hasNext()) {
-			IButtonEventListener listener = (IButtonEventListener) iter.next();
-			listener.buttonEvent(event);
-		}
-	}
 	
 	private Properties createBasicServiceProperties() {
 		Properties p = new Properties();
@@ -347,50 +297,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 	public int suspend() throws IOException {
 		throw new IOException("CameraModlet suspend call is not implemented for Virtual BUG");
 	}
-
-	public List getCommands() {
-		List l = new ArrayList();
-
-		l.add(new CameraButtonCommand());
-
-		return l;
-	}
-
-	private class CameraButtonCommand extends AbstractCommand {
-
-		public void execute() throws Exception {
-			String b = (String) arguments.get(0);
-
-			if (b.equals("out")) {
-				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_OUT, 0 , ButtonEvent.BUTTON_CAMERA_ZOOM_OUT));
-			} else if (b.equals("in")) {
-				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_ZOOM_IN, 0 , ButtonEvent.BUTTON_CAMERA_ZOOM_IN));
-			} else if (b.equals("shutter")) {
-				fireEvent(new ButtonEvent(ButtonEvent.BUTTON_CAMERA_SHUTTER, 0, ButtonEvent.BUTTON_CAMERA_SHUTTER));
-			}
-		}
-
-		public String getName() {
-			return "button.camera";
-		}
-
-		
-		public boolean isValid() {
-			return this.arguments.size() == 1;
-		}
-
-		
-		public String getUsage() {
-			return "(shutter | in | out)";
-		}
-
-		
-		public String getDescription() {
-			return "Simulates button presses on camera module.";
-		}
-
-	}
-
 	
 	public int cameraOpen(String media_node, int slot_num, int full_height, int full_width, int preview_height, int preview_width) {
 		return 0;

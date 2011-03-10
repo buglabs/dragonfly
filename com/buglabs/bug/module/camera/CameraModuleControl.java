@@ -5,10 +5,9 @@ import java.io.IOException;
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.module.camera.pub.ICamera2ModuleControl;
-import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.module.IModuleLEDController;
 
-public class CameraModuleControl implements ICameraModuleControl, ICamera2ModuleControl, IModuleLEDController {
+public class CameraModuleControl implements ICamera2ModuleControl, IModuleLEDController {
 
 	private int slotId;
 	private LogService logService;
