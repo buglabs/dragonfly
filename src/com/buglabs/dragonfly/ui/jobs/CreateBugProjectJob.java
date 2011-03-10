@@ -221,6 +221,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		List<String> packages = new ArrayList<String>();
 		manifestContents.append("Import-Package:");
 		manifestContents.append(" org.osgi.framework");
+		boolean orgOsgiServiceLogAdded = false;
 		
 		if (services.size() > 0) {
 			manifestContents.append(",\n");
@@ -236,12 +237,19 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 					packages.add(packagename);
 					manifestContents.append(" " + packagename + ",\n");
 				}
+				if (packagename.equals("org.osgi.service.log")) {
+					orgOsgiServiceLogAdded = true;
+				}
 			}
 			manifestContents.append(" org.osgi.util.tracker,\n");
+			if (!orgOsgiServiceLogAdded) {
+				manifestContents.append(" org.osgi.service.log,\n");
+			}
 			manifestContents.append(" com.buglabs.application,\n");
 			manifestContents.append(" com.buglabs.util\n");
 		} else if (pinfo.getGenerateLogMethod()) {
 			manifestContents.append(",\n");
+			manifestContents.append(" org.osgi.service.log,\n");
 			manifestContents.append(" org.osgi.util.tracker,\n");
 			manifestContents.append(" com.buglabs.util\n");
 		}  else {
