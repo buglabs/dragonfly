@@ -21,10 +21,6 @@ import org.osgi.service.log.LogService;
 import com.buglabs.bug.accelerometer.pub.AccelerometerConfiguration;
 import com.buglabs.bug.accelerometer.pub.AccelerometerSample;
 import com.buglabs.bug.accelerometer.pub.Constants;
-import com.buglabs.bug.accelerometer.pub.IAccelerometerControl;
-import com.buglabs.bug.accelerometer.pub.IAccelerometerRawFeed;
-import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleFeed;
-import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleProvider;
 import com.buglabs.bug.module.lcd.accelerometer.LCDAccelerometerSampleProvider;
 import com.buglabs.bug.module.lcd.pub.ILCDModuleControl;
 import com.buglabs.bug.module.lcd.pub.IML8953Accelerometer;
@@ -38,7 +34,6 @@ import com.buglabs.module.ModuleProperty;
 import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.util.IStreamMultiplexerListener;
 import com.buglabs.util.LogServiceUtil;
-import com.buglabs.util.RemoteOSGiServiceConstants;
 import com.buglabs.util.StreamMultiplexerEvent;
 
 public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IModuleDisplay, IStreamMultiplexerListener, IModuleLEDController, IML8953Accelerometer {
@@ -70,6 +65,7 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 	private final int LCD_WIDTH = 320;
 	private final int LCD_HEIGHT = 200;
 
+	/*
 	private ServiceRegistration accRawFeedRef;
 
 	private ServiceRegistration accSampleProvRef;
@@ -77,7 +73,8 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 	private ServiceRegistration accSampleFeedRef;
 
 	private ServiceRegistration accControlRef;
-
+	*/
+	
 	private ServiceRegistration ledControllerRef;
 
 	private ServiceRegistration moduleControlRef;
@@ -126,11 +123,13 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		
 		acceld = new AccelerometerRawFeed(data,accControl);
 		
+		/*
 		accRawFeedRef = context.registerService(IAccelerometerRawFeed.class.getName(), acceld, createBasicServiceProperties());
 		IAccelerometerSampleProvider asp = new AccelerometerSampleProvider(acceld, accDevice);
 		accSampleProvRef = context.registerService(IAccelerometerSampleProvider.class.getName(), asp, createBasicServiceProperties());
 		accSampleFeedRef = context.registerService(IAccelerometerSampleFeed.class.getName(), acceld, createBasicServiceProperties());
 		accControlRef = context.registerService(IAccelerometerControl.class.getName(), accControl, createBasicServiceProperties());
+		*/
 		
 		LCDAccelerometerSampleProvider accsp = new LCDAccelerometerSampleProvider(acceld);
 		
@@ -180,10 +179,12 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		moduleDisplayServReg.unregister();
 		ledControllerRef.unregister();
 		moduleControlRef.unregister();
+		/*
 		accRawFeedRef.unregister();
 		accSampleProvRef.unregister();
 		accSampleFeedRef.unregister();
 		accControlRef.unregister();	
+		*/
 		
 		// upon stopping of the Modlet all
 		// frames need to disposed of.
