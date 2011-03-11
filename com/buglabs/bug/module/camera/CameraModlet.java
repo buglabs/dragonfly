@@ -74,8 +74,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 
 	private String serviceName = "Picture";
 
-	private ServiceRegistration buttonCmdReg;
-
 	private ServiceRegistration camera2ModuleControl;
 
 	private ServiceRegistration cameraControlWSReg;
@@ -137,7 +135,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 	}
 
 	public void stop() throws Exception {
-		buttonCmdReg.unregister();
 		cameraService.unregister();
 		moduleControl.unregister();
 		cameraModuleControl.unregister();
