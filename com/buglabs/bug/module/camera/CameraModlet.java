@@ -307,11 +307,6 @@ public class CameraModlet implements IModlet, ICamera2Device, PublicWSProvider2,
 		return 0;
 	}
 	
-	public int openDefault() {
-		return 0;
-	}
-
-	
 	public int cameraClose() {
 		return 0;
 	}

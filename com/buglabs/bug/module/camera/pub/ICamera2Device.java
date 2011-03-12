@@ -66,10 +66,10 @@ public interface ICamera2Device {
 	 * (DEFAULT_MEDIA_NODE, -1, 2048, 1536, 320, 240)
 	 * @return 0 if open was successful
 	 */
-	public int openDefault();
+	public int cameraOpenDefault();
 	
 	/**
-	 * Closes the camera - allowing other processes to access it.
+	 * Closes the camera - allowing other processes to abug_camera_openccess it.
 	 * @return 0 if open was successful
 	 */
 	public int cameraClose();
@@ -91,7 +91,9 @@ public interface ICamera2Device {
 	 * Grabs a raw RGB-encoded preview image. 
 	 * bug_camera_open() and bug_camera_start() must already have been called.
 	 * @param pixelBuffer array of size preview width * preview height from
-	 *        the call to bug_camera_open
+	 *        the call to open(). You can create such a buffer with:
+	 *        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+	 *        int [] buf = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	 * @return true if grab succeeded
 	 */
 	public boolean grabPreview(int [] pixelBuffer);
