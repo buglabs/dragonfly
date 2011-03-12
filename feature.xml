@@ -2,7 +2,7 @@
 <feature
       id="com.buglabs.dragonfly.feature"
       label="Dragonfly Java/OSGi SDK"
-      version="2.1.8.qualifier"
+      version="2.1.9.qualifier"
       provider-name="Bug Labs, Inc."
       plugin="com.buglabs.dragonfly.ui">
 
