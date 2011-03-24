@@ -14,11 +14,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 
-public class ExportJarActionDelegate implements IObjectActionDelegate {
+public class ExportJarActionDelegate implements IObjectActionDelegate, IWorkbenchWindowActionDelegate {
 	IProject project;
 
 	public ExportJarActionDelegate() {
@@ -39,6 +41,9 @@ public class ExportJarActionDelegate implements IObjectActionDelegate {
 			Object element = ((IStructuredSelection) selection).getFirstElement();
 			if (element instanceof IProject) {
 				project = (IProject) element;
+			} else {
+				action.setEnabled(false);
+				return;
 			}
 
 			// disable sending to BUG if project has errors or there are no active BUGs
@@ -52,4 +57,11 @@ public class ExportJarActionDelegate implements IObjectActionDelegate {
 		}
 	}
 
+	@Override
+	public void dispose() {		
+	}
+
+	@Override
+	public void init(IWorkbenchWindow window) {		
+	}
 }

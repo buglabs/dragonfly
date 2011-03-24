@@ -348,6 +348,20 @@
                label="Launch BUG Simulator"
                style="push"
                toolbarPath="dragonfly/3/launchVirtualBug"/>
+         <action
+               class="com.buglabs.dragonfly.ui.actions.ExportJarActionDelegate"
+               icon="icons/color/dwnld.gif"
+               id="com.buglabs.dragonfly.ui.actions.downloadToBUG"
+               label="Install on BUG"
+               style="push"
+               toolbarPath="dragonfly/4/installApp"
+               tooltip="Install app on BUG device.">
+            <enablement>
+               <objectClass
+                     name="org.eclipse.core.resources.IProject">
+               </objectClass>
+            </enablement>
+         </action>
       </actionSet>
    </extension>
    <extension
