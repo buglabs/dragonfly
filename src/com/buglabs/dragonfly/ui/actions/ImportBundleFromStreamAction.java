@@ -34,7 +34,6 @@ import com.buglabs.dragonfly.felix.ConciergeUtils;
 import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.util.BugWSHelper;
-import com.buglabs.dragonfly.util.UIUtils;
 
 public class ImportBundleFromStreamAction extends Action {
 	String programName;
@@ -109,18 +108,13 @@ public class ImportBundleFromStreamAction extends Action {
 						List cpl = new ArrayList();
 						IClasspathEntry jre = JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath());
 						IClasspathEntry pde = JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins"));
-						boolean shownMessage = false;
 						
 						for (int i = 0; i < importCP.length; ++i) {
 							String cpName = importCP[i].getPath().toString();
 							
 							if (cpName.equals("com.buglabs.osgi.concierge.jdt.ConciergeClasspathContainerInitializer") || 
 								cpName.equals("com.buglabs.phoneme.personal.PhoneMEClasspathContainer") || 
-								cpName.equals("com.buglabs.osgi.concierge.jdt.OSGiBundleClassPathContainerInitializer")) {
-								if (!shownMessage) {
-									shownMessage = true;
-									UIUtils.giveVisualInformation("This project will be converted to use BUG 2.0 dependencies.");
-								}
+								cpName.equals("com.buglabs.osgi.concierge.jdt.OSGiBundleClassPathContainerInitializer")) {							
 								
 								if (!cpl.contains(jre)) {
 									cpl.add(jre);
