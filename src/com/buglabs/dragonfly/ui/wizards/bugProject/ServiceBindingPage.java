@@ -678,6 +678,7 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 					DragonflyActivator.getDefault().setVirtualBugRemovedByTerminate(false);
 
 					BUGSimulatorLaunchShortCut virtualBugLaunchShortcut = new BUGSimulatorLaunchShortCut();
+					virtualBugLaunchShortcut.setDiscoveryMode(true);
 					IProcess[] processes = null;
 					try {
 						processes = virtualBugLaunchShortcut.launch(ILaunchManager.RUN_MODE).getProcesses();
