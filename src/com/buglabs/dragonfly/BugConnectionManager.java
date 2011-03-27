@@ -401,7 +401,6 @@ public class BugConnectionManager {
 		 * will get called
 		 */
 		public void serviceAdded(final ServiceEvent event) {
-			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "BUG Device Added - " + event.getName()));
 			new Thread(new Runnable() {
 				public void run() {
 					event.getDNS().requestServiceInfo(event.getType(), event.getName());
@@ -413,7 +412,6 @@ public class BugConnectionManager {
 		 * The service is removed, remove from list and send event
 		 */
 		public void serviceRemoved(ServiceEvent event) {
-			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug Device Removed - " + event.getName()));
 			IModelNode bug = getBugConnection(event.getName());
 			if (bug == null)
 				return;
@@ -426,13 +424,10 @@ public class BugConnectionManager {
 		/**
 		 * The service is resolved, add to list and send event
 		 * 
-		 * TODO - remove some of logging
 		 */
 		public void serviceResolved(final ServiceEvent event) {
 			if (event.getInfo() == null)
 				return;
-
-			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug Device Resolved - " + event.getName() + " " + event.getInfo().getHostAddress()));
 
 			URL bugUrl = null;
 			try {
@@ -451,14 +446,12 @@ public class BugConnectionManager {
 				if (bug instanceof DiscoveredBugConnection) {
 					bug.setName(event.getName());
 				}
-				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug w/ same ip as " + event.getName() + " exists: " + bug.getName()));
 			}
 			// else if bug w/ same name get it and set IP address
 			else if (sameNameConnected(event.getName())) {
 				bug = getBugConnection(event.getName());
 				// set IP address
 				bug.setUrl(bugUrl);
-				UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Bug w/ same name as " + event.getName() + " exists, ip: " + bugUrl.getHost()));
 			}
 			// finally it's brand new so create it and add it
 			else {
