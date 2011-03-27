@@ -265,13 +265,6 @@
 
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
-         <view
-               id="com.buglabs.dragonfly.ui.views.SampleView"
-               ratio="0.5"
-               relationship="right"
-               relative="org.eclipse.ui.views.TaskList"/>
-      </perspectiveExtension>
       <perspectiveExtension targetID="com.buglabs.dragonfly.ui.perspective">
          <actionSet id="com.buglabs.dragonfly.ui.actionsets.Dragonfly"/>
          <actionSet id="org.eclipse.debug.ui.launchActionSet"/>
