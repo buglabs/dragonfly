@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.0/notation" xmi:id="_hJ8eAPynEduxCeJYjTQ2Yw" type="Ecore" name="model.ecore_diagram" measurementUnit="Pixel">
-  <styles xmi:type="notation:PageStyle" xmi:id="_hJ9FEPynEduxCeJYjTQ2Yw"/>
-  <styles xmi:type="notation:GuideStyle" xmi:id="_hJ9FEfynEduxCeJYjTQ2Yw"/>
-  <styles xmi:type="notation:DescriptionStyle" xmi:id="_hJ9FEvynEduxCeJYjTQ2Yw"/>
-  <element xmi:type="ecore:EPackage" href="model.ecore#/"/>
-</notation:Diagram>
