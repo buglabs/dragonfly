@@ -28,6 +28,7 @@ import com.buglabs.dragonfly.util.UIUtils;
 public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 
 	protected IProgressMonitor progressMonitor;
+	private boolean discoveryMode = false;
 
 	public void launch(ISelection selection, String mode) {
 		try {
@@ -77,6 +78,14 @@ public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 
 		return null;
 	}
+	
+	public void setDiscoveryMode(boolean discoveryMode) {
+		this.discoveryMode = discoveryMode;
+	}
+	
+	public boolean getDiscoveryMode() {
+		return discoveryMode;
+	}
 
 	private ILaunchConfiguration[] getLaunchConfigurations() {
 		ArrayList result = new ArrayList();
@@ -99,7 +108,8 @@ public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 		ILaunchConfigurationType configType = getLaunchConfigurationType();
 		String computedName = getComputedName("BUG Simulator"); //$NON-NLS-1$
 		ILaunchConfigurationWorkingCopy wc = configType.newInstance(null, computedName);
-		SimulatorLaunchConfigurationInitializer.initializeSystemProperties(wc);
+		SimulatorLaunchConfigurationInitializer.initializeSystemProperties(wc, discoveryMode);
+		
 		config = wc.doSave();
 
 		return config;

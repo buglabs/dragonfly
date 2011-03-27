@@ -19,10 +19,13 @@ import com.buglabs.dragonfly.ui.Activator;
  * 
  */
 public class SimulatorLaunchConfigurationInitializer {
-	public static void initializeSystemProperties(ILaunchConfigurationWorkingCopy wc) throws CoreException {
+	public static void initializeSystemProperties(ILaunchConfigurationWorkingCopy wc, boolean discoveryMode) throws CoreException {
 		Map properties = wc.getAttribute(ConciergeLaunchConfiguration.SYSTEM_PROPERTIES, new HashMap());
 		properties.put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3"); //$NON-NLS-1$
 		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG, "true"); //$NON-NLS-1$
+		
+		if (discoveryMode)
+			properties.put(VirtualBugLaunchConfigurationDelegate.PROP_DISCOVERY_MODE, "true"); //$NON-NLS-1$
 
 		String bundleVersion = (String) Activator.getDefault().getContext().getBundle().getHeaders().get("Bundle-Version"); //$NON-NLS-1$
 		String storageDirectory = "bug-configuration"; //$NON-NLS-1$

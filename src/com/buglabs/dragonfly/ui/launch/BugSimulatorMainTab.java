@@ -374,7 +374,7 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
 		try {
-			SimulatorLaunchConfigurationInitializer.initializeSystemProperties(configuration);
+			SimulatorLaunchConfigurationInitializer.initializeSystemProperties(configuration, false);
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 			UIUtils.handleNonvisualError(e1.getMessage(), e1);
