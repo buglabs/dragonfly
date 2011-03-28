@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2011 Bug Labs, Inc..
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.buglabs.net/legal/epl_license.html
+ *******************************************************************************/
 package com.buglabs.dragonfly.ui.jobs;
 
 import java.io.ByteArrayInputStream;
@@ -84,7 +91,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		jproj.setOption(JavaCore.COMPILER_PB_ASSERT_IDENTIFIER, JavaCore.WARNING);
 		jproj.setOption(JavaCore.COMPILER_PB_ENUM_IDENTIFIER, JavaCore.WARNING);
 
-		if (getBugProjectInfo().getServices().size() > 0) {
+		if (getBugProjectInfo().getOSGiServices().size() > 0 || getBugProjectInfo().getModuleServices().size() > 0) {
 			if (getBugProjectInfo().isGenerateSeparateApplicationClass()) {
 				createApplication(monitor);
 			}
@@ -216,7 +223,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		manifestContents.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY + ": " + APIVersionManager.getSDKAPIVersion() + "\n");
 
 		BugProjectInfo pinfo = getBugProjectInfo();
-		List services = pinfo.getServices();
+		List<String> services = getMergedServices(pinfo);
 
 		List<String> packages = new ArrayList<String>();
 		manifestContents.append("Import-Package:");
@@ -299,22 +306,23 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 	 * getActivatorContents()
 	 */
 	protected StringBuffer getActivatorContents() {
-		if (getBugProjectInfo().getServices().size() > 0) {
+		if (getBugProjectInfo().getOSGiServices().size() > 0 | getBugProjectInfo().getModuleServices().size() > 0) {
 
 			StringBuffer sb = new StringBuffer();
 			String projectName = getBugProjectInfo().getProjectName();
-
+			
 			// last param is
 			// usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap())
 			// for v1.5 of SDK (which will be built against R1.4.3 or greater of
 			// BUG)
 			// Use false otherwise
+
 			sb.append(new Activator().generate(
 					BugProjectUtil.formatProjectNameAsClassName(projectName), 
 					BugProjectUtil.formatProjectNameAsPackage(projectName),
 					getServiceTrackerPackageName(projectName), 
 					usePropertyFilters(getBugProjectInfo().getServicePropertyHelperMap()),
-					getBugProjectInfo().getServices(),
+					getMergedServices(getBugProjectInfo()),
 					getBugProjectInfo().isGenerateSeparateApplicationClass(),
 					convertHelperMapToMapofStrings(getBugProjectInfo().getServicePropertyHelperMap()),
 					getBugProjectInfo()));
@@ -323,6 +331,19 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 
 		GeneratorActivator gen = new GeneratorActivator();
 		return new StringBuffer(gen.generate(projInfo));
+	}
+
+	/**
+	 * @param pinfo
+	 * @return A list of services selected in the osgi and module wizard pages.
+	 */
+	private List<String> getMergedServices(BugProjectInfo pinfo) {
+		List<String> sl = new ArrayList<String>(pinfo.getOSGiServices());
+		for (String svc: pinfo.getModuleServices())
+			if (!sl.contains(svc))
+				sl.add(svc);
+		
+		return sl;
 	}
 
 	/**
@@ -380,7 +401,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		String appContents = new Application().generate(
 				BugProjectUtil.formatProjectNameAsClassName(projectName) + "Application",
 				BugProjectUtil.formatProjectNameAsPackage(projectName), 
-				pinfo.getServices(),
+				getMergedServices(pinfo),
 				pinfo);
 
 		return appContents;

@@ -92,12 +92,12 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author akravets and then... bballantine!
  * 
  */
-public class ServiceBindingPage extends WizardPage implements IDebugEventSetListener {
+public class OSGiServiceBindingPage extends WizardPage implements IDebugEventSetListener {
 
 	// titles, labels, tooltips, etc
 	private static final String BUGLABS_EMULATOR_BUNDLE_NAME = "com.buglabs.bug.emulator";
 	private static final String PAGE_NAME = "CodeGenerationPage";
-	private static final String PAGE_TITLE = "Service Definition";
+	private static final String PAGE_TITLE = "Other OSGi Services";
 	private static final String TARGET_BUG_TITLE = "Target BUG";
 	private static final String TARGET_BUG_INSTRUCTIONS = "Select a BUG from the list below to be used as a target";
 	private static final String START_VIRTUAL_BUG_LABEL = "Start &BUG Simulator";
@@ -121,10 +121,10 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 	private static final String LAUNCH_VBUG_MESSAGE = "Launch BUG Simulator to select services that this project will consume.";
 	private static final String SELECT_BUG_MESSAGE = "Select a BUG from Target BUG List to choose services that this project will consume.";
 	private static final String SVCS_INSTRUCTIONS_TEXT = "Selecting a service will add it to the list of services required to run your project.  Double click the service to add required properties.";
-	private static final int BUGS_VIEWER_HEIGHT_HINT = 66;
-	private static final int SERVICES_GROUP_HEIGHT_HINT = 300;
+	private static final int BUGS_VIEWER_HEIGHT_HINT = 33;
+	private static final int SERVICES_GROUP_HEIGHT_HINT = 240;
 	private static final int SERVICES_GROUP_WIDTH_HINT = 550;
-	private static final int DEPENDENCY_VIEWER_HEIGHT_HINT = 154;
+	private static final int DEPENDENCY_VIEWER_HEIGHT_HINT = 120;
 	private static final int SERVICE_DESCRIPTION_AREA_HEIGHT = 33;
 
 	// UI elements
@@ -146,7 +146,7 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 	private ISelection currentBugSelection = null;
 	private String pageMessage = "";
 
-	protected ServiceBindingPage(BugProjectInfo pinfo) {
+	protected OSGiServiceBindingPage(BugProjectInfo pinfo) {
 		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
 		setMessage(pageMessage);
 		this.pinfo = pinfo;
@@ -480,7 +480,7 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 	private void clearSelections() {
 		// clear pinfo's selections
 		pinfo.getServicePropertyHelperMap().clear();
-		pinfo.getServices().clear();
+		pinfo.getOSGiServices().clear();
 		dependencyViewer.setAllChecked(false);
 	}
 
@@ -492,7 +492,7 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 	 */
 	private boolean reloadListDialog(Shell shell) {
 		// if we switch to another bug, our settings will be lost!
-		if (pinfo.getServices() == null || pinfo.getServices().size() < 1)
+		if (pinfo.getOSGiServices() == null || pinfo.getOSGiServices().size() < 1)
 			return true;
 
 		return MessageDialog.openConfirm(shell, RELOAD_LIST_WARN_TITLE, RELOAD_LIST_WARN_MESSAGE);
@@ -585,7 +585,7 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 			setInputForDependencyViewer();
 			PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 				public void run() {
-					ServiceBindingPage.this.setErrorMessage("An error occured while connecting to " + bugConnection.getName() + ": " + e1.getMessage());
+					OSGiServiceBindingPage.this.setErrorMessage("An error occured while connecting to " + bugConnection.getName() + ": " + e1.getMessage());
 				}
 			});
 		}
@@ -596,8 +596,8 @@ public class ServiceBindingPage extends WizardPage implements IDebugEventSetList
 	 */
 	private void updateModel() {
 		List checkedServices = Arrays.asList(dependencyViewer.getCheckedElements());
-		pinfo.getServices().clear();
-		pinfo.getServices().addAll(checkedServices);
+		pinfo.getOSGiServices().clear();
+		pinfo.getOSGiServices().addAll(checkedServices);
 	}
 
 	/**

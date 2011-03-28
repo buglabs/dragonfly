@@ -25,9 +25,6 @@ import com.buglabs.dragonfly.util.UIUtils;
  * 
  */
 public class NewBugProjectWizard extends Wizard implements INewWizard {
-
-	private NewProjectMainPage pg1;
-
 	private BugProjectInfo pinfo;
 
 	public NewBugProjectWizard() {
@@ -50,9 +47,9 @@ public class NewBugProjectWizard extends Wizard implements INewWizard {
 	}
 
 	public void addPages() {
-		pg1 = new NewProjectMainPage(pinfo);
-		addPage(pg1);
-		addPage(new ServiceBindingPage(pinfo));
+		addPage(new NewProjectMainPage(pinfo));
+		addPage(new BUGModuleServiceBindingPage(pinfo));
+		addPage(new OSGiServiceBindingPage(pinfo));
 		addPage(new CodeGenerationOptionsPage(pinfo));
 	}
 
