@@ -11,9 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.IDebugEventSetListener;
@@ -36,7 +34,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -56,9 +53,10 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEventSetListener {
 
-	private static final String DEFAULT_BUG_MODULE_SERVICES_XML_FILENAME = "/default_services.xml";
-	private static final String PAGE_NAME = "BUGModuleServiceBindingPage";
-	private static final String PAGE_TITLE = "BUG Module Services";
+	private static final String SELECT_BUG_MODULE_SERVICES_THAT_WILL_BE_USED_IN_THE_APPLICATION = "Select BUG module services that will be used in the application."; //$NON-NLS-1$
+	private static final String DEFAULT_BUG_MODULE_SERVICES_XML_FILENAME = "/default_services.xml"; //$NON-NLS-1$
+	private static final String PAGE_NAME = "BUGModuleServiceBindingPage"; //$NON-NLS-1$
+	private static final String PAGE_TITLE = "BUG Module Services"; //$NON-NLS-1$
 	private final BugProjectInfo pinfo;
 	private CheckboxTableViewer serviceViewer;
 	private List<String> pinfoSvcs;
@@ -66,7 +64,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 	
 	protected BUGModuleServiceBindingPage(BugProjectInfo pinfo) {
 		super(PAGE_NAME, PAGE_TITLE, Activator.getDefault().getImageRegistry().getDescriptor(Activator.IMAGE_COLOR_DIALOG_PROJECT));
-		setMessage("Select BUG module services that will be used in the application.");
+		setMessage(SELECT_BUG_MODULE_SERVICES_THAT_WILL_BE_USED_IN_THE_APPLICATION);
 		this.pinfo = pinfo;
 	}
 
@@ -101,7 +99,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 			serviceViewer.setInput(null);
 			serviceViewer.addCheckStateListener(new ICheckStateListener() {
 				
-				@Override
+				
 				public void checkStateChanged(CheckStateChangedEvent event) {
 					BUGModuleService bms = (BUGModuleService) ((IStructuredSelection) serviceViewer.getSelection()).getFirstElement();
 					if (bms != null) {
@@ -117,7 +115,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 			
 			moduleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 				
-				@Override
+				
 				public void selectionChanged(SelectionChangedEvent event) {					
 					BUGModule bm = (BUGModule) ((IStructuredSelection) moduleViewer.getSelection()).getFirstElement();
 					serviceViewer.setInput(bm);
@@ -131,7 +129,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 			
 			serviceViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 				
-				@Override
+				
 				public void selectionChanged(SelectionChangedEvent event) {
 					BUGModuleService bms = (BUGModuleService) ((IStructuredSelection) serviceViewer.getSelection()).getFirstElement();
 					if (bms != null) {
@@ -225,15 +223,15 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 	
 	private class BUGStaticServiceContentProvider implements IStructuredContentProvider {
 
-		@Override
+		
 		public void dispose() {			
 		}
 
-		@Override
+		
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {			
 		}
 
-		@Override
+		
 		public Object[] getElements(Object inputElement) {		
 			List<BUGModule> bml = (List<BUGModule>) inputElement;
 			
@@ -247,29 +245,29 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 		private ImageRegistry ir =  Activator.getDefault().getImageRegistry();
 		private Display display = PlatformUI.getWorkbench().getDisplay();
 		
-		@Override
+		
 		public void addListener(ILabelProviderListener listener) {			
 		}
 
-		@Override
+		
 		public void dispose() {
 			// TODO Auto-generated method stub
 			
 		}
 
-		@Override
+		
 		public boolean isLabelProperty(Object element, String property) {
 			// TODO Auto-generated method stub
 			return false;
 		}
 
-		@Override
+		
 		public void removeListener(ILabelProviderListener listener) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		@Override
+		
 		public Image getColumnImage(Object element, int columnIndex) {				
 			BUGModule bm = (BUGModule) element;
 			
@@ -296,7 +294,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 			return modImage;
 		}
 
-		@Override
+		
 		public String getColumnText(Object element, int columnIndex) {
 			BUGModule bm = (BUGModule) element;
 			
@@ -307,15 +305,15 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 	
 	private class BUGServiceContentProvider implements IStructuredContentProvider {
 
-		@Override
+		
 		public void dispose() {			
 		}
 
-		@Override
+		
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {			
 		}
 
-		@Override
+		
 		public Object[] getElements(Object inputElement) {		
 			BUGModule bm = (BUGModule) inputElement;
 			
@@ -326,51 +324,27 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 	
 	private class BUGServiceLabelProvider implements ITableLabelProvider {
 		
-		private ImageRegistry ir = Activator.getDefault().getImageRegistry();
-		private Display display = PlatformUI.getWorkbench().getDisplay();
-		
-		@Override
 		public void addListener(ILabelProviderListener listener) {			
 		}
 
-		@Override
+		
 		public void dispose() {			
 		}
 
-		@Override
+		
 		public boolean isLabelProperty(Object element, String property) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-			
+		
+		public void removeListener(ILabelProviderListener listener) {			
 		}
 
-		@Override
+		
 		public Image getColumnImage(Object element, int columnIndex) {		
-			return null;
-			/*BUGModuleService bms = (BUGModuleService) element;
-			
-			Image modImage = ir.get("/icons/m_generic.gif");
-			
-			if (modImage == null) {
-				try {
-					InputStream is = Activator.getDefault().getBundle().getEntry("/icons/m_generic.gif").openStream();
-					modImage = new Image(display, is);
-					
-					ir.put("/icons/m_generic.gif", modImage);
-				} catch (IOException e) {
-					UIUtils.handleNonvisualError("Unable to load image for module.", e);					
-				}
-			}
-			
-			return modImage;*/
+			return null;		
 		}
 
-		@Override
 		public String getColumnText(Object element, int columnIndex) {
 			BUGModuleService bm = (BUGModuleService) element;
 			
