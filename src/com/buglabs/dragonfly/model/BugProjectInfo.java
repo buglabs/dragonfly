@@ -1,9 +1,9 @@
 package com.buglabs.dragonfly.model;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class BugProjectInfo {
 	private String projectName;
@@ -15,7 +15,8 @@ public class BugProjectInfo {
 	private boolean generateActivator;
 	boolean generateSeparateAppClass;
 
-	private Vector services;
+	private List<String> osgiServices;
+	private List<String> moduleServices;
 	private Hashtable<String, List<ServicePropertyHelper>> service_property_helpers;
 	private String bundleDescription;
 	private boolean generateLogMethod;
@@ -31,12 +32,17 @@ public class BugProjectInfo {
 		executionEnvironment = "";
 		
 		generateSeparateAppClass = false;
-		services = new Vector();
+		osgiServices = new ArrayList<String>();
+		moduleServices = new ArrayList<String>();
 		service_property_helpers = new Hashtable<String, List<ServicePropertyHelper>>();
 	}
 
-	public Vector getServices() {
-		return services;
+	public List<String> getOSGiServices() {
+		return osgiServices;
+	}
+	
+	public List<String> getModuleServices() {
+		return moduleServices;
 	}
 
 	public Map<String, List<ServicePropertyHelper>> getServicePropertyHelperMap() {
@@ -51,7 +57,6 @@ public class BugProjectInfo {
 		this.generateSeparateAppClass = shouldGenerateApplicationLoop;
 	}
 	
-
 	public String getProjectName() {
 		return projectName;
 	}

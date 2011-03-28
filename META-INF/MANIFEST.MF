@@ -18,6 +18,7 @@ Export-Package: com.buglabs.dragonfly,
  com.buglabs.dragonfly.exception,
  com.buglabs.dragonfly.jdt,
  com.buglabs.dragonfly.model,
+ com.buglabs.dragonfly.model.project.wizard,
  com.buglabs.dragonfly.rest,
  com.buglabs.dragonfly.util,
  com.buglabs.dragonfly.validator
