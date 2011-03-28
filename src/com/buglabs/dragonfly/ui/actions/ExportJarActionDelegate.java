@@ -57,11 +57,9 @@ public class ExportJarActionDelegate implements IObjectActionDelegate, IWorkbenc
 		}
 	}
 
-	@Override
 	public void dispose() {		
 	}
 
-	@Override
 	public void init(IWorkbenchWindow window) {		
 	}
 }
