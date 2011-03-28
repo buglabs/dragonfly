@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ISaveParticipant;
@@ -36,6 +37,7 @@ import org.osgi.framework.BundleContext;
 
 import com.buglabs.dragonfly.model.AuthenticationData;
 import com.buglabs.dragonfly.model.Bug;
+import com.buglabs.dragonfly.model.FolderNode;
 import com.buglabs.dragonfly.model.IModelChangeListener;
 import com.buglabs.dragonfly.model.IModelContainer;
 import com.buglabs.dragonfly.model.MyLibraryNode;
@@ -50,9 +52,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class DragonflyActivator extends AbstractUIPlugin implements IModelContainer {
 	public static final int MODEL_CHANGE_EVENT_LISTEN_PORT = 8990;
 
-	private List bugList; // stores the list of bugs (model)
+	private List<FolderNode> bugList; // stores the list of bugs (model)
 
-	private List modelListeners;
+	private List<IModelChangeListener> modelListeners;
 
 	public File jarFolder;
 
@@ -100,8 +102,8 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 
 	public DragonflyActivator() {
 		plugin = this;
-		bugList = new ArrayList();
-		modelListeners = new ArrayList();
+		bugList = new ArrayList<FolderNode>();
+		modelListeners = new CopyOnWriteArrayList<IModelChangeListener>();
 		authData = new AuthenticationData();
 		try {
 			resourceBundle = ResourceBundle.getBundle("com.buglabs.dragonfly.pluginProperties"); //$NON-NLS-1$
@@ -165,12 +167,9 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	}
 
 	public void fireModelChangeEvent(PropertyChangeEvent event) {
-		synchronized (modelListeners) {
-			for (Iterator i = modelListeners.iterator(); i.hasNext();) {
-				IModelChangeListener l = (IModelChangeListener) i.next();
-				l.propertyChange(event);
-			}
-		}
+		for (IModelChangeListener listener: modelListeners) {
+			listener.propertyChange(event);
+		}		
 	}
 
 	public Object getModel() {
