@@ -1,7 +1,7 @@
 <modules>
 	<module name="GPS">
 		<description>The GPS module provides location information.</description>
-		<imageFile>/images/Module.png</imageFile>
+		<imageFile>/images/buglocate.jpg</imageFile>
 		<services>
 			<service shortName="Position Provider" javaName="com.buglabs.bug.module.gps.pub.IPositionProvider" description="A service that returns the current position as detected by the GPS device."></service>
 			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
@@ -14,7 +14,7 @@
 	
 	<module name="LCD">
 		<description>The LCD module provides a QVGA touchscreen.</description>
-		<imageFile>/images/Module.png</imageFile>
+		<imageFile>/images/bugview.jpg</imageFile>
 		<services>
 			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
 			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
@@ -24,7 +24,7 @@
 	</module>
 	<module name="von Hippel">
 		<description>Allows BUG to integrate with other electronics.</description>
-		<imageFile>/images/Module.png</imageFile>
+		<imageFile>/images/vonhippel.jpg</imageFile>
 		<services>
 			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
 			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
@@ -34,7 +34,7 @@
 	</module>
 	<module name="Camera">
 		<description>Provides a camera to BUG.</description>
-		<imageFile>/images/Module.png</imageFile>
+		<imageFile>/images/bugcamera.jpg</imageFile>
 		<services>
 			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
 			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
@@ -45,7 +45,7 @@
 	</module>
 	<module name="Video">
 		<description>Allows BUG to be connected to monitor for video output.</description>
-		<imageFile>/images/Module.png</imageFile>
+		<imageFile>/images/bugvideo.jpg</imageFile>
 		<services>
 			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
 			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
