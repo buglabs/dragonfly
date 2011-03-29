@@ -80,7 +80,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 			msComp.setLayout(new GridLayout(2, false));
 			msComp.setLayoutData(new GridData(GridData.FILL_BOTH));
 			
-			final TableViewer moduleViewer = new TableViewer(msComp, SWT.BORDER);
+			final TableViewer moduleViewer = new TableViewer(msComp, SWT.BORDER | SWT.V_SCROLL);
 			moduleViewer.getTable().setLayoutData(getModuleViewerLayoutData());
 			moduleViewer.setContentProvider(new BUGStaticServiceContentProvider());
 			moduleViewer.setLabelProvider(new BUGStaticServiceLabelProvider());
@@ -113,9 +113,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 			serviceDescText.setLayoutData(getDescriptionLabelLayoutData());
 			serviceDescText.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
 			
-			moduleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-				
-				
+			moduleViewer.addSelectionChangedListener(new ISelectionChangedListener() {		
 				public void selectionChanged(SelectionChangedEvent event) {					
 					BUGModule bm = (BUGModule) ((IStructuredSelection) moduleViewer.getSelection()).getFirstElement();
 					serviceViewer.setInput(bm);
@@ -179,8 +177,9 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 
 
 	private Object getModuleViewerLayoutData() {
-		GridData gd = new GridData(GridData.FILL_VERTICAL);
-		gd.widthHint = 180;
+		GridData gd = new GridData();
+		gd.widthHint = 195;
+		gd.heightHint = 400;
 		
 		return gd;
 	}
@@ -282,7 +281,7 @@ public class BUGModuleServiceBindingPage  extends WizardPage implements IDebugEv
 				    final int height = modImage.getBounds().height;
 				    
 					Image scaledImage = new Image(display,
-							modImage.getImageData().scaledTo((int)(width*0.38),(int)(height*0.38)));
+							modImage.getImageData().scaledTo((int)(width*0.32),(int)(height*0.32)));
 					ir.put(bm.getImageFilename(), scaledImage);
 					modImage.dispose();
 					modImage = scaledImage;
