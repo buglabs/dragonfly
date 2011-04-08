@@ -1,56 +1,45 @@
 <modules>
-	<module name="GPS">
-		<description>The GPS module provides location information.</description>
+	<module name="locate">
+		<description>BUGlocate is a GPS reciever</description>
 		<imageFile>/images/buglocate.jpg</imageFile>
 		<services>
-			<service shortName="Position Provider" javaName="com.buglabs.bug.module.gps.pub.IPositionProvider" description="A service that returns the current position as detected by the GPS device."></service>
-			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
-			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
-			<service shortName="NMEA Sentence Provider" javaName="com.buglabs.bug.module.gps.pub.INMEASentenceProvider" description="A service that provides NMEA sentences from a GPS device."></service>
-			<service shortName="NMEA Data Provider" javaName="com.buglabs.bug.module.gps.pub.INMEARawFeed" description="A service that streams raw NMEA data from a GPS device."></service>
-			<service shortName="GPS Module Control" javaName="com.buglabs.bug.module.gps.pub.IGPSModuleControl" description="Controls module functions of GPS module."></service>			
+			<service shortName="Position Service" javaName="com.buglabs.bug.module.gps.pub.IPositionProvider" description="Get the current position reported by the GPS module"></service>
+			<service shortName="GPS Control" javaName="com.buglabs.bug.module.gps.pub.IGPSModuleControl" description="Control which antenna to use, get basic GPS status information and interface with the LEDs on the BUGlocate."></service>
+			<service shortName="NMEA Sentence Provider" javaName="com.buglabs.bug.module.gps.pub.INMEASentenceProvider" description="Convert BUGlocate data to NMEA sentences"></service>
+			<service shortName="NMEA Data Provider" javaName="com.buglabs.bug.module.gps.pub.INMEARawFeed" description="Stream raw NMEA data from BUGlocate"></service>
 		</services>
 	</module>
 	
-	<module name="LCD">
-		<description>The LCD module provides a QVGA touchscreen.</description>
+	<module name="view">
+		<description>BUGview is a touch-sensitive LCD screen with an accelerometer</description>
 		<imageFile>/images/bugview.jpg</imageFile>
 		<services>
-			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
-			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
-			<service shortName="LCD Module Control" javaName="com.buglabs.bug.module.lcd.pub.ILCDModuleControl" description="A service to control the LCD module."></service>
-			<service shortName="Accelerometer Service" javaName="com.buglabs.bug.module.lcd.pub.IML8953Accelerometer" description="Access the accelerometer from this service."></service>
+			<service shortName="Accelerometer Service" javaName="com.buglabs.bug.module.lcd.pub.IML8953Accelerometer" description="Read the X, Y and/or Z axis acelleration"></service>
+			<service shortName="LCD Control" javaName="com.buglabs.bug.module.lcd.pub.ILCDModuleControl" description="Control the backlight brightness and enable or disable the BUGview"></service>
 		</services>
 	</module>
 	<module name="von Hippel">
-		<description>Allows BUG to integrate with other electronics.</description>
+		<description>BUGvonHippel is a breakout module that can connect with sensors, wires, and USB devices</description>
 		<imageFile>/images/vonhippel.jpg</imageFile>
 		<services>
-			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
-			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
-			<service shortName="von Hippel Module Control" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl" description="Access von Hippel functionality from this service."></service>
-			<service shortName="von Hippel Serial Port" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort" description="Connect to von Hippel serial port."></service>
+			<service shortName="von Hippel Serial Port" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort" description="Connect to the von Hippel serial port"></service>
+			<service shortName="von Hippel Control" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl" description="Control LEDs, set output and input pins, read values and convert using ADC and DAC and more"></service>
 		</services>
 	</module>
-	<module name="Camera">
-		<description>Provides a camera to BUG.</description>
+	<module name="camera">
+		<description>BUGcamera is a 3-megapixel still camera with an LED flash</description>
 		<imageFile>/images/bugcamera.jpg</imageFile>
 		<services>
-			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
-			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
-			<service shortName="Camera Module Control" javaName="com.buglabs.bug.module.camera.pub.ICameraModuleControl" description="Control the camera module from this service."></service>
-			<service shortName="Camera version 2 Module Control" javaName="com.buglabs.bug.module.camera.pub.ICamera2ModuleControl" description="Control the camera module from this service."></service>
-			<service shortName="Camera Service" javaName="com.buglabs.bug.module.camera.pub.ICamera2Device" description="Access camera functionality."></service>
+			<service shortName="Camera Service" javaName="com.buglabs.bug.module.camera.pub.ICamera2Device" description="Take pictures"></service>
+			<service shortName="Camera Control" javaName="com.buglabs.bug.module.camera.pub.ICamera2ModuleControl" description="Control the exposure, orientation, flash, LEDs and special effects"></service>
 		</services>
 	</module>
-	<module name="Video">
-		<description>Allows BUG to be connected to monitor for video output.</description>
+	<module name="video">
+		<description>BUGvideo is a VGA and HDMI output that supports 720p video</description>
 		<imageFile>/images/bugvideo.jpg</imageFile>
 		<services>
-			<service shortName="Module Control" javaName="com.buglabs.module.IModuleControl" description="A service for common module control."></service>
-			<service shortName="Module LED Control" javaName="com.buglabs.module.IModuleLEDController" description="A service to control module LEDs."></service>
-			<service shortName="Video Module Control" javaName="com.buglabs.bug.module.video.pub.IVideoModuleControl" description="Control the video module from this service."></service>
-			<service shortName="Display Service" javaName="com.buglabs.bug.module.lcd.pub.IModuleDisplay" description="Access the module display functionality."></service>
+			<service shortName="Display Service" javaName="com.buglabs.bug.module.lcd.pub.IModuleDisplay" description="Get the frame to change the display"></service>
+			<service shortName="Video Control" javaName="com.buglabs.bug.module.video.pub.IVideoModuleControl" description="Get the current resolution, switch between VGA and DVI"></service>
 		</services>
 	</module>
 </modules>
