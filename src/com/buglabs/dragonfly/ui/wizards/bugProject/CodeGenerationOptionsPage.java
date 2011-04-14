@@ -68,6 +68,7 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		btnAddLogCode.setLayoutData(gd);
 		btnAddLogCode.setText("Generate static logging method in Activator.");
+		btnAddLogCode.setSelection(true);
 		btnAddLogCode.addSelectionListener(new SelectionListener() {
 			
 			
@@ -133,6 +134,7 @@ public class CodeGenerationOptionsPage  extends WizardPage implements IDebugEven
 		genAppGD.heightHint = 30;
 		btnSeparateApplicationClass.setLayoutData(genAppGD);
 		btnSeparateApplicationClass.setText("Generate separate application class.");
+		btnSeparateApplicationClass.setSelection(true);
 
 		btnSeparateApplicationClass.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {/*unused here*/
