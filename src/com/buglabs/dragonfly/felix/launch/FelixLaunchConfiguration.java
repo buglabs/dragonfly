@@ -50,13 +50,14 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-3.0.9.jar";
 	private IPath launchDir;
 	private boolean debug = false;
-	
-	public FelixLaunchConfiguration() {
-		launchDir = Activator.getDefault().getStateLocation();
-	}
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		try {
+			launchDir = getLaunchDir();
+			if (!launchDir.toFile().exists())
+				if (!launchDir.toFile().mkdirs())
+					throw new IOException("Cannot create directory: " + launchDir.toFile());
+			
 			URL relativeURL = Activator.getDefault().getBundle().getEntry(File.separator);
 			URL bundleURL = FileLocator.toFileURL(Activator.getDefault().getBundle().getEntry(File.separator + REL_BUNDLE_DIR));
 			URL localURL = FileLocator.toFileURL(relativeURL);
@@ -76,7 +77,9 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			debugPrint("Felix configuration: " + confFile.toString());
 			
 			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, REL_BUNDLE_DIR, monitor);
-			copyBundles(Path.fromPortableString(getSourceDir()), launchDir, REL_BUNDLE_DIR, monitor);
+			
+			if (getSourceDir() != null)
+				copyBundles(Path.fromPortableString(getSourceDir()), launchDir, REL_BUNDLE_DIR, monitor);
 			
 			if (getCompiledWorkspaceBundleDir() != null) {
 				copyBundles(Path.fromPortableString(getCompiledWorkspaceBundleDir()), launchDir, REL_APP_DIR ,monitor);
@@ -96,8 +99,12 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 			IVMRunner vmRunner = vmInstall.getVMRunner(mode);
 			vmRunner.run(vmconfig, launch, monitor);
 		} catch (Exception e) {
-			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to launch BUG Simulator", e));
+			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to launch Felix.", e));
 		} 
+	}
+
+	protected IPath getLaunchDir() {
+		return Activator.getDefault().getStateLocation().append("bugSimulator");
 	}
 
 	/**

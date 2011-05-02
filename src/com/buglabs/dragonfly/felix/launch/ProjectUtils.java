@@ -75,7 +75,7 @@ public class ProjectUtils {
 		return file;
 	}
 
-	public static File exporToJar(File location, IProject project, boolean deleteExisting) throws CoreException {
+	public static File exporToJar(File location, IProject project, boolean deleteExisting, boolean rootClasses) throws CoreException {
 		List jarContents = getJarContents(project);
 		IFile ManifestFile = project.getFile("META-INF/MANIFEST.MF");
 
@@ -114,8 +114,15 @@ public class ProjectUtils {
 			Object obj = iter.next();
 			if (obj instanceof IFile) {
 				IFile f = (IFile) obj;
-				if (!f.equals(ManifestFile)) {
-					jw.write(f, f.getProjectRelativePath());
+				if (!f.equals(ManifestFile)) {				
+					if (rootClasses) {
+						if (f.getName().endsWith(".class")) {
+							//Remove the /bin folder from the classpath
+							jw.write(f, f.getProjectRelativePath().removeFirstSegments(1));
+						} else {
+							jw.write(f, f.getProjectRelativePath());
+						}
+					}
 				}
 			}
 		}
