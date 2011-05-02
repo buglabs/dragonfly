@@ -154,7 +154,7 @@ public class BUGSupportInfoManager {
 		}
 
 		if (info.getExecutionEnvironment() == null)
-			info.setExecutionEnvironment(DEFAULT_EXECUTION_ENVIRONMENT);
+			info.setExecutionEnvironment(DEFAULT_EXECUTION_ENV);
 
 		// Get Bundle List
 		List<String> bundles = new ArrayList<String>();
