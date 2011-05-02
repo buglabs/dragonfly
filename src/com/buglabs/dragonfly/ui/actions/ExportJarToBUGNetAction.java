@@ -72,7 +72,7 @@ public class ExportJarToBUGNetAction extends Action {
 		File jarFile = null;
 
 		try {
-			jarFile = ProjectUtils.exporToJar(location, project, true);
+			jarFile = ProjectUtils.exporToJar(location, project, true, false);
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to export project as jar file.", e);
 			return;

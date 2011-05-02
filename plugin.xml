@@ -366,6 +366,15 @@
             name="BUG Simulator"
             sourceLocatorId="com.buglabs.dragonfly.launch.BugKernelSourceLocator"
             sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"/>
+      <launchConfigurationType
+            delegate="com.buglabs.dragonfly.launch.felix.FelixLaunchConfigurationDelegate"
+            id="com.buglabs.dragonfly.ui.launchConfigurationType2"
+            modes="run, debug"
+            name="Felix OSGi Framework"
+            public="true"
+            sourceLocatorId="com.buglabs.dragonfly.ui.felixSourceLocator"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+      </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -375,6 +384,11 @@
             type="com.buglabs.dragonfly.launch.virtualBug">
          <launchMode mode="debug"/>
          <launchMode mode="run"/>
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="com.buglabs.dragonfly.ui.launch.felix.FelixLaunchTabGroup"
+            id="com.buglabs.dragonfly.ui.launch.FelixLaunchTabGroup"
+            type="com.buglabs.dragonfly.ui.launchConfigurationType2">
       </launchConfigurationTabGroup>
    </extension>
    <extension
@@ -395,6 +409,11 @@
             class="com.buglabs.dragonfly.launch.BugKernelSourceLocator"
             id="com.buglabs.dragonfly.launch.BugKernelSourceLocator"
             name="BugKernel Source Locator"/>
+      <sourceLocator
+            class="com.buglabs.dragonfly.launch.felix.FelixBundleSourceLocator"
+            id="com.buglabs.dragonfly.ui.felixSourceLocator"
+            name="Felix Bundle Source Locator">
+      </sourceLocator>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">

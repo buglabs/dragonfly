@@ -401,7 +401,7 @@ public class ConciergeLaunchConfiguration extends LaunchConfigurationDelegate im
 			IProject proj = (IProject) projIter.next();
 
 			if (workspaceBundles.contains(proj.getName())) {
-				File jar = ProjectUtils.exporToJar(bundlesLoc, proj, false);
+				File jar = ProjectUtils.exporToJar(bundlesLoc, proj, false, false);
 
 				// do not add project to export list if exporting to jar failed
 				if (jar != null) {

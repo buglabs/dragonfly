@@ -363,7 +363,7 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public File exportToJar(IProject proj) throws CoreException {
-		return ProjectUtils.exporToJar(new File(getJarLocation()), proj, false);
+		return ProjectUtils.exporToJar(new File(getJarLocation()), proj, false, false);
 	}
 
 	public String getJarLocation() {

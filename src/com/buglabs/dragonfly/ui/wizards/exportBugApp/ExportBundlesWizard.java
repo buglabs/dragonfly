@@ -114,7 +114,7 @@ public class ExportBundlesWizard extends Wizard implements IExportWizard {
 		while (projectsIter.hasNext()) {
 			IProject proj = (IProject) projectsIter.next();
 			try {
-				File exporToJar = ProjectUtils.exporToJar(loc, proj, false);
+				File exporToJar = ProjectUtils.exporToJar(loc, proj, false, false);
 
 				if (exporToJar == null)
 					return false;

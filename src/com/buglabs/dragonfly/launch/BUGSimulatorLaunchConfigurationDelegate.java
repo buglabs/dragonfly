@@ -171,7 +171,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		
 		for (IProject project: children) {
 			try {
-				ProjectUtils.exporToJar(file, project, true);
+				ProjectUtils.exporToJar(file, project, true, false);
 			} catch (CoreException e) {
 				UIUtils.handleNonvisualError("Unable to compile project " + project, e);
 			}
