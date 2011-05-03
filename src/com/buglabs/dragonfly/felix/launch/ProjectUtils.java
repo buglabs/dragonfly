@@ -47,6 +47,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -107,8 +108,12 @@ public class ProjectUtils {
 		jpd.setExportErrors(true);
 		jpd.setExportWarnings(true);
 
+		if (!jpd.isValid())
+			return null;
+		
 		JarWriter3 jw = new JarWriter3(jpd, null);
-
+		
+			
 		Iterator iter = jarContents.iterator();
 		while (iter.hasNext()) {
 			Object obj = iter.next();
