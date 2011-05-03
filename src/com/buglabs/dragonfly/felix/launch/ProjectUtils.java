@@ -31,9 +31,11 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.jar.JarFile;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
@@ -49,6 +51,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -90,11 +93,6 @@ public class ProjectUtils {
 			return null;
 		}
 		
-		IJavaProject jproject = JavaCore.create(project);
-		if (jproject != null && rootClasses) {
-			jproject.setOutputLocation(project.getFullPath(), new NullProgressMonitor());
-		}
-
 		File jar = new File(location, projectJarName);
 		
 		if (jar.exists() && deleteExisting) {
@@ -122,14 +120,24 @@ public class ProjectUtils {
 		
 		JarWriter3 jw = new JarWriter3(jpd, null);
 		
-			
+		IJavaProject jproject = JavaCore.create(project);
+		
 		Iterator iter = jarContents.iterator();
 		while (iter.hasNext()) {
 			Object obj = iter.next();
 			if (obj instanceof IFile) {
 				IFile f = (IFile) obj;
 				if (!f.equals(ManifestFile)) {		
-					jw.write(f, f.getProjectRelativePath());					
+					jw.write(f, f.getProjectRelativePath());
+					
+					if (rootClasses) {						
+						IPath rootPath = getRootPath(jproject.getOutputLocation(), f.getFullPath());
+						try {
+							jw.write(f, rootPath);
+						} catch (CoreException e) {
+							// ignore
+						}
+					}
 				}
 			}
 		}
@@ -137,6 +145,12 @@ public class ProjectUtils {
 		jw.close();
 
 		return jar;
+	}
+
+	private static IPath getRootPath(IPath outputLocation, IPath projectRelativePath) {
+		int diff = Math.abs(outputLocation.segmentCount() - projectRelativePath.segmentCount());
+		
+		return projectRelativePath.removeFirstSegments(diff);
 	}
 
 	public static String getProjectJarName(IProject project) throws CoreException {
