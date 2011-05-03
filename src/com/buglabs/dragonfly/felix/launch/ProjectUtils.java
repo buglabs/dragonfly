@@ -52,6 +52,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.core.JavaProject;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.ui.jarpackager.JarPackageData;
 import org.eclipse.jdt.ui.jarpackager.JarWriter3;
 import org.eclipse.ui.dialogs.IOverwriteQuery;
@@ -84,6 +88,11 @@ public class ProjectUtils {
 
 		if (projectJarName == null) {
 			return null;
+		}
+		
+		IJavaProject jproject = JavaCore.create(project);
+		if (jproject != null && rootClasses) {
+			jproject.setOutputLocation(project.getFullPath(), new NullProgressMonitor());
 		}
 
 		File jar = new File(location, projectJarName);
@@ -119,15 +128,8 @@ public class ProjectUtils {
 			Object obj = iter.next();
 			if (obj instanceof IFile) {
 				IFile f = (IFile) obj;
-				if (!f.equals(ManifestFile)) {				
-					if (rootClasses) {
-						if (f.getName().endsWith(".class")) {
-							//Remove the /bin folder from the classpath
-							jw.write(f, f.getProjectRelativePath().removeFirstSegments(1));
-						} else {
-							jw.write(f, f.getProjectRelativePath());
-						}
-					}
+				if (!f.equals(ManifestFile)) {		
+					jw.write(f, f.getProjectRelativePath());					
 				}
 			}
 		}
