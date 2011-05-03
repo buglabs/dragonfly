@@ -47,7 +47,8 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	private static final String FELIX_MAIN_CLASS = "org.apache.felix.main.Main";
 	private static final String REL_BUNDLE_DIR = "bundle";
 	private static final String REL_APP_DIR = "apps";
-	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-3.0.9.jar";
+	private static final String FELIX_VERSION = "3.2.1";
+	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-" + FELIX_VERSION + ".jar";
 	private IPath launchDir;
 	private boolean debug = false;
 
