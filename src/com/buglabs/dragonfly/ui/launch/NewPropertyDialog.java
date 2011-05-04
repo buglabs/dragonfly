@@ -53,7 +53,7 @@ public class NewPropertyDialog extends Dialog {
 
 	private String value;
 
-	protected NewPropertyDialog(Shell parentShell) {
+	public NewPropertyDialog(Shell parentShell) {
 		super(parentShell);
 
 		setShellStyle(getShellStyle() | SWT.RESIZE);

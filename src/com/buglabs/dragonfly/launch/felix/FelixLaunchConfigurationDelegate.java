@@ -40,6 +40,7 @@ import com.buglabs.dragonfly.BugConnectionManager;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
 import com.buglabs.dragonfly.felix.launch.ProjectUtils;
+import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.launch.BugSimulatorMainTab;
@@ -48,8 +49,8 @@ import com.buglabs.dragonfly.ui.properties.BUGAppPropertyPage;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
- * A launch configuration for the Apache Felix OSGi framework. Relies on FelixLaunchConfiguration
- * to provide OSGi framework jars.
+ * A launch configuration for the Apache Felix OSGi framework. Relies on
+ * FelixLaunchConfiguration to provide OSGi framework jars.
  * 
  * @author kgilmer
  * 
@@ -67,18 +68,18 @@ public class FelixLaunchConfigurationDelegate extends FelixLaunchConfiguration {
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
 		this.configuration = configuration;
-	
+
 		try {
 			buildPDEProjects();
-	
+
 			super.launch(configuration, mode, launch, monitor);
-	
+
 			deleteBUGProjects();
 		} catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Unable to launch Felix.", e));
 		}
 	}
-	
+
 	protected IPath getLaunchDir() {
 		return Activator.getDefault().getStateLocation().append("felix");
 	}
@@ -179,17 +180,31 @@ public class FelixLaunchConfigurationDelegate extends FelixLaunchConfiguration {
 
 	@Override
 	protected List<File> getOtherLaunchBundles() throws Exception {
-		//String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
+		String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
 
 		List<File> l = new ArrayList<File>();
 
-		/*if (rawList != null && rawList.trim().length() > 0) {
+		if (rawList != null && rawList.trim().length() > 0) {
 			l = BugSimulatorMainTab.delimitedStringToList(rawList);
 		}
-*/
+
 		return l;
 	}
 
+	private static String getSystemProperty(ILaunchConfiguration configuration,
+			String prop, String defaultValue) throws CoreException {
+
+		Map properties = configuration
+				.getAttribute(
+						BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES,
+						new HashMap());
+		String val = (String) properties.get(prop);
+
+		if (val != null)
+			return val;
+		return defaultValue;
+	}
+	
 	@Override
 	public String getCompiledWorkspaceBundleDir() {
 		if (!hasWorkspaceBundles) {

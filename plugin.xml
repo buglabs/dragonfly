@@ -368,7 +368,7 @@
             sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"/>
       <launchConfigurationType
             delegate="com.buglabs.dragonfly.launch.felix.FelixLaunchConfigurationDelegate"
-            id="com.buglabs.dragonfly.ui.launchConfigurationType2"
+            id="com.buglabs.dragonfly.ui.FelixLaunchConfigurationType"
             modes="run, debug"
             name="Felix OSGi Framework"
             public="true"
@@ -388,7 +388,7 @@
       <launchConfigurationTabGroup
             class="com.buglabs.dragonfly.ui.launch.felix.FelixLaunchTabGroup"
             id="com.buglabs.dragonfly.ui.launch.FelixLaunchTabGroup"
-            type="com.buglabs.dragonfly.ui.launchConfigurationType2">
+            type="com.buglabs.dragonfly.ui.FelixLaunchConfigurationType">
       </launchConfigurationTabGroup>
    </extension>
    <extension
@@ -421,6 +421,11 @@
             configTypeID="com.buglabs.dragonfly.launch.virtualBug"
             icon="icons/color/virtual_bug.gif"
             id="com.buglabs.dragonfly.launch.virtualBugImage"/>
+      <launchConfigurationTypeImage
+            configTypeID="com.buglabs.dragonfly.ui.FelixLaunchConfigurationType"
+            icon="icons/bundle_obj.gif"
+            id="com.buglabs.dragonfly.ui.launchConfigurationTypeImage2">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
