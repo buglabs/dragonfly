@@ -324,7 +324,6 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 		cleanStorageButton.setLayoutData(gdata);
 		cleanStorageButton.addSelectionListener(new SelectionListener() {
 			
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (cleanStorageButton.getSelection())
 					put(VirtualBugLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, FELIX_CLEAR_CACHE_ON_FIRST_INIT);
@@ -332,7 +331,6 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 					put(VirtualBugLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, "none");
 			}
 			
-			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {				
 			}
 		});
