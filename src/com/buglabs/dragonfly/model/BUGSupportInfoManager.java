@@ -37,7 +37,6 @@ public class BUGSupportInfoManager {
 	 * PhoneME.
 	 */
 	public static final String PHONEME_EXECUTION_ENV = "JRE-1.1";
-	public static final String DEFAULT_EXECUTION_ENV = "JRE-1.6";
 
 	// keys used for parsing xml
 	private static final String ROOTFS_VERSION_NODE_NAME = "rootfs_version";
@@ -154,7 +153,7 @@ public class BUGSupportInfoManager {
 		}
 
 		if (info.getExecutionEnvironment() == null)
-			info.setExecutionEnvironment(DEFAULT_EXECUTION_ENV);
+			info.setExecutionEnvironment(PHONEME_EXECUTION_ENV);
 
 		// Get Bundle List
 		List<String> bundles = new ArrayList<String>();
