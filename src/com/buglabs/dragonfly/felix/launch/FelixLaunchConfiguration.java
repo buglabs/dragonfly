@@ -50,7 +50,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	/**
 	 * This value must be changed when the embedded Felix jar is changed.
 	 */
-	private static final String FELIX_VERSION = "3.2.1";
+	private static final String FELIX_VERSION = "3.2.2";
 	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-" + FELIX_VERSION + ".jar";
 	private IPath launchDir;
 	private boolean debug = false;
