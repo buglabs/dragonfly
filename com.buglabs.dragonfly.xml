@@ -8,6 +8,8 @@
 	<property name="eclipse.default.file" value="${eclipse.dir}/eclipse-lin.tar.gz" />
 	<property name="felix.download.url" value="http://www.eng.lsu.edu/mirrors/apache/felix/" />
 	<property name="felix.version" value="3.2.2" />
+	
+	<property name="publishDir" location="/tmp" />
 
 	<!-- ===================================================================== -->
 	<!-- Build properties setup -->
