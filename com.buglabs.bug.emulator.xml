@@ -74,9 +74,7 @@
 		</exec>
 
 		<copy todir="${checkout.dir}/libs">
-			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/javax.servlet_*" />
-			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/org.eclipse.osgi_*" />
-			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/org.eclipse.osgi.services_*" />
+			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/*.jar" />
 		</copy>
 
 		<property name="externalDirectory" location="${checkout.dir}/libs" />
