@@ -1,0 +1,45 @@
+<modules>
+	<module name="locate">
+		<description>BUGlocate is a GPS reciever</description>
+		<imageFile>/images/buglocate.jpg</imageFile>
+		<services>
+			<service shortName="Position Service" javaName="com.buglabs.bug.module.gps.pub.IPositionProvider" description="Get the current position reported by the GPS module"></service>
+			<service shortName="GPS Control" javaName="com.buglabs.bug.module.gps.pub.IGPSModuleControl" description="Control which antenna to use, get basic GPS status information and interface with the LEDs on the BUGlocate."></service>
+			<service shortName="NMEA Sentence Provider" javaName="com.buglabs.bug.module.gps.pub.INMEASentenceProvider" description="Convert BUGlocate data to NMEA sentences"></service>
+			<service shortName="NMEA Data Provider" javaName="com.buglabs.bug.module.gps.pub.INMEARawFeed" description="Stream raw NMEA data from BUGlocate"></service>
+		</services>
+	</module>
+	
+	<module name="view">
+		<description>BUGview is a touch-sensitive LCD screen with an accelerometer</description>
+		<imageFile>/images/bugview.jpg</imageFile>
+		<services>
+			<service shortName="Accelerometer Service" javaName="com.buglabs.bug.module.lcd.pub.IML8953Accelerometer" description="Read the X, Y and/or Z axis acelleration"></service>
+			<service shortName="LCD Control" javaName="com.buglabs.bug.module.lcd.pub.ILCDModuleControl" description="Control the backlight brightness and enable or disable the BUGview"></service>
+		</services>
+	</module>
+	<module name="von Hippel">
+		<description>BUGvonHippel is a breakout module that can connect with sensors, wires, and USB devices</description>
+		<imageFile>/images/vonhippel.jpg</imageFile>
+		<services>
+			<service shortName="von Hippel Serial Port" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort" description="Connect to the von Hippel serial port"></service>
+			<service shortName="von Hippel Control" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl" description="Control LEDs, set output and input pins, read values and convert using ADC and DAC and more"></service>
+		</services>
+	</module>
+	<module name="camera">
+		<description>BUGcamera is a 3-megapixel still camera with an LED flash</description>
+		<imageFile>/images/bugcamera.jpg</imageFile>
+		<services>
+			<service shortName="Camera Service" javaName="com.buglabs.bug.module.camera.pub.ICamera2Device" description="Take pictures"></service>
+			<service shortName="Camera Control" javaName="com.buglabs.bug.module.camera.pub.ICamera2ModuleControl" description="Control the exposure, orientation, flash, LEDs and special effects"></service>
+		</services>
+	</module>
+	<module name="video">
+		<description>BUGvideo is a VGA and HDMI output that supports 720p video</description>
+		<imageFile>/images/bugvideo.jpg</imageFile>
+		<services>
+			<service shortName="Display Service" javaName="com.buglabs.bug.module.lcd.pub.IModuleDisplay" description="Get the frame to change the display"></service>
+			<service shortName="Video Control" javaName="com.buglabs.bug.module.video.pub.IVideoModuleControl" description="Get the current resolution, switch between VGA and DVI"></service>
+		</services>
+	</module>
+</modules>

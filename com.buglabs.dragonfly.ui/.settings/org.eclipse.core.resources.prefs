@@ -1,0 +1,12 @@
+#Mon Nov 16 17:40:58 EST 2009
+eclipse.preferences.version=1
+encoding//src/com/buglabs/dragonfly/ui/actions/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/dialogs/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/dnd/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/editors/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/jobs/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/preferences/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/views/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/wizards/bug/messages.properties=8859_1
+encoding//src/com/buglabs/dragonfly/ui/wizards/bugProject/messages.properties=8859_1
