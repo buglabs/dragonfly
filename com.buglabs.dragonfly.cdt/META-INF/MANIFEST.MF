@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dragonfly C/C++ Plugin
+Bundle-SymbolicName: com.buglabs.dragonfly.cdt;singleton:=true
+Bundle-Version: 2.2.1.qualifier
+Bundle-Activator: com.buglabs.dragonfly.cdt.Activator
+Bundle-Vendor: Bug Labs, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.cdt.managedbuilder.core,
+ org.eclipse.cdt.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
