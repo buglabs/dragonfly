@@ -1,0 +1,512 @@
+
+/*******************************************************************************
+ * Copyright (c) 2001, 2005 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+
+/* Framework */
+html,
+body {
+	height: 100%;
+	margin: 0px 0 0 5px;
+	padding: 0;
+	font: normal 1em/120% Helvetica,Arial,'Lucida Grande',sans-serif;
+  color:#636363;
+}
+li, td, span, code {color:#636363;}
+
+/* Content */
+#content {
+/*	margin-left: 0.5em;*/
+	padding: 1em;
+
+	background-color: white;
+
+}
+/* Footer */
+#footer {
+	margin-left: 1em;
+	margin-top: 5em;
+	padding: 0.75em;
+  border-left: 10px solid #eee;
+	/*
+  background-image: url(images/border.png);
+	background-position: top left;
+	background-repeat: repeat-x; */
+}
+#footer ul {
+	list-style: none;
+	list-style-image: none;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+#footer ul li {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.5em;
+	font-size: 0.7em;
+}
+#footer #footer-icons {
+	float: right;
+}
+/* @noflip */
+body.ltr #footer #footer-places {
+	float: left;
+}
+#footer #footer-info li {
+	line-height: 1.4em;
+}
+#footer #footer-icons li {
+	float: left;
+	margin-left: 0.5em;
+	line-height: 2em;
+}
+#footer #footer-places li {
+	float: left;
+	margin-right: 1em;
+	line-height: 2em;
+}
+/*
+ * 
+ * The following code is highly modified from monobook. It would be nice if the
+ * preftoc id was more human readable like preferences-toc for instance,
+ * howerver this would require backporting the other skins.
+ */
+
+
+/*
+ * 
+ * The following code is slightly modified from monobook
+ * 
+ */
+#content {
+	line-height: 1.5em;
+}
+#bodyContent {
+	font-size: 0.9em;
+}
+/* Links */
+a {
+	text-decoration: none;
+	color: #0064c8;
+	background: none;
+}
+a:visited {
+	color: #0395d9;
+}
+a:active {
+	color: #0064c8;
+}
+a:hover {
+	text-decoration: underline;
+}
+a.stub {
+	color: #0c97c5;
+}
+a.new {
+  background:#efffd8; color:#636363;
+}
+#p-personal a.new {
+ background:none;
+}
+#p-personal a.new:visited {
+	color: #B5D3DD;
+}
+#p-personal a {
+  color: #B5D3DD;
+}
+#p-personal a.new, #p-personal a.new:visited {
+  color: #B5D3DD;
+}
+#p-personal a:visited {
+  color: #B5D3DD;
+}
+
+/* Inline Elements */
+img {
+	border: none;
+	vertical-align: middle;
+}
+hr {
+	height: 1px;
+	color: #aaa;
+	background-color: #aaa;
+	border: 0;
+	margin: .2em 0 .2em 0;
+}
+
+/* Structural Elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: #535353;
+	background: none;
+	font-weight: normal;
+	margin: 0;
+	padding-top: .5em;
+	padding-bottom: .3em;
+	border-bottom: 1px solid #3eaccb;
+	width: auto;
+}
+h1 * {color: #535353;}
+h2 * {color: #535353;}
+h3 * {color: #535353;}
+h4 * {color: #535353;}
+h5 * {color: #535353;}
+h6 * {color: #535353;}
+
+h1 { font-size: 160%; }
+h1 .editsection { font-size: 53%; }
+h2 { font-size: 150%; }
+h2 .editsection { font-size: 67%; }
+h3,
+h4,
+h5,
+h6 {
+	border-bottom: none;
+	font-weight: bold;
+}
+h3 { font-size: 132%; }
+h3 .editsection { font-size: 76%; font-weight: normal; }
+h4 { font-size: 116%; }
+h4 .editsection { font-size: 86%; font-weight: normal; }
+h5 { font-size: 100%; }
+h5 .editsection { font-weight: normal; }
+h6 { font-size: 80%;  }
+h6 .editsection { font-size: 125%; font-weight: normal; }
+p {
+	margin: .4em 0 .5em 0;
+	line-height: 1.5em;
+}
+	p img {
+		margin: 0;
+	}
+abbr,
+acronym,
+.explain {
+	border-bottom: 1px dotted black;
+	color: black;
+	background: none;
+	cursor: help;
+}
+q {
+	font-family: Times, "Times New Roman", serif;
+	font-style: italic;
+}
+/* Disabled for now
+blockquote {
+	font-family: Times, "Times New Roman", serif;
+	font-style: italic;
+}*/
+code {
+	background-color: #f9f9f9;
+}
+pre {
+	padding: 1em;
+	text-align:left;
+	border: 0px dashed #2f6fab;
+	color: black;
+	background-color: #eee;
+	font-size:12px;
+	line-height: 1.1em;
+}
+ul {
+	line-height: 1.5em;
+	list-style-type: disc;
+  color:#333;
+	margin: .3em 0 0 1.5em;
+	padding: 0;
+	/*list-style-image: url(images/bullet-icon.png);*/
+}
+ol {
+	line-height: 1.5em;
+	margin: .3em 0 0 3.2em;
+	padding: 0;
+	list-style-image: none;
+}
+li {
+	margin-bottom: .1em;
+}
+dt {
+	font-weight: bold;
+	margin-bottom: .1em;
+}
+dl {
+	margin-top: .2em;
+	margin-bottom: .5em;
+}
+dd {
+	line-height: 1.5em;
+	margin-left: 2em;
+	margin-bottom: .1em;
+}
+/* Tables */
+table {
+	font-size: 100%;
+	color: black;
+	/* we don't want the bottom borders of <h2>s to be visible through
+	 * floated tables */
+	background-color: white;
+}
+fieldset table {
+	/* but keep table layouts in forms clean... */
+	background: none;
+}
+/* Forms */
+fieldset {
+	border: 1px solid #ddd;
+	margin: 1em 0 1em 0;
+	padding: 0 1em 1em;
+	line-height: 1.5em;
+}
+	fieldset.nested {
+		margin: 0 0 0.5em 0;
+		padding: 0 0.5em 0.5em;
+	}
+legend {
+	padding: .5em;
+	font-size: 95%;
+}
+form {
+	border: none;
+	margin: 0;
+}
+textarea {
+	width: 100%;
+	padding: .1em;
+}
+select {
+	vertical-align: top;
+}
+/* Table of Contents */
+#toc,
+.toc,
+.mw-warning {
+	border: 0px solid #aaa;
+	background-color: #ebf3f5;
+	padding: 5px 10px;
+	font-size: 95%;
+  margin-bottom:15px;
+}
+#toc h2,
+.toc h2 {
+	display: inline;
+	border: none;
+	padding: 0;
+	font-size: 100%;
+	font-weight: bold;
+  color:#333;
+}
+#toc #toctitle,
+.toc #toctitle,
+#toc .toctitle,
+.toc .toctitle {
+	/*text-align: center;*/
+}
+#toc ul,
+.toc ul {
+	list-style-type: none;
+	list-style-image: none;
+	margin-left: 0;
+	padding-left: 0;
+	text-align: left;
+}
+#toc ul ul,
+.toc ul ul {
+	margin: 0 0 0 2em;
+}
+#toc .toctoggle,
+.toc .toctoggle {
+	font-size: 94%;
+}
+#toc a {color:#636363;}
+/* Images */
+div.floatright, table.floatright {
+	clear: right;
+	float: right;
+	position: relative;
+	margin: 0 0 .5em .5em;
+	border: 0;
+}
+div.floatright p { font-style: italic; }
+div.floatleft, table.floatleft {
+	float: left;
+	clear: left;
+	position: relative;
+	margin: 0 .5em .5em 0;
+	border: 0;
+}
+div.floatleft p { font-style: italic; }
+/* Thumbnails */
+div.thumb {
+	margin-bottom: .5em;
+	border-style: solid;
+	border-color: white;
+	width: auto;
+	background-color: transparent;
+}
+div.thumbinner {
+	border: 1px solid #ccc;
+	padding: 3px !important;
+	background-color: #f9f9f9;
+	font-size: 94%;
+	text-align: center;
+	overflow: hidden;
+}
+html .thumbimage {
+	border: 1px solid #ccc;
+}
+html .thumbcaption {
+	border: none;
+	text-align: left;
+	line-height: 1.4em;
+	padding: 3px !important;
+	font-size: 94%;
+}
+div.magnify {
+	float: right;
+	border: none !important;
+	background: none !important;
+}
+div.magnify a, div.magnify img {
+	display: block;
+	border: none !important;
+	background: none !important;
+}
+div.tright {
+	clear: right;
+	float: right;
+	border-width: .5em 0 .8em 1.4em;
+}
+div.tleft {
+	float: left;
+	clear: left;
+	margin-right: .5em;
+	border-width: .5em 1.4em .8em 0;
+}
+img.thumbborder {
+	border: 1px solid #dddddd;
+}
+.hiddenStructure {
+	display: none;
+}
+/* Warning */
+.mw-warning {
+	margin-left: 50px;
+	margin-right: 50px;
+	text-align: center;
+}
+/* User Message */
+.usermessage {
+	background-color: #ffce7b;
+	border: 1px solid #ffa500;
+	color: black;
+	font-weight: bold;
+	margin: 2em 0 1em;
+	padding: .5em 1em;
+	vertical-align: middle;
+}
+/* Site Notice */
+#siteNotice {
+	text-align: center;
+	font-size: 0.8em;
+	margin: 0;
+}
+	#siteNotice div,
+	#siteNotice p {
+		margin: 0;
+		padding: 0;
+		margin-bottom: 0.9em;
+	}
+/* Categories */
+.catlinks {
+	border: 1px solid #aaa;
+	background-color: #f9f9f9;
+	padding: 5px;
+	margin-top: 1em;
+	clear: both;
+}
+/* Sub-navigation */
+#siteSub {
+	display: none;
+}
+#jump-to-nav {
+	display: none;
+}
+#contentSub, #contentSub2 {
+	font-size: 84%;
+	line-height: 1.2em;
+	margin: 0 0 1.4em 1em;
+	color: #7d7d7d;
+	width: auto;
+}
+span.subpages {
+	display: block;
+}
+/* Emulate Center */
+.center {
+	width: 100%;
+	text-align: center;
+}
+*.center * {
+	margin-left: auto;
+	margin-right: auto;
+}
+/* Small for tables and similar */
+.small, .small * {
+	font-size: 94%;
+}
+table.small {
+	font-size: 100%;
+}
+/* Edge Cases for Content */
+h1, h2 {
+	margin-bottom: .4em;
+}
+h3, h4, h5 {
+	margin-bottom: .2em;
+}
+#firstHeading {
+	padding-top: 0;
+	margin-top: 0;
+	padding-top: 0;
+	margin-bottom: 0.1em;
+	font-size: 1.6em;
+	padding-bottom: 0.3em;
+}
+#content a[href ^="mailto:"],
+.link-mailto {
+	background: url(images/mail-icon.png) center right no-repeat;
+	padding: 0 18px 0 0;
+}
+#content a[href ^="irc://"],
+#content a.extiw[href ^="irc://"],
+.link-irc {
+	background: url(images/talk-icon.png) center right no-repeat;
+	padding: 0 18px 0 0;
+}
+
+#content a.external[href $=".pdf"], #content a.external[href $=".PDF"],
+#content a.external[href *=".pdf#"], #content a.external[href *=".PDF#"],
+#content a.external[href *=".pdf?"], #content a.external[href *=".PDF?"],
+.link-document {
+	background: url("images/document-icon.png") center right no-repeat;
+	padding: 0 18px 0 0;
+}
+
+#bodyContent > h1 {margin-top: 20px; }
+#bodyContent > h2 {margin-top: 15px; }
+#bodyContent > h3 {margin-top: 10px;}
+input[type='submit'] { background-color: #75949e; border:0px; color:#fff; font-family: Helvetica,Arial,'Lucida Grande',sans-serif;  font-size: 12px; padding: 3px 5px 2px 5px; }
+div.source { background-color:#eee; padding: 10px; }
+div.source * { font-size:12px;} 

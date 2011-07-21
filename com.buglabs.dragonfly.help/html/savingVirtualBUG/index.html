@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<!-- ########### INSERT PAGE TITLE HERE ########## -->
+		<title>
+			Saving State of Virtual BUG
+		</title><!-- ########### /INSERT PAGE TITLE HERE ########## -->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="STYLESHEET" href="../../book.css" charset="ISO-8859-1" type="text/css" />
+	</head>
+	<body>
+		<div id="content">
+			 <!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">
+				<!-- ########### INSERT H1 TITLE HERE ########## -->
+				 Saving State of Virtual BUG <!-- ########### /INSERT H1 TITLE HERE ########## -->
+			</h1><!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+				<!-- ########### START OF INSERTED CONTENT ########## -->
+				<!-- ### Copy everything between bodytext comments in printable page source here -->
+				<!-- bodytext -->
+				<p>
+					Upon unregistering a bundle from the OSGi Framework all configuration data that might have been set to define its state is gone. To relieve user of pains of reconfiguring the bundle once its active, Configuration Admin can be used to persist configuration data so that upon the bundle's being active again it's states can be set to those when they were before bundle was unregistered.
+				</p>
+				<p>
+					<br />
+				</p>
+				<table id="toc" class="toc">
+					<tr>
+						<td>
+							<div id="toctitle">
+								<h2>
+									Contents
+								</h2>
+							</div>
+							<ul>
+								<li class="toclevel-1 tocsection-1">
+									<a href="#Get_Configuration_Admin_Service:"><span class="tocnumber">1</span> <span class="toctext">Get Configuration Admin Service:</span></a>
+								</li>
+								<li class="toclevel-1 tocsection-2">
+									<a href="#Get_the_Configuration:"><span class="tocnumber">2</span> <span class="toctext">Get the Configuration:</span></a>
+								</li>
+								<li class="toclevel-1 tocsection-3">
+									<a href="#Retrieve_properties_for_the_service:"><span class="tocnumber">3</span> <span class="toctext">Retrieve properties for the service:</span></a>
+								</li>
+								<li class="toclevel-1 tocsection-4">
+									<a href="#Update_service_with_properties:"><span class="tocnumber">4</span> <span class="toctext">Update service with properties:</span></a>
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+				<script type="text/javascript">
+//<![CDATA[
+				if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
+				//]]>
+				</script>
+				<h2>
+					<span class="mw-headline" id="Get_Configuration_Admin_Service:">Get Configuration Admin Service:</span>
+				</h2>
+				<pre>
+                ServiceReference serviceReference = context.getServiceReference(ConfigurationAdmin.class.getName());
+                ConfigurationAdmin configAdmin = (ConfigurationAdmin) context.getService(serviceReference);
+                
+</pre>
+				<p>
+					or use a ServiceTracker in order to know when service will be available.
+				</p>
+				<p>
+					<br />
+				</p>
+				<h2>
+					<span class="mw-headline" id="Get_the_Configuration:">Get the Configuration:</span>
+				</h2>
+				<p>
+					Each Configuration contains a Dictionary that holds properties for service of interest, to initiate a new store or retrieve an existing one:
+				</p>
+				<pre>
+                Configuration config = configAdmin.getConfiguration("com.buglabs.someService");
+                
+</pre>
+				<p>
+					<br />
+				</p>
+				<h2>
+					<span class="mw-headline" id="Retrieve_properties_for_the_service:">Retrieve properties for the service:</span>
+				</h2>
+				<pre>
+                Dictionary properties = config.getProperties();
+                
+</pre>
+				<p>
+					<br />
+				</p>
+				<h2>
+					<span class="mw-headline" id="Update_service_with_properties:">Update service with properties:</span>
+				</h2>
+				<pre>
+                Dictionary prop = new Hashtable();
+                prop.put("enabled", Boolean.TRUE);
+                
+</pre>
+				<p>
+					Refer to section 10.4.2 of OSGi R3 specifications for valid types that can be used in Dictionary.
+				</p>
+				<pre>
+                config.update(properties);
+                
+</pre>
+				<p>
+					Configuration's properties can also be cleared by executing
+				</p>
+				<pre>
+                config.update(null);
+                
+</pre>
+				<p>
+					This will clear all properties for this Configuration but leave Constants.SERVICE_PID intact since it identified id for this Configuration.
+				</p>
+				<p>
+					<br />
+					Complete specifications for OSGi including CM can be downloaded from <a href="http://www2.osgi.org/Specifications/HomePage" class="external free" rel="nofollow">http://www2.osgi.org/Specifications/HomePage</a>.
+				</p><!-- 
+				NewPP limit report
+				Preprocessor node count: 51/1000000
+				Post-expand include size: 0/2097152 bytes
+				Template argument size: 0/2097152 bytes
+				Expensive parser function count: 0/100
+				-->
+				<!-- Saved in parser cache with key wiki:pcache:idhash:278-0!1!0!!en!2!printable=1 and timestamp 20100925154920 -->
+				<div class="printfooter">
+					Retrieved from "<a href="http://wiki.buglabs.net/index.php/Tutorial:Save_State_of_Virtual_BUG">http://wiki.buglabs.net/index.php/Tutorial:Save_State_of_Virtual_BUG</a>"
+				</div><!-- /bodytext -->
+				<!-- ########### END OF INSERTED CONTENT ########## -->
+
+
+				<div class="visualClear"></div>
+			</div><!-- /bodyContent -->
+		</div><!-- /content -->
+	</body>
+</html>

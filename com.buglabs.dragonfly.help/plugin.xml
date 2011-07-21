@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<!-- NOTE: The plugin id should help URLs like this to redirect correctly 
+FROM: /help/content/PLUGINS_ROOT/com.buglabs.dragonfly.help/book.css
+TO: /help/content/com.buglabs.dragonfly.help/book.css -->
+<plugin id="com.buglabs.dragonfly.help">
+
+   <extension point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>
+      <!-- <toc file="tocCreateBUGProject.xml"/>
+	  <toc file="tocAnatomyOfBUGApplication.xml"/>
+	  <toc file="tocCallWebServicesApp.xml"/>
+	  <toc file="tocDebugAnApp.xml"/>
+	  <toc file="tocInteractingWithBUGnetView.xml"/>
+	  <toc file="tocInteractingWithMyBUGsView.xml"/>
+	  <toc file="tocUploadApplication.xml"/>
+	  <toc file="tocSendAppToBUG.xml"/>
+	  <toc file="tocUsingVirtualBug.xml"/>
+	  <toc file="tocLaunchConfiguration.xml"/>	   -->
+   </extension>
+<!-- KEEP THIS FOR LATER.  See also: http://www.keycontent.org/Eclipse+Help+System -->
+	<!-- <extension point="org.eclipse.help.index">
+	  <index file="index.xml"/>
+	</extension> -->
+
+</plugin>
