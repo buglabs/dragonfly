@@ -74,10 +74,22 @@
 		</exec>
 
 		<copy todir="${checkout.dir}/libs">
-			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/*.jar" />
+			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/javax.servlet_*" />
+			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/org.eclipse.osgi_*" />
+			<fileset file="${checkout.dir}/com.eclipse.sdk/eclipse/plugins/org.eclipse.osgi.services_*" />
 		</copy>
 
 		<property name="externalDirectory" location="${checkout.dir}/libs" />
+		
+		<exec executable="/usr/bin/wget">
+			<arg value="-P ${externalDirectory}"/>
+			<arg value="http://mirrors.ibiblio.org/pub/mirrors/apache/felix/org.osgi.core-1.4.0.jar" />
+		</exec>
+		
+		<exec executable="/usr/bin/wget">
+			<arg value="-P ${externalDirectory}"/>
+			<arg value="http://mirrors.ibiblio.org/pub/mirrors/apache/felix/org.osgi.compendium-1.4.0.jar" />
+		</exec>
 
 		<svn>
 			<checkout url="${svn.url.bug}/com.buglabs.osgi.http" destPath="${checkout.dir}/com.buglabs.osgi.http" />
