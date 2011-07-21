@@ -1,0 +1,68 @@
+<%@ jet package="com.buglabs.dragonfly.generators.jet" imports="java.util.* com.buglabs.dragonfly.model.BugProjectInfo" class="Application" skeleton="Application.skeleton" %>
+package <%=packageName%>;
+
+import java.util.Map;
+
+<%
+	Iterator siter = services.iterator();
+	while(siter.hasNext()) {
+		String sname = (String) siter.next();
+%>
+import <%=sname%>;
+<%
+	}
+%>
+
+import com.buglabs.application.ServiceTrackerHelper.ManagedRunnable;
+<% if (projInfo.getGenerateLogMethod()) { %>
+import org.osgi.service.log.LogService;
+<% } %>
+/**
+ * This class represents the running application when all service dependencies are fulfilled.
+ * 
+ * The run() method will be called with a map containing all the services specified in ServiceTrackerHelper.openServiceTracker().
+ * The application will run in a separate thread than the caller of start() in the Activator.  See 
+ * ManagedInlineRunnable for a thread-less application.
+ * 
+ * By default, the application will only be started when all service dependencies are fulfilled.  For 
+ * finer grained service binding logic, see ServiceTrackerHelper.openServiceTracker(BundleContext context, String[] services, Filter filter, ServiceTrackerCustomizer customizer)
+ */
+public class <%=appName%> implements ManagedRunnable {
+
+	@Override
+	public void run(Map<Object, Object> services) {
+<%
+	siter = services.iterator();
+	while(siter.hasNext()) {
+		String sname = (String) siter.next();
+		String serviceQualified = new String(sname);
+		
+		int i = serviceQualified.lastIndexOf(".");
+		String service = "";
+		if(i < 0) {
+			service = serviceQualified;
+		} else {
+			service = serviceQualified.substring(i+1, serviceQualified.length());
+		}
+%>			
+		<%=service%> <%= service.toLowerCase()%> = (<%=service %>) services.get(<%=service%>.class.getName());
+<%
+	}
+%>
+		// TODO Use services here.
+<% if (projInfo.getGenerateLogMethod()) { %>
+		
+		Activator.getLogger().log(LogService.LOG_INFO, this.getClass().getName() + " has started!");
+<% } else if (projInfo.getGenerateDebugStatements()) { %>
+		System.out.println("DEBUG (" + this.getClass().getName() + "): Application Run");
+<% } %>
+	}
+
+	@Override
+	public void shutdown() {
+		// TODO Add shutdown code here if necessary.
+<% if (projInfo.getGenerateDebugStatements()) { %>
+		System.out.println("DEBUG (" + this.getClass().getName() + "): Application Shutdown");
+<% } %>
+	}
+}
