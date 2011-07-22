@@ -29,8 +29,8 @@ package com.buglabs.bug.input.pub;
 
 import org.osgi.service.log.LogService;
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import com.buglabs.bug.buttons.IButtonEventListener;
+import com.buglabs.bug.buttons.IButtonEventProvider;
 
 /**
  * A non-working implementation of IButtonEventProvider for BUG Simulator.

@@ -2,11 +2,9 @@ package com.buglabs.bug.simulator.controller;
 
 import org.osgi.framework.BundleContext;
 
-import com.buglabs.bug.bmi.pub.BMIMessage;
-import com.buglabs.bug.bmi.pub.Manager;
-import com.buglabs.bug.module.pub.IModletFactory;
-import com.buglabs.module.IModuleControl;
-import com.buglabs.util.OSGiServiceLoader;
+import com.buglabs.bug.bmi.api.IModletFactory;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.util.osgi.OSGiServiceLoader;
 
 /**
  * Protocol for simulator controller.
@@ -23,11 +21,11 @@ public class ControllerProtocol {
 	public static final String CMD_MODULE_LIST = "ML";
 	public static final String CMD_GOODBYE = "GB";
 	private final BundleContext context;
-	private Manager bmiManager;
+	//private Manager bmiManager;
 
 	public ControllerProtocol(BundleContext context) {
 		this.context = context;
-		bmiManager = Manager.getManager();
+	//	bmiManager = Manager.getManager();
 	}
 
 	public String processInput(String inText) throws Exception {
@@ -59,8 +57,8 @@ public class ControllerProtocol {
 			Thread t = new Thread(new Runnable() {
 
 				public void run() {
-					BMIMessage insertMSG = new BMIMessage(fmodule, "emulator", slotId, BMIMessage.EVENT_INSERT);
-					bmiManager.processMessage(insertMSG.toString());
+					/*BMIMessage insertMSG = new BMIMessage(fmodule, "emulator", slotId, BMIMessage.EVENT_INSERT);
+					bmiManager.processMessage(insertMSG.toString());*/
 				}
 
 			});
@@ -78,8 +76,8 @@ public class ControllerProtocol {
 			Thread t = new Thread(new Runnable() {
 
 				public void run() {
-					BMIMessage removeMSG = new BMIMessage(fmodule, "emulator", slotId, BMIMessage.EVENT_REMOVE);
-					bmiManager.processMessage(removeMSG.toString());
+				/*	BMIMessage removeMSG = new BMIMessage(fmodule, "emulator", slotId, BMIMessage.EVENT_REMOVE);
+					bmiManager.processMessage(removeMSG.toString());*/
 				}
 
 			});
