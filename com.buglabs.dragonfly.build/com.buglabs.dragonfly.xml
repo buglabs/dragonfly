@@ -1,5 +1,6 @@
 <project name="build-com.buglabs.dragonfly" default="publish">
 
+	<property name="build.level" value="integration" />
 	<import file="common.xml" />
 
 	<property name="git.bin" location="/usr/bin/git" />
@@ -8,13 +9,13 @@
 	<property name="eclipse.dir" value="/opt/jenkins/build-deps/com.eclipse.sdk" />
 	<property name="eclipse.default.file" value="${eclipse.dir}/eclipse-lin.tar.gz" />
 	<property name="felix.download.url" value="http://www.eng.lsu.edu/mirrors/apache/felix/" />
-	<property name="tmp.dir" location="/tmp/dragonly_build_tmp"/>
+	<property name="tmp.dir" location="/tmp/dragonly_build_tmp" />
 	<property name="felix.version" value="3.2.2" />
 
 	<property name="publishDir" location="/tmp" />
 
 	<!-- ===================================================================== -->
-	<!-- Build properties setup -->
+	<!-- Build properties fetch.dependencies -->
 	<!-- Depending on how this script is executed build properties are either generated or inhereted from calling script -->
 	<!-- ===================================================================== -->
 	<if>
@@ -39,32 +40,31 @@
 		</else>
 	</if>
 
-	<target name="prepareBuildDirectories">
-		<echo message="Checking out projects from git and preparing directories..." />
-		<exec executable="${git.bin}">
-			<arg value="clone" />
-			<arg value="git://github.com/buglabs/dragonfly.git" />
-			<arg value="${checkout.dir}" />
-		</exec>
+	<target name="fetch.dependencies">
+		<copy todir="${base.build.dir}">
+			<fileset dir="${checkout.dir}">
+				<exclude name="build"/>
+			</fileset>
+		</copy>
 
-		<!-- Clone the bug labs osgi repo to a temp location and merge the projects in with the SDK projects.  -->
-		<mkdir dir="${tmp.dir}"/>
-		<exec executable="${git.bin}">
+		<echo message="Checking out projects from git and preparing directories..." />
+		<exec executable="${git.bin}" dir="${checkout.dir}">
 			<arg value="clone" />
 			<arg value="git://github.com/buglabs/bug-osgi.git" />
-			<arg value="${tmp.dir}" />
 		</exec>
 
-		<exec executable="mv" >
-			<arg value="${tmp.dir}/*" />
-			<arg value="${checkout.dir}" />
-		</exec>
+		<copy todir="${base.build.dir}">
+			<fileset dir="${checkout.dir}/bug-osgi">
+			</fileset>
+		</copy>
 
 		<!-- get Felix jars -->
 		<echo message="Downloading Felix artifacts from ${felix.download.url}" />
+		<mkdir dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" />
 		<exec dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" executable="wget">
 			<arg line="${felix.download.url}org.apache.felix.main-${felix.version}.jar" />
 		</exec>
+		<mkdir dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" />
 		<exec dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" executable="wget">
 			<arg line="${felix.download.url}org.apache.felix.log-1.0.0.jar" />
 		</exec>
@@ -75,8 +75,8 @@
 		</manifest>
 
 		<!-- call device management target to checkout needed projects -->
-		<ant antfile="com.buglabs.dragonfly.dm.xml" target="prepareBuildDirectories" />
-		<ant antfile="com.buglabs.dragonfly.cdt.xml" target="prepareBuildDirectories" />
+		<ant antfile="com.buglabs.dragonfly.dm.xml" target="fetch.dependencies" />
+		<ant antfile="com.buglabs.dragonfly.cdt.xml" target="fetch.dependencies" />
 
 		<mkdir dir="${checkout.dir}/${project.feature}/build" />
 		<mkdir dir="${checkout.dir}/${project.feature}/build/plugins" />
@@ -101,7 +101,7 @@
 		</copy>
 	</target>
 
-	<target name="build" depends="clean,build-bug-osgi,setup,prepareBuildDirectories">
+	<target name="build" depends="clean,mkdirs,fetch.dependencies,build-bug-osgi">
 		<echo message="#########################" />
 		<echo message="Building Dragonfly SDK..." />
 		<echo message="#########################" />
@@ -137,13 +137,20 @@
 		</exec>
 
 		<!-- Call the target that does everything -->
-		<ant antfile="build.xml" target="bundles.all" dir="${checkout.dir}/${project.feature}" />
+		<ant antfile="build.xml" target="bundles.all" dir="${base.build.dir}/${project.feature}" />
 
 	</target>
 
 	<target name="build-bug-osgi">
-		<ant antfile="${basedir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="clean fetch.dependencies jar">
-			<property name="meta.project" value="com.buglabs.osgi" />
+		<echo message="Executing bug-osgi build: ${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" />
+		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="clean">
+			<property name="base.build.dir" value="${script.dir}" />
+		</ant>
+		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="fetch.dependencies">
+			<property name="base.build.dir" value="${script.dir}" />
+		</ant>
+		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="jar">
+			<property name="base.build.dir" value="${script.dir}" />
 		</ant>
 	</target>
 
@@ -153,26 +160,30 @@
     -->
 	<target name="publish" depends="build">
 		<echo message="Publishing ${meta.project}..." />
-		<mkdir dir="${base.build.dir}/artifacts/${build.level}/${meta.project}/${build.label}" />
+		<mkdir dir="${dist.dir}/${build.level}/${meta.project}/${build.label}" />
 
-		<copy todir="${base.build.dir}/artifacts/${build.level}/${meta.project}/${build.label}">
+		<copy todir="${dist.dir}/${build.level}/${meta.project}/${build.label}">
 			<fileset dir="${checkout.dir}/${project.feature}/dist" />
 		</copy>
 
-		<exec dir="${base.build.dir}/artifacts/${build.level}/${meta.project}/" executable="rm">
+		<exec dir="${dist.dir}/${build.level}/${meta.project}/" executable="rm">
 			<arg line="current" />
 		</exec>
 
-		<symlink link="${base.build.dir}/artifacts/${build.level}/${meta.project}/current" resource="${base.build.dir}/artifacts/${build.level}/${meta.project}/${build.label}" />
+		<symlink link="${dist.dir}/${build.level}/${meta.project}/current" resource="${dist.dir}/${build.level}/${meta.project}/${build.label}" />
 	</target>
 
-	<target name="clean">
+	<target name="clean" description="Delete temporary directories">
 		<echo message="Deleting previous checkout directories..." />
-		<delete dir="${checkout.dir}" />
+		<delete dir="${dist.dir}" />
+		<delete dir="${base.build.dir}" />
+		<delete dir="${checkout.dir}/bug-osgi" />
+		<delete dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" />
+		<delete dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" />
 	</target>
 
-	<target name="setup">
-		<echo message="Setting up checkout directories..." />
+	<target name="mkdirs" description="Create temporary directories">
 		<mkdir dir="${checkout.dir}" />
+		<mkdir dir="${base.build.dir}" />
 	</target>
 </project>

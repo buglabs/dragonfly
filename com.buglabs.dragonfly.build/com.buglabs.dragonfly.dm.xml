@@ -33,7 +33,7 @@
 		</else>
 	</if>
 
-	<target name="prepareBuildDirectories" depends="checkout">
+	<target name="fetch.dependencies" depends="">
 		<echo message="Checking out projects from svn and preparing directories..." />
 
 		<mkdir dir="${checkout.dir}/${project.feature}/build" />
@@ -68,7 +68,7 @@
 		</svn>
 	</target>
 
-	<target name="build" depends="clean,setup,prepareBuildDirectories">
+	<target name="build" depends="clean,setup,fetch.dependencies">
 		<echo message="###############" />
 		<echo message="Building ${project.feature}..." />
 		<echo message="###############" />

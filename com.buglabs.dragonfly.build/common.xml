@@ -4,8 +4,12 @@
         which overrides values in the default.properties file -->
     <property file="system.${build.level}.properties" />
     <property file="default.properties"/> 
-    <property name="base.build.dir" location="${basedir}" />
-    <property name="checkout.dir" location="${user.home}/checkout-${build.level}" />
+	
+	<property name="root.dir" location="${basedir}/.." />
+    <property name="base.build.dir" location="${root.dir}/build" />
+	<property name="dist.dir" location="${root.dir}/dist"></property>
+    <property name="checkout.dir" location="${root.dir}" />
+	<property name="script.dir" location="${basedir}" />
 	
 	<property name="javacFailOnError" value="true" />
 	<property name="javacDebugInfo" value="on" />
@@ -14,6 +18,15 @@
 	<property name="compilerArg" value="" />
 	<property name="javacSource" value="1.6" />
 	<property name="javacTarget" value="1.6" />
+	
+	<echo message="Dragonfly build variables"></echo>
+	<echo message="#########################"></echo>
+	<echo message="build.level: 	${build.level}"></echo>
+	<echo message="root.dir: 		${root.dir}"></echo>
+	<echo message="dist.dir: 		${dist.dir}"></echo>
+	<echo message="checkout.dir:	${checkout.dir}"></echo>
+	<echo message="base.build.dir:	${base.build.dir}"></echo>
+	<echo message="script.dir:		${script.dir}"></echo>
     
 	<!-- Setup ant-contrib libraries -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -32,5 +45,4 @@
     </path>
 
     <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
-
 </project>
