@@ -3,7 +3,6 @@
 	<property name="eclipse.home" location="../com.eclipse.sdk/eclipse" />
 	<property name="base" location="../com.eclipse.sdk" />
 	<property name="builder" location="." />
-	<property name="tmp.dir" location="build" />
 	<!-- to build for eclipse 3.5, change eclipse.version to be 3.5.1.R35x_20090820 -->
 	<!-- to build for eclipse 3.4, change eclipse.version to be 3.4.1.R34x_v20081217 -->
 	<!-- to build for eclipse 3.3, change eclipse.version to be 3.3.2.v20071019 -->
@@ -28,9 +27,9 @@
 	 		<echo message="java -cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar org.eclipse.equinox.launcher.Main 
         		-DbuildId=${meta.project.version}
         		-Dbuilder=${builder} 
-        		-DbuildDirectory=${tmp.dir} 
+        		-DbuildDirectory=${dist.dir}
         		-DforceContextQualifier=${meta.project.version}
-        		-DbasBuildDir=${base.build.dir}
+        		-DbaseBuildDir=${base.build.dir}
         		-Dbuild.level=${build.level}
         		-Dbase=${base} 
         		-Did=${projectName} 
@@ -41,9 +40,9 @@
 	        	<arg line="-cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar org.eclipse.equinox.launcher.Main 
 	        		-DbuildId=${meta.project.version}
 	        		-Dbuilder=${builder} 
-	        		-DbuildDirectory=${tmp.dir} 
+	        		-DbuildDirectory=${dist.dir} 
 	        		-DforceContextQualifier=${meta.project.version}
-	        		-DbasBuildDir=${base.build.dir}
+	        		-DbaseBuildDir=${base.build.dir}
 	        		-Dbuild.level=${build.level}
 	        		-Dbase=${base} 
 	        		-Did=${projectName} 

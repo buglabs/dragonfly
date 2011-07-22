@@ -113,10 +113,7 @@
 		<echo message="Copying BUG Simulator jars from directory: ${basBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/ to ${virtualBugJarTargetDir}"/>
 		<echo message="KG basBuildDir: ${basBuildDir}"/>
 		<copy todir="${virtualBugJarTargetDir}">
-			<fileset dir="${basBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/" />
-			<!--
-			<fileset dir="${basBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/" />
-			-->
+			<fileset dir="${baseBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/" />			
 		</copy>
 	</target>
 

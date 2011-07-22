@@ -10,6 +10,7 @@
 	<property name="dist.dir" location="${root.dir}/dist"></property>
     <property name="checkout.dir" location="${root.dir}" />
 	<property name="script.dir" location="${basedir}" />
+	<property name="externalDirectory" location="${dist.dir}" />
 	
 	<property name="javacFailOnError" value="true" />
 	<property name="javacDebugInfo" value="on" />

@@ -138,7 +138,6 @@
 
 		<!-- Call the target that does everything -->
 		<ant antfile="build.xml" target="bundles.all" dir="${base.build.dir}/${project.feature}" />
-
 	</target>
 
 	<target name="build-bug-osgi">
