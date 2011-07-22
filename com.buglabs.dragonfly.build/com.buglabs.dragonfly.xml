@@ -145,12 +145,18 @@
 		<echo message="Executing bug-osgi build: ${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" />
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="clean">
 			<property name="base.build.dir" value="${script.dir}" />
+			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
+			<property name="distDirectory" value="${dist.dir}" />			
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="fetch.dependencies">
 			<property name="base.build.dir" value="${script.dir}" />
+			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
+			<property name="distDirectory" value="${dist.dir}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="jar">
 			<property name="base.build.dir" value="${script.dir}" />
+			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
+			<property name="distDirectory" value="${dist.dir}" />
 		</ant>
 	</target>
 
@@ -163,7 +169,7 @@
 		<mkdir dir="${dist.dir}/${build.level}/${meta.project}/${build.label}" />
 
 		<copy todir="${dist.dir}/${build.level}/${meta.project}/${build.label}">
-			<fileset dir="${checkout.dir}/${project.feature}/dist" />
+			<fileset dir="${base.build.dir}/${project.feature}/dist" />
 		</copy>
 
 		<exec dir="${dist.dir}/${build.level}/${meta.project}/" executable="rm">
