@@ -1,8 +1,9 @@
 <project name="build-com.buglabs.bug.emulator" default="publish">
+	<property name="build.level" value="integration" />
 	<import file="common.xml" />
 
 	<property name="git.bin" location="/usr/bin/git" />
-	
+
 	<property name="meta.project" value="com.buglabs.bug.emulator" />
 	<property name="meta.distDirectory" location="${checkout.dir}/${meta.project}/dist" />
 	<property name="distDirectory" location="${meta.distDirectory}" />
@@ -10,7 +11,7 @@
 	<property name="eclipse.dir" value="/opt/jenkins/build-deps/com.eclipse.sdk" />
 	<property name="apache.mirror.url" value="http://www.ibiblio.org/pub/mirrors/apache" />
 	<property name="felix.download.url" value="http://mirrors.ibiblio.org/pub/mirrors/apache/felix/" />
-	<property name="tmp.dir" location="/tmp/dragonly_build_tmp"/>
+	<property name="tmp.dir" location="/tmp/dragonly_build_tmp" />
 
 	<!-- ===================================================================== -->
 	<!-- Build properties setup -->
@@ -85,43 +86,44 @@
 
 		<property name="externalDirectory" location="${checkout.dir}/libs" />
 
-		<delete dir="${tmp.dir}"/>
-		<mkdir dir="${tmp.dir}"/>
-		<exec executable="${git.bin}">
+		<delete dir="${tmp.dir}"/> 
+		<mkdir dir="${tmp.dir}" />
+		<exec executable="${git.bin}" dir="${tmp.dir}">
 			<arg value="clone" />
 			<arg value="git://github.com/buglabs/bug-osgi.git" />
-			<arg value="${tmp.dir}" />
 		</exec>
-				
-		<exec executable="mv" >
-			<arg value="${tmp.dir}/*" />
-			<arg value="${checkout.dir}" />
-		</exec>
-		
-		<delete dir="${tmp.dir}"/>
-		<mkdir dir="${tmp.dir}"/>
-		<exec executable="${git.bin}">
+
+		<copy todir="${checkout.dir}">
+			<fileset dir="${tmp.dir}/bug-osgi">
+			</fileset>
+		</copy>
+
+		<delete dir="${tmp.dir}" /> 
+		<mkdir dir="${tmp.dir}" />
+		<exec executable="${git.bin}" dir="${tmp.dir}">
 			<arg value="clone" />
 			<arg value="git://github.com/buglabs/dragonfly.git" />
-			<arg value="${tmp.dir}" />
 		</exec>
-				
-		<exec executable="mv" >
-			<arg value="${tmp.dir}/*" />
-			<arg value="${checkout.dir}" />
-		</exec>
-		<delete dir="${tmp.dir}"/>
+
+		<copy todir="${checkout.dir}">
+			<fileset dir="${tmp.dir}/dragonfly" />
+		</copy>
+
+		<delete dir="${tmp.dir}" />
 	</target>
 
 	<target name="build" depends="checkout">
-		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.osgi.http" />
-		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.common" />
+		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.common">
+			<property name="project" value="com.buglabs.common"></property>
+		</ant>
 		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.osgi.shell" />
-		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.module" />
-		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.event" />
-		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.program" />
+		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.ws" />
+		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.appui" />
+		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.bmi" />
+		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.dragonfly" />
+		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.util.shell" />
 		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.service" />
-		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.nmea" />
+		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.util.nmea" />
 		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.bug.simulator" />
 		<ant antfile="build.xml" target="build.jars" dir="${checkout.dir}/com.sun.javax.servlet" />
 		<ant antfile="build.xml" target="doc.build.jars" dir="${checkout.dir}/com.buglabs.osgi.sewing" />
@@ -138,7 +140,7 @@
 		<copy todir="${base.build.dir}/artifacts/${build.level}/${meta.project}/${project.version}">
 			<fileset dir="${checkout.dir}/${meta.project}/dist" />
 		</copy>
-		
+
 		<exec dir="${base.build.dir}/artifacts/${build.level}/${meta.project}/${project.version}" executable="wget">
 			<arg line="${felix.download.url}org.apache.felix.configadmin-1.2.8.jar" />
 		</exec>
@@ -152,7 +154,7 @@
 
 	<target name="clean">
 		<delete dir="${checkout.dir}" />
-		<delete dir="${tmp.dir}"/>
+		<delete dir="${tmp.dir}" />
 	</target>
 
 	<target name="makeDirs">

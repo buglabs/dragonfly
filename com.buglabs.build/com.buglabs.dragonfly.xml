@@ -46,7 +46,7 @@
 			<arg value="git://github.com/buglabs/dragonfly.git" />
 			<arg value="${checkout.dir}" />
 		</exec>
-		
+
 		<!-- Clone the bug labs osgi repo to a temp location and merge the projects in with the SDK projects.  -->
 		<mkdir dir="${tmp.dir}"/>
 		<exec executable="${git.bin}">
@@ -54,7 +54,7 @@
 			<arg value="git://github.com/buglabs/bug-osgi.git" />
 			<arg value="${tmp.dir}" />
 		</exec>
-		
+
 		<exec executable="mv" >
 			<arg value="${tmp.dir}/*" />
 			<arg value="${checkout.dir}" />
@@ -101,7 +101,7 @@
 		</copy>
 	</target>
 
-	<target name="build" depends="clean,checkEmulator,setup,prepareBuildDirectories">
+	<target name="build" depends="clean,build-bug-osgi,setup,prepareBuildDirectories">
 		<echo message="#########################" />
 		<echo message="Building Dragonfly SDK..." />
 		<echo message="#########################" />
@@ -141,10 +141,9 @@
 
 	</target>
 
-	<!-- force a build of the emulator if it's not there -->
-	<target name="checkEmulator">
-		<ant antfile="com.buglabs.bug.emulator.xml" target="publish">
-			<property name="meta.project" value="com.buglabs.bug.emulator" />
+	<target name="build-bug-osgi">
+		<ant antfile="${basedir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="clean fetch.dependencies jar">
+			<property name="meta.project" value="com.buglabs.osgi" />
 		</ant>
 	</target>
 
