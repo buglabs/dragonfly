@@ -1,6 +1,8 @@
 <project name="build-com.buglabs.bug.emulator" default="publish">
 	<import file="common.xml" />
 
+	<property name="git.bin" location="/usr/bin/git" />
+	
 	<property name="meta.project" value="com.buglabs.bug.emulator" />
 	<property name="meta.distDirectory" location="${checkout.dir}/${meta.project}/dist" />
 	<property name="distDirectory" location="${meta.distDirectory}" />
@@ -8,6 +10,7 @@
 	<property name="eclipse.dir" value="/opt/jenkins/build-deps/com.eclipse.sdk" />
 	<property name="apache.mirror.url" value="http://www.ibiblio.org/pub/mirrors/apache" />
 	<property name="felix.download.url" value="http://mirrors.ibiblio.org/pub/mirrors/apache/felix/" />
+	<property name="tmp.dir" location="/tmp/dragonly_build_tmp"/>
 
 	<!-- ===================================================================== -->
 	<!-- Build properties setup -->
@@ -82,19 +85,32 @@
 
 		<property name="externalDirectory" location="${checkout.dir}/libs" />
 
-		<svn>
-			<checkout url="${svn.url.bug}/com.buglabs.osgi.http" destPath="${checkout.dir}/com.buglabs.osgi.http" />
-			<checkout url="${svn.url.bug}/com.buglabs.common" destPath="${checkout.dir}/com.buglabs.common" />
-			<checkout url="${svn.url.bug}/com.buglabs.osgi.shell" destPath="${checkout.dir}/com.buglabs.osgi.shell" />
-			<checkout url="${svn.url.bug}/com.buglabs.bug.module" destPath="${checkout.dir}/com.buglabs.bug.module" />
-			<checkout url="${svn.url.bug}/com.buglabs.bug.event" destPath="${checkout.dir}/com.buglabs.bug.event" />
-			<checkout url="${svn.url.bug}/com.buglabs.bug.program" destPath="${checkout.dir}/com.buglabs.bug.program" />
-			<checkout url="${svn.url.bug}/com.buglabs.bug.service" destPath="${checkout.dir}/com.buglabs.bug.service" />
-			<checkout url="${svn.url.bug}/com.buglabs.nmea" destPath="${checkout.dir}/com.buglabs.nmea" />
-			<checkout url="${svn.url.dragonfly}/com.buglabs.bug.simulator" destPath="${checkout.dir}/com.buglabs.bug.simulator" />
-			<checkout url="${svn.url.bug}/com.sun.javax.servlet" destPath="${checkout.dir}/com.sun.javax.servlet" />
-			<checkout url="${svn.url.bug}/com.buglabs.osgi.sewing" destPath="${checkout.dir}/com.buglabs.osgi.sewing" />
-		</svn>
+		<delete dir="${tmp.dir}"/>
+		<mkdir dir="${tmp.dir}"/>
+		<exec executable="${git.bin}">
+			<arg value="clone" />
+			<arg value="git://github.com/buglabs/bug-osgi.git" />
+			<arg value="${tmp.dir}" />
+		</exec>
+				
+		<exec executable="mv" >
+			<arg value="${tmp.dir}/*" />
+			<arg value="${checkout.dir}" />
+		</exec>
+		
+		<delete dir="${tmp.dir}"/>
+		<mkdir dir="${tmp.dir}"/>
+		<exec executable="${git.bin}">
+			<arg value="clone" />
+			<arg value="git://github.com/buglabs/dragonfly.git" />
+			<arg value="${tmp.dir}" />
+		</exec>
+				
+		<exec executable="mv" >
+			<arg value="${tmp.dir}/*" />
+			<arg value="${checkout.dir}" />
+		</exec>
+		<delete dir="${tmp.dir}"/>
 	</target>
 
 	<target name="build" depends="checkout">
@@ -136,6 +152,7 @@
 
 	<target name="clean">
 		<delete dir="${checkout.dir}" />
+		<delete dir="${tmp.dir}"/>
 	</target>
 
 	<target name="makeDirs">
