@@ -272,13 +272,13 @@ GLGPL-licenced code is included as a part of the BUG Simulator.  The license for
 
    <includes
          id="com.buglabs.dragonfly.dm.feature"
-         version="0.0.0"
+         version="2.5.0"
          name="Device Management support for BUG"
          optional="true"/>
 
    <includes
          id="com.buglabs.dragonfly.cdt.feature"
-         version="0.0.0"
+         version="2.5.0"
          name="C/C++ Support for BUG"
          optional="true"/>
 
@@ -367,4 +367,5 @@ GLGPL-licenced code is included as a part of the BUG Simulator.  The license for
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
 </feature>

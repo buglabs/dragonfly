@@ -169,38 +169,34 @@
 	<!-- Steps to do after the build is done. -->
 	<!-- ===================================================================== -->
 	<target name="postBuild">
-			<property name="outputDir" location="${buildDirectory}/${buildLabel}" />
-			<property name="distDir" location="${buildDirectory}/../dist" />
+		<!--
+			<property name="publishDir" location="${buildDirectory}/../dist" />
 			<property name="UpdateSiteStagingLocation" value="${buildDirectory}/${updateSite}" />
-			<property name="sitePackagePrefix" value="${updateSite}" />
+			
 			<property name="checkoutDir" location="${buildDirectory}/../../com.buglabs.dragonfly.updatesite" />
+		-->
+			<property name="updatesiteSourceDir" location="${buildDirectory}/com.buglabs.dragonfly.updatesite" />
+			<property name="featureBinDir" location="${buildDirectory}/${buildLabel}" />
+			<property name="sitePackagePrefix" value="${updateSite}" />
+			<property name="UpdateSiteStagingLocation" value="${buildDirectory}/${updateSite}" />
 
 			<delete dir="${UpdateSiteStagingLocation}" />
 			<antcall target="generateUpdateSite" />
 
-			<copy todir="${distDir}">
-				<fileset dir="${outputDir}" />
+			<copy todir="${publishDir}">
+				<fileset dir="${featureBinDir}" />
 			</copy>
 		
 			<copy todir="${UpdateSiteStagingLocation}">
-						<fileset dir="${checkoutDir}" />
+						<fileset dir="${updatesiteSourceDir}" />
 			</copy>
 		
-			<mkdir dir="${distDir}/updatesite" />
-			<copy todir="${distDir}/updatesite">
+			<mkdir dir="${publishDir}/updatesite" />
+			<copy todir="${publishDir}/updatesite">
 				<fileset dir="${UpdateSiteStagingLocation}" />
 			</copy>
 
-			<zip destfile="${distDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}" excludes="CVS .project" />
-
-			<delete dir="${publishDir}" />
-			<mkdir dir="${publishDir}" />
-			<copy todir="${publishDir}">
-				<fileset dir="${distDir}" />
-			</copy>
-			<!--
-			<antcall target="remotePublish" />
-			-->
+			<zip destfile="${publishDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}" excludes="CVS .project" />			
 		</target>
 
 		<target name="generateUpdateSite">
@@ -223,12 +219,7 @@
 			</ant>
 		</target>
 		<target name="copySiteXmlFromCvs" unless="isNightlyBuild">
-			<copy file="${buildDirectory}/../../${updateSite}/site.xml" tofile="${buildDirectory}/${updateSite}/site.xml"/>
-			<!--
-			<svn javahl="false">
-				<update dir="${buildDirectory}/${updateSite}" recurse="false" />
-			</svn>
-			-->
+			<copy file="${buildDirectory}/../../${updateSite}/site.xml" tofile="${buildDirectory}/${updateSite}/site.xml"/>		
 		</target>
 
 		<!-- Now lets add the build number in here -->
