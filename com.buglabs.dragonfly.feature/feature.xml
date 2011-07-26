@@ -340,42 +340,21 @@ GLGPL-licenced code is included as a part of the BUG Simulator.  The license for
          unpack="false"/>
 
    <plugin
-         id="com.buglabs.bug.event"
+         id="com.buglabs.bug.dragonfly"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.buglabs.bug.module"
+         id="com.buglabs.bug.ws"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.buglabs.bug.program"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.buglabs.bug.service"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.buglabs.nmea"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.buglabs.osgi.http"
+         id="com.buglabs.util.nmea"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -387,12 +366,4 @@ GLGPL-licenced code is included as a part of the BUG Simulator.  The license for
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="com.buglabs.osgi.shell"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
 </feature>
