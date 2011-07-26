@@ -17,10 +17,10 @@ fi
 DATE=`date +%Y%m%d%H%M`
 WHOAMI=`/usr/bin/whoami`
 # SOURCEDIR1=/opt/sdk_build/com.buglabs.build/artifacts/$PUBENV/com.buglabs.dragonfly/current
-SOURCEDIR1=artifacts/$PUBENV/com.buglabs.dragonfly/current
+SOURCEDIR1=dragonfly/dist/eclipse/
 FILENAME1=$SOURCEDIR1/com.buglabs.dragonfly.updatesite*.zip
 VERSION=`ls $SOURCEDIR1/updatesite/features | grep "_[IPT]" | sed 's/com\.buglabs\.dragonfly\.feature_//' | sed 's/\.jar$//' | grep -v buglabs`
-REMOTESYS=newkeds
+REMOTESYS=bugcommunity.com
 REMOTEUSER=web
 REMOTEBASEDIR=/var/tmp
 REMOTEDIR1=$REMOTEBASEDIR/$PUBENV/$VERSION/updatesite/
