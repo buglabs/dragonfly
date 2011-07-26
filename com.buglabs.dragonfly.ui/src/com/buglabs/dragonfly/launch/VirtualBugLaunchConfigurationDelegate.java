@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.util.JarUtils;
-import com.buglabs.util.BugBundleConstants;
+import com.buglabs.util.osgi.BUGBundleConstants;
 
 public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfiguration {
 
@@ -131,7 +131,7 @@ public class VirtualBugLaunchConfigurationDelegate extends ConciergeLaunchConfig
 			File jar = (File) iter.next();
 			JarFile jarFile = new JarFile(jar);
 			String bundleType = JarUtils.getBugBundleType(jarFile);
-			if ((bundleType != null && bundleType.equals(BugBundleConstants.BUG_BUNDLE_MODULE))) {
+			if ((bundleType != null && bundleType.equals(BUGBundleConstants.BUG_BUNDLE_MODULE))) {
 				// installBundles.add(jar.toURL());
 			}
 		}

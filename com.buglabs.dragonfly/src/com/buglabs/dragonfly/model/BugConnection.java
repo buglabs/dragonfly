@@ -20,8 +20,8 @@ import org.osgi.framework.Bundle;
 
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.services.ws.PublicWSProvider;
-import com.buglabs.util.XmlNode;
-import com.buglabs.util.XmlParser;
+import com.buglabs.util.xml.XmlNode;
+import com.buglabs.util.xml.XmlParser;
 
 /**
  * Generic BUG connection
@@ -232,7 +232,7 @@ public abstract class BugConnection extends Bug implements IWorkbenchAdapter {
 		prop.addAttribute("id", id.toString());
 		prop.addAttribute("newValue", value.toString());
 
-		node.addChildElement(prop);
+		node.addChild(prop);
 		BugWSHelper.setConfigurationProperty(getConfigAdminURL(), node.toString());
 	}
 

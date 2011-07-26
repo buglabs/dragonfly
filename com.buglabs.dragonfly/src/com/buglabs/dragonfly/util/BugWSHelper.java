@@ -50,8 +50,8 @@ import com.buglabs.dragonfly.model.PutServiceNode;
 import com.buglabs.dragonfly.model.ServiceDetail;
 import com.buglabs.dragonfly.model.ServiceNode;
 import com.buglabs.dragonfly.model.ServiceProperty;
-import com.buglabs.util.XmlNode;
-import com.buglabs.util.XmlParser;
+import com.buglabs.util.xml.XmlNode;
+import com.buglabs.util.xml.XmlParser;
 
 /**
  * Web Service Access helper methods for accessing BUG from IDE.

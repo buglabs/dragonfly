@@ -1,6 +1,6 @@
 package com.buglabs.dragonfly.model;
 
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.xml.XmlNode;
 
 public class PutServiceNode extends ServiceNode {
 	private static final long serialVersionUID = 8505755261050519825L;

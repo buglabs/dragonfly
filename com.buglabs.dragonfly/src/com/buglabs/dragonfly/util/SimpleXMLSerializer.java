@@ -24,9 +24,8 @@ import com.buglabs.dragonfly.model.IPackage;
 import com.buglabs.dragonfly.model.PackageImpl;
 import com.buglabs.dragonfly.model.ServiceDetail;
 import com.buglabs.dragonfly.model.ServiceProperty;
-import com.buglabs.util.SelfReferenceException;
-import com.buglabs.util.XmlNode;
-import com.buglabs.util.XmlParser;
+import com.buglabs.util.xml.XmlNode;
+import com.buglabs.util.xml.XmlParser;
 
 class SimpleXMLSerializer implements ISerializer {
 
@@ -136,25 +135,25 @@ class SimpleXMLSerializer implements ISerializer {
 		XmlNode root = new XmlNode(PACKAGE);
 		root.setAttribute(PROGRAM_ID_ATTRIBUTE, pkg.getId());
 
-		root.addChildElement(new XmlNode(TITLE, pkg.getName()));
-		root.addChildElement(new XmlNode(AUTHOR, pkg.getAuthor()));
-		root.addChildElement(new XmlNode(NOTES, pkg.getNotes()));
-		root.addChildElement(new XmlNode(DATE_CREATED, pkg.getCreated()));
-		root.addChildElement(new XmlNode(DATE_MODIFIED, pkg.getModified()));
+		root.addChild(new XmlNode(TITLE, pkg.getName()));
+		root.addChild(new XmlNode(AUTHOR, pkg.getAuthor()));
+		root.addChild(new XmlNode(NOTES, pkg.getNotes()));
+		root.addChild(new XmlNode(DATE_CREATED, pkg.getCreated()));
+		root.addChild(new XmlNode(DATE_MODIFIED, pkg.getModified()));
 		root.getAttributes().put(VERSION, "" + pkg.getVersion());
 
-		root.addChildElement(listToXml(EVENT_TRIGGERS, pkg.getEventURIs()));
+		root.addChild(listToXml(EVENT_TRIGGERS, pkg.getEventURIs()));
 
-		root.addChildElement(listToXml(SERVICES, pkg.getServiceDependendies()));
+		root.addChild(listToXml(SERVICES, pkg.getServiceDependendies()));
 
 		return root.toString();
 	}
 
-	private XmlNode listToXml(String listName, List list) throws SelfReferenceException {
+	private XmlNode listToXml(String listName, List list) {
 		XmlNode root = new XmlNode(listName);
 
 		for (Iterator i = list.iterator(); i.hasNext();) {
-			root.addChildElement(new XmlNode(ITEM_ELEMENT, i.next().toString()));
+			root.addChild(new XmlNode(ITEM_ELEMENT, i.next().toString()));
 		}
 
 		return root;

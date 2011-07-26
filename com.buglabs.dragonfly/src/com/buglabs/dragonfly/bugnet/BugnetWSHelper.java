@@ -28,9 +28,9 @@ import com.buglabs.dragonfly.rest.HTTPException;
 import com.buglabs.dragonfly.rest.HTTPRequest;
 import com.buglabs.dragonfly.rest.HTTPResponse;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.util.XmlNode;
-import com.buglabs.util.XmlParser;
-import com.buglabs.util.XpathQuery;
+import com.buglabs.util.xml.XmlNode;
+import com.buglabs.util.xml.XmlParser;
+import com.buglabs.util.xml.XpathQuery;
 
 /**
  * 

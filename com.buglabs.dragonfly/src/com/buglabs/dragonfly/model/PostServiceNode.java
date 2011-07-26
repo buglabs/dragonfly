@@ -3,7 +3,7 @@ package com.buglabs.dragonfly.model;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.xml.XmlNode;
 
 public class PostServiceNode extends ServiceNode {
 	private static final long serialVersionUID = 8505755261050519825L;

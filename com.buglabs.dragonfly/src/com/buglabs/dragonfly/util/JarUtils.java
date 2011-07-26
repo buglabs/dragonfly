@@ -10,10 +10,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import com.buglabs.util.BugBundleConstants;
-import com.buglabs.util.XmlNode;
-import com.buglabs.util.XmlParser;
-import com.buglabs.util.XpathQuery;
+import com.buglabs.util.osgi.BUGBundleConstants;
+import com.buglabs.util.xml.XmlNode;
+import com.buglabs.util.xml.XmlParser;
+import com.buglabs.util.xml.XpathQuery;
 
 /**
  * Utils for extracting informatino out of jars
@@ -32,7 +32,7 @@ public class JarUtils {
 	public static String getBugBundleType(JarFile jarFile) throws IOException {
 		String name = null;
 
-		name = jarFile.getManifest().getMainAttributes().getValue(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER);
+		name = jarFile.getManifest().getMainAttributes().getValue(BUGBundleConstants.BUG_BUNDLE_TYPE_HEADER);
 
 		return name;
 	}

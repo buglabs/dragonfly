@@ -11,7 +11,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 import com.buglabs.dragonfly.model.ProgramNode;
-import com.buglabs.util.BugBundleConstants;
+import com.buglabs.util.osgi.BUGBundleConstants;
 
 public class ApplicationFilter extends ViewerFilter {
 
@@ -22,7 +22,7 @@ public class ApplicationFilter extends ViewerFilter {
 
 		if (element instanceof ProgramNode) {
 			ProgramNode pn = (ProgramNode) element;
-			if (pn.getBundleType().equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) || pn.getBundleType().equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)) {
+			if (pn.getBundleType().equals(BUGBundleConstants.BUG_BUNDLE_APPLICATION) || pn.getBundleType().equals(BUGBundleConstants.BUG_BUNDLE_LIBRARY)) {
 				return true;
 			} else {
 				return false;

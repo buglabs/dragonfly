@@ -4,7 +4,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.xml.XmlNode;
 
 public class GetServiceNode extends ServiceNode {
 	private static final long serialVersionUID = 8505755261050519825L;

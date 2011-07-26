@@ -11,7 +11,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.buglabs.dragonfly.model.ProgramNode;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
-import com.buglabs.util.BugBundleConstants;
+import com.buglabs.util.osgi.BUGBundleConstants;
 
 /**
  * Delegate that calls {@link RemoveBundleJob} to remove selected bundles from
@@ -49,7 +49,7 @@ public class RemoveBundleActionDelegate implements IObjectActionDelegate {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] instanceof ProgramNode) {
 				bundleType = ((ProgramNode) array[i]).getBundleType();
-				if (bundleType.equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) || bundleType.equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)) {
+				if (bundleType.equals(BUGBundleConstants.BUG_BUNDLE_APPLICATION) || bundleType.equals(BUGBundleConstants.BUG_BUNDLE_LIBRARY)) {
 					list.add(array[i]);
 				}
 			}

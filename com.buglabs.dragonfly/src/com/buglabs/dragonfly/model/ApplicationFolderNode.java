@@ -16,7 +16,7 @@ import java.util.List;
 
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.util.BugBundleConstants;
+import com.buglabs.util.osgi.BUGBundleConstants;
 
 /**
  * Application folder node
@@ -74,7 +74,7 @@ public class ApplicationFolderNode extends FolderNode {
 		while (iterator.hasNext()) {
 			ProgramNode bundle = (ProgramNode) iterator.next();
 			bundleType = bundle.getBundleType();
-			if (!bundleType.equals(BugBundleConstants.BUG_BUNDLE_APPLICATION) && !bundleType.equals(BugBundleConstants.BUG_BUNDLE_LIBRARY)) {
+			if (!bundleType.equals(BUGBundleConstants.BUG_BUNDLE_APPLICATION) && !bundleType.equals(BUGBundleConstants.BUG_BUNDLE_LIBRARY)) {
 				continue;
 			}
 			bugBundles.add(bundle);

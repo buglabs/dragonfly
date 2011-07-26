@@ -27,7 +27,7 @@
 	 		<echo message="java -cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar org.eclipse.equinox.launcher.Main 
 	 			-DbuildId=${meta.project.version}
         		-Dbuilder=${builder} 
-        		-DbuildDirectory=${base.build.dir}   
+        		-DbuildDirectory=${base.build.dir}/${projectName}/build/
         		-DforceContextQualifier=${meta.project.version}
         		-DbaseBuildDir=${dist.dir}
         		-Dbuild.level=${build.level}
@@ -40,7 +40,7 @@
 	        	<arg line="-cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar org.eclipse.equinox.launcher.Main 
 	        		-DbuildId=${meta.project.version}
 	        		-Dbuilder=${builder} 
-	        		-DbuildDirectory=${base.build.dir}   
+	        		-DbuildDirectory=${base.build.dir}/${projectName}/build/ 
 	        		-DforceContextQualifier=${meta.project.version}
 	        		-DbaseBuildDir=${dist.dir}
 	        		-Dbuild.level=${build.level}

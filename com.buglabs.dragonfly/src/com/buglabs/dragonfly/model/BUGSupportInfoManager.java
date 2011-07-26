@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.buglabs.dragonfly.util.BugWSHelper;
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.xml.XmlNode;
 
 /**
  * This class helps manage the SDK's view of the BUG support info The support

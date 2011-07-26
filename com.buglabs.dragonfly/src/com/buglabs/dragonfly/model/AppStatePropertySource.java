@@ -12,7 +12,7 @@ import org.osgi.framework.Bundle;
 
 import com.buglabs.dragonfly.util.BugWSHelper;
 import com.buglabs.dragonfly.util.UIUtils;
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.xml.XmlNode;
 
 /**
  * Complex property of application state
@@ -85,7 +85,7 @@ public class AppStatePropertySource implements IPropertySource {
 			String state = BugConnection.APPLICATION_STATE[Integer.parseInt(value.toString())];
 			prop.addAttribute("newValue", bundleStateDef.get(state).toString());
 
-			node.addChildElement(prop);
+			node.addChild(prop);
 			BugWSHelper.setConfigurationProperty(bug.getConfigAdminURL(), node.toString());
 		} catch (MalformedURLException e) {
 			UIUtils.handleVisualError("Failed to set property for " + id + ", invalid url", e);

@@ -45,7 +45,7 @@ import com.buglabs.dragonfly.model.BugProjectInfo;
 import com.buglabs.dragonfly.model.ServicePropertyHelper;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.osgi.concierge.templates.GeneratorActivator;
-import com.buglabs.util.BugBundleConstants;
+import com.buglabs.util.osgi.BUGBundleConstants;
 
 public class CreateBugProjectJob extends WorkspaceModifyOperation {
 
@@ -217,7 +217,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		}
 
 		StringBuffer manifestContents = buffer;
-		manifestContents.append(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER + ": " + BugBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
+		manifestContents.append(BUGBundleConstants.BUG_BUNDLE_TYPE_HEADER + ": " + BUGBundleConstants.BUG_BUNDLE_APPLICATION + "\n");
 
 		// add API Version
 		manifestContents.append(APIVersionManager.BUG_API_VERSION_MANIFEST_KEY + ": " + APIVersionManager.getSDKAPIVersion() + "\n");

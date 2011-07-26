@@ -9,7 +9,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.xml.XmlNode;
 
 public class PutTest extends TestCase {
 
