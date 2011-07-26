@@ -5,10 +5,20 @@
 #     deployment on http://buglabs.net/sdk/
 
 PUBENV=$1
+SOURCEDIR1=$2
 if [ -z "$PUBENV" ]; then 
   echo
   echo "  Usage:"
-  echo "    /usr/local/bin/scp-publish.sh environment"
+  echo "    /usr/local/bin/scp-publish.sh environment dist_root"
+  echo "    where environment is one of either production, testing or integration"
+  echo
+  exit 1
+fi
+
+if [ -z "$SOURCEDIR1" ]; then 
+  echo
+  echo "  Usage:"
+  echo "    /usr/local/bin/scp-publish.sh environment dist_root"
   echo "    where environment is one of either production, testing or integration"
   echo
   exit 1
@@ -16,8 +26,6 @@ fi
 
 DATE=`date +%Y%m%d%H%M`
 WHOAMI=`/usr/bin/whoami`
-# SOURCEDIR1=/opt/sdk_build/com.buglabs.build/artifacts/$PUBENV/com.buglabs.dragonfly/current
-SOURCEDIR1=dragonfly/dist/eclipse/
 FILENAME1=$SOURCEDIR1/com.buglabs.dragonfly.updatesite*.zip
 VERSION=`ls $SOURCEDIR1/updatesite/features | grep "_[IPT]" | sed 's/com\.buglabs\.dragonfly\.feature_//' | sed 's/\.jar$//' | grep -v buglabs`
 REMOTESYS=bugcommunity.com
