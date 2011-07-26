@@ -9,7 +9,6 @@ Export-Package:
  com.buglabs.bug.accelerometer.pub,
  com.buglabs.bug.base.pub,
  com.buglabs.bug.input.pub,
- com.buglabs.bug.sysfs,
  org.osgi.util.measurement,
  org.osgi.util.position
 Bundle-Vendor: Bug Labs, Inc.
