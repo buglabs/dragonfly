@@ -1,4 +1,4 @@
-<project name="build-com.buglabs.dragonfly" default="publish">
+<project name="build-com.buglabs.dragonfly" default="build">
 
 	<property name="build.level" value="integration" />
 	<import file="common.xml" />
@@ -169,25 +169,6 @@
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
 		</ant>
-	</target>
-
-	<!-- 
-	this target is called by default in the script. When building from com.buglabs.sdk.xml call build target so that that script will generate appropriate
-	file names
-    -->
-	<target name="publish" depends="build">
-		<echo message="Publishing ${meta.project}..." />
-		<mkdir dir="${dist.dir}/${build.level}/${meta.project}/${build.label}" />
-
-		<copy todir="${dist.dir}/${build.level}/${meta.project}/${build.label}">
-			<fileset dir="${base.build.dir}/${project.feature}/dist" />
-		</copy>
-
-		<exec dir="${dist.dir}/${build.level}/${meta.project}/" executable="rm">
-			<arg line="current" />
-		</exec>
-
-		<symlink link="${dist.dir}/${build.level}/${meta.project}/current" resource="${dist.dir}/${build.level}/${meta.project}/${build.label}" />
 	</target>
 
 	<target name="clean" description="Delete temporary directories">
