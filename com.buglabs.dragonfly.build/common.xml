@@ -8,6 +8,7 @@
 	<property name="root.dir" location="${basedir}/.." />
     <property name="base.build.dir" location="${root.dir}/build" />
 	<property name="dist.dir" location="${root.dir}/dist"></property>
+	<property name="eclipse.dist.dir" location="${dist.dir}/eclipse"></property>
     <property name="checkout.dir" location="${root.dir}" />
 	<property name="script.dir" location="${basedir}" />
 	<property name="externalDirectory" location="${dist.dir}" />

@@ -82,11 +82,11 @@
 		<mkdir dir="${checkout.dir}/${project.feature}/build/plugins" />
 		<mkdir dir="${checkout.dir}/${project.feature}/build/features" />
 
-		<copy todir="${checkout.dir}/${project.feature}/build/plugins">
+		<copy todir="${base.build.dir}/${project.feature}/build/plugins">
 			<fileset dir="${checkout.dir}" excludes="**/${project.feature}/**" />
 		</copy>
 
-		<copy todir="${checkout.dir}/${project.feature}/build/features/${project.feature}">
+		<copy todir="${base.build.dir}/${project.feature}/build/features/${project.feature}">
 			<fileset dir="${checkout.dir}/${project.feature}" excludes="**/build/**" />
 		</copy>
 		
@@ -148,6 +148,7 @@
 		<ant antfile="build.xml" target="bundles.all" dir="${base.build.dir}/${project.feature}">
 			<property name="eclipse.home" location="${root.dir}/com.eclipse.sdk/eclipse"></property>
 			<property name="base" location="${root.dir}/com.eclipse.sdk/"></property>
+			<property name="publishDir" location="${eclipse.dist.dir}"></property>
 		</ant>
 	</target>
 
@@ -197,11 +198,13 @@
 		<delete dir="${checkout.dir}/bug-osgi" />
 		<delete dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" />
 		<delete dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" />
+		<delete dir="${checkout.dir}/com.buglabs.dragonfly.feature/build" />
 	</target>
 
 	<target name="mkdirs" description="Create temporary directories">
 		<mkdir dir="${checkout.dir}" />
 		<mkdir dir="${base.build.dir}" />
 		<mkdir dir="${checkout.dir}/com.eclipse.sdk" />
+		<mkdir dir="${eclipse.dist.dir}" />
 	</target>
 </project>
