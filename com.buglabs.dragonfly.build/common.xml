@@ -12,6 +12,7 @@
     <property name="checkout.dir" location="${root.dir}" />
 	<property name="script.dir" location="${basedir}" />
 	<property name="externalDirectory" location="${dist.dir}" />
+	<property name="full.version" value="${sdk.version}" />
 	
 	<property name="javacFailOnError" value="true" />
 	<property name="javacDebugInfo" value="on" />
