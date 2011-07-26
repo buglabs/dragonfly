@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
@@ -50,13 +49,10 @@ import org.osgi.util.tracker.ServiceTracker;
 import com.buglabs.bug.base.SupportServlet;
 import com.buglabs.bug.base.VBUGSupportInfo;
 import com.buglabs.bug.base.pub.IBUG20BaseControl;
-import com.buglabs.bug.base.pub.IShellService;
 import com.buglabs.bug.base.pub.ITimeProvider;
 import com.buglabs.bug.bmi.api.IModlet;
 import com.buglabs.bug.bmi.api.IModletFactory;
-import com.buglabs.bug.buttons.IButtonEventProvider;
 import com.buglabs.bug.simulator.controller.Server;
-
 import com.buglabs.support.SupportInfoTextFormatter;
 import com.buglabs.support.SupportInfoXMLFormatter;
 import com.buglabs.util.osgi.LogServiceUtil;
@@ -140,7 +136,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		
 		httpST = ServiceTrackerUtil.openServiceTracker(context, new ServiceTrackerUtil.ManagedRunnable() {
 			
-			@Override
 			public void run(Map<Object, Object> services) {
 				httpService = (HttpService) services.get(HttpService.class);
 				try {
@@ -154,7 +149,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 					logService.log(LogService.LOG_ERROR, "Unable to register info servlet.", e);
 				}
 			}
-			@Override
+
 			public void shutdown() {
 				if (httpService != null) {
 					httpService.unregister(INFO_SERVLET_ALIAS);
