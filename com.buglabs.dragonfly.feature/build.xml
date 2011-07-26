@@ -23,19 +23,7 @@
 	<!-- to build for 3.5.1, change first arg line to have org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar -->
 	<!-- to build for 3.4.2, change first arg line to have org.eclipse.equinox.launcher_1.0.101.R34x_v20081125.jar -->
 	<!-- to build for 3.3, change first arg line to have org.eclipse.equinox.launcher_1.0.1.R33x_v20080118.jar -->
-	 <target name="runpdebuild">
-	 		<echo message="java -cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar org.eclipse.equinox.launcher.Main 
-	 			-DbuildId=${meta.project.version}
-        		-Dbuilder=${builder} 
-        		-DbuildDirectory=${base.build.dir}/${projectName}/build
-        		-DforceContextQualifier=${meta.project.version}
-        		-DbaseBuildDir=${dist.dir}
-        		-Dbuild.level=${build.level}
-        		-Dbase=${base} 
-        		-Did=${projectName} 
-        		-buildfile ${eclipse.home}/plugins/org.eclipse.pde.build_${eclipse.version}/scripts/build.xml 
-        		-verbose
-        		-application org.eclipse.ant.core.antRunner"></echo>
+	 <target name="runpdebuild">	 		
 	        <exec dir="." executable="java">
 	        	<arg line="-cp ${eclipse.home}/plugins/org.eclipse.equinox.launcher_1.0.201.R35x_v20090715.jar org.eclipse.equinox.launcher.Main 
 	        		-DbuildId=${meta.project.version}
@@ -45,6 +33,7 @@
 	        		-DbaseBuildDir=${dist.dir}
 	        		-Dbuild.level=${build.level}
 	        		-Dbase=${base} 
+	        		-DpublishDir=${publishDir}
 	        		-Did=${projectName} 
 	        		-buildfile ${eclipse.home}/plugins/org.eclipse.pde.build_${eclipse.version}/scripts/build.xml 
 	        		-verbose 
