@@ -89,7 +89,7 @@
 		<copy todir="${checkout.dir}/${project.feature}/build/features/${project.feature}">
 			<fileset dir="${checkout.dir}/${project.feature}" excludes="**/build/**" />
 		</copy>
-
+		
 		<mkdir dir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.dm.feature" />
 		<copy todir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.dm.feature">
 			<fileset dir="${checkout.dir}/com.buglabs.dragonfly.dm.feature" />
@@ -135,9 +135,16 @@
 		<exec dir="${checkout.dir}/com.eclipse.sdk" executable="tar">
 			<arg line="xfzv eclipse-lin.tar.gz" />
 		</exec>
+		
+		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/knapsack.jar"></copy>
+		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/commons-io-2.0.1.jar"></copy>
+		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/Sprinkles.jar"></copy>		
 
 		<!-- Call the target that does everything -->
-		<ant antfile="build.xml" target="bundles.all" dir="${base.build.dir}/${project.feature}" />
+		<ant antfile="build.xml" target="bundles.all" dir="${base.build.dir}/${project.feature}">
+			<property name="eclipse.home" location="${root.dir}/com.eclipse.sdk/eclipse"></property>
+			<property name="base" location="${root.dir}/com.eclipse.sdk/"></property>
+		</ant>
 	</target>
 
 	<target name="build-bug-osgi">
@@ -182,6 +189,7 @@
 		<echo message="Deleting previous checkout directories..." />
 		<delete dir="${dist.dir}" />
 		<delete dir="${base.build.dir}" />
+		<delete dir="${checkout.dir}/com.eclipse.sdk" />
 		<delete dir="${checkout.dir}/bug-osgi" />
 		<delete dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" />
 		<delete dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" />
@@ -190,5 +198,6 @@
 	<target name="mkdirs" description="Create temporary directories">
 		<mkdir dir="${checkout.dir}" />
 		<mkdir dir="${base.build.dir}" />
+		<mkdir dir="${checkout.dir}/com.eclipse.sdk" />
 	</target>
 </project>
