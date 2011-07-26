@@ -5,7 +5,6 @@ Export-Package:
  com.buglabs.bug.accelerometer.pub, 
  com.buglabs.bug.input.pub,
  com.buglabs.bug.jni.common,
- com.buglabs.bug.sysfs,
  gnu.io
 Bundle-Vendor: Bug Labs, Inc.
 Manifest-Version: 1.0
