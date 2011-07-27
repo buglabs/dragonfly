@@ -199,10 +199,11 @@
 			<copy todir="${UpdateSiteStagingLocation}/plugins">				
 				<fileset dir="${publishDir}/eclipse/plugins/" includes="*.jar" />
 			</copy>
-			
-			<exec dir="${UpdateSiteStagingLocation}" executable="find">
-					<arg line="." />
-			</exec>
+		
+			<copy todir="${UpdateSiteStagingLocation}/features">				
+				<fileset dir="${publishDir}/eclipse/features/" includes="*.jar" />
+			</copy>
+					
 		
 			<zip destfile="${publishDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}"/>			
 		</target>
