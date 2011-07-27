@@ -51,6 +51,11 @@
 			<arg value="clone" />
 			<arg value="git://github.com/buglabs/bug-osgi.git" />
 		</exec>
+		<!--
+		<echo message="Replacing ${checkout.dir}/bug-osgi/com.buglabs.common/META-INF/MANIFEST.MF" />
+		<replace file="${checkout.dir}/bug-osgi/com.buglabs.common/META-INF/MANIFEST.MF" token="qualifier" value="${meta.project.version}" />
+		
+		-->
 
 		<copy todir="${base.build.dir}">
 			<fileset dir="${checkout.dir}/bug-osgi">
@@ -158,17 +163,20 @@
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="clean">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
-			<property name="distDirectory" value="${dist.dir}" />			
+			<property name="distDirectory" value="${dist.dir}" />	
+			<property name="full.version" value="2.5.0.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="fetch.dependencies">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
+			<property name="full.version" value="2.5.0.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="jar">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
+			<property name="full.version" value="2.5.0.${meta.project.version}" />
 		</ant>
 	</target>
 
