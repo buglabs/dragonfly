@@ -109,8 +109,7 @@
 	<!-- ===================================================================== -->
 	<target name="copyEmulatorJars">
 		<!-- we need to build the BUG Simulator, which is not an eclipse plugin -->
-		<property name="virtualBugJarTargetDir" value="${buildDirectory}/plugins/com.buglabs.dragonfly.simulator/bundles" />
-		<echo message="Copying BUG Simulator jars from directory: ${baseBuildDir}/artifacts/${build.level}/com.buglabs.bug.emulator/current/ to ${virtualBugJarTargetDir}"/>
+		<property name="virtualBugJarTargetDir" value="${buildDirectory}/plugins/com.buglabs.dragonfly.simulator/bundles" />		
 		<copy todir="${virtualBugJarTargetDir}">
 			<fileset dir="${baseBuildDir}" />			
 		</copy>
@@ -188,22 +187,33 @@
 			</copy>
 		
 			<copy todir="${UpdateSiteStagingLocation}">
-						<fileset dir="${updatesiteSourceDir}" />
+				<fileset dir="${updatesiteSourceDir}" />
 			</copy>
 		
-			<mkdir dir="${publishDir}/updatesite" />
+			<mkdir dir="${publishDir}/updatesite" />			
+			<unzip dest="${publishDir}" src="${buildDirectory}/I.${forceContextQualifier}/${id}-${forceContextQualifier}.zip"></unzip>			
+			
 			<copy todir="${publishDir}/updatesite">
 				<fileset dir="${UpdateSiteStagingLocation}" />
 			</copy>
-
-			<zip destfile="${publishDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}" excludes="CVS .project" />			
+			<copy todir="${UpdateSiteStagingLocation}/plugins">				
+				<fileset dir="${publishDir}/eclipse/plugins/" includes="*.jar" />
+			</copy>
+			
+			<exec dir="${UpdateSiteStagingLocation}" executable="find">
+					<arg line="." />
+			</exec>
+		
+			<zip destfile="${publishDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}"/>			
 		</target>
 
-		<target name="generateUpdateSite">
+		<target name="generateUpdateSite">		
 			<!-- Create the directory structure -->
+			
 			<mkdir dir="${UpdateSiteStagingLocation}" />
 			<mkdir dir="${UpdateSiteStagingLocation}/features" />
 			<mkdir dir="${UpdateSiteStagingLocation}/plugins" />
+			
 			<!-- Build the jar files -->
 			<antcall target="allElements">
 				<param name="genericTargets" value="${builder}/customTargets.xml" />
@@ -212,12 +222,14 @@
 			<antcall target="copySiteXmlFromCvs" />
 			<antcall target="updateSiteXml" />
 		</target>
+	
 		<target name="updateSiteExport">
 			<ant antfile="build.xml" dir="${buildDirectory}/features/${id}/" target="build.update.jar">
 				<property name="feature.destination" value="${UpdateSiteStagingLocation}/features" />
 				<property name="plugin.destination" value="${UpdateSiteStagingLocation}/plugins" />
 			</ant>
 		</target>
+	
 		<target name="copySiteXmlFromCvs" unless="isNightlyBuild">
 			<copy file="${buildDirectory}/../../${updateSite}/site.xml" tofile="${buildDirectory}/${updateSite}/site.xml"/>		
 		</target>
@@ -226,14 +238,7 @@
 
 		<target name="updateSiteXml">
 			<replace file="${buildDirectory}/${updateSite}/site.xml" token="qualifier" value="${forceContextQualifier}" />
-		</target>
-
-		<!-- here is where we copy the updatesite to the local web server for outside access -->
-		<target name="remotePublish">
-			<copy todir="${CCBaseDirectory}/release/com.buglabs.dragonfly">
-				<fileset dir="${UpdateSiteStagingLocation}" />
-			</copy>
-		</target>
+		</target>		
 
 	<!-- ===================================================================== -->
 	<!-- Steps to do to test the build results -->

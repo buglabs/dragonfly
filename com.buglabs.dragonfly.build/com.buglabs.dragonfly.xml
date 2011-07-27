@@ -11,7 +11,6 @@
 	<property name="felix.download.url" value="http://www.eng.lsu.edu/mirrors/apache/felix/" />
 	<property name="tmp.dir" location="/tmp/dragonly_build_tmp" />
 	<property name="felix.version" value="3.2.2" />
-
 	<property name="publishDir" location="/tmp" />
 
 	<!-- ===================================================================== -->
@@ -83,7 +82,8 @@
 		<mkdir dir="${checkout.dir}/${project.feature}/build/features" />
 
 		<copy todir="${base.build.dir}/${project.feature}/build/plugins">
-			<fileset dir="${checkout.dir}" excludes="**/${project.feature}/**" />
+			<fileset dir="${checkout.dir}" excludes="**/${project.feature}/**,**/bug-osgi/**" />
+			<fileset dir="${checkout.dir}/bug-osgi/" includes="com.buglabs.common/*,com.buglabs.bug.dragonfly/*,com.buglabs.util.nmea/*,com.buglabs.bug.ws/*"/>
 		</copy>
 
 		<copy todir="${base.build.dir}/${project.feature}/build/features/${project.feature}">
