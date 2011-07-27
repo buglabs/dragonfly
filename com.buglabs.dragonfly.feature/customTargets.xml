@@ -196,10 +196,11 @@
 			<copy todir="${publishDir}/updatesite">
 				<fileset dir="${UpdateSiteStagingLocation}" />
 			</copy>
+		
+			<!-- hack the update site by manually adding jars and the feature in -->
 			<copy todir="${UpdateSiteStagingLocation}/plugins">				
 				<fileset dir="${publishDir}/eclipse/plugins/" includes="*.jar" />
 			</copy>
-		
 			<copy todir="${UpdateSiteStagingLocation}/features">				
 				<fileset dir="${publishDir}/eclipse/features/" includes="*.jar" />
 			</copy>

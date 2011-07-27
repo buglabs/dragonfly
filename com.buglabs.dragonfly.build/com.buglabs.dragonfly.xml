@@ -81,6 +81,7 @@
 		<mkdir dir="${checkout.dir}/${project.feature}/build/plugins" />
 		<mkdir dir="${checkout.dir}/${project.feature}/build/features" />
 
+		<!-- copy dragonfly plugin dependencies into the PDE build -->
 		<copy todir="${base.build.dir}/${project.feature}/build/plugins">
 			<fileset dir="${checkout.dir}" excludes="**/${project.feature}/**,**/bug-osgi/**" />
 			<fileset dir="${checkout.dir}/bug-osgi/" includes="com.buglabs.common/*,com.buglabs.bug.dragonfly/*,com.buglabs.util.nmea/*,com.buglabs.bug.ws/*"/>
