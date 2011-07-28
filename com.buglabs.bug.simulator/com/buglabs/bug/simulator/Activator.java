@@ -136,7 +136,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		
 		httpST = ServiceTrackerUtil.openServiceTracker(context, new ServiceTrackerUtil.ManagedRunnable() {
 			
-			public void run(Map<Object, Object> services) {
+			public void run(Map<String, Object> services) {
 				httpService = (HttpService) services.get(HttpService.class);
 				try {
 					// xml servlet
