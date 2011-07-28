@@ -12,7 +12,7 @@ import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.util.BugWSHelper;
 
-public class ConnectBugJob extends Job {
+public class ConnectBUGJob extends Job {
 
 	private static final String MODULES_NODE_NAME = "Modules";
 	private static final String APPLICATIONS_NODE_NAME = "Applications";
@@ -24,11 +24,11 @@ public class ConnectBugJob extends Job {
 
 	IStatus result = Status.OK_STATUS;
 
-	public ConnectBugJob(BugConnection bug) {
+	public ConnectBUGJob(BugConnection bug) {
 		this(bug, false);
 	}
 
-	public ConnectBugJob(BugConnection bug, boolean quiet) {
+	public ConnectBUGJob(BugConnection bug, boolean quiet) {
 		super("BUG Connection");
 		this.bug = bug;
 		this.quiet = quiet;

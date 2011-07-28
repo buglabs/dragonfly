@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -47,17 +46,28 @@ import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.osgi.concierge.templates.GeneratorActivator;
 import com.buglabs.util.osgi.BUGBundleConstants;
 
-public class CreateBugProjectJob extends WorkspaceModifyOperation {
+/**
+ * Create a BUG project using properties gathered from NewBUGProjectWizard.
+ *
+ */
+public class CreateBUGProjectJob extends WorkspaceModifyOperation {
 
+	private static final String MANIFEST_DIRECTORY = "META-INF"; //$NON-NLS-1$
+	private static final String MANIFEST_FILENAME = "MANIFEST.MF"; //$NON-NLS-1$
+	private static final String PDE_REQUIREDPLUGINS_ID = "org.eclipse.pde.core.requiredPlugins"; //$NON-NLS-1$
+	private static final String PDE_NATURE_ID = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
 	private BugProjectInfo projInfo;
-	private List classpathEntries;
+	private List<IClasspathEntry> classpathEntries;
 
 	private IContainer srcContainer;
 	private IContainer binContainer;
 
-	public CreateBugProjectJob(BugProjectInfo projInfo) {
+	/**
+	 * @param projInfo BugProjectInfo
+	 */
+	public CreateBUGProjectJob(BugProjectInfo projInfo) {
 		this.projInfo = projInfo;
-		classpathEntries = new ArrayList();
+		classpathEntries = new ArrayList<IClasspathEntry>();
 	}
 
 	/*
@@ -98,16 +108,27 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		}
 	}
 
+	/**
+	 * Create manifest file.
+	 * @param proj IProject
+	 * @param monitor IProgressMonitor
+	 * @throws CoreException on project error
+	 */
 	private void createManifest(IProject proj, IProgressMonitor monitor) throws CoreException {
-		IFolder metainf = proj.getFolder("META-INF");
+		IFolder metainf = proj.getFolder(MANIFEST_DIRECTORY);
 		metainf.create(true, true, monitor);
-		IFile manifest = metainf.getFile("MANIFEST.MF");
+		IFile manifest = metainf.getFile(MANIFEST_FILENAME);
 		String contents = getManifestContents().toString();
 		manifest.create(new ByteArrayInputStream(contents.getBytes()), true, monitor);
 	}
 
+	/**
+	 * @param proj
+	 * @param monitor
+	 * @throws CoreException
+	 */
 	private void createSrcFolder(IProject proj, IProgressMonitor monitor) throws CoreException {
-		srcContainer = proj;// .getFolder("/");// proj.getFolder("src");
+		srcContainer = proj;
 
 		if (srcContainer.getType() == IResource.FOLDER) {
 			((IFolder) srcContainer).create(true, true, monitor);
@@ -115,12 +136,22 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		classpathEntries.add(JavaCore.newSourceEntry(srcContainer.getFullPath()));
 	}
 
+	/**
+	 * @param proj
+	 * @param monitor
+	 * @throws JavaModelException
+	 */
 	private void setProjectClassPath(IProject proj, IProgressMonitor monitor) throws JavaModelException {
 		addClasspathEntries();
 		IJavaProject jproj = JavaCore.create(proj);
 		jproj.setRawClasspath(getClassPathEntries(proj, monitor), null);
 	}
 
+	/**
+	 * @param proj
+	 * @param monitor
+	 * @throws CoreException
+	 */
 	private void createBinFolder(IProject proj, IProgressMonitor monitor) throws CoreException {
 		binContainer = proj;
 		// bin.create(true, true, monitor);
@@ -128,6 +159,11 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		jproj.setOutputLocation(binContainer.getFullPath(), monitor);
 	}
 
+	/**
+	 * @param container
+	 * @param childpath
+	 * @throws CoreException
+	 */
 	protected void createDeepFile(IContainer container, Path childpath) throws CoreException {
 
 		IContainer localContainer = container;
@@ -138,10 +174,21 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		}
 	}
 
+	/**
+	 * @param project
+	 * @param monitor
+	 * @return
+	 */
 	private IClasspathEntry[] getClassPathEntries(IProject project, IProgressMonitor monitor) {
 		return (IClasspathEntry[]) classpathEntries.toArray(new IClasspathEntry[classpathEntries.size()]);
 	}
 
+	/**
+	 * @param file
+	 * @param contents
+	 * @param monitor
+	 * @throws CoreException
+	 */
 	protected void writeContents(IFile file, String contents, IProgressMonitor monitor) throws CoreException {
 		if (file.exists()) {
 			file.delete(true, monitor);
@@ -150,6 +197,11 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		file.create(new ByteArrayInputStream(contents.getBytes()), true, monitor);
 	}
 
+	/**
+	 * Generate project Activator class.
+	 * @param monitor IProgressMonitor
+	 * @throws CoreException on project error
+	 */
 	protected void generateActivator(IProgressMonitor monitor) throws CoreException {
 		String contents = getActivatorContents().toString();
 
@@ -160,7 +212,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		 * String(charArray);
 		 */
 
-		Path activatorpath = new Path(fileHandle + ".java");
+		Path activatorpath = new Path(fileHandle + ".java"); //$NON-NLS-1$
 		createDeepFile(srcContainer, activatorpath);
 		IFile activator = srcContainer.getFile(activatorpath);
 		writeContents(activator, contents, monitor);
@@ -175,7 +227,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 	 */
 	protected void addClasspathEntries() {
 		classpathEntries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
-		classpathEntries.add(JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins")));
+		classpathEntries.add(JavaCore.newContainerEntry(new Path(PDE_REQUIREDPLUGINS_ID)));
 		classpathEntries.add(JavaCore.newContainerEntry(new Path(BugClasspathContainerInitializer.ID)));
 	}
 
@@ -233,8 +285,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 		if (services.size() > 0) {
 			manifestContents.append(",\n");
 			packages.add("org.osgi.util.tracker");
-			packages.add("com.buglabs.application");
-			packages.add("com.buglabs.util");
+			packages.add("com.buglabs.util.osgi");
 			Iterator serviceIter = services.iterator();
 			while (serviceIter.hasNext()) {
 				String serviceQualified = (String) serviceIter.next();
@@ -252,13 +303,12 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 			if (!orgOsgiServiceLogAdded) {
 				manifestContents.append(" org.osgi.service.log,\n");
 			}
-			manifestContents.append(" com.buglabs.application,\n");
-			manifestContents.append(" com.buglabs.util\n");
+			manifestContents.append(" com.buglabs.util.osgi\n");
 		} else if (pinfo.getGenerateLogMethod()) {
 			manifestContents.append(",\n");
 			manifestContents.append(" org.osgi.service.log,\n");
 			manifestContents.append(" org.osgi.util.tracker,\n");
-			manifestContents.append(" com.buglabs.util\n");
+			manifestContents.append(" com.buglabs.util.osgi\n");
 		}  else {
 			manifestContents.append("\n");
 		}
@@ -284,7 +334,7 @@ public class CreateBugProjectJob extends WorkspaceModifyOperation {
 	 */
 	protected void addNatures(IProject proj, IProgressMonitor monitor) throws CoreException {
 		ConciergeUtils.addNatureToProject(proj, JavaCore.NATURE_ID, monitor);
-		ConciergeUtils.addNatureToProject(proj, "org.eclipse.pde.PluginNature", monitor);
+		ConciergeUtils.addNatureToProject(proj, PDE_NATURE_ID, monitor);
 		ConciergeUtils.addNatureToProject(proj, BugApplicationNature.ID, monitor);
 	}
 

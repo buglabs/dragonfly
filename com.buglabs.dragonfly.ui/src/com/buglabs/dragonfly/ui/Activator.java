@@ -29,7 +29,7 @@ import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.model.StaticBugConnection;
 import com.buglabs.dragonfly.ui.actions.LaunchWelcomeEditorAction;
-import com.buglabs.dragonfly.ui.jobs.LoadBugsJob;
+import com.buglabs.dragonfly.ui.jobs.LoadBUGsJob;
 import com.buglabs.dragonfly.ui.views.mybugs.MyBugsView;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -233,7 +233,7 @@ public class Activator extends AbstractUIPlugin {
 		if (!bugsFileName.exists()) {
 			bugsFileName.createNewFile();
 		}
-		LoadBugsJob loadBugs = new LoadBugsJob(bugsFileName);
+		LoadBUGsJob loadBugs = new LoadBUGsJob(bugsFileName);
 		loadBugs.setPriority(Job.SHORT);
 		loadBugs.schedule();
 	}

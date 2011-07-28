@@ -33,7 +33,7 @@
             name="Dragonfly"/>
       <wizard
             category="com.buglabs.dragonfly.wizardCategory"
-            class="com.buglabs.dragonfly.ui.wizards.bugProject.NewBugProjectWizard"
+            class="com.buglabs.dragonfly.ui.wizards.bugProject.NewBUGProjectWizard"
             hasPages="true"
             icon="icons/color/project.gif"
             id="com.buglabs.dragonfly.ui.wizards.bugProgram.NewBugProgramWizard"

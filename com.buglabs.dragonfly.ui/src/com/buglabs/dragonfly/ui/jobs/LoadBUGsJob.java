@@ -27,7 +27,7 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author akravets
  * 
  */
-public class LoadBugsJob extends Job {
+public class LoadBUGsJob extends Job {
 
 	private File bugsFileName;
 
@@ -41,7 +41,7 @@ public class LoadBugsJob extends Job {
 
 	public static final String BUG_URL = "url"; //$NON-NLS-1$	
 
-	public LoadBugsJob(File bugsFileName) {
+	public LoadBUGsJob(File bugsFileName) {
 		super("Loading BUGs");
 		this.bugsFileName = bugsFileName;
 	}

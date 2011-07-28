@@ -22,7 +22,9 @@
 		<description>BUGvonHippel is a breakout module that can connect with sensors, wires, and USB devices</description>
 		<imageFile>/images/vonhippel.jpg</imageFile>
 		<services>
+			<!-- 
 			<service shortName="von Hippel Serial Port" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort" description="Connect to the von Hippel serial port"></service>
+			 -->
 			<service shortName="von Hippel Control" javaName="com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl" description="Control LEDs, set output and input pins, read values and convert using ADC and DAC and more"></service>
 		</services>
 	</module>

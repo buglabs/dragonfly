@@ -15,7 +15,7 @@ import com.buglabs.dragonfly.model.ITreeNode;
 import com.buglabs.dragonfly.model.Module;
 import com.buglabs.dragonfly.model.ProgramNode;
 import com.buglabs.dragonfly.model.ServiceNode;
-import com.buglabs.dragonfly.ui.jobs.ConnectBugHelper;
+import com.buglabs.dragonfly.ui.jobs.ConnectBUGHelper;
 import com.buglabs.dragonfly.ui.jobs.Messages;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -34,7 +34,7 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 	public Object[] getChildren(Object parentElement) {
 		// try to connect to bug when bug is selected
 		if (parentElement instanceof BugConnection && !((BugConnection) parentElement).isConnected()) {
-			ConnectBugHelper.connectToBug((BugConnection) parentElement, false);
+			ConnectBUGHelper.connectToBug((BugConnection) parentElement, false);
 			UIUtils.log(new Status(Status.INFO, DragonflyActivator.PLUGIN_ID, "Trying to connect w/ the BUG because getChildren was called in tree node: "
 					+ ((BugConnection) parentElement).getName()));
 		}
@@ -90,7 +90,7 @@ public class MyBugsViewContentProvider implements ITreeContentProvider, IModelCh
 					BugConnection leBug = (BugConnection) event.getNewValue();
 					// Add Bug, connect to it, connectToBug will handle refresh
 					if (event.getPropertyName().equals(BugConnectionManager.ADD_BUG)) {
-						ConnectBugHelper.connectToBug(leBug, true);
+						ConnectBUGHelper.connectToBug(leBug, true);
 						return;
 					}
 				}

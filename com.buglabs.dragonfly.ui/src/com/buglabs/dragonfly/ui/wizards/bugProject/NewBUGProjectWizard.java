@@ -14,7 +14,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.buglabs.dragonfly.model.BugProjectInfo;
-import com.buglabs.dragonfly.ui.jobs.CreateBugProjectJob;
+import com.buglabs.dragonfly.ui.jobs.CreateBUGProjectJob;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -24,15 +24,15 @@ import com.buglabs.dragonfly.util.UIUtils;
  * @author Angel Roman
  * 
  */
-public class NewBugProjectWizard extends Wizard implements INewWizard {
+public class NewBUGProjectWizard extends Wizard implements INewWizard {
 	private BugProjectInfo pinfo;
 
-	public NewBugProjectWizard() {
+	public NewBUGProjectWizard() {
 		pinfo = new BugProjectInfo();
 	}
 
 	public boolean performFinish() {
-		CreateBugProjectJob job = new CreateBugProjectJob(pinfo);
+		CreateBUGProjectJob job = new CreateBUGProjectJob(pinfo);
 		try {
 			getContainer().run(false, false, job);
 		} catch (Exception e) {

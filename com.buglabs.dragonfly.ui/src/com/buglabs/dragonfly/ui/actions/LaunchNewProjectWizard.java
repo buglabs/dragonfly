@@ -6,7 +6,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import com.buglabs.dragonfly.ui.wizards.bugProject.NewBugProjectWizard;
+import com.buglabs.dragonfly.ui.wizards.bugProject.NewBUGProjectWizard;
 
 /**
  * Launches the new bug project wizard
@@ -27,7 +27,7 @@ public class LaunchNewProjectWizard implements IWorkbenchWindowActionDelegate {
 	}
 
 	public void run(IAction action) {
-		WizardDialog wd = new WizardDialog(win.getShell(), new NewBugProjectWizard());
+		WizardDialog wd = new WizardDialog(win.getShell(), new NewBUGProjectWizard());
 		wd.open();
 	}
 

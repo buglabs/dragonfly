@@ -14,7 +14,7 @@ import com.buglabs.dragonfly.model.BugConnection;
 import com.buglabs.dragonfly.ui.actions.RefreshBugAction;
 import com.buglabs.dragonfly.util.UIUtils;
 
-public class ConnectBugHelper {
+public class ConnectBUGHelper {
 
 	/**
 	 * This method creates a ConnectBugJob, attaches a listener for when job is
@@ -28,7 +28,7 @@ public class ConnectBugHelper {
 	 *            - Whether or not to show user an error if connection fails
 	 */
 	public static void connectToBug(final BugConnection bug, boolean quiet) {
-		Job connectBugJob = new ConnectBugJob(bug, quiet);
+		Job connectBugJob = new ConnectBUGJob(bug, quiet);
 		connectBugJob.addJobChangeListener(new JobChangeAdapter() {
 			@Override
 			public void done(final IJobChangeEvent event) {
@@ -36,11 +36,11 @@ public class ConnectBugHelper {
 					public void run() {
 						Job job = event.getJob();
 
-						if (!(job instanceof ConnectBugJob)) {
+						if (!(job instanceof ConnectBUGJob)) {
 							throw new RuntimeException("Invalid job in job event handler.");
 						}
 
-						if (!((ConnectBugJob) job).failedQuietly()) {
+						if (!((ConnectBUGJob) job).failedQuietly()) {
 							if (event.getResult().isOK()) {
 								Job registerJob = new RegisterEventListenerJob(bug);
 								registerJob.setPriority(Job.LONG);
@@ -87,7 +87,7 @@ public class ConnectBugHelper {
 	private void connectToBug1(final BugConnection bug, boolean quiet) {
 		List elements = new ArrayList();
 		try {
-			ConnectBugJob bugConnectJob = new ConnectBugJob(bug, quiet);
+			ConnectBUGJob bugConnectJob = new ConnectBUGJob(bug, quiet);
 
 			// get job manager and check if there is this job is already
 			// running, if so don't start another one
