@@ -17,7 +17,7 @@ import com.buglabs.dragonfly.model.BugProjectInfo;
   protected final String TEXT_1 = "package ";
   protected final String TEXT_2 = ";";
   protected final String TEXT_3 = NL + NL + "import org.osgi.framework.BundleActivator;" + NL + "import org.osgi.framework.BundleContext;" + NL;
-  protected final String TEXT_4 = NL + "import org.osgi.service.log.LogService;\t\t" + NL + "import com.buglabs.util.LogServiceUtil;";
+  protected final String TEXT_4 = NL + "import org.osgi.service.log.LogService;\t\t" + NL + "import com.buglabs.util.osgi.LogServiceUtil;";
   protected final String TEXT_5 = NL + NL + "public class ";
   protected final String TEXT_6 = " implements BundleActivator {";
   protected final String TEXT_7 = NL + "\tprivate static LogService logger = null;" + NL + "\t";

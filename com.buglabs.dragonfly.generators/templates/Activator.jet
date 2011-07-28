@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.buglabs.util.ServiceFilterGenerator;
+import com.buglabs.util.osgi.FilterUtil;
 
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -36,11 +36,11 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.buglabs.application.ServiceTrackerHelper;
+import com.buglabs.uti.osgi.ServiceTrackerUtil;
 
 <% if (projInfo.getGenerateLogMethod()) { %>
 import org.osgi.service.log.LogService;		
-import com.buglabs.util.LogServiceUtil;
+import com.buglabs.util.osgi.LogServiceUtil;
 <% } %>
 
 /**
@@ -84,7 +84,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 <% if (!usesPropertyFilters) {
     if (!createApplication) { %>
-		serviceTracker = ServiceTrackerHelper.openServiceTracker(context, services, new ServiceTrackerHelper.ManagedInlineRunnable() {
+		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, services, new ServiceTrackerUtil.ManagedInlineRunnable() {
 			
 			@Override
 			public void run(Map<Object, Object> services) {
@@ -116,7 +116,7 @@ public class Activator implements BundleActivator {
 		});
 <% } else { %>
 		//Begin tracking services, and when all services are available, create thread and call ManagedRunnable.run().
-		serviceTracker = ServiceTrackerHelper.openServiceTracker(context, services, new <%=appName%>Application());
+		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, services, new <%=appName%>Application());
 <% } %>
 
 <% } else { %>
@@ -148,7 +148,7 @@ public class Activator implements BundleActivator {
 %>
 
  <%if (!createApplication) { %>
-		serviceTracker = ServiceTrackerHelper.openServiceTracker(context, getServiceNames(serviceMap), createFilter(context, serviceMap), new ServiceTrackerHelper.ManagedInlineRunnable() {
+		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, getServiceNames(serviceMap), createFilter(context, serviceMap), new ServiceTrackerUtil.ManagedInlineRunnable() {
 			
 			@Override
 			public void run(Map<Object, Object> services) {
@@ -180,7 +180,7 @@ public class Activator implements BundleActivator {
 		});
 <% } else { %>
 		//Begin tracking services, and when all services are available, create thread and call ManagedRunnable.run().
-		serviceTracker = ServiceTrackerHelper.openServiceTracker(context, getServiceNames(serviceMap), createFilter(context, serviceMap), new <%=appName%>Application());
+		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, getServiceNames(serviceMap), createFilter(context, serviceMap), new <%=appName%>Application());
 <% } %>
 	
 <% } %>

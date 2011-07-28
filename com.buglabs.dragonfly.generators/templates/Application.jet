@@ -13,7 +13,7 @@ import <%=sname%>;
 	}
 %>
 
-import com.buglabs.application.ServiceTrackerHelper.ManagedRunnable;
+import com.buglabs.util.osgi.ServiceTrackerUtil.ManagedRunnable;
 <% if (projInfo.getGenerateLogMethod()) { %>
 import org.osgi.service.log.LogService;
 <% } %>

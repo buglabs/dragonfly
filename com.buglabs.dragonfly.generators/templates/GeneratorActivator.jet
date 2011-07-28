@@ -15,7 +15,7 @@ import org.osgi.framework.BundleContext;
 
 <% if (projInfo.getGenerateLogMethod()) { %>
 import org.osgi.service.log.LogService;		
-import com.buglabs.util.LogServiceUtil;
+import com.buglabs.util.osgi.LogServiceUtil;
 <% } %>
 
 public class <%=projInfo.getActivatorName()%> implements BundleActivator {
