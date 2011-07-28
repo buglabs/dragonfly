@@ -164,19 +164,19 @@
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />	
-			<property name="full.version" value="2.5.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.0.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="fetch.dependencies">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
-			<property name="full.version" value="2.5.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.0.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="jar">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
-			<property name="full.version" value="2.5.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.0.${meta.project.version}" />
 		</ant>
 	</target>
 
