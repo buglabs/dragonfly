@@ -67,8 +67,8 @@ public class Activator implements BundleActivator {
 		return locDir.getAbsolutePath();
 	}
 
-	public List getBUGOSGiJars() throws IOException, URISyntaxException {
-		List jars = new ArrayList();
+	public List<File> getBUGOSGiJars() throws IOException, URISyntaxException {
+		List<File> jars = new ArrayList<File>();
 
 		String loc = "";
 

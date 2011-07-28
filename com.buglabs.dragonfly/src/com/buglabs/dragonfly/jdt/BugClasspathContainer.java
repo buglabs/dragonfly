@@ -23,13 +23,13 @@ public class BugClasspathContainer implements IClasspathContainer {
 	public static final String ID = "com.buglabs.dragonfly.jdt.BugClasspathContainer";
 
 	public IClasspathEntry[] getClasspathEntries() {
-		List libraries = DragonflyActivator.getDefault().getBUGOSGiJars();
+		List<File> libraries = DragonflyActivator.getDefault().getBUGOSGiJars();
 
 		if (!libraries.isEmpty()) {
 			IClasspathEntry[] ceLibs = new IClasspathEntry[libraries.size()];
 
 			for (int i = 0; i < ceLibs.length; ++i) {
-				String path = ((File) libraries.get(i)).getAbsolutePath();
+				String path = libraries.get(i).getAbsolutePath();
 				ceLibs[i] = JavaCore.newLibraryEntry(new Path(path), null, null, false);
 			}
 

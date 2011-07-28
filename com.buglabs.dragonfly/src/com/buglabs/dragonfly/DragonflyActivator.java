@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -285,14 +286,14 @@ public class DragonflyActivator extends AbstractUIPlugin implements IModelContai
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public List getBUGOSGiJars() {
+	public List<File> getBUGOSGiJars() {
 		try {
 			return Activator.getDefault().getBUGOSGiJars();
 		} catch (Exception e) {
 			UIUtils.handleNonvisualError("Unable to retrieve BUG libraries.", e);
 		}
 
-		return new ArrayList(0);
+		return Collections.emptyList();
 	}
 
 	/**
