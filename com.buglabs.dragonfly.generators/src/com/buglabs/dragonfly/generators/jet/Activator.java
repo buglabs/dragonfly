@@ -23,7 +23,7 @@ public class Activator
   protected final String TEXT_5 = NL + "import java.util.Map;" + NL;
   protected final String TEXT_6 = NL + "import ";
   protected final String TEXT_7 = ";";
-  protected final String TEXT_8 = NL + NL + "import org.osgi.framework.BundleActivator;" + NL + "import org.osgi.framework.BundleContext;" + NL + "import org.osgi.util.tracker.ServiceTracker;" + NL + "" + NL + "import com.buglabs.uti.osgi.ServiceTrackerUtil;" + NL;
+  protected final String TEXT_8 = NL + NL + "import org.osgi.framework.BundleActivator;" + NL + "import org.osgi.framework.BundleContext;" + NL + "import org.osgi.util.tracker.ServiceTracker;" + NL + "" + NL + "import com.buglabs.util.osgi.ServiceTrackerUtil;" + NL;
   protected final String TEXT_9 = NL + "import org.osgi.service.log.LogService;\t\t" + NL + "import com.buglabs.util.osgi.LogServiceUtil;";
   protected final String TEXT_10 = NL + NL + "/**" + NL + " * BundleActivator for ";
   protected final String TEXT_11 = ".  The OSGi entry point to the application." + NL + " *" + NL + " */" + NL + "public class Activator implements BundleActivator {";
@@ -33,15 +33,15 @@ public class Activator
   protected final String TEXT_15 = ".class.getName(),";
   protected final String TEXT_16 = NL + "\t};";
   protected final String TEXT_17 = "\t" + NL + "\tprivate ServiceTracker serviceTracker;" + NL + "\t" + NL + "\t/*" + NL + "\t * (non-Javadoc)" + NL + "\t * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)" + NL + "\t */" + NL + "\tpublic void start(BundleContext context) throws Exception {";
-  protected final String TEXT_18 = NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, services, new ServiceTrackerUtil.ManagedInlineRunnable() {" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void run(Map<Object, Object> services) {";
+  protected final String TEXT_18 = NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, new ServiceTrackerUtil.ManagedInlineRunnable() {" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void run(Map<Object, Object> services) {";
   protected final String TEXT_19 = "\t\t\t" + NL + "\t\t\t\t";
   protected final String TEXT_20 = " ";
   protected final String TEXT_21 = " = (";
   protected final String TEXT_22 = ") services.get(";
   protected final String TEXT_23 = ".class.getName());";
-  protected final String TEXT_24 = NL + "\t\t\t\t// Warning, this method will be called from within the same thread as the OSGi framework.  Long running operations should be avoided here." + NL + "\t\t\t\t// Implement application here." + NL + "\t\t\t\t" + NL + "\t\t\t}" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void shutdown() {" + NL + "\t\t\t\t// TODO Perform cleanup operations as necessary." + NL + "\t\t\t\t" + NL + "\t\t\t}" + NL + "\t\t});";
-  protected final String TEXT_25 = NL + "\t\t//Begin tracking services, and when all services are available, create thread and call ManagedRunnable.run()." + NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, services, new ";
-  protected final String TEXT_26 = "Application());";
+  protected final String TEXT_24 = NL + "\t\t\t\t// Warning, this method will be called from within the same thread as the OSGi framework.  Long running operations should be avoided here." + NL + "\t\t\t\t// Implement application here." + NL + "\t\t\t\t" + NL + "\t\t\t}" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void shutdown() {" + NL + "\t\t\t\t// TODO Perform cleanup operations as necessary." + NL + "\t\t\t\t" + NL + "\t\t\t}" + NL + "\t\t}, services);";
+  protected final String TEXT_25 = NL + "\t\t//Begin tracking services, and when all services are available, create thread and call ManagedRunnable.run()." + NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, new ";
+  protected final String TEXT_26 = "Application(), services);";
   protected final String TEXT_27 = NL;
   protected final String TEXT_28 = NL + "\t\tSortedMap serviceMap = new TreeMap();";
   protected final String TEXT_29 = NL + "\t    addToMap(serviceMap, ";

@@ -36,7 +36,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.buglabs.uti.osgi.ServiceTrackerUtil;
+import com.buglabs.util.osgi.ServiceTrackerUtil;
 
 <% if (projInfo.getGenerateLogMethod()) { %>
 import org.osgi.service.log.LogService;		
@@ -84,7 +84,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 <% if (!usesPropertyFilters) {
     if (!createApplication) { %>
-		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, services, new ServiceTrackerUtil.ManagedInlineRunnable() {
+		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, new ServiceTrackerUtil.ManagedInlineRunnable() {
 			
 			@Override
 			public void run(Map<Object, Object> services) {
@@ -113,10 +113,10 @@ public class Activator implements BundleActivator {
 				// TODO Perform cleanup operations as necessary.
 				
 			}
-		});
+		}, services);
 <% } else { %>
 		//Begin tracking services, and when all services are available, create thread and call ManagedRunnable.run().
-		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, services, new <%=appName%>Application());
+		serviceTracker = ServiceTrackerUtil.openServiceTracker(context, new <%=appName%>Application(), services);
 <% } %>
 
 <% } else { %>
