@@ -30,7 +30,7 @@ import org.osgi.service.log.LogService;
 public class <%=appName%> implements ManagedRunnable {
 
 	@Override
-	public void run(Map<Object, Object> services) {
+	public void run(Map<String, Object> services) {
 <%
 	siter = services.iterator();
 	while(siter.hasNext()) {

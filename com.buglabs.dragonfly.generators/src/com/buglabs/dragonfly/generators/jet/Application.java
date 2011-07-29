@@ -22,7 +22,7 @@ public class Application
   protected final String TEXT_5 = NL + NL + "import com.buglabs.util.osgi.ServiceTrackerUtil.ManagedRunnable;";
   protected final String TEXT_6 = NL + "import org.osgi.service.log.LogService;";
   protected final String TEXT_7 = NL + "/**" + NL + " * This class represents the running application when all service dependencies are fulfilled." + NL + " * " + NL + " * The run() method will be called with a map containing all the services specified in ServiceTrackerHelper.openServiceTracker()." + NL + " * The application will run in a separate thread than the caller of start() in the Activator.  See " + NL + " * ManagedInlineRunnable for a thread-less application." + NL + " * " + NL + " * By default, the application will only be started when all service dependencies are fulfilled.  For " + NL + " * finer grained service binding logic, see ServiceTrackerHelper.openServiceTracker(BundleContext context, String[] services, Filter filter, ServiceTrackerCustomizer customizer)" + NL + " */" + NL + "public class ";
-  protected final String TEXT_8 = " implements ManagedRunnable {" + NL + "" + NL + "\t@Override" + NL + "\tpublic void run(Map<Object, Object> services) {";
+  protected final String TEXT_8 = " implements ManagedRunnable {" + NL + "" + NL + "\t@Override" + NL + "\tpublic void run(Map<String, Object> services) {";
   protected final String TEXT_9 = "\t\t\t" + NL + "\t\t";
   protected final String TEXT_10 = " ";
   protected final String TEXT_11 = " = (";
