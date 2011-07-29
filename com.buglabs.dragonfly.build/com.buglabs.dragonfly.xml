@@ -11,6 +11,7 @@
 	<property name="felix.download.url" value="http://www.eng.lsu.edu/mirrors/apache/felix/" />
 	<property name="tmp.dir" location="/tmp/dragonly_build_tmp" />
 	<property name="felix.version" value="3.2.2" />
+	<property name="felix.log.version" value="1.0.1" />
 	<property name="publishDir" location="/tmp" />
 
 	<!-- ===================================================================== -->
@@ -70,7 +71,7 @@
 		</exec>
 		<mkdir dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" />
 		<exec dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" executable="wget">
-			<arg line="${felix.download.url}org.apache.felix.log-1.0.0.jar" />
+			<arg line="${felix.download.url}org.apache.felix.log-${felix.log.version}.jar" />
 		</exec>
 
 		<!-- Add the BUG API Version to the Dragonfly Plugin Manifest -->
