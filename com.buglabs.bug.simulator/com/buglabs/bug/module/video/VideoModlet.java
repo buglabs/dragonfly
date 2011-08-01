@@ -40,22 +40,21 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.pub.BMIModuleProperties;
-import com.buglabs.bug.module.pub.IModlet;
+import com.buglabs.bug.bmi.api.BMIModuleProperties;
+import com.buglabs.bug.bmi.api.IModlet;
 import com.buglabs.bug.module.video.pub.IVideoModuleControl;
-import com.buglabs.module.IModuleControl;
-import com.buglabs.module.IModuleProperty;
-import com.buglabs.module.ModuleProperty;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.bug.dragonfly.module.IModuleProperty;
+import com.buglabs.bug.dragonfly.module.ModuleProperty;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.PublicWSProviderWithParams;
 import com.buglabs.services.ws.WSResponse;
-import com.buglabs.util.LogServiceUtil;
-import com.buglabs.util.RemoteOSGiServiceConstants;
-import com.buglabs.util.SelfReferenceException;
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.osgi.LogServiceUtil;
+
+import com.buglabs.util.xml.XmlNode;
 
 /**
  * Video Modlet class.
@@ -117,8 +116,8 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		props.put("height", new Integer(LCD_HEIGHT));
 		props.put("Slot", "" + slotId);
 
-		videoControlServReg = context.registerService(IVideoModuleControl.class.getName(), this, createRemotableProperties(null));
-		moduleDisplayServReg = context.registerService(com.buglabs.bug.module.lcd.pub.IModuleDisplay.class.getName(), this, createRemotableProperties(props));
+		videoControlServReg = context.registerService(IVideoModuleControl.class.getName(), this, createBasicServiceProperties());
+		moduleDisplayServReg = context.registerService(com.buglabs.bug.module.lcd.pub.IModuleDisplay.class.getName(), this, props);
 		wsReg = context.registerService(PublicWSProvider.class.getName(), this, null);
 	}
 
@@ -127,20 +126,6 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 		videoControlServReg.unregister();
 		moduleDisplayServReg.unregister();
 		wsReg.unregister();
-	}
-
-	/**
-	 * @return A dictionary with R-OSGi enable property.
-	 */
-	private Dictionary createRemotableProperties(Dictionary ht) {
-		if (ht == null) {
-			ht = new Hashtable();
-			ht.put("Slot", "" + slotId);
-		}
-
-		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-
-		return ht;
 	}
 	
 	private Properties createBasicServiceProperties() {
@@ -335,13 +320,10 @@ public class VideoModlet implements IModlet, IVideoModuleControl, IModuleControl
 	
 	private String getVideoInfoXml() {
 		XmlNode root = new XmlNode("VideoInfo");
-		try {
-			root.addChildElement(new XmlNode("Mode", isVGA() ? "VGA" : "DVI"));
-			root.addChildElement(new XmlNode("Resolution", getResolution()));
+		
+		root.addChild(new XmlNode("Mode", isVGA() ? "VGA" : "DVI"));
+		root.addChild(new XmlNode("Resolution", getResolution()));
 
-		} catch (SelfReferenceException e) {
-			log.log(LogService.LOG_ERROR, "Xml error", e);
-		}
 		return root.toString();
 	}
 

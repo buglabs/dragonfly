@@ -6,8 +6,8 @@ import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.WSResponse;
-import com.buglabs.util.SelfReferenceException;
-import com.buglabs.util.XmlNode;
+
+import com.buglabs.util.xml.XmlNode;
 
 /**
  * A class that exposes WS API for Von Hippel module
@@ -47,50 +47,47 @@ public class VonHippelWS implements PublicWSProvider2 {
 	private Object getAccelerationXml() {
 		XmlNode root = new XmlNode("Status");
 		
-		try {
-			//gpio.  style = <GPIO>
-			//                <Pin number="0">0</Pin>
-			// 			      <Pin number="1">0</Pin> ...
-			XmlNode gpio = new XmlNode("GPIO");
-			root.addChildElement(gpio);
-			XmlNode pin0 = new XmlNode("Pin", "0");
-			XmlNode pin1 = new XmlNode("Pin", "0");
-			XmlNode pin2 = new XmlNode("Pin", "0");
-			XmlNode pin3 = new XmlNode("Pin", "0");
-			pin0.addAttribute("number", "0");
-			pin1.addAttribute("number", "1");
-			pin2.addAttribute("number", "2");
-			pin3.addAttribute("number", "3");
-			gpio.addChildElement(pin0);
-			gpio.addChildElement(pin1);
-			gpio.addChildElement(pin2);
-			gpio.addChildElement(pin3);
-			//iox.  style = <IOX>
-			//                <Pin number="0">0</Pin>
-			// 			      <Pin number="1">0</Pin> ...
-			XmlNode iox = new XmlNode("IOX");
-			root.addChildElement(iox);
-			XmlNode ioxpin0 = new XmlNode("Pin", "0");
-			XmlNode ioxpin1 = new XmlNode("Pin", "0");
-			XmlNode ioxpin2 = new XmlNode("Pin", "0");
-			XmlNode ioxpin3 = new XmlNode("Pin", "0");
-			XmlNode ioxpin4 = new XmlNode("Pin", "0");
-			XmlNode ioxpin5 = new XmlNode("Pin", "0");
-			ioxpin0.addAttribute("number", "0");
-			ioxpin1.addAttribute("number", "1");
-			ioxpin2.addAttribute("number", "2");
-			ioxpin3.addAttribute("number", "3");
-			ioxpin4.addAttribute("number", "4");
-			ioxpin5.addAttribute("number", "5");
-			iox.addChildElement(ioxpin0);
-			iox.addChildElement(ioxpin1);
-			iox.addChildElement(ioxpin2);
-			iox.addChildElement(ioxpin3);
-			iox.addChildElement(ioxpin4);
-			iox.addChildElement(ioxpin5);
-		} catch (SelfReferenceException e) {
-			e.printStackTrace();
-		}
+		//gpio.  style = <GPIO>
+		//                <Pin number="0">0</Pin>
+		// 			      <Pin number="1">0</Pin> ...
+		XmlNode gpio = new XmlNode("GPIO");
+		root.addChild(gpio);
+		XmlNode pin0 = new XmlNode("Pin", "0");
+		XmlNode pin1 = new XmlNode("Pin", "0");
+		XmlNode pin2 = new XmlNode("Pin", "0");
+		XmlNode pin3 = new XmlNode("Pin", "0");
+		pin0.addAttribute("number", "0");
+		pin1.addAttribute("number", "1");
+		pin2.addAttribute("number", "2");
+		pin3.addAttribute("number", "3");
+		gpio.addChild(pin0);
+		gpio.addChild(pin1);
+		gpio.addChild(pin2);
+		gpio.addChild(pin3);
+		//iox.  style = <IOX>
+		//                <Pin number="0">0</Pin>
+		// 			      <Pin number="1">0</Pin> ...
+		XmlNode iox = new XmlNode("IOX");
+		root.addChild(iox);
+		XmlNode ioxpin0 = new XmlNode("Pin", "0");
+		XmlNode ioxpin1 = new XmlNode("Pin", "0");
+		XmlNode ioxpin2 = new XmlNode("Pin", "0");
+		XmlNode ioxpin3 = new XmlNode("Pin", "0");
+		XmlNode ioxpin4 = new XmlNode("Pin", "0");
+		XmlNode ioxpin5 = new XmlNode("Pin", "0");
+		ioxpin0.addAttribute("number", "0");
+		ioxpin1.addAttribute("number", "1");
+		ioxpin2.addAttribute("number", "2");
+		ioxpin3.addAttribute("number", "3");
+		ioxpin4.addAttribute("number", "4");
+		ioxpin5.addAttribute("number", "5");
+		iox.addChild(ioxpin0);
+		iox.addChild(ioxpin1);
+		iox.addChild(ioxpin2);
+		iox.addChild(ioxpin3);
+		iox.addChild(ioxpin4);
+		iox.addChild(ioxpin5);
+	
 		return root.toString();
 	}
 

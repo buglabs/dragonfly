@@ -53,7 +53,7 @@ import com.buglabs.nmea.sentences.NMEAParserException;
 import com.buglabs.nmea2.AbstractNMEASentence;
 import com.buglabs.nmea2.NMEASentenceFactory;
 import com.buglabs.nmea2.RMC;
-import com.buglabs.util.LogServiceUtil;
+import com.buglabs.util.osgi.LogServiceUtil;
 
 /**
  * This class is a thread that listens for NMEA sentences on the InputStream

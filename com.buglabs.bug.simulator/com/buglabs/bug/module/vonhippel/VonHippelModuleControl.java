@@ -38,7 +38,7 @@ import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl;
 import com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort;
-import com.buglabs.module.IModuleLEDController;
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
 
 public class VonHippelModuleControl implements IVonHippelModuleControl, IModuleLEDController, IVonHippelSerialPort {
 

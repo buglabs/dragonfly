@@ -47,10 +47,6 @@ import org.osgi.service.http.NamespaceException;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.buglabs.application.IServiceProvider;
-import com.buglabs.application.RunnableWithServices;
-import com.buglabs.application.ServiceTrackerHelper;
-import com.buglabs.bug.base.ShellService;
 import com.buglabs.bug.base.SupportServlet;
 import com.buglabs.bug.base.VBUGSupportInfo;
 import com.buglabs.bug.base.pub.IBUG20BaseControl;
@@ -58,24 +54,24 @@ import com.buglabs.bug.base.pub.IShellService;
 import com.buglabs.bug.base.pub.ITimeProvider;
 import com.buglabs.bug.bmi.PipeReader;
 import com.buglabs.bug.bmi.pub.Manager;
-import com.buglabs.bug.module.audio.AudioActivator;
 import com.buglabs.bug.module.camera.CameraActivator;
 import com.buglabs.bug.module.gps.GPSActivator;
 import com.buglabs.bug.module.lcd.LCDActivator;
 import com.buglabs.bug.module.motion.MotionActivator;
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.bug.module.pub.IModletFactory;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.bmi.api.IModletFactory;
 import com.buglabs.bug.module.sierra.GSMActivator;
 import com.buglabs.bug.module.video.VideoActivator;
 import com.buglabs.bug.module.vonhippel.VHActivator;
 import com.buglabs.bug.simulator.controller.Server;
-import com.buglabs.bug.simulator.ui.SimulatorModuleCommands;
-import com.buglabs.device.IButtonEventProvider;
-import com.buglabs.osgi.shell.ICommand;
-import com.buglabs.osgi.shell.IShellCommandProvider;
+
+import com.buglabs.bug.buttons.IButtonEventProvider;
+
 import com.buglabs.support.SupportInfoTextFormatter;
 import com.buglabs.support.SupportInfoXMLFormatter;
-import com.buglabs.util.LogServiceUtil;
+import com.buglabs.util.osgi.LogServiceUtil;
+import com.buglabs.util.osgi.ServiceTrackerUtil;
+import com.buglabs.util.osgi.ServiceTrackerUtil.ManagedRunnable;
 
 /**
  * This bundle offers base unit features to the runtime, such as date/time and
@@ -124,8 +120,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	private Server controllerServer;
 
-	private AudioActivator audioActivator;
-
 	private MotionActivator motionActivator;
 
 	private LCDActivator lcdActivator;
@@ -138,12 +132,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	private VideoActivator videoActivator;
 
-	private ServiceRegistration userBepReg;
-
-	private ServiceRegistration powerBepReg;
-
-	private ServiceRegistration buttonCommandReg;
-
 	public void start(final BundleContext context) throws Exception {
 		// Basic setup ********************************************
 		this.context = context;
@@ -151,11 +139,18 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 		// com.buglabs.bug.base services **************************
 		timeReg = context.registerService(ITimeProvider.class.getName(), this, null);
-		shellServiceReg = context.registerService(IShellService.class.getName(), new ShellService(), null);
-		httpST = ServiceTrackerHelper.createAndOpen(context, new String[] { HttpService.class.getName() }, new RunnableWithServices() {
-
-			public void allServicesAvailable(IServiceProvider serviceProvider) {
-				httpService = (HttpService) serviceProvider.getService(HttpService.class);
+		httpST = ServiceTrackerUtil.openServiceTracker(context, new ManagedRunnable() {
+			
+			@Override
+			public void shutdown() {
+				if (httpService != null) {
+					httpService.unregister(INFO_SERVLET_ALIAS);
+				}
+			}
+			
+			@Override
+			public void run(Map<String, Object> services) {
+				httpService = (HttpService) services.get(HttpService.class.getName());
 				try {
 					// xml servlet
 					httpService.registerServlet(INFO_SERVLET_ALIAS, new SupportServlet(new VBUGSupportInfo(context), new SupportInfoXMLFormatter()), null, null);
@@ -167,13 +162,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 					logService.log(LogService.LOG_ERROR, "Unable to register info servlet.", e);
 				}
 			}
-
-			public void serviceUnavailable(IServiceProvider serviceProvider, ServiceReference sr, Object service) {
-				if (httpService != null) {
-					httpService.unregister(INFO_SERVLET_ALIAS);
-				}
-			}
-		});
+		}, HttpService.class.getName());
 
 		// com.buglabs.bug.bmi services ********************************
 		modletFactories = new Hashtable();
@@ -209,9 +198,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		videoActivator = new VideoActivator();
 		videoActivator.start(context);
 
-		// UI stuff ***********************************************
-		shellCommandReg = context.registerService(IShellCommandProvider.class.getName(), new SimulatorModuleCommands(bmiManager), null);
-
 		// Module Controller *************************************
 		try {
 			controllerServer = Server.startServer(BUG_SIMULATOR_CONTROLLER_PORT, logService, context);
@@ -221,44 +207,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 		Dictionary<String, String> d = new Hashtable<String, String>();
 		d.put("bug.base.version", "2.0");
-		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, d);
-		
-		ShellButtonAdapter userBtn = new ShellButtonAdapter("user");
-		ShellButtonAdapter powerBtn = new ShellButtonAdapter("power");
-		ICommand [] cmds = {userBtn, powerBtn};
-		
-		userBepReg = context.registerService(IButtonEventProvider.class.getName(), userBtn, getUserButtonProperties());
-		powerBepReg = context.registerService(IButtonEventProvider.class.getName(), powerBtn, getPowerButtonProperties());
-		buttonCommandReg = context.registerService(IShellCommandProvider.class.getName(), new ButtonCommands(cmds), null);
-	}
-
-	private Dictionary<String, String> getPowerButtonProperties() {
-		Dictionary<String, String> d = new Hashtable<String, String>();
-		d.put("Provider", this.getClass().getName());
-		d.put("Button", "Power");
-		return d;
-	}
-
-	private Dictionary<String, String> getUserButtonProperties() {
-		Dictionary<String, String> d = new Hashtable<String, String>();
-		d.put("Provider", this.getClass().getName());
-		d.put("Button", "User");
-		return d;
+		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, d);		
 	}
 	
-	public void stop(BundleContext context) throws Exception {
-		if (buttonCommandReg != null) {
-			buttonCommandReg.unregister();
-		}
-		
-		if (powerBepReg != null) {
-			powerBepReg.unregister();
-		}
-		
-		if (userBepReg != null) {
-			userBepReg.unregister();
-		}
-		
+	public void stop(BundleContext context) throws Exception {	
 		if (controllerServer != null) {
 			controllerServer.shutdown();
 		}
@@ -295,10 +247,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 			gsmActivator.stop(context);
 		}
 
-		if (audioActivator != null) {
-			audioActivator.stop(context);
-		}
-		
 		if (videoActivator != null) {
 			videoActivator.stop(context);
 		}
@@ -444,7 +392,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	}
 
 	private void createModlets(IModletFactory factory) throws Exception {
-		IModlet modlet = factory.createModlet(context, 0);
+		IModlet modlet = factory.createModlet(context, 0, null);
 		modlet.setup();
 		modlet.start();
 	}
@@ -459,18 +407,5 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	public static LogService getLogService() {
 		return logService;
-	}
-	
-	private class ButtonCommands implements IShellCommandProvider {
-		private final ICommand[] cmds;
-
-		public ButtonCommands(ICommand[] cmds) {
-			this.cmds = cmds;		
-		}
-
-		public List getCommands() {			
-			return Arrays.asList(cmds);
-		}
-		
-	}
+	}	
 }

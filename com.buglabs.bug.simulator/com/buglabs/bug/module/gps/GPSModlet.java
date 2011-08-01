@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
@@ -21,6 +19,11 @@ import org.osgi.util.measurement.Measurement;
 import org.osgi.util.measurement.Unit;
 import org.osgi.util.position.Position;
 
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
+import com.buglabs.bug.dragonfly.module.IModuleProperty;
+import com.buglabs.bug.dragonfly.module.ModuleProperty;
 import com.buglabs.bug.module.gps.pub.IGPSModuleControl;
 import com.buglabs.bug.module.gps.pub.INMEARawFeed;
 import com.buglabs.bug.module.gps.pub.INMEASentenceProvider;
@@ -28,22 +31,15 @@ import com.buglabs.bug.module.gps.pub.INMEASentenceSubscriber;
 import com.buglabs.bug.module.gps.pub.IPositionProvider;
 import com.buglabs.bug.module.gps.pub.IPositionSubscriber;
 import com.buglabs.bug.module.gps.pub.LatLon;
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.module.IModuleControl;
-import com.buglabs.module.IModuleLEDController;
-import com.buglabs.module.IModuleProperty;
-import com.buglabs.module.ModuleProperty;
 import com.buglabs.nmea.sentences.RMC;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.WSResponse;
-import com.buglabs.util.ConfigAdminUtil;
-import com.buglabs.util.LogServiceUtil;
-import com.buglabs.util.RemoteOSGiServiceConstants;
-import com.buglabs.util.SelfReferenceException;
-import com.buglabs.util.XmlNode;
+import com.buglabs.util.osgi.ConfigAdminUtil;
+import com.buglabs.util.osgi.LogServiceUtil;
+import com.buglabs.util.xml.XmlNode;
 
 public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IGPSModuleControl, PublicWSProvider, PublicWSProvider2, INMEARawFeed, IModuleLEDController {
 	private BundleContext context;
@@ -269,20 +265,14 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 		Position p = getPosition();
 
 		XmlNode root = new XmlNode("Location");
-		try {
-			root.addChildElement(new XmlNode("Latitude", p.getLatitude().toString()));
-			root.addChildElement(new XmlNode("Longitude", p.getLongitude().toString()));
-			root.addChildElement(new XmlNode("Altitude", p.getAltitude().toString()));
+		root.addChild(new XmlNode("Latitude", p.getLatitude().toString()));
+		root.addChild(new XmlNode("Longitude", p.getLongitude().toString()));
+		root.addChild(new XmlNode("Altitude", p.getAltitude().toString()));
 
-			RMC rmc = gpsd.getRMC();
-			root.addChildElement(new XmlNode("LatitudeDegrees", Double.toString(rmc.getLatitudeAsDMS().toDecimalDegrees())));
-			root.addChildElement(new XmlNode("LongitudeDegrees", Double.toString(rmc.getLongitudeAsDMS().toDecimalDegrees())));
-
-		} catch (SelfReferenceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		RMC rmc = gpsd.getRMC();
+		root.addChild(new XmlNode("LatitudeDegrees", Double.toString(rmc.getLatitudeAsDMS().toDecimalDegrees())));
+		root.addChild(new XmlNode("LongitudeDegrees", Double.toString(rmc.getLongitudeAsDMS().toDecimalDegrees())));
+		
 		return root.toString();
 	}
 

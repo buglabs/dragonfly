@@ -9,7 +9,7 @@ import com.buglabs.bug.accelerometer.pub.AccelerometerConfiguration;
 import com.buglabs.bug.accelerometer.pub.AccelerometerSample;
 import com.buglabs.bug.accelerometer.pub.AccelerometerSampleStream;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerConfigurationListener;
-import com.buglabs.util.StringUtil;
+
 
 public class MotionAccelerometerSampleStream extends AccelerometerSampleStream implements IAccelerometerConfigurationListener{
 	
@@ -35,7 +35,7 @@ public class MotionAccelerometerSampleStream extends AccelerometerSampleStream i
 		if(buffer.ready()){
 			String line = buffer.readLine();
 			if(line != null){
-				String[] split = StringUtil.split(line, ",");
+				String[] split = line.split(",");
 				try {
 					Thread.sleep(config.getDelay());
 				} catch (InterruptedException e) {

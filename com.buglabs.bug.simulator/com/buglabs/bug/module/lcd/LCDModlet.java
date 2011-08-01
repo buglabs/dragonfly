@@ -26,17 +26,15 @@ import com.buglabs.bug.module.lcd.pub.ILCDModuleControl;
 import com.buglabs.bug.module.lcd.pub.IML8953Accelerometer;
 import com.buglabs.bug.module.lcd.pub.IModuleDisplay;
 import com.buglabs.bug.module.motion.pub.AccelerationWS;
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.module.IModuleControl;
-import com.buglabs.module.IModuleLEDController;
-import com.buglabs.module.IModuleProperty;
-import com.buglabs.module.ModuleProperty;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
+import com.buglabs.bug.dragonfly.module.IModuleProperty;
+import com.buglabs.bug.dragonfly.module.ModuleProperty;
 import com.buglabs.services.ws.PublicWSProvider;
-import com.buglabs.util.IStreamMultiplexerListener;
-import com.buglabs.util.LogServiceUtil;
-import com.buglabs.util.StreamMultiplexerEvent;
+import com.buglabs.util.osgi.LogServiceUtil;
 
-public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IModuleDisplay, IStreamMultiplexerListener, IModuleLEDController, IML8953Accelerometer {
+public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IModuleDisplay, IModuleLEDController, IML8953Accelerometer {
 
 	private final BundleContext context;
 
@@ -64,16 +62,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 	
 	private final int LCD_WIDTH = 320;
 	private final int LCD_HEIGHT = 200;
-
-	/*
-	private ServiceRegistration accRawFeedRef;
-
-	private ServiceRegistration accSampleProvRef;
-
-	private ServiceRegistration accSampleFeedRef;
-
-	private ServiceRegistration accControlRef;
-	*/
 	
 	private ServiceRegistration ledControllerRef;
 
@@ -228,23 +216,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 
 		activeFrames.add(frame);
 		return frame;
-	}
-
-	public void streamNotification(StreamMultiplexerEvent event) {
-		switch(event.type) {
-		case StreamMultiplexerEvent.EVENT_STREAM_ADDED:
-			if(event.numberOfStreams == 1) {
-				//accDevice.ioctl_BMI_MDACC_ACCELEROMETER_RUN();
-			}
-			break;
-		case StreamMultiplexerEvent.EVENT_STREAM_REMOVED:
-			if(event.numberOfStreams == 0) {
-				//accDevice.ioctl_BMI_MDACC_ACCELEROMETER_STOP();
-			}
-			break;
-		default:
-			break;
-		}
 	}
 
 	public int disable() throws IOException {

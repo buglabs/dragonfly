@@ -29,25 +29,22 @@ package com.buglabs.bug.module.sierra;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.pub.IModlet;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
+import com.buglabs.bug.dragonfly.module.IModuleProperty;
+import com.buglabs.bug.dragonfly.module.ModuleProperty;
 import com.buglabs.bug.module.sierra.pub.ISierraModuleControl;
-import com.buglabs.module.IModuleControl;
-import com.buglabs.module.IModuleLEDController;
-import com.buglabs.module.IModuleProperty;
-import com.buglabs.module.ModuleProperty;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider2;
-import com.buglabs.util.LogServiceUtil;
-import com.buglabs.util.RemoteOSGiServiceConstants;
+import com.buglabs.util.osgi.LogServiceUtil;
 
 /**
  * The Modlet exports the hardware-level services to the OSGi runtime.
@@ -100,35 +97,18 @@ public class GSMModlet implements IModlet, ISierraModuleControl, IModuleControl,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.buglabs.bug.module.pub.IModlet#start()
+	 * @see com.buglabs.bug.bmi.api.IModlet#start()
 	 */
 	public void start() throws Exception {
-		
-
 		moduleRef = context.registerService(IModuleControl.class.getName(), this, null);
-		ledRef = context.registerService(IModuleLEDController.class.getName(), this, createRemotableProperties(null));
-		gsmControlRef = context.registerService(ISierraModuleControl.class.getName(), this, createRemotableProperties(null));
+		ledRef = context.registerService(IModuleLEDController.class.getName(), this, null);
+		gsmControlRef = context.registerService(ISierraModuleControl.class.getName(), this, null);
 	}
-
-	/**
-	 * @return A dictionary with R-OSGi enable property.
-	 */
-	private Dictionary createRemotableProperties(Dictionary ht) {
-		if (ht == null) {
-			ht = new Hashtable();
-		}
-	
-		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-
-		return ht;
-	}
-
-
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.buglabs.bug.module.pub.IModlet#stop()
+	 * @see com.buglabs.bug.bmi.api.IModlet#stop()
 	 */
 	public void stop() throws Exception {
 		logService.log(LogService.LOG_DEBUG, "GSMModlet stop enter");
@@ -144,7 +124,7 @@ public class GSMModlet implements IModlet, ISierraModuleControl, IModuleControl,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.buglabs.module.IModuleControl#getModuleProperties()
+	 * @see com.buglabs.bug.dragonfly.module.IModuleControl#getModuleProperties()
 	 */
 	public List getModuleProperties() {
 		List properties = new ArrayList();

@@ -32,9 +32,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.bug.module.pub.IModletFactory;
-import com.buglabs.util.BugBundleConstants;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.bmi.api.IModletFactory;
+import com.buglabs.util.osgi.BUGBundleConstants;
 
 /**
  * Manages logic of receiving messages from BMI and making changes to runtime.
@@ -142,7 +142,7 @@ public class Manager {
 
 							// TODO we want to do some logic like get only the
 							// latest version of a given modlet factory.
-							IModlet m = mf.createModlet(context, message.getSlot());
+							IModlet m = mf.createModlet(context, message.getSlot(), null);
 							try {
 								m.setup();
 							} catch (Exception e) {
@@ -228,7 +228,7 @@ public class Manager {
 		for (int i = 0; i < bundles.length; ++i) {
 			Dictionary d = bundles[i].getHeaders();
 			
-			if ((id = (String) d.get(BugBundleConstants.BUG_BUNDLE_MODULE_ID)) != null) {
+			if ((id = (String) d.get(BUGBundleConstants.BUG_BUNDLE_MODULE_ID)) != null) {
 				if (id.equals(moduleId)) {
 					matches.add(bundles[i]);					
 				}

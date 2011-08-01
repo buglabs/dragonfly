@@ -34,9 +34,9 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.buglabs.bug.module.pub.BMIModuleProperties;
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.bug.module.pub.IModletFactory;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.bmi.api.IModletFactory;
+import com.buglabs.bug.bmi.sysfs.BMIDevice;
 
 public class VideoActivator implements BundleActivator, IModletFactory {
 	private BundleContext context;
@@ -67,10 +67,6 @@ public class VideoActivator implements BundleActivator, IModletFactory {
 		}
 	}
 
-	public IModlet createModlet(BundleContext context, int slotId) {
-		return new VideoModlet(context, slotId, getModuleId());
-	}
-
 	public String getModuleId() {
 		return "VIDEO";
 	}
@@ -91,7 +87,8 @@ public class VideoActivator implements BundleActivator, IModletFactory {
 		return "bmi_video";
 	}
 
-	public IModlet createModlet(BundleContext context, int slotId, BMIModuleProperties properties) {
-		return new VideoModlet(context, slotId, getModuleId(), properties);
+	@Override
+	public IModlet createModlet(BundleContext context, int slotId, BMIDevice properties) {
+		return new VideoModlet(context, slotId, getModuleId());
 	}
 }

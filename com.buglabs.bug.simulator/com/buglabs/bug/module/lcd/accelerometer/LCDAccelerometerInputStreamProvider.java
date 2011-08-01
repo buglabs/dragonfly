@@ -32,22 +32,23 @@ import java.io.InputStream;
 import com.buglabs.bug.accelerometer.pub.AccelerometerSampleStream;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerRawFeed;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleFeed;
-import com.buglabs.bug.module.lcd.LCDActivator;
-import com.buglabs.util.LogServiceUtil;
-import com.buglabs.util.StreamMultiplexer;
 
-public class LCDAccelerometerInputStreamProvider extends StreamMultiplexer implements IAccelerometerSampleFeed, IAccelerometerRawFeed {
+public class LCDAccelerometerInputStreamProvider implements IAccelerometerSampleFeed, IAccelerometerRawFeed {
 	private static final int BUFFER_SIZE = 6;
 	private static final int PROCESS_DELAY = 50;
 	private static final int READ_DELAY = 250;
+	private final InputStream inputStream;
 	
-	public LCDAccelerometerInputStreamProvider(InputStream is) {
-		super(is, BUFFER_SIZE, PROCESS_DELAY);
-		setName("LCDAccelerometer");
-		setLogService(LogServiceUtil.getLogService(LCDActivator.getInstance().getBundleContext()));
+	public LCDAccelerometerInputStreamProvider(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 
 	public AccelerometerSampleStream getSampleInputStream() {
 		return new LCDAccelerometerSampleInputStream(getInputStream());
+	}
+
+	@Override
+	public InputStream getInputStream() {
+		return inputStream;
 	}
 }

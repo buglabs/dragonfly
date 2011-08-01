@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
@@ -20,26 +18,22 @@ import com.buglabs.bug.accelerometer.pub.IAccelerometerControl;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerRawFeed;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleFeed;
 import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleProvider;
-import com.buglabs.bug.module.motion.commands.MotionShellCommandProvider;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
+import com.buglabs.bug.dragonfly.module.IModuleProperty;
+import com.buglabs.bug.dragonfly.module.ModuleProperty;
 import com.buglabs.bug.module.motion.pub.AccelerationWS;
 import com.buglabs.bug.module.motion.pub.IMDACCModuleControl;
 import com.buglabs.bug.module.motion.pub.IMotionSubject;
 import com.buglabs.bug.module.motion.pub.InputEvent;
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.module.IModuleControl;
-import com.buglabs.module.IModuleLEDController;
-import com.buglabs.module.IModuleProperty;
-import com.buglabs.module.ModuleProperty;
-import com.buglabs.osgi.shell.IShellCommandProvider;
 import com.buglabs.services.ws.PublicWSProvider;
-import com.buglabs.util.IStreamMultiplexerListener;
-import com.buglabs.util.RemoteOSGiServiceConstants;
-import com.buglabs.util.StreamMultiplexerEvent;
+
  
 /**
  * @deprecated This module is not supported in BUG 2.0 *
  */
-public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleControl, IStreamMultiplexerListener, IModuleLEDController {
+public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleControl, IModuleLEDController {
 
 	private BundleContext context;
 
@@ -50,8 +44,6 @@ public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleContro
 	private ServiceRegistration motionObserverRef;
 
 	private ServiceRegistration moduleRef;
-
-	private ServiceRegistration motionShellCommandRef;
 
 	private ServiceRegistration wsRef;
 	
@@ -96,10 +88,10 @@ public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleContro
 
 	public void start() throws Exception {
 		IMotionSubject motionSubject = new MotionSubject();
-		motionObserverRef = context.registerService(IMotionSubject.class.getName(), motionSubject, createRemotableProperties(null));
+		motionObserverRef = context.registerService(IMotionSubject.class.getName(), motionSubject, createBasicServiceProperties());
 		moduleRef = context.registerService(IModuleControl.class.getName(), this, null);
-		lcdRef = context.registerService(IModuleLEDController.class.getName(), this, createRemotableProperties(null));
-		motionShellCommandRef = context.registerService(IShellCommandProvider.class.getName(), new MotionShellCommandProvider((MotionSubject) motionSubject), null);
+		lcdRef = context.registerService(IModuleLEDController.class.getName(), this, createBasicServiceProperties());
+
 		MotionWS motionWS = new MotionWS();
 		motionSubject.register(motionWS);
 		wsRef = context.registerService(PublicWSProvider.class.getName(), motionWS, null);
@@ -110,30 +102,18 @@ public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleContro
 		
 		acceld = new AccelerometerRawFeed(data,accControl);
 		
-		accRawFeedRef = context.registerService(IAccelerometerRawFeed.class.getName(), acceld, createRemotableProperties(createBasicServiceProperties()));
+		accRawFeedRef = context.registerService(IAccelerometerRawFeed.class.getName(), acceld, createBasicServiceProperties());
 		IAccelerometerSampleProvider asp = new AccelerometerSampleProvider(acceld, accDevice);
-		accSampleProvRef = context.registerService(IAccelerometerSampleProvider.class.getName(), asp, createRemotableProperties(createBasicServiceProperties()));
-		accSampleFeedRef = context.registerService(IAccelerometerSampleFeed.class.getName(), acceld, createRemotableProperties(createBasicServiceProperties()));
-		accControlRef = context.registerService(IAccelerometerControl.class.getName(), accControl, createRemotableProperties(createBasicServiceProperties()));
+		accSampleProvRef = context.registerService(IAccelerometerSampleProvider.class.getName(), asp, createBasicServiceProperties());
+		accSampleFeedRef = context.registerService(IAccelerometerSampleFeed.class.getName(), acceld, createBasicServiceProperties());
+		accControlRef = context.registerService(IAccelerometerControl.class.getName(), accControl, createBasicServiceProperties());
 		AccelerationWS accWs = new AccelerationWS(asp, logService);
 		wsAccRef = context.registerService(PublicWSProvider.class.getName(), accWs, null); 
 		
 		mdaccRef = context.registerService(IMDACCModuleControl.class.getName(), this, createBasicServiceProperties());	
 	}
 	
-	/**
-	 * @return A dictionary with R-OSGi enable property.
-	 */
-	private Dictionary createRemotableProperties(Dictionary ht) {
-		if (ht == null) {
-			ht = new Hashtable();
-		}
-		
-		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-		
-		return ht;
-	}
-
+	
 	private InputStream getAccelerometerSamples() throws IOException {
 		String prop = System.getProperty(Constants.PROPERTY_ACCELEROMETER_LOG);
 		
@@ -157,7 +137,6 @@ public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleContro
 		Properties p = new Properties();
 		p.put("Provider", this.getClass().getName());
 		p.put("Slot", Integer.toString(slotId));
-		p.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
 		return p;
 	}
 
@@ -174,7 +153,6 @@ public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleContro
 	public void stop() throws Exception {		
 		wsRef.unregister();
 		wsAccRef.unregister();
-		motionShellCommandRef.unregister();
 		motionObserverRef.unregister();
 		moduleRef.unregister();
 		lcdRef.unregister();
@@ -223,22 +201,6 @@ public class MotionModlet implements IModlet, IMDACCModuleControl, IModuleContro
 		
 	}
 
-	public void streamNotification(StreamMultiplexerEvent event) {
-		switch(event.type) {
-		case StreamMultiplexerEvent.EVENT_STREAM_ADDED:
-			if(event.numberOfStreams == 1) {
-				//accDevice.ioctl_BMI_MDACC_ACCELEROMETER_RUN();
-			}
-			break;
-		case StreamMultiplexerEvent.EVENT_STREAM_REMOVED:
-			if(event.numberOfStreams == 0) {
-				//accDevice.ioctl_BMI_MDACC_ACCELEROMETER_STOP();
-			}
-			break;
-		default:
-			break;
-		}
-	}
 	public int setLEDGreen(boolean state) throws IOException {
 		if(state)
 			logService.log(LogService.LOG_INFO, "Green LED is on");

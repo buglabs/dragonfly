@@ -8,10 +8,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.pub.BMIModuleProperties;
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.bug.module.pub.IModletFactory;
-import com.buglabs.util.LogServiceUtil;
+import com.buglabs.bug.bmi.api.BMIModuleProperties;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.bmi.api.IModletFactory;
+import com.buglabs.bug.bmi.sysfs.BMIDevice;
+import com.buglabs.util.osgi.LogServiceUtil;
 
 /**
  * @deprecated This module is not supported in BUG 2.0 *
@@ -52,16 +53,6 @@ public class MotionActivator implements BundleActivator, IModletFactory {
 	public BundleContext getBundleContext(){
 		return context;
 	}
-
-	public IModlet createModlet(BundleContext context, int slotId) {
-		MotionModlet modlet = new MotionModlet(context, slotId, getModuleId(),logService);
-
-		return modlet;
-	}
-
-	public IModlet createModlet(BundleContext context, int slotId, BMIModuleProperties properties) {
-		return createModlet(context, slotId);
-	}	
 	
 	public String getModuleId() {
 		return "MOTION";
@@ -72,7 +63,11 @@ public class MotionActivator implements BundleActivator, IModletFactory {
 	}
 
 	public String getVersion() {
-		return "2.0.0";
+		return "3.0.0";
 	}
 
+	@Override
+	public IModlet createModlet(BundleContext context, int slotId, BMIDevice properties) {
+		return new MotionModlet(context, slotId, getModuleId(),logService);
+	}
 }

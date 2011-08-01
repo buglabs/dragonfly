@@ -14,17 +14,16 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.pub.IModlet;
+import com.buglabs.bug.bmi.api.IModlet;
 import com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl;
 import com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort;
 import com.buglabs.bug.module.vonhippel.pub.VonHippelWS;
-import com.buglabs.module.IModuleControl;
-import com.buglabs.module.IModuleLEDController;
-import com.buglabs.module.IModuleProperty;
-import com.buglabs.module.ModuleProperty;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
+import com.buglabs.bug.dragonfly.module.IModuleProperty;
+import com.buglabs.bug.dragonfly.module.ModuleProperty;
 import com.buglabs.services.ws.PublicWSProvider;
-import com.buglabs.util.ConfigAdminUtil;
-import com.buglabs.util.RemoteOSGiServiceConstants;
+import com.buglabs.util.osgi.ConfigAdminUtil;
 
 public class VonHippelModlet implements  IModlet, IModuleControl {
 
@@ -117,12 +116,12 @@ public class VonHippelModlet implements  IModlet, IModuleControl {
 		VonHippelModuleControl vonHippelModuleControl = 
 			new VonHippelModuleControl(logService, getIOStreamPath());
 		vonHippelControlRef = context.registerService(
-				IVonHippelModuleControl.class.getName(), vonHippelModuleControl, createRemotableProperties(null));
+				IVonHippelModuleControl.class.getName(), vonHippelModuleControl, createBasicServiceProperties());
 		vonHippelSerial = context.registerService(
-				IVonHippelSerialPort.class.getName(), vonHippelModuleControl, createRemotableProperties(null));
+				IVonHippelSerialPort.class.getName(), vonHippelModuleControl, createBasicServiceProperties());
 		moduleRef = context.registerService(IModuleControl.class.getName(), this, createBasicServiceProperties());
 		ledRef = context.registerService(
-				IModuleLEDController.class.getName(), vonHippelModuleControl, createRemotableProperties(null));
+				IModuleLEDController.class.getName(), vonHippelModuleControl, createBasicServiceProperties());
 		VonHippelWS vhWS = new VonHippelWS();
 		wsVonHippelReg = context.registerService(PublicWSProvider.class.getName(), vhWS, null);
 	}
@@ -143,20 +142,7 @@ public class VonHippelModlet implements  IModlet, IModuleControl {
 		p.put("Provider", this.getClass().getName());
 		p.put("Slot", Integer.toString(slotId));
 		return p;
-	}
-	
-	/**
-	 * @return A dictionary with R-OSGi enable property.
-	 */
-	private Dictionary createRemotableProperties(Dictionary ht) {
-		if (ht == null) {
-			ht = new Hashtable();
-		}
-		
-		ht.put(RemoteOSGiServiceConstants.R_OSGi_REGISTRATION, "true");
-		
-		return ht;
-	}
+	}	
 
 	public List getModuleProperties() {
 		List properties = new ArrayList();

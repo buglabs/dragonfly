@@ -27,8 +27,8 @@
  *******************************************************************************/
 package com.buglabs.bug.module.sierra.pub;
 
-import com.buglabs.module.IModuleControl;
-import com.buglabs.module.IModuleLEDController;
+import com.buglabs.bug.dragonfly.module.IModuleControl;
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
 
 public interface ISierraModuleControl extends IModuleControl, IModuleLEDController {
 

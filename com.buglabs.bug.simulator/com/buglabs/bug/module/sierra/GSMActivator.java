@@ -34,9 +34,9 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.buglabs.bug.module.pub.BMIModuleProperties;
-import com.buglabs.bug.module.pub.IModlet;
-import com.buglabs.bug.module.pub.IModletFactory;
+import com.buglabs.bug.bmi.api.IModlet;
+import com.buglabs.bug.bmi.api.IModletFactory;
+import com.buglabs.bug.bmi.sysfs.BMIDevice;
 
 public class GSMActivator implements BundleActivator, IModletFactory {
 	private BundleContext context;
@@ -62,12 +62,6 @@ public class GSMActivator implements BundleActivator, IModletFactory {
 		sr.unregister();
 	}
 
-	public IModlet createModlet(BundleContext context, int slotId) {
-		GSMModlet modlet = new GSMModlet(context, slotId, getModuleId(), "Sierra");
-
-		return modlet;
-	}
-
 	public String getModuleId() {
 		return "SIERRA";
 	}
@@ -77,7 +71,7 @@ public class GSMActivator implements BundleActivator, IModletFactory {
 	}
 
 	public String getVersion() {
-		return "2.0.0";
+		return "3.0.0";
 	}
 
 	public BundleContext getBundleContext() {
@@ -88,9 +82,9 @@ public class GSMActivator implements BundleActivator, IModletFactory {
 		return instance;
 	}
 
-	public IModlet createModlet(BundleContext context, int slotId,
-			BMIModuleProperties properties) {
-		return createModlet(context, slotId);
+	@Override
+	public IModlet createModlet(BundleContext context, int slotId, BMIDevice properties) {
+		return new GSMModlet(context, slotId, getModuleId(), "Sierra");
 	}
 
 }

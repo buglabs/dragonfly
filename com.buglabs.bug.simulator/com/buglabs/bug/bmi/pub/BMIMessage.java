@@ -19,8 +19,6 @@
  */
 package com.buglabs.bug.bmi.pub;
 
-import com.buglabs.util.StringUtil;
-
 /**
  * A message from the BMI system. Format [moduleId] [version] [slot] [event]
  * 
@@ -94,7 +92,7 @@ public class BMIMessage {
 	 * @return
 	 */
 	public boolean parse() {
-		String[] toks = StringUtil.split(raw, " ");
+		String[] toks = raw.split(" ");
 
 		if (toks.length != 4) {
 			return false;

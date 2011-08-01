@@ -14,7 +14,7 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
 import com.buglabs.bug.module.gps.GPSActivator;
-import com.buglabs.util.ConfigAdminUtil;
+import com.buglabs.util.osgi.ConfigAdminUtil;
 
 
 public class RecordStore {
