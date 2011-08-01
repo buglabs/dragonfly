@@ -17,9 +17,10 @@
 |   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --------------------------------------------------------------------------*/
 package gnu.io;
-import java.io.*;
-import java.util.*;
-import java.lang.Math;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.TooManyListenersException;
 
 /**
 * @author Trent Jarvi

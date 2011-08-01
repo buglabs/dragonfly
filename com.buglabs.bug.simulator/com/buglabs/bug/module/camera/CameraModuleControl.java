@@ -6,15 +6,14 @@ import java.util.Map;
 
 import org.osgi.service.log.LogService;
 
+import com.buglabs.bug.dragonfly.module.IModuleLEDController;
 import com.buglabs.bug.module.camera.pub.ICamera2ModuleControl;
 import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
-import com.buglabs.bug.dragonfly.module.IModuleLEDController;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.PublicWSProviderWithParams;
 import com.buglabs.services.ws.WSResponse;
-
 import com.buglabs.util.xml.XmlNode;
 
 public class CameraModuleControl implements ICameraModuleControl, ICamera2ModuleControl, IModuleLEDController, PublicWSProviderWithParams {

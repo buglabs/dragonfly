@@ -30,7 +30,6 @@ package com.buglabs.bug.module.video;
 import java.awt.Frame;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -42,10 +41,10 @@ import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.bmi.api.BMIModuleProperties;
 import com.buglabs.bug.bmi.api.IModlet;
-import com.buglabs.bug.module.video.pub.IVideoModuleControl;
 import com.buglabs.bug.dragonfly.module.IModuleControl;
 import com.buglabs.bug.dragonfly.module.IModuleProperty;
 import com.buglabs.bug.dragonfly.module.ModuleProperty;
+import com.buglabs.bug.module.video.pub.IVideoModuleControl;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
@@ -53,7 +52,6 @@ import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.PublicWSProviderWithParams;
 import com.buglabs.services.ws.WSResponse;
 import com.buglabs.util.osgi.LogServiceUtil;
-
 import com.buglabs.util.xml.XmlNode;
 
 /**

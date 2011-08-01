@@ -2,6 +2,8 @@ package com.buglabs.bug.sysfs;
 
 import java.io.File;
 
+import com.buglabs.bug.bmi.sysfs.BMIDevice;
+
 /**
  * A work-in-progress for sysfs class for java clients.
  * @author kgilmer

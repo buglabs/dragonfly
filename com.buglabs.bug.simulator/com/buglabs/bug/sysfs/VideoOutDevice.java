@@ -2,6 +2,8 @@ package com.buglabs.bug.sysfs;
 
 import java.io.File;
 
+import com.buglabs.bug.bmi.sysfs.BMIDevice;
+
 /**
  * Access sysfs items for video module.
  * WIP

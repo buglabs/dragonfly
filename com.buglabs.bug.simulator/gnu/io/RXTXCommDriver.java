@@ -25,9 +25,10 @@
 
 package gnu.io;
 
-import java.lang.*;
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Iterator;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 /**

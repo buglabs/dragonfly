@@ -18,9 +18,9 @@
 --------------------------------------------------------------------------*/
 package  gnu.io;
 
-import  java.io.FileDescriptor;
-import  java.util.Vector;
-import  java.util.Enumeration;
+import java.io.FileDescriptor;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
 * @author Trent Jarvi

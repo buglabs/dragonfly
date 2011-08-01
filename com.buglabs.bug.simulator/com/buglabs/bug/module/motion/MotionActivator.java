@@ -8,7 +8,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.bmi.api.BMIModuleProperties;
 import com.buglabs.bug.bmi.api.IModlet;
 import com.buglabs.bug.bmi.api.IModletFactory;
 import com.buglabs.bug.bmi.sysfs.BMIDevice;

@@ -9,7 +9,6 @@ import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider2;
 import com.buglabs.services.ws.WSResponse;
-
 import com.buglabs.util.xml.XmlNode;
 
 /**

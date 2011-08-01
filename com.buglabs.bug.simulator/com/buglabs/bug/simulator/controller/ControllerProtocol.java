@@ -2,9 +2,9 @@ package com.buglabs.bug.simulator.controller;
 
 import org.osgi.framework.BundleContext;
 
+import com.buglabs.bug.bmi.api.IModletFactory;
 import com.buglabs.bug.bmi.pub.BMIMessage;
 import com.buglabs.bug.bmi.pub.Manager;
-import com.buglabs.bug.bmi.api.IModletFactory;
 import com.buglabs.bug.dragonfly.module.IModuleControl;
 import com.buglabs.util.osgi.OSGiServiceLoader;
 

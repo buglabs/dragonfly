@@ -3,7 +3,6 @@ package com.buglabs.bug.module.vonhippel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
@@ -15,13 +14,13 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogService;
 
 import com.buglabs.bug.bmi.api.IModlet;
-import com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl;
-import com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort;
-import com.buglabs.bug.module.vonhippel.pub.VonHippelWS;
 import com.buglabs.bug.dragonfly.module.IModuleControl;
 import com.buglabs.bug.dragonfly.module.IModuleLEDController;
 import com.buglabs.bug.dragonfly.module.IModuleProperty;
 import com.buglabs.bug.dragonfly.module.ModuleProperty;
+import com.buglabs.bug.module.vonhippel.pub.IVonHippelModuleControl;
+import com.buglabs.bug.module.vonhippel.pub.IVonHippelSerialPort;
+import com.buglabs.bug.module.vonhippel.pub.VonHippelWS;
 import com.buglabs.services.ws.PublicWSProvider;
 import com.buglabs.util.osgi.ConfigAdminUtil;
 

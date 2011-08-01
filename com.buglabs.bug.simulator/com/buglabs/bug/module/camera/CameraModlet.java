@@ -16,14 +16,14 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
-import com.buglabs.bug.module.camera.pub.ICamera2Device;
-import com.buglabs.bug.module.camera.pub.ICamera2ModuleControl;
-import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.bug.bmi.api.IModlet;
 import com.buglabs.bug.dragonfly.module.IModuleControl;
 import com.buglabs.bug.dragonfly.module.IModuleLEDController;
 import com.buglabs.bug.dragonfly.module.IModuleProperty;
 import com.buglabs.bug.dragonfly.module.ModuleProperty;
+import com.buglabs.bug.module.camera.pub.ICamera2Device;
+import com.buglabs.bug.module.camera.pub.ICamera2ModuleControl;
+import com.buglabs.bug.module.camera.pub.ICameraModuleControl;
 import com.buglabs.services.ws.IWSResponse;
 import com.buglabs.services.ws.PublicWSDefinition;
 import com.buglabs.services.ws.PublicWSProvider;
