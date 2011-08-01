@@ -256,7 +256,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 
 	private Map<String, String> getFelixLaunchProperties() {
 		
-		Map<String, String> m = new Hashtable();
+		Map<String, String> m = new Hashtable<String, String>();
 		
 		m.put("felix.auto.deploy.action", "install,start");
 		m.put("felix.log.level", "4");
@@ -265,12 +265,12 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 	}
 
 	private String[] loadBootClasspath(String felixPluginBase) throws IOException {
-		List cp = new ArrayList();
+		List<String> cp = new ArrayList<String>();
 		
 		//Add the Felix OSGi Framework
 		cp.add(felixPluginBase + FELIX_FRAMEWORK_REL_PATH);
 	
-		return (String[]) cp.toArray(new String[cp.size()]);
+		return cp.toArray(new String[cp.size()]);
 	}
 	
 	/**
