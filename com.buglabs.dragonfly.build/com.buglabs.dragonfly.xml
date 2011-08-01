@@ -141,7 +141,7 @@
 		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins">
 			<fileset dir="${dist.dir}/" includes="com.buglabs.*.jar" />
 		</copy>
-		
+	
 		<!-- Call the target that does everything -->
 		<ant antfile="build.xml" target="bundles.all" dir="${base.build.dir}/${project.feature}">
 			<property name="eclipse.home" location="${root.dir}/com.eclipse.sdk/eclipse"></property>
@@ -185,13 +185,7 @@
 			<property name="distDirectory" value="${dist.dir}" />
 			<property name="full.version" value="3.0.0.${meta.project.version}" />
 			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF"/>
-		</ant>
-		<chmod file="${dist.dir}/com.buglabs.app.bugdash2.jar" perm="u+x"/>
-		<chmod file="${dist.dir}/com.buglabs.bug.dragonfly.jar" perm="u+x"/>
-		<chmod file="${dist.dir}/com.buglabs.bug.simulator.jar" perm="u+x"/>
-		<chmod file="${dist.dir}/com.buglabs.bug.ws.jar" perm="u+x"/>
-		<chmod file="${dist.dir}/com.buglabs.osgi.sewing.jar" perm="u+x"/>
-		<chmod file="${dist.dir}/com.buglabs.util.shell.jar" perm="u+x"/>
+		</ant>		
 	</target>
 
 	<target name="clean" description="Delete temporary directories">

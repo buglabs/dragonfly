@@ -112,13 +112,7 @@
 		<property name="virtualBugJarTargetDir" value="${buildDirectory}/plugins/com.buglabs.dragonfly.simulator/bundles" />		
 		<copy todir="${virtualBugJarTargetDir}">
 			<fileset dir="${baseBuildDir}" excludes="knapsack.jar,org.apache.felix.configadmin-1.2.8.jar,org.apache.felix.log-1.0.1.jar,org.apache.felix.main-3.2.2.jar,com.buglabs.bug.base.bug20.jar,*.tests.jar,com.buglabs.osgi.tester.jar,com.buglabs.bug.jni.*,com.buglabs.bug.module.*,*.zip,hamcrest*.jar,junit*.jar"/>			
-		</copy>
-		<chmod file="${virtualBugJarTargetDir}/com.buglabs.app.bugdash2.jar" perm="u+x"/>
-		<chmod file="${virtualBugJarTargetDir}/com.buglabs.bug.dragonfly.jar" perm="u+x"/>
-		<chmod file="${virtualBugJarTargetDir}/com.buglabs.bug.simulator.jar" perm="u+x"/>
-		<chmod file="${virtualBugJarTargetDir}/com.buglabs.bug.ws.jar" perm="u+x"/>
-		<chmod file="${virtualBugJarTargetDir}/com.buglabs.osgi.sewing.jar" perm="u+x"/>
-		<chmod file="${virtualBugJarTargetDir}/com.buglabs.util.shell.jar" perm="u+x"/>
+		</copy>		
 	</target>
 
 	<!-- ===================================================================== -->
@@ -204,12 +198,6 @@
 			<copy todir="${UpdateSiteStagingLocation}/features">				
 				<fileset dir="${publishDir}/eclipse/features/" includes="*.jar" />
 			</copy>
-			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.app.bugdash2.jar" perm="u+x"/>
-			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.bug.dragonfly.jar" perm="u+x"/>
-			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.bug.simulator.jar" perm="u+x"/>
-			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.bug.ws.jar" perm="u+x"/>
-			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.osgi.sewing.jar" perm="u+x"/>
-			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.util.shell.jar" perm="u+x"/>
 		
 			<zip destfile="${publishDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}"/>
 			<!--
