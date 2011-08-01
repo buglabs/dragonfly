@@ -62,12 +62,8 @@
 		<echo message="Downloading Felix artifacts from ${felix.download.url}" />
 		<mkdir dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" />
 		<exec dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" executable="wget">
-			<arg line="${felix.download.url}org.apache.felix.main-${felix.version}.jar" />
-		</exec>
-		<mkdir dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" />
-		<exec dir="${checkout.dir}/com.buglabs.dragonfly.felix/bundle" executable="wget">
-			<arg line="${felix.download.url}org.apache.felix.log-${felix.log.version}.jar" />
-		</exec>
+			<arg line="https://leafcutter.ci.cloudbees.com/job/knapsack/50/artifact/knapsack.jar" />
+		</exec>		
 
 		<!-- Add the BUG API Version to the Dragonfly Plugin Manifest -->
 		<manifest file="${checkout.dir}/com.buglabs.dragonfly/META-INF/MANIFEST.MF" mode="update">

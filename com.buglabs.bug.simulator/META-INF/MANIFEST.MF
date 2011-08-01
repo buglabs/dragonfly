@@ -26,7 +26,8 @@ Bundle-Version: 1.0.0
 Bundle-Name: com.buglabs.bug.simulator
 Bundle-Activator: com.buglabs.bug.simulator.Activator
 Bundle-SymbolicName: com.buglabs.bug.simulator
-Import-Package: com.buglabs.bug.bmi.api,
+Import-Package: 
+ com.buglabs.bug.bmi.api,
  com.buglabs.bug.bmi.sysfs,
  com.buglabs.bug.buttons,
  com.buglabs.bug.dragonfly.module,

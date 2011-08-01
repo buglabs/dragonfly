@@ -44,14 +44,11 @@ import com.buglabs.dragonfly.felix.Activator;
  */
 public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
 
-	private static final String FELIX_MAIN_CLASS = "org.apache.felix.main.Main";
+	private static final String FELIX_MAIN_CLASS = "org.knapsack.Bootstrap";
 	private static final String REL_BUNDLE_DIR = "bundle";
 	private static final String REL_APP_DIR = "apps";
-	/**
-	 * This value must be changed when the embedded Felix jar is changed.
-	 */
-	private static final String FELIX_VERSION = "3.2.2";
-	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "org.apache.felix.main-" + FELIX_VERSION + ".jar";
+	
+	private static final String FELIX_FRAMEWORK_REL_PATH = "framework" + File.separator + "knapsack.jar";
 	private IPath launchDir;
 	private boolean debug = false;
 
