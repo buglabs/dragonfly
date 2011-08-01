@@ -11,6 +11,7 @@ Export-Package:
  com.buglabs.bug.jni.common,
  com.buglabs.bug.base.pub,
  com.buglabs.bug.input.pub,
+ com.buglabs.bug.base.bug20.pub,
  com.openlapi,
  org.osgi.util.measurement,
  org.osgi.util.position, 
