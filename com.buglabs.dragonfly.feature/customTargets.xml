@@ -111,7 +111,7 @@
 		<!-- we need to build the BUG Simulator, which is not an eclipse plugin -->
 		<property name="virtualBugJarTargetDir" value="${buildDirectory}/plugins/com.buglabs.dragonfly.simulator/bundles" />		
 		<copy todir="${virtualBugJarTargetDir}">
-			<fileset dir="${baseBuildDir}" />			
+			<fileset dir="${baseBuildDir}" excludes="com.buglabs.bug.jni.*,com.buglabs.bug.module.*,*.zip,hamcrest*.jar,junit*.jar"/>			
 		</copy>
 	</target>
 

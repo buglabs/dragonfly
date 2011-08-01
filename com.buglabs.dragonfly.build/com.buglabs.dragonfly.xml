@@ -52,11 +52,6 @@
 			<arg value="clone" />
 			<arg value="git://github.com/buglabs/bug-osgi.git" />
 		</exec>
-		<!--
-		<echo message="Replacing ${checkout.dir}/bug-osgi/com.buglabs.common/META-INF/MANIFEST.MF" />
-		<replace file="${checkout.dir}/bug-osgi/com.buglabs.common/META-INF/MANIFEST.MF" token="qualifier" value="${meta.project.version}" />
-		
-		-->
 
 		<copy todir="${base.build.dir}">
 			<fileset dir="${checkout.dir}/bug-osgi">
