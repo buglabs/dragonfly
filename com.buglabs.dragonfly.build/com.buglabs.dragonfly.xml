@@ -186,6 +186,12 @@
 			<property name="full.version" value="3.0.0.${meta.project.version}" />
 			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF"/>
 		</ant>
+		<chmod file="${dist.dir}/com.buglabs.app.bugdash2.jar" perm="u+x"/>
+		<chmod file="${dist.dir}/com.buglabs.bug.dragonfly.jar" perm="u+x"/>
+		<chmod file="${dist.dir}/com.buglabs.bug.simulator.jar" perm="u+x"/>
+		<chmod file="${dist.dir}/com.buglabs.bug.ws.jar" perm="u+x"/>
+		<chmod file="${dist.dir}/com.buglabs.osgi.sewing.jar" perm="u+x"/>
+		<chmod file="${dist.dir}/com.buglabs.util.shell.jar" perm="u+x"/>
 	</target>
 
 	<target name="clean" description="Delete temporary directories">

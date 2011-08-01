@@ -173,13 +173,7 @@
 	<!-- ===================================================================== -->
 	<!-- Steps to do after the build is done. -->
 	<!-- ===================================================================== -->
-	<target name="postBuild">
-		<!--
-			<property name="publishDir" location="${buildDirectory}/../dist" />
-			<property name="UpdateSiteStagingLocation" value="${buildDirectory}/${updateSite}" />
-			
-			<property name="checkoutDir" location="${buildDirectory}/../../com.buglabs.dragonfly.updatesite" />
-		-->
+	<target name="postBuild">	
 			<property name="updatesiteSourceDir" location="${buildDirectory}/com.buglabs.dragonfly.updatesite" />
 			<property name="featureBinDir" location="${buildDirectory}/${buildLabel}" />
 			<property name="sitePackagePrefix" value="${updateSite}" />
@@ -210,9 +204,18 @@
 			<copy todir="${UpdateSiteStagingLocation}/features">				
 				<fileset dir="${publishDir}/eclipse/features/" includes="*.jar" />
 			</copy>
-					
+			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.app.bugdash2.jar" perm="u+x"/>
+			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.bug.dragonfly.jar" perm="u+x"/>
+			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.bug.simulator.jar" perm="u+x"/>
+			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.bug.ws.jar" perm="u+x"/>
+			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.osgi.sewing.jar" perm="u+x"/>
+			<chmod file="${UpdateSiteStagingLocation}/plugins/com.buglabs.util.shell.jar" perm="u+x"/>
 		
-			<zip destfile="${publishDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}"/>			
+			<zip destfile="${publishDir}/${updateSite}-${forceContextQualifier}.zip" basedir="${UpdateSiteStagingLocation}"/>
+			<!--
+			<delete dir="${publishDir}/eclipse"></delete>
+			<delete dir="${publishDir}/updatesite"></delete>
+			-->
 		</target>
 
 		<target name="generateUpdateSite">		
