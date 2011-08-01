@@ -60,7 +60,7 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 					throw new IOException("Cannot create directory: " + launchDir.toFile());
 			
 			URL relativeURL = Activator.getDefault().getBundle().getEntry(File.separator);
-			URL bundleURL = FileLocator.toFileURL(Activator.getDefault().getBundle().getEntry(File.separator + REL_BUNDLE_DIR));
+
 			URL localURL = FileLocator.toFileURL(relativeURL);
 			String felixPluginBase = Path.fromPortableString(localURL.getPath()).toOSString();
 			
@@ -76,8 +76,6 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		
 			File confFile = createFelixConfFile(configuration, launchDir, felixPluginBase, getLaunchProperties());
 			debugPrint("Felix configuration: " + confFile.toString());
-			
-			copyBundles(Path.fromPortableString(bundleURL.getPath()), launchDir, REL_BUNDLE_DIR, monitor);
 			
 			if (getSourceDir() != null)
 				copyBundles(Path.fromPortableString(getSourceDir()), launchDir, REL_BUNDLE_DIR, monitor);
