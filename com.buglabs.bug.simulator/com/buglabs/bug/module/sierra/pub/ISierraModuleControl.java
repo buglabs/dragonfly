@@ -25,33 +25,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.sierra.pub;
 
-import org.osgi.service.log.LogService;
+import com.buglabs.module.IModuleControl;
+import com.buglabs.module.IModuleLEDController;
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+public interface ISierraModuleControl extends IModuleControl, IModuleLEDController {
 
-/**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
- */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
 }

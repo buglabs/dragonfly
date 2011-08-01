@@ -25,33 +25,40 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.lcd.pub;
 
-import org.osgi.service.log.LogService;
+import java.io.IOException;
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import com.buglabs.module.IModuleControl;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
+ * The interface that controls functions of the LCD module.
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+public interface ILCDModuleControl extends IModuleControl {
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @param val
+	 *            Set's the intensity of the backlight 0-7.
+	 * 
+	 */
+	public int setBackLight(int val) throws IOException; // Set IOX backlight
+															// bits [2:0]
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @param val
+	 *            Set's the intensity of the backlight 0-7.
+	 * @deprecated use setBackLight.
+	 */
+	public int setBlackLight(int val) throws IOException; // Set IOX backlight
+															// bits [2:0]
+
+	/**
+	 * 
+	 * @return The stat of IOX. The 3 LSBs reprersent the state of the
+	 *         backlight.
+	 */
+
+	public int disable() throws IOException; // Power down module
+
+	public int enable() throws IOException; // Power up module
 }

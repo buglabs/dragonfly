@@ -25,33 +25,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.lcd.pub;
 
-import org.osgi.service.log.LogService;
+import java.io.IOException;
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import com.buglabs.bug.accelerometer.pub.AccelerometerSample;
 
-/**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
- */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+public interface IML8953Accelerometer {
+	/**
+	 * Read the X-Axis data from the accelerometer device.
+	 * @return X-Axis Data
+	 */
+	public short readX() throws IOException;
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * Read the Y-Axis data from the accelerometer device.
+	 * @return Y-Axis Data
+	 */
+	public short readY() throws IOException;
 	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * Read the Z-Axis data from the accelerometer device.
+	 * @return Z-Axis Data
+	 */
+	public short readZ() throws IOException;
+	
+	
+	
+	/**
+	 * Reads a single sample of the X,Y,Z axes. 
+	 */
+	public AccelerometerSample readSample() throws IOException;
+		
+	
 }

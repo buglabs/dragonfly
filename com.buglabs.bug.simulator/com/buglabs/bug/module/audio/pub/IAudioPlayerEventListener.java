@@ -25,33 +25,26 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
-
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+package com.buglabs.bug.module.audio.pub;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * Listeners for audio events.
  * @author kgilmer
+ * @deprecated This module is not supported in BUG 2.0
  *
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+public interface IAudioPlayerEventListener {
+	public static final int PLAY_COMPLETE = 1;
+	public static final int DECODE_ERROR = 2;
+	public static final int PLAY_START =3;
+	public static final int PAUSE = 4;
+	public static final int RESUME = 5;
+	public static final int PLAY_HALTED = 6;
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * An event audio event has occured.
+	 * @param eventType One of IAudioPlayerEventListener constants.
+	 * @param message null or message if an error has occurred.
+	 */
+	public void audioPlayerEvent(int eventType, String message);
 }

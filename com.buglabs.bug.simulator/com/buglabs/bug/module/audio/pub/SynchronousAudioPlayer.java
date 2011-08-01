@@ -25,33 +25,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.audio.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * An audio player that synchronously plays stream. Requires AudioBackend OSGi
+ * service provided by an Audio Module.
+ * 
  * @author kgilmer
- *
+ * @deprecated This module is not supported in BUG 2.0
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public class SynchronousAudioPlayer {
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	/**
+	 * Uses WAV decoder by default.
+	 * 
+	 * @param backend
+	 * @param audioStream
+	 * @throws IOException
+	 */
+	public SynchronousAudioPlayer(InputStream audioStream) throws IOException {
+	}
+
+	
+	/**
+	 * Synchronously play audio until input stream is complete.
+	 * 
+	 * @throws IOException
+	 */
+	public void play() throws IOException {
 	}
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	
+	/**
+	 * @return Input stream of audio data.
+	 */
+	public InputStream getInputStream() {
+		return null;
 	}
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
 }

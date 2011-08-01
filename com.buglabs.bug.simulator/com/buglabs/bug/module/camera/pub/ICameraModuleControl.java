@@ -25,33 +25,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.camera.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import java.io.IOException;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
+ * Provides hardware control of the Camera Module
+ * 
+ * @author Angel Roman
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public interface ICameraModuleControl {
+	/**
+	 * Sets the beam intensity
+	 * 
+	 * @param intensity
+	 *            The intensity of the beam. 0 = low, 1 = high
+	 * @return negative value if request was not successful.
+	 */
+	public int setFlashBeamIntensity(int intensity) throws IOException;
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * Turns Flash LED off
+	 * 
+	 * @return negative value if request was not successful.
+	 */
+	public int setLEDFlash(boolean state) throws IOException;
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * Selects a camera based on slot number.
+	 * 
+	 * @param slot
+	 *            the slot number of the desired camera.
+	 * @return negative value if request was not sucessful.
+	 */
+	public int setSelectedCamera(int slot) throws IOException;
 	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * Returns the slot number of the selected camera.
+	 * 
+	 * @return negative value if request was not successful.
+	 */
+	public int getSelectedCamera() throws IOException;
 }

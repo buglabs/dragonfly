@@ -25,33 +25,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.camera.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
 import com.buglabs.device.IButtonEventProvider;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * A button provider for the Camera module.
+ * @deprecated
  * @author kgilmer
- *
+ * 
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public interface ICameraButtonEventProvider extends IButtonEventProvider {
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
 }

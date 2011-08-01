@@ -25,33 +25,88 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.audio.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * This audio player plays audio streams asynchronously.  
+ * @deprecated This module is not supported in BUG 2.0
  * @author kgilmer
- *
+ * 
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public class AsynchronousAudioPlayer {
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	/**
+	 * @param listener
+	 */
+	public void addListener(IAudioPlayerEventListener listener) {
 	}
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	/**
+	 * Interrupt the playback if happening, stop and cleanup the thread and line.
+	 */
+	public void close() {
+	}
+
+	
+	/**
+	 * @return Input stream of audio data.
+	 */
+	public InputStream getInputStream() {
+		return null;
+	}
+
+	/**
+	 * Initialize playback.  Uses WAV decoder by default.
+	 * @param audioStream
+	 * @throws IOException
+	 */
+	public AsynchronousAudioPlayer(InputStream audioStream) throws IOException {
+	}
+
+	/**
+	 * @return true if playback has occured and pause() was called.
+	 */
+	public boolean isPaused() {
+		return false;
 	}
 	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	/**
+	 * @return true if audio line is currently sending audio.
+	 */
+	public boolean isPlaying() {
+		return false;
 	}
+
+	/**
+	 * Notify event suscribers.
+	 * @param event
+	 * @param message
+	 */
+	synchronized private void notifyListeners(int event, String message) {
+	}
+
+	/**
+	 * Pause playback.  This cancels the thread but keeps the input stream open.
+	 * @throws IOException
+	 */
+	public void pause() throws IOException {
+	}
+
+	/**
+	 * Begin playback of audio stream.  Method will return after playback thread is started.
+	 * @throws IOException
+	 */
+	public void play() throws IOException {
+	}
+
+	/**
+	 * Remove audio event listener
+	 * @param listener
+	 */
+	public void removeListener(IAudioPlayerEventListener listener) {
+	}
+
 }

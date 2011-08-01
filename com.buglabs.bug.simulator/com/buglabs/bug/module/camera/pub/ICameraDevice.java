@@ -25,33 +25,59 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.camera.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import java.awt.Rectangle;
+import java.io.InputStream;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * An interface for a device that can return images.
+ * 
  * @author kgilmer
- *
+ * @deprecated see {@link ICamera2Device}
+ * 
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public interface ICameraDevice {
+	/**
+	 * @return byte array representing image from camera in JPG format.
+	 */
+	public byte[] getImage();
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @param sizeX preferred X size of image from camera.
+	 * @param sizeY preferred Y size of image from camera.
+	 * @param format preferred format of image from camera.
+	 * @param highQuality quality setting for camera device.
+	 * @return byte array of image from camera.
+	 */
+	public byte[] getImage(int sizeX, int sizeY, int format, boolean highQuality);
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * Initialize overlay from camera device on LCD with specific bounds.
+	 * @param pbounds
+	 * @return
+	 */
+	public boolean initOverlay(Rectangle pbounds);
+
+	/**
+	 * Start overlay of image from camera to LCD screen.
+	 * @return
+	 */
+	public boolean startOverlay();
+
+	/**
+	 * Stop overlay.
+	 * @return
+	 */
+	public boolean stopOverlay();
+
+	/**
+	 * @return inputstream of bytes from Camera device.
+	 */
+	public InputStream getImageInputStream();
+
+	/**
+	 * @return The default format images are presented in.
+	 */
+	public String getFormat();
 }

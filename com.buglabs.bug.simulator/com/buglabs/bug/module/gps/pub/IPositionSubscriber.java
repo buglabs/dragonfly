@@ -25,33 +25,24 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.gps.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import org.osgi.util.position.Position;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * Register this service to receive position change events.
+ * 
+ * This is a whiteboard-pattern API.  Clients register an implementation of IPositionSubscriber.
+ * If position information is available, a server will pick up this service from the OSGi service
+ * registry and pass location update events.
+ * 
  * @author kgilmer
  *
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+public interface IPositionSubscriber {
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @param Position
+	 */
+	public void positionUpdate(Position position);
 }

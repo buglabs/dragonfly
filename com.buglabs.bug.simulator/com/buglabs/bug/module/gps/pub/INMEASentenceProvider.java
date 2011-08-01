@@ -25,33 +25,35 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.gps.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import com.buglabs.nmea.sentences.RMC;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
+ * Provides access methods to NMEA data from GPS devices.
+ * 
+ * If a GPS device is attached, a INMEASentenceProvider service will be accessible to clients via
+ * the OSGi service registry.  This service is appropriate for clients wishing to poll for NEMA
+ * sentences at specific times.
+ * 
+ * @author Angel Roman
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+public interface INMEASentenceProvider {
+	/**
+	 * Provides the latest RMC sentence read from the GPS Device, or null if no information is available.
+	 * @deprecated
+	 * @return RMC sentence object
+	 */
+	public RMC getRMC();
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @return Last parsed RMC NMEA sentence, or null if no sentence with location information has been received.
+	 */
+	public com.buglabs.nmea2.RMC getLastRMC();
 	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @return the index of the RMC value currently available.
+	 * Useful for determining if new RMC is available.
+	 */
+	public int getIndex();
 }

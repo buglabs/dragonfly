@@ -25,33 +25,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.gps.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import org.osgi.util.position.Position;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
+ * This interface describes location services.  When a GPS module is attached to BUG, this service will be available to clients
+ * via the OSGi service registry.  It's best used when the client wishes to poll for location at given times.
+ * 
+ * See {@link IPositionSubscriber} for a notification-based API.
+ * 
  * @author kgilmer
- *
+ * 
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public interface IPositionProvider {
+	/**
+	 * @return current position as Position object or null if unable to
+	 *         determine position.
+	 */
+	public Position getPosition();
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @return current position as LatLon object or null if unable to determine
+	 *         Lat/Long.
+	 */
+	public LatLon getLatitudeLongitude();
 }

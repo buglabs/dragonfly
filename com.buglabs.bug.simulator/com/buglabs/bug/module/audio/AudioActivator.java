@@ -25,33 +25,59 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.audio;
 
-import org.osgi.service.log.LogService;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
+import com.buglabs.bug.module.pub.BMIModuleProperties;
+import com.buglabs.bug.module.pub.IModlet;
+import com.buglabs.bug.module.pub.IModletFactory;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
+ * @deprecated This module is not supported in BUG 2.0
  *
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public class AudioActivator implements BundleActivator, IModletFactory {
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	private BundleContext context;
+	private ServiceRegistration sr;
+
+	public void start(BundleContext context) throws Exception {
+		this.context = context;
+		
+		Dictionary dict = new Hashtable();
+		dict.put("Modlet Provider", getName());
+		dict.put("Module", getModuleId());
+		
+		sr = context.registerService(IModletFactory.class.getName(), this, dict);
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		sr.unregister();
 	}
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	public String getModuleId() {
+		return "AUDIO";
 	}
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	public String getName() {
+		return "com.buglabs.bug.module.audio";
 	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+
+	public String getVersion() {
+		return "2.0.0";
 	}
+
+	public IModlet createModlet(BundleContext context, int slotId) {
+		return new AudioModlet(context, slotId, getModuleId(), getModuleId());
+	}
+
+	public IModlet createModlet(BundleContext context, int slotId, BMIModuleProperties properties) {
+		return createModlet(context, slotId);
+	}	
 }

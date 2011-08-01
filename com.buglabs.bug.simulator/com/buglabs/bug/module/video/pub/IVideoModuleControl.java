@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009 Bug Labs, Inc.
+ * Copyright (c) 2010 Bug Labs, Inc.
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -25,33 +25,41 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.video.pub;
 
-import org.osgi.service.log.LogService;
+//import java.io.IOException;
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import com.buglabs.module.IModuleControl;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
+ * The interface that controls functions of the Video module.
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+public interface IVideoModuleControl extends IModuleControl {
+	/**
+	 * Get the currently selected video resolution.
+	 * @return resolution, e.g. "1280x1024"
+	 */
+	public String getResolution();
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @return true if video module is currently in VGA mode
+	 */
+	public boolean isVGA();
 	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * @return true if video module is currently in DVI mode
+	 */
+	public boolean isDVI();
+	
+	/**
+	 * Switch video mode to VGA.
+	 * @return true if request was successful.
+	 */
+	public boolean setVGA();
+	
+	/**
+	 * Switch video mode to DVI.
+	 * @return true if request was successful.
+	 */
+	public boolean setDVI();
 }

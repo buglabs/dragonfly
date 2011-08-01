@@ -7,7 +7,7 @@ import java.util.List;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import com.buglabs.util.osgi.BUGBundleConstants;
+import com.buglabs.util.BugBundleConstants;
 
 /**
  * Utility class for BUG Simulator.
@@ -33,7 +33,7 @@ public class BUGModuleHelper {
 
 		while (bundlesIter.hasNext()) {
 			Bundle b = (Bundle) bundlesIter.next();
-			moduleNames.add(b.getHeaders().get(BUGBundleConstants.BUG_BUNDLE_MODULE_ID));
+			moduleNames.add(b.getHeaders().get(BugBundleConstants.BUG_BUNDLE_MODULE_ID));
 		}
 
 		return moduleNames;
@@ -50,12 +50,12 @@ public class BUGModuleHelper {
 		ArrayList modules = new ArrayList();
 		for (int i = 0; i < bundles.length; ++i) {
 			Bundle b = bundles[i];
-			String type = (String) b.getHeaders().get(BUGBundleConstants.BUG_BUNDLE_TYPE_HEADER);
+			String type = (String) b.getHeaders().get(BugBundleConstants.BUG_BUNDLE_TYPE_HEADER);
 
 			// TODO determine if it's a list, if so handle appropriately.
 
 			if (type != null) {
-				if (type.equals(BUG_MODULE) && !modules.contains(b.getHeaders().get(BUGBundleConstants.BUG_BUNDLE_MODULE_ID))) {
+				if (type.equals(BUG_MODULE) && !modules.contains(b.getHeaders().get(BugBundleConstants.BUG_BUNDLE_MODULE_ID))) {
 					modules.add(b);
 				}
 			}

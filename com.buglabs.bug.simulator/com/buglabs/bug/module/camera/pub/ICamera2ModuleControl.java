@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009 Bug Labs, Inc.
+ * Copyright (c) 2010 Bug Labs, Inc.
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -25,33 +25,69 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.camera.pub;
 
-import org.osgi.service.log.LogService;
+public interface ICamera2ModuleControl {
+	/**
+	 * @return test pattern setting or negative value if error
+	 */
+	public int getTestPattern();
+	/**
+	 * Set camera's test pattern:
+	 *
+	 * @param testPattern 0=Disabled, 1=Walking 1's
+	 * @return 0 if successful, negative value otherwise.
+	 */
+	public int setTestPattern(int testPattern);
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
-
-/**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
- */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
-
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * 
+	 * @return color effects setting or negative value if error
+	 */
+	public int getColorEffects();
+	/**
+	 * Set camera's color effects
+	 * 
+	 * @param colorEffects 0=Disabled, 1=Black & White, 2=Sepia, 3=Negative, 4=Solarize
+	 * @return 0 if successful, negative value otherwise.
+	 */
+	public int setColorEffects(int colorEffects);
 	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * 
+	 * @return vertical flip setting or negative value if error
+	 */
+	public int getVerticalFlip();
+	/**
+	 * Set vertical flip.
+	 * 
+	 * @param verticalFlip 0=Disabled, 1=Flipped
+	 * @return 0 if successful, negative value otherwise.
+	 */
+	public int setVerticalFlip(int verticalFlip);
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * 
+	 * @return horizontal mirror setting or negative value if error
+	 */
+	public int getHorizontalMirror();
+	/**
+	 * Set horizontal mirror.
+	 * 
+	 * @param horizontalMirror 0=Disabled, 1=Mirrored
+	 * @return 0 if successful, negative value otherwise.
+	 */
+	public int setHorizontalMirror(int horizontalMirror);
 	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
+	/**
+	 * 
+	 * @return exposure level or negative value if error
+	 */
+	public int getExposureLevel();
+	/**
+	 * Set exposure level.
+	 * @param exposureLevel in the range 0-255 (default is 55)
+	 * @return
+	 */
+	public int setExposureLevel(int exposureLevel);
 }

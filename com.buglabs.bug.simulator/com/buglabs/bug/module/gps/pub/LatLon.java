@@ -25,33 +25,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.gps.pub;
 
-import org.osgi.service.log.LogService;
-
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import java.io.Serializable;
 
 /**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
+ * A class that describes position in longitude and latitude.
+ * 
+ * @author aroman
+ * 
  */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public class LatLon implements Serializable {
+	private static final long serialVersionUID = 6318765018123280457L;
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	public double latitude;
+
+	public double longitude;
+
+	public LatLon(double latitude, double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	public LatLon() {
+		this(0, 0);
 	}
 }

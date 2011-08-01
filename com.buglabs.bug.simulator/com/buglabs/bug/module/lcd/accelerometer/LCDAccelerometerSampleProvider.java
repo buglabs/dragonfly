@@ -25,33 +25,28 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-package com.buglabs.bug.input.pub;
+package com.buglabs.bug.module.lcd.accelerometer;
 
-import org.osgi.service.log.LogService;
+import java.io.IOException;
 
-import com.buglabs.device.IButtonEventListener;
-import com.buglabs.device.IButtonEventProvider;
+import com.buglabs.bug.accelerometer.pub.AccelerometerSample;
+import com.buglabs.bug.accelerometer.pub.AccelerometerSampleStream;
+import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleFeed;
+import com.buglabs.bug.accelerometer.pub.IAccelerometerSampleProvider;
 
-/**
- * A non-working implementation of IButtonEventProvider for BUG Simulator.
- * @author kgilmer
- *
- */
-public class InputEventProvider extends Thread implements IButtonEventProvider {
+public class LCDAccelerometerSampleProvider implements IAccelerometerSampleProvider {
 
-	public InputEventProvider(String inputDevice, LogService log) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void addListener(IButtonEventListener listener) {		
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	private IAccelerometerSampleFeed prov;
+
+	public LCDAccelerometerSampleProvider(IAccelerometerSampleFeed prov) {
+		this.prov = prov;
 	}
 
-	public void removeListener(IButtonEventListener listener) {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
-	}
-	
-	public void tearDown() {
-		throw new RuntimeException(this.getClass().getName() + " is unimplemented in the BUG Simulator.");
+	public AccelerometerSample readSample() throws IOException {
+		AccelerometerSampleStream is = prov.getSampleInputStream();
+		AccelerometerSample sample = is.readSample();
+		is.close();
+
+		return sample;
 	}
 }
