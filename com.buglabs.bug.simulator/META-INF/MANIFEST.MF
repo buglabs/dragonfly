@@ -45,4 +45,5 @@ Import-Package:
  org.osgi.service.http,
  org.osgi.service.log,
  org.osgi.util.position,
- org.osgi.util.tracker
+ org.osgi.util.tracker,
+ org.knapsack.shell.pub

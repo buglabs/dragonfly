@@ -62,6 +62,7 @@ import com.buglabs.bug.module.sierra.GSMActivator;
 import com.buglabs.bug.module.video.VideoActivator;
 import com.buglabs.bug.module.vonhippel.VHActivator;
 import com.buglabs.bug.simulator.controller.Server;
+import com.buglabs.bug.simulator.ui.ShellIOThread;
 import com.buglabs.support.SupportInfoTextFormatter;
 import com.buglabs.support.SupportInfoXMLFormatter;
 import com.buglabs.util.osgi.LogServiceUtil;
@@ -126,6 +127,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private ServiceRegistration baseControlReg;
 
 	private VideoActivator videoActivator;
+
+	private ShellIOThread shellThread;
 
 	public void start(final BundleContext context) throws Exception {
 		// Basic setup ********************************************
@@ -203,9 +206,14 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		Dictionary<String, String> d = new Hashtable<String, String>();
 		d.put("bug.base.version", "2.0");
 		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, d);		
+		
+		shellThread = new ShellIOThread(Integer.parseInt(System.getProperty("org.knapsack.shell.port")));
+		shellThread.start();
 	}
 	
 	public void stop(BundleContext context) throws Exception {	
+		shellThread.shutdown();
+		
 		if (controllerServer != null) {
 			controllerServer.shutdown();
 		}
