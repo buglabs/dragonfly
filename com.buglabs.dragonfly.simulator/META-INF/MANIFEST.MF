@@ -5,8 +5,11 @@ Bundle-SymbolicName: com.buglabs.dragonfly.simulator;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: com.buglabs.dragonfly.simulator.Activator
 Bundle-Vendor: Bug Labs, Inc.
-Require-Bundle: org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.buglabs.dragonfly.simulator,
+Export-Package: 
+ com.buglabs.dragonfly.simulator,
  com.buglabs.dragonfly.simulator.controller
+Import-Package: 
+ org.eclipse.core.runtime,
+ org.osgi.framework
