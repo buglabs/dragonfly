@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
+import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.util.UIUtils;
 
 public class FelixLaunchBundleTab extends AbstractLaunchConfigurationTab {
@@ -223,7 +223,7 @@ public class FelixLaunchBundleTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		
 		try {
-			String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
+			String rawList = getSystemProperty(configuration, BUGSimulatorLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
 			externalBundleList = delimitedStringToList(rawList);
 			externalBundleViewer.setInput(externalBundleList);
 		} catch (CoreException e) {
@@ -259,11 +259,11 @@ public class FelixLaunchBundleTab extends AbstractLaunchConfigurationTab {
 		try {
 			// here make a new copy of the config hash and save the copy so
 			// revert button works
-			Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+			Map properties = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 			Map<String, String> propertiesCopy = new HashMap<String, String>(properties);
 			
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, listToDelimitedString(externalBundleList));
-			configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
+			propertiesCopy.put(BUGSimulatorLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, listToDelimitedString(externalBundleList));
+			configuration.setAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
 		} catch (CoreException e) {
 			e.printStackTrace();
 			UIUtils.handleNonvisualError(e.getMessage(), e);
@@ -300,7 +300,7 @@ public class FelixLaunchBundleTab extends AbstractLaunchConfigurationTab {
 	}
 
 	private String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
-		Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+		Map properties = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 		String val = (String) properties.get(prop);
 
 		if (val != null) {

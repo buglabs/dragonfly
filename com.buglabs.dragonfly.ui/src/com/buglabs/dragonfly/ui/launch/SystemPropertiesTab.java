@@ -59,7 +59,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
+import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
 
 /**
@@ -137,7 +137,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "0");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "0");
 			}
 		});
 
@@ -148,7 +148,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "1");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "1");
 			}
 		});
 		warningLevel = new Button(levelGroup, SWT.RADIO);
@@ -158,7 +158,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "2");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "2");
 			}
 		});
 
@@ -169,7 +169,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3");
 			}
 		});
 
@@ -180,7 +180,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "4");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "4");
 			}
 		});
 
@@ -310,9 +310,9 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 			systemProps = configuration.getAttribute(SYSTEM_PROPERTIES_KEY, new Hashtable());
 			propViewer.setInput(systemProps);
 
-			String ll = (String) systemProps.get(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL);
+			String ll = (String) systemProps.get(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL);
 
-			jvmArgStr = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, "");
+			jvmArgStr = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, "");
 
 			if (ll != null) {
 				switch (Integer.parseInt(ll)) {
@@ -333,7 +333,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 				}
 			}
 
-			String args = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, "");
+			String args = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, "");
 			if (args != null) {
 				jvmArgs.setText(args);
 			}
@@ -345,7 +345,7 @@ public class SystemPropertiesTab extends AbstractLaunchConfigurationTab {
 
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		configuration.setAttribute(SYSTEM_PROPERTIES_KEY, systemProps);
-		configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, jvmArgStr);
+		configuration.setAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, jvmArgStr);
 		propViewer.setInput(systemProps);
 	}
 

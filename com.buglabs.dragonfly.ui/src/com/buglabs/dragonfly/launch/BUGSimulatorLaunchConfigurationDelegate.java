@@ -44,6 +44,14 @@ import com.buglabs.dragonfly.util.UIUtils;
  */
 public class BUGSimulatorLaunchConfigurationDelegate extends
 		FelixLaunchConfiguration {
+	public static final String ID = "com.buglabs.dragonfly.launch.virtualBug";
+	public static final String SHELL_BUNDLE = "com.buglabs.osgi.shell";
+	public static final String CG_SHELL_BUNDLE = "shell.jar";
+	public static final String JVM_ARGS = "com.buglabs.osgi.concierge.ui.launch.jvmArgs";
+	public static final String FELIX_LOG_LEVEL = "felix.log.level";
+	public static final String PROP_EXTERNAL_BUNDLE_LAUNCH_LIST = "com.buglabs.bug.emulator.external.bundle.launch.path";
+	public static final String PROP_DISCOVERY_MODE = "com.buglabs.bug.discoveryMode";
+	public static final String FELIX_CLEAN_STORAGE = "org.osgi.framework.storage.clean";
 	public static final String ATTR_GPS_LOG = "GPS_LOG";
 	public static final String ATTR_IMAGES = "IMAGES";
 	public static final String ATTR_HTTP_PORT = "HTTP PORT";
@@ -65,7 +73,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	private static final String COMPILE_BUNDLE_TMP_DIR = "workspace_compile_dir";
 	private ILaunchConfiguration configuration;
 	private boolean hasWorkspaceBundles = false;
-
+	
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
 
@@ -216,7 +224,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		//This method generates a path should not be valid for Windows File class but actually is.
 		//Also the forward slash isn't magically stripped as the backslash is when the property is passed
 		//to the felix runtime.
-		String s = "apps";
+		String s = com.buglabs.dragonfly.felix.Activator.getDefault().getStateLocation() + File.separator + "bugSimulator" + File.separator + "apps";
 		m.put(APP_DIR, s);
 		
 		try {
@@ -245,7 +253,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 
 	@Override
 	protected String[] getVMArgs() throws CoreException {
-		String s = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, new String());
+		String s = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, new String());
 		
 		if (s == null || s.trim().length() == 0) {
 			return new String[0];
@@ -255,7 +263,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 
 	@Override
 	protected List<File> getOtherLaunchBundles() throws Exception {
-		String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST,
+		String rawList = getSystemProperty(configuration, BUGSimulatorLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST,
 				"");
 		
 		List<File> l = new ArrayList<File>();

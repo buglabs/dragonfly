@@ -22,7 +22,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
-import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
+import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.util.UIUtils;
 
 public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
@@ -91,7 +91,7 @@ public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 		ArrayList result = new ArrayList();
 		try {
 			ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-			ILaunchConfiguration[] configs = manager.getLaunchConfigurations(manager.getLaunchConfigurationType(VirtualBugLaunchConfigurationDelegate.ID));
+			ILaunchConfiguration[] configs = manager.getLaunchConfigurations(manager.getLaunchConfigurationType(BUGSimulatorLaunchConfigurationDelegate.ID));
 			for (int i = 0; i < configs.length; i++) {
 				if (!DebugUITools.isPrivate(configs[i])) {
 					result.add(configs[i]);
@@ -117,7 +117,7 @@ public class BUGSimulatorLaunchShortCut implements ILaunchShortcut {
 
 	private ILaunchConfigurationType getLaunchConfigurationType() {
 		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-		return manager.getLaunchConfigurationType(VirtualBugLaunchConfigurationDelegate.ID);
+		return manager.getLaunchConfigurationType(BUGSimulatorLaunchConfigurationDelegate.ID);
 	}
 
 	protected ILaunchConfiguration chooseConfiguration(ILaunchConfiguration[] configs, String mode) {

@@ -8,8 +8,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 
 import com.buglabs.dragonfly.DragonflyActivator;
+import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.launch.ConciergeLaunchConfiguration;
-import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
 
 /**
@@ -21,11 +21,11 @@ import com.buglabs.dragonfly.ui.Activator;
 public class SimulatorLaunchConfigurationInitializer {
 	public static void initializeSystemProperties(ILaunchConfigurationWorkingCopy wc, boolean discoveryMode) throws CoreException {
 		Map properties = wc.getAttribute(ConciergeLaunchConfiguration.SYSTEM_PROPERTIES, new HashMap());
-		properties.put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3"); //$NON-NLS-1$
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG, "true"); //$NON-NLS-1$
+		properties.put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3"); //$NON-NLS-1$
+		properties.put(BUGSimulatorLaunchConfigurationDelegate.PROP_VBUG, "true"); //$NON-NLS-1$
 		
 		if (discoveryMode)
-			properties.put(VirtualBugLaunchConfigurationDelegate.PROP_DISCOVERY_MODE, "true"); //$NON-NLS-1$
+			properties.put(BUGSimulatorLaunchConfigurationDelegate.PROP_DISCOVERY_MODE, "true"); //$NON-NLS-1$
 
 		String bundleVersion = (String) Activator.getDefault().getContext().getBundle().getHeaders().get("Bundle-Version"); //$NON-NLS-1$
 		String storageDirectory = "bug-configuration"; //$NON-NLS-1$
@@ -33,27 +33,27 @@ public class SimulatorLaunchConfigurationInitializer {
 			storageDirectory = bundleVersion + File.separator + "bug-configuration"; //$NON-NLS-1$
 		}
 
-		String appDirectory = com.buglabs.dragonfly.felix.Activator.getDefault().getStateLocation() + File.separator + "apps";
+		String appDirectory = com.buglabs.dragonfly.felix.Activator.getDefault().getStateLocation() + File.separator + "bugSimulator/apps";
 
 		File f = new File(appDirectory);
 		if (!f.exists()) {
 			f.mkdirs();
 		}
 
-		properties.put(VirtualBugLaunchConfigurationDelegate.APP_DIR, appDirectory); //$NON-NLS-1$
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_CM_STORAGE, storageDirectory);
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG_SCROLLDELAY, "1000"); //$NON-NLS-1$
-		properties.put(VirtualBugLaunchConfigurationDelegate.PROP_VBUG_SCROLLSPEED, "15"); //$NON-NLS-1$
+		properties.put(BUGSimulatorLaunchConfigurationDelegate.APP_DIR, appDirectory); //$NON-NLS-1$
+		properties.put(BUGSimulatorLaunchConfigurationDelegate.PROP_CM_STORAGE, storageDirectory);
+		properties.put(BUGSimulatorLaunchConfigurationDelegate.PROP_VBUG_SCROLLDELAY, "1000"); //$NON-NLS-1$
+		properties.put(BUGSimulatorLaunchConfigurationDelegate.PROP_VBUG_SCROLLSPEED, "15"); //$NON-NLS-1$
 
 		wc.setAttribute(ConciergeLaunchConfiguration.SYSTEM_PROPERTIES, properties);
 
-		Map bugprops = wc.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+		Map bugprops = wc.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 
-		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
-		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, "");
-		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, "");
-		bugprops.put(VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
+		bugprops.put(BUGSimulatorLaunchConfigurationDelegate.PROP_HTTP_PORT, DragonflyActivator.getDefault().getHttpPort());
+		bugprops.put(BUGSimulatorLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, "");
+		bugprops.put(BUGSimulatorLaunchConfigurationDelegate.PROP_GPS_LOG, "");
+		bugprops.put(BUGSimulatorLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
 
-		wc.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, bugprops);
+		wc.setAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, bugprops);
 	}
 }

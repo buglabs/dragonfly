@@ -2,50 +2,30 @@ package com.buglabs.dragonfly.launch.felix;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
-import sun.misc.IOUtils;
-
-import com.buglabs.dragonfly.BugApplicationNature;
-import com.buglabs.dragonfly.BugConnectionManager;
-import com.buglabs.dragonfly.DragonflyActivator;
 import com.buglabs.dragonfly.felix.launch.FelixLaunchConfiguration;
 import com.buglabs.dragonfly.felix.launch.ProjectUtils;
 import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
-import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.launch.BugSimulatorMainTab;
 import com.buglabs.dragonfly.ui.launch.SystemPropertiesTab;
-import com.buglabs.dragonfly.ui.properties.BUGAppPropertyPage;
 import com.buglabs.dragonfly.util.UIUtils;
 
 /**
@@ -170,7 +150,7 @@ public class FelixLaunchConfigurationDelegate extends FelixLaunchConfiguration {
 
 	@Override
 	protected String[] getVMArgs() throws CoreException {
-		String s = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, new String());
+		String s = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, new String());
 
 		if (s == null || s.trim().length() == 0) {
 			return new String[0];
@@ -180,7 +160,7 @@ public class FelixLaunchConfigurationDelegate extends FelixLaunchConfiguration {
 
 	@Override
 	protected List<File> getOtherLaunchBundles() throws Exception {
-		String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
+		String rawList = getSystemProperty(configuration, BUGSimulatorLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
 
 		List<File> l = new ArrayList<File>();
 

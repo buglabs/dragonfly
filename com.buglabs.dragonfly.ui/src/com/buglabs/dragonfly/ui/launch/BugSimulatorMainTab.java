@@ -42,7 +42,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
+import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.util.BugProjectUtil;
 import com.buglabs.dragonfly.util.UIUtils;
 
@@ -337,27 +337,27 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 		httpPort.setText(String.valueOf(httpPortValue));
 
 		try {
-			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""); //$NON-NLS-1$
+			String systemProperty = getSystemProperty(configuration, BUGSimulatorLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, ""); //$NON-NLS-1$
 			txtImages.setText(systemProperty);
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize images.", e);
 		}
 
 		try {
-			String systemProperty = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, ""); //$NON-NLS-1$
+			String systemProperty = getSystemProperty(configuration, BUGSimulatorLaunchConfigurationDelegate.PROP_GPS_LOG, ""); //$NON-NLS-1$
 			txtGpsLog.setText(systemProperty);
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize GPS log.", e);
 		}
 
 		try {
-			txtAccelerometerLog.setText(getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, ""));
+			txtAccelerometerLog.setText(getSystemProperty(configuration, BUGSimulatorLaunchConfigurationDelegate.PROP_ACC_LOG, ""));
 		} catch (CoreException e) {
 			UIUtils.handleVisualError("Unable to initialize Accelerometer log.", e);
 		}
 		
 		try {
-			String rawList = getSystemProperty(configuration, VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
+			String rawList = getSystemProperty(configuration, BUGSimulatorLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, "");
 			externalBundleList = delimitedStringToList(rawList);
 			externalBundleViewer.setInput(externalBundleList);
 		} catch (CoreException e) {
@@ -393,14 +393,14 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 		try {
 			// here make a new copy of the config hash and save the copy so
 			// revert button works
-			Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+			Map properties = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 			Map<String, String> propertiesCopy = new HashMap<String, String>(properties);
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, listToDelimitedString(externalBundleList));
-			configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
+			propertiesCopy.put(BUGSimulatorLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
+			propertiesCopy.put(BUGSimulatorLaunchConfigurationDelegate.PROP_CAMERA_SNAPSHOTS, txtImages.getText());
+			propertiesCopy.put(BUGSimulatorLaunchConfigurationDelegate.PROP_GPS_LOG, txtGpsLog.getText());
+			propertiesCopy.put(BUGSimulatorLaunchConfigurationDelegate.PROP_ACC_LOG, txtAccelerometerLog.getText());
+			propertiesCopy.put(BUGSimulatorLaunchConfigurationDelegate.PROP_EXTERNAL_BUNDLE_LAUNCH_LIST, listToDelimitedString(externalBundleList));
+			configuration.setAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
 		} catch (CoreException e) {
 			e.printStackTrace();
 			UIUtils.handleNonvisualError(e.getMessage(), e);
@@ -440,7 +440,7 @@ public class BugSimulatorMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	private String getSystemProperty(ILaunchConfiguration configuration, String prop, String defaultValue) throws CoreException {
-		Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+		Map properties = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 		String val = (String) properties.get(prop);
 
 		if (val != null) {

@@ -64,7 +64,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.buglabs.dragonfly.DragonflyActivator;
-import com.buglabs.dragonfly.launch.VirtualBugLaunchConfigurationDelegate;
+import com.buglabs.dragonfly.launch.BUGSimulatorLaunchConfigurationDelegate;
 import com.buglabs.dragonfly.ui.Activator;
 import com.buglabs.dragonfly.ui.launch.NewPropertyDialog;
 import com.buglabs.dragonfly.util.UIUtils;
@@ -149,7 +149,7 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "0");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "0");
 			}
 		});
 
@@ -160,7 +160,7 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "1");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "1");
 			}
 		});
 		warningLevel = new Button(levelGroup, SWT.RADIO);
@@ -170,7 +170,7 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "2");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "2");
 			}
 		});
 
@@ -181,7 +181,7 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "3");
 			}
 		});
 
@@ -192,7 +192,7 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				put(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "4");
+				put(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL, "4");
 			}
 		});
 
@@ -326,9 +326,9 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 			
 			public void widgetSelected(SelectionEvent e) {
 				if (cleanStorageButton.getSelection())
-					put(VirtualBugLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, FELIX_CLEAR_CACHE_ON_FIRST_INIT);
+					put(BUGSimulatorLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, FELIX_CLEAR_CACHE_ON_FIRST_INIT);
 				else 
-					put(VirtualBugLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, "none");
+					put(BUGSimulatorLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, "none");
 			}
 			
 			public void widgetDefaultSelected(SelectionEvent e) {				
@@ -365,7 +365,7 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 						setErrorMessage(null);
 					}
 					setDirty(true);
-					put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
+					put(BUGSimulatorLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
 					updateLaunchConfigurationDialog();
 				}
 			}
@@ -406,8 +406,8 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 			httpPortValue = DragonflyActivator.getDefault().getPluginPreferences().getString(DragonflyActivator.PREF_DEFAULT_BUGPORT);
 			httpPort.setText(String.valueOf(httpPortValue));
 
-			jvmArgStr = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, "");
-			String ll = (String) systemProps.get(VirtualBugLaunchConfigurationDelegate.FELIX_LOG_LEVEL);
+			jvmArgStr = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, "");
+			String ll = (String) systemProps.get(BUGSimulatorLaunchConfigurationDelegate.FELIX_LOG_LEVEL);
 
 			if (ll != null) {
 				switch (Integer.parseInt(ll)) {
@@ -428,15 +428,15 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 				}
 			}
 
-			String args = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, "");
+			String args = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, "");
 			if (args != null) {
 				jvmArgs.setText(args);
 			}
 			
-			String cleanStorageStr = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, FELIX_CLEAR_CACHE_ON_FIRST_INIT);
+			String cleanStorageStr = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, FELIX_CLEAR_CACHE_ON_FIRST_INIT);
 			if (cleanStorageStr.equals(FELIX_CLEAR_CACHE_ON_FIRST_INIT))
 				cleanStorageButton.setSelection(true);
-			put(VirtualBugLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, cleanStorageStr);
+			put(BUGSimulatorLaunchConfigurationDelegate.FELIX_CLEAN_STORAGE, cleanStorageStr);
 			
 		} catch (CoreException e) {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.ERROR, e.getMessage(), null));
@@ -448,11 +448,11 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 		try {
 			// here make a new copy of the config hash and save the copy so
 			// revert button works
-			Map properties = configuration.getAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
+			Map properties = configuration.getAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, new HashMap());
 			Map<String, String> propertiesCopy = new HashMap<String, String>(properties);
-			propertiesCopy.put(VirtualBugLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
+			propertiesCopy.put(BUGSimulatorLaunchConfigurationDelegate.PROP_HTTP_PORT, httpPortValue);
 			
-			configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
+			configuration.setAttribute(BUGSimulatorLaunchConfigurationDelegate.ATTR_VBUG_SYSTEM_PROPERTIES, propertiesCopy);
 		} catch (CoreException e) {
 			e.printStackTrace();
 			UIUtils.handleNonvisualError(e.getMessage(), e);
@@ -461,7 +461,7 @@ public class FelixLaunchPropertiesTab extends AbstractLaunchConfigurationTab {
 		DragonflyActivator.getDefault().getPluginPreferences().setValue(DragonflyActivator.PREF_DEFAULT_BUGPORT, httpPortValue);
 		
 		configuration.setAttribute(SYSTEM_PROPERTIES_KEY, systemProps);
-		configuration.setAttribute(VirtualBugLaunchConfigurationDelegate.JVM_ARGS, jvmArgStr);
+		configuration.setAttribute(BUGSimulatorLaunchConfigurationDelegate.JVM_ARGS, jvmArgStr);
 		
 		propViewer.setInput(systemProps);
 	}
