@@ -9,7 +9,7 @@
 	<property name="eclipse.dir" value="/opt/jenkins/build-deps/com.eclipse.sdk" />
 	<property name="eclipse.default.file" value="${eclipse.dir}/eclipse-lin.tar.gz" />
 	<property name="felix.download.url" value="http://www.eng.lsu.edu/mirrors/apache/felix/" />
-	<property name="knapsack.download.url" value="https://leafcutter.ci.cloudbees.com/job/knapsack/56/artifact/knapsack.jar" />
+	<property name="knapsack.download.url" value="https://leafcutter.ci.cloudbees.com/job/knapsack/57/artifact/knapsack.jar" />
 	<property name="tmp.dir" location="/tmp/dragonly_build_tmp" />
 	<property name="felix.version" value="3.2.2" />
 	<property name="felix.log.version" value="1.0.1" />
