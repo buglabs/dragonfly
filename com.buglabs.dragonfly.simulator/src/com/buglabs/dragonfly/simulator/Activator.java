@@ -28,7 +28,8 @@ public class Activator implements BundleActivator {
 				"com.buglabs.bug.simulator.jar",
 				"com.buglabs.bug.ws.jar",
 				"com.buglabs.osgi.sewing.jar",
-				"com.buglabs.util.shell.jar"};
+				"com.buglabs.util.shell.jar",
+				"org.apache.felix.http.bundle-2.2.0.jar" };
 	
 	private static BundleContext context;
 	private static Activator ref;
