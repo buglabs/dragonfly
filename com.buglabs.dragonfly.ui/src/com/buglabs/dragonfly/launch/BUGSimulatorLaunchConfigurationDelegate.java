@@ -216,7 +216,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 		//This method generates a path should not be valid for Windows File class but actually is.
 		//Also the forward slash isn't magically stripped as the backslash is when the property is passed
 		//to the felix runtime.
-		String s = getLaunchDir().toPortableString();
+		String s = "apps";
 		m.put(APP_DIR, s);
 		
 		try {
