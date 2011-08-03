@@ -94,8 +94,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 
 	protected HttpService httpService;
 
-	private ServiceRegistration shellServiceReg;
-
 	private PipeReader pipeReader;
 
 	private String pipeFilename;
@@ -265,8 +263,7 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 			}
 		}
 		timeReg.unregister();
-		shellServiceReg.unregister();
-
+		
 		// com.buglabs.bug.bmi ****************************
 		context.removeServiceListener(this);
 		stopModlets(activeModlets);
