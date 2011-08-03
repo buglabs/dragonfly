@@ -3,36 +3,26 @@ package com.buglabs.dragonfly.launch;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
-
-import sun.misc.IOUtils;
 
 import com.buglabs.dragonfly.BugApplicationNature;
 import com.buglabs.dragonfly.BugConnectionManager;
@@ -58,8 +48,6 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	public static final String ATTR_IMAGES = "IMAGES";
 	public static final String ATTR_HTTP_PORT = "HTTP PORT";
 	public static final String ATTR_LAUNCH_PROJECTS = "Bug Projects to Launch";
-	public static final String SHELL_BUNDLE = "com.buglabs.osgi.shell";
-	public static final String CG_SHELL_BUNDLE = "shell.jar";
 	public static final String PROP_LAUNCH_ALL = "com.buglabs.dragonfly.launch.launchAllProjects";
 	public static final String PROP_HTTP_PORT = "org.osgi.service.http.port";
 	public static final String PROP_LOG_LEVEL = "felix.log.level";
