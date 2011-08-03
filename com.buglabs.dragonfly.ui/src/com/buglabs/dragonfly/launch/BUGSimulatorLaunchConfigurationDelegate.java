@@ -50,6 +50,7 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 	public static final String ATTR_LAUNCH_PROJECTS = "Bug Projects to Launch";
 	public static final String PROP_LAUNCH_ALL = "com.buglabs.dragonfly.launch.launchAllProjects";
 	public static final String PROP_HTTP_PORT = "org.osgi.service.http.port";
+	public static final String PROP_HTTP_JETTY_ENABLED = "org.apache.felix.http.jettyEnabled";
 	public static final String PROP_LOG_LEVEL = "felix.log.level";
 	public static final String PROP_VBUG = "com.buglabs.virtual.bug";
 	public static final String PROP_CAMERA_SNAPSHOTS = "com.buglabs.bug.emulator.module.camera.snapshots";
@@ -201,7 +202,8 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 
 		//TODO confirm that these properties are what is on BUG20 rootfs.
 		m.put("bug.os.version", "2009.X-stable");
-		m.put("org.osgi.service.http.port", "8082");
+		m.put(PROP_HTTP_PORT, "8082");
+		m.put(PROP_HTTP_JETTY_ENABLED, "true");
 		m.put("org.osgi.framework.storage.clean", "onFirstInit");
 		m.put("org.osgi.framework.os.name", "linux");
 		m.put("org.osgi.framework.processor", "armv7l");
