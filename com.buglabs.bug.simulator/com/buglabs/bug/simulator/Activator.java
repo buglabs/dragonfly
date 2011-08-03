@@ -199,13 +199,13 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		// Module Controller *************************************
 		try {
 			controllerServer = Server.startServer(BUG_SIMULATOR_CONTROLLER_PORT, logService, context);
+			
+			Dictionary<String, String> d = new Hashtable<String, String>();
+			d.put("bug.base.version", "2.0");
+			baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, d);
 		} catch (BindException e) {
 			logService.log(LogService.LOG_ERROR, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
-		}
-
-		Dictionary<String, String> d = new Hashtable<String, String>();
-		d.put("bug.base.version", "2.0");
-		baseControlReg = context.registerService(IBUG20BaseControl.class.getName(), controllerServer, d);		
+		}		
 		
 		shellThread = new ShellIOThread(Integer.parseInt(System.getProperty("org.knapsack.shell.port")));
 		shellThread.start();
