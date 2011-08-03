@@ -232,14 +232,16 @@ public abstract class FelixLaunchConfiguration extends LaunchConfigurationDelega
 		
 		props.putAll(getFelixLaunchProperties());
 		
-		for (Iterator i = props.keySet().iterator(); i.hasNext();) {
-			String key = (String) i.next();
+		for (Iterator<String> i = props.keySet().iterator(); i.hasNext();) {
+			String key = i.next();
 			String val = props.get(key);
 			
-			fw.write(key);
-			fw.write('=');
-			fw.write(val);
-			fw.write('\n');
+			if (key != null && key.length() > 0 && val != null && val.length() > 0) {
+				fw.write(key);
+				fw.write('=');
+				fw.write(val);
+				fw.write('\n');
+			}
 		}
 		
 		fw.close();
