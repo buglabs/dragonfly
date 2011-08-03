@@ -202,17 +202,21 @@ public class BUGSimulatorLaunchConfigurationDelegate extends
 
 		//TODO confirm that these properties are what is on BUG20 rootfs.
 		m.put("bug.os.version", "2009.X-stable");
+		
 		m.put(PROP_HTTP_PORT, "8082");
 		m.put(PROP_HTTP_JETTY_ENABLED, "true");
+		
 		m.put("org.osgi.framework.storage.clean", "onFirstInit");
 		m.put("org.osgi.framework.os.name", "linux");
 		m.put("org.osgi.framework.processor", "armv7l");
 		m.put(PROP_VBUG, "true");
 		
+		m.put("org.knapsack.bundleDirs", "bundle, apps");
+		
 		//This method generates a path should not be valid for Windows File class but actually is.
 		//Also the forward slash isn't magically stripped as the backslash is when the property is passed
 		//to the felix runtime.
-		String s = getLaunchDirectory().toPortableString();
+		String s = getLaunchDir().toPortableString();
 		m.put(APP_DIR, s);
 		
 		try {
