@@ -375,4 +375,18 @@ GLGPL-licenced code is included as a part of the BUG Simulator.  The license for
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.buglabs.util.nmea"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.knapsack"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
