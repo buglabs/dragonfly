@@ -33,7 +33,7 @@ public class SimulatorLaunchConfigurationInitializer {
 			storageDirectory = bundleVersion + File.separator + "bug-configuration"; //$NON-NLS-1$
 		}
 
-		String appDirectory = com.buglabs.dragonfly.felix.Activator.getDefault().getStateLocation() + File.separator + "bugSimulator/apps";
+		String appDirectory = com.buglabs.dragonfly.felix.Activator.getDefault().getStateLocation() + File.separator + "bugSimulator" + File.separator + "apps";
 
 		File f = new File(appDirectory);
 		if (!f.exists()) {
