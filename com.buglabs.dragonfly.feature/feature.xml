@@ -347,4 +347,32 @@ GLGPL-licenced code is included as a part of the BUG Simulator.  The license for
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.buglabs.bug.bmi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.sprinkles"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.util.shell"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.buglabs.bug.dragonfly"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
