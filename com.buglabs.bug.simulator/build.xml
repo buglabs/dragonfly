@@ -3,19 +3,6 @@
 	<!-- PROJECT CONSTANTS -->
 	<property name="project" value="com.buglabs.bug.simulator" />
 	
-	<!-- target: build.jars   Build jars intended for production distribution -->
-	<target name="build.jars" depends="build, document" description="Package the java class files into a jar.">
-		<echo message="## PROJECT: ${ant.project.name} ## TARGET: build.jars" />
-			
-		<property name="dist.jar.name" value="${ant.project.name}" />
-		<property name="manifest.location" location="${basedir}/META-INF/MANIFEST.MF"/>
-			
-		<fail unless="distDirectory" message="distDirectory must be defined." />
-		<fail unless="buildDirectory" message="buildDirectory must be defined." />
-
-		<jar destfile="${distDirectory}/${dist.jar.name}.jar" basedir="${buildDirectory}" manifest="${manifest.location}"/>
-	</target>
-
 	<!-- PROJECT IMPORTS -->
 	<property name="common.ant.file" location="${base.build.dir}/toolbox/common-osgi.xml" />
 	<import file="${common.ant.file}" />

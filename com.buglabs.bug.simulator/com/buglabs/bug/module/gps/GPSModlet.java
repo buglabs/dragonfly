@@ -144,7 +144,7 @@ public class GPSModlet implements IModlet, IModuleControl, IPositionProvider, IG
 		gpsInputStream = null;
 
 		if (prop == null || prop.length() == 0) {
-			gpsInputStream = GPSModlet.class.getResourceAsStream("gps.log");
+			gpsInputStream = GPSModlet.class.getResourceAsStream("gps.out");
 		} else {
 			gpsInputStream = new FileInputStream(prop);
 		}
