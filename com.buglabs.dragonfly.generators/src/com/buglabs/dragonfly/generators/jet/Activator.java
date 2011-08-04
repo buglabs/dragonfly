@@ -33,7 +33,7 @@ public class Activator
   protected final String TEXT_15 = ".class.getName(),";
   protected final String TEXT_16 = NL + "\t};";
   protected final String TEXT_17 = "\t" + NL + "\tprivate ServiceTracker serviceTracker;" + NL + "\t" + NL + "\t/*" + NL + "\t * (non-Javadoc)" + NL + "\t * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)" + NL + "\t */" + NL + "\tpublic void start(BundleContext context) throws Exception {";
-  protected final String TEXT_18 = NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, new ServiceTrackerUtil.ManagedInlineRunnable() {" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void run(Map<Object, Object> services) {";
+  protected final String TEXT_18 = NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, new ServiceTrackerUtil.ManagedInlineRunnable() {" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void run(Map<String, Object> services) {";
   protected final String TEXT_19 = "\t\t\t" + NL + "\t\t\t\t";
   protected final String TEXT_20 = " ";
   protected final String TEXT_21 = " = (";
@@ -48,7 +48,7 @@ public class Activator
   protected final String TEXT_30 = ".class.getName(), ";
   protected final String TEXT_31 = ");" + NL + "\t    ";
   protected final String TEXT_32 = NL;
-  protected final String TEXT_33 = NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, getServiceNames(serviceMap), createFilter(context, serviceMap), new ServiceTrackerUtil.ManagedInlineRunnable() {" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void run(Map<Object, Object> services) {";
+  protected final String TEXT_33 = NL + "\t\tserviceTracker = ServiceTrackerUtil.openServiceTracker(context, getServiceNames(serviceMap), createFilter(context, serviceMap), new ServiceTrackerUtil.ManagedInlineRunnable() {" + NL + "\t\t\t" + NL + "\t\t\t@Override" + NL + "\t\t\tpublic void run(Map<String, Object> services) {";
   protected final String TEXT_34 = "\t\t\t" + NL + "\t\t\t\t";
   protected final String TEXT_35 = " ";
   protected final String TEXT_36 = " = (";
