@@ -4,7 +4,9 @@
 	<property name="project" value="com.buglabs.bug.simulator" />
 	
 	<!-- target: build.jars   Build jars intended for production distribution -->
-	<target name="build.jars" depends="build, document" description="Package the java class files into a jar.">
+	<target name="build.jars" description="Package the java class files into a jar.">
+		<antcall target="build"/>
+		<antcall target="document"/>
 		<echo message="## PROJECT: ${ant.project.name} ## TARGET: build.jars" />
 			
 		<property name="dist.jar.name" value="${ant.project.name}" />
