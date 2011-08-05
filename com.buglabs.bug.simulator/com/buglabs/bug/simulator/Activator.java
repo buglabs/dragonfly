@@ -33,6 +33,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
+import org.knapsack.shell.pub.IKnapsackCommand;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -54,6 +55,7 @@ import com.buglabs.bug.bmi.PipeReader;
 import com.buglabs.bug.bmi.api.IModlet;
 import com.buglabs.bug.bmi.api.IModletFactory;
 import com.buglabs.bug.bmi.pub.Manager;
+import com.buglabs.bug.buttons.IButtonEventProvider;
 import com.buglabs.bug.module.camera.CameraActivator;
 import com.buglabs.bug.module.gps.GPSActivator;
 import com.buglabs.bug.module.lcd.LCDActivator;
@@ -63,6 +65,7 @@ import com.buglabs.bug.module.video.VideoActivator;
 import com.buglabs.bug.module.vonhippel.VHActivator;
 import com.buglabs.bug.simulator.controller.Server;
 import com.buglabs.bug.simulator.ui.ShellIOThread;
+import com.buglabs.bug.simulator.ui.SimulatorModuleCommands;
 import com.buglabs.support.SupportInfoTextFormatter;
 import com.buglabs.support.SupportInfoXMLFormatter;
 import com.buglabs.util.osgi.LogServiceUtil;
@@ -127,6 +130,8 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 	private VideoActivator videoActivator;
 
 	private ShellIOThread shellThread;
+
+	private List<ServiceRegistration> btnServices;
 
 	public void start(final BundleContext context) throws Exception {
 		// Basic setup ********************************************
@@ -207,9 +212,42 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		
 		shellThread = new ShellIOThread(Integer.parseInt(System.getProperty("org.knapsack.shell.port")));
 		shellThread.start();
+		
+		ShellButtonAdapter userBtn = new ShellButtonAdapter("user");
+		ShellButtonAdapter powerBtn = new ShellButtonAdapter("power");
+		IKnapsackCommand [] cmds = {userBtn, powerBtn};
+		
+		btnServices = new ArrayList<ServiceRegistration>();
+		btnServices.add(context.registerService(IButtonEventProvider.class.getName(), userBtn, getUserButtonProperties()));
+		btnServices.add(context.registerService(IKnapsackCommand.class.getName(), userBtn, null));
+		
+		btnServices.add(context.registerService(IButtonEventProvider.class.getName(), powerBtn, getPowerButtonProperties()));
+		btnServices.add(context.registerService(IKnapsackCommand.class.getName(), powerBtn, null));		
+		
+		SimulatorModuleCommands smc = new SimulatorModuleCommands(bmiManager);
+		
+		for (IKnapsackCommand cmd : smc.getCommands())
+			btnServices.add(context.registerService(IKnapsackCommand.class.getName(), cmd, null));
+	}
+
+	private Dictionary<String, String> getPowerButtonProperties() {
+		Dictionary<String, String> d = new Hashtable<String, String>();
+		d.put("Provider", this.getClass().getName());
+		d.put("Button", "Power");
+		return d;
+	}
+
+	private Dictionary<String, String> getUserButtonProperties() {
+		Dictionary<String, String> d = new Hashtable<String, String>();
+		d.put("Provider", this.getClass().getName());
+		d.put("Button", "User");
+		return d;
 	}
 	
-	public void stop(BundleContext context) throws Exception {	
+	public void stop(BundleContext context) throws Exception {			
+		for (ServiceRegistration sr : btnServices)
+			sr.unregister();
+			
 		shellThread.shutdown();
 		
 		if (controllerServer != null) {
