@@ -2,6 +2,8 @@
 
 	<property name="build.level" value="integration" />
 	<import file="common.xml" />
+	
+	<fail unless="bug-osgi.tag" message="'bug-osgi.tag' must be defined." />
 
 	<property name="git.bin" location="/usr/bin/git" />
 	<property name="project.feature" value="com.buglabs.dragonfly.feature" />
@@ -53,6 +55,12 @@
 			<arg value="clone" />
 			<arg value="git://github.com/buglabs/bug-osgi.git" />
 		</exec>
+		
+		<echo message="Checking out version: ${bug-osgi.tag}" />
+		<exec executable="${git.bin}" dir="${checkout.dir}/bug-osgi">
+			<arg value="checkout" />
+			<arg value="${bug-osgi.tag}" />
+		</exec>
 
 		<copy todir="${base.build.dir}">
 			<fileset dir="${checkout.dir}/bug-osgi">
@@ -72,8 +80,10 @@
 		</manifest>
 
 		<!-- call device management target to checkout needed projects -->
+		<!--
 		<ant antfile="com.buglabs.dragonfly.dm.xml" target="fetch.dependencies" />
 		<ant antfile="com.buglabs.dragonfly.cdt.xml" target="fetch.dependencies" />
+		-->
 
 		<mkdir dir="${checkout.dir}/${project.feature}/build" />
 		<mkdir dir="${checkout.dir}/${project.feature}/build/plugins" />
@@ -89,6 +99,7 @@
 			<fileset dir="${checkout.dir}/${project.feature}" excludes="**/build/**" />
 		</copy>
 		
+		<!--
 		<mkdir dir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.dm.feature" />
 		<copy todir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.dm.feature">
 			<fileset dir="${checkout.dir}/com.buglabs.dragonfly.dm.feature" />
@@ -98,6 +109,7 @@
 		<copy todir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.cdt.feature">
 			<fileset dir="${checkout.dir}/com.buglabs.dragonfly.cdt.feature" />
 		</copy>
+		-->
 	</target>
 
 	<target name="build" depends="clean,mkdirs,fetch.dependencies,build-bug-osgi">
