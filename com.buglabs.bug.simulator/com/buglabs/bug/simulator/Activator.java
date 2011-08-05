@@ -215,7 +215,6 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		
 		ShellButtonAdapter userBtn = new ShellButtonAdapter("user");
 		ShellButtonAdapter powerBtn = new ShellButtonAdapter("power");
-		IKnapsackCommand [] cmds = {userBtn, powerBtn};
 		
 		btnServices = new ArrayList<ServiceRegistration>();
 		btnServices.add(context.registerService(IButtonEventProvider.class.getName(), userBtn, getUserButtonProperties()));
