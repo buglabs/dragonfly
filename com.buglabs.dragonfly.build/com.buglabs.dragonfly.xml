@@ -2,7 +2,7 @@
 
 	<property name="build.level" value="integration" />
 	<import file="common.xml" />
-	
+
 	<fail unless="bug-osgi.tag" message="'bug-osgi.tag' must be defined." />
 
 	<property name="git.bin" location="/usr/bin/git" />
@@ -43,10 +43,20 @@
 		</else>
 	</if>
 
+	<!-- Checkout the correct branch/tag of the base project -->
+	<target name="checkout.branch">
+		<echo message="Checking out version: ${dragonfly.tag}" />
+		<exec executable="${git.bin}" dir="${checkout.dir}">
+			<arg value="checkout" />
+			<arg value="-f" />
+			<arg value="${dragonfly.tag}" />
+		</exec>
+	</target>
+
 	<target name="fetch.dependencies">
 		<copy todir="${base.build.dir}">
 			<fileset dir="${checkout.dir}">
-				<exclude name="build"/>
+				<exclude name="build" />
 			</fileset>
 		</copy>
 
@@ -55,10 +65,11 @@
 			<arg value="clone" />
 			<arg value="git://github.com/buglabs/bug-osgi.git" />
 		</exec>
-		
+
 		<echo message="Checking out version: ${bug-osgi.tag}" />
 		<exec executable="${git.bin}" dir="${checkout.dir}/bug-osgi">
 			<arg value="checkout" />
+			<arg value="-f" />
 			<arg value="${bug-osgi.tag}" />
 		</exec>
 
@@ -72,18 +83,12 @@
 		<mkdir dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" />
 		<exec dir="${checkout.dir}/com.buglabs.dragonfly.felix/framework" executable="wget">
 			<arg line="${knapsack.download.url}" />
-		</exec>		
+		</exec>
 
 		<!-- Add the BUG API Version to the Dragonfly Plugin Manifest -->
 		<manifest file="${checkout.dir}/com.buglabs.dragonfly/META-INF/MANIFEST.MF" mode="update">
 			<attribute name="BUG-API-Version" value="${bug.version}" />
 		</manifest>
-
-		<!-- call device management target to checkout needed projects -->
-		<!--
-		<ant antfile="com.buglabs.dragonfly.dm.xml" target="fetch.dependencies" />
-		<ant antfile="com.buglabs.dragonfly.cdt.xml" target="fetch.dependencies" />
-		-->
 
 		<mkdir dir="${checkout.dir}/${project.feature}/build" />
 		<mkdir dir="${checkout.dir}/${project.feature}/build/plugins" />
@@ -92,27 +97,15 @@
 		<!-- copy dragonfly plugin dependencies into the PDE build -->
 		<copy todir="${base.build.dir}/${project.feature}/build/plugins">
 			<fileset dir="${checkout.dir}" excludes="**/${project.feature}/**,**/bug-osgi/**" />
-			<fileset dir="${checkout.dir}/bug-osgi/" includes="com.buglabs.common/*,com.buglabs.bug.dragonfly/*,com.buglabs.util.nmea/*,com.buglabs.bug.ws/*"/>
+			<fileset dir="${checkout.dir}/bug-osgi/" includes="com.buglabs.common/*,com.buglabs.bug.dragonfly/*,com.buglabs.util.nmea/*,com.buglabs.bug.ws/*" />
 		</copy>
 
 		<copy todir="${base.build.dir}/${project.feature}/build/features/${project.feature}">
 			<fileset dir="${checkout.dir}/${project.feature}" excludes="**/build/**" />
 		</copy>
-		
-		<!--
-		<mkdir dir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.dm.feature" />
-		<copy todir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.dm.feature">
-			<fileset dir="${checkout.dir}/com.buglabs.dragonfly.dm.feature" />
-		</copy>
-
-		<mkdir dir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.cdt.feature" />
-		<copy todir="${checkout.dir}/${project.feature}/build/features/com.buglabs.dragonfly.cdt.feature">
-			<fileset dir="${checkout.dir}/com.buglabs.dragonfly.cdt.feature" />
-		</copy>
-		-->
 	</target>
 
-	<target name="build" depends="clean,mkdirs,fetch.dependencies,build-bug-osgi">
+	<target name="build" depends="clean,mkdirs,checkout.branch,fetch.dependencies,build-bug-osgi">
 		<echo message="#########################" />
 		<echo message="Building Dragonfly SDK..." />
 		<echo message="#########################" />
@@ -146,20 +139,26 @@
 		<exec dir="${checkout.dir}/com.eclipse.sdk" executable="tar">
 			<arg line="xfzv eclipse-lin.tar.gz" />
 		</exec>
-		
-		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/knapsack.jar"></copy>
-		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/commons-io-2.0.1.jar"></copy>
-		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/Sprinkles.jar"></copy>	
-		
+
+		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/knapsack.jar">
+		</copy>
+		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/commons-io-2.0.1.jar">
+		</copy>
+		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins" file="${dist.dir}/Sprinkles.jar">
+		</copy>
+
 		<copy todir="${checkout.dir}/com.eclipse.sdk/eclipse/plugins">
 			<fileset dir="${dist.dir}/" includes="com.buglabs.*.jar" />
 		</copy>
-	
+
 		<!-- Call the target that does everything -->
 		<ant antfile="build.xml" target="bundles.all" dir="${base.build.dir}/${project.feature}">
-			<property name="eclipse.home" location="${root.dir}/com.eclipse.sdk/eclipse"></property>
-			<property name="base" location="${root.dir}/com.eclipse.sdk/"></property>
-			<property name="publishDir" location="${eclipse.dist.dir}"></property>
+			<property name="eclipse.home" location="${root.dir}/com.eclipse.sdk/eclipse">
+			</property>
+			<property name="base" location="${root.dir}/com.eclipse.sdk/">
+			</property>
+			<property name="publishDir" location="${eclipse.dist.dir}">
+			</property>
 		</ant>
 	</target>
 
@@ -168,7 +167,7 @@
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="clean">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
-			<property name="distDirectory" value="${dist.dir}" />	
+			<property name="distDirectory" value="${dist.dir}" />
 			<property name="full.version" value="3.0.0.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="fetch.dependencies">
@@ -186,19 +185,19 @@
 		<ant antfile="${checkout.dir}/com.buglabs.bug.simulator/build.xml" target="clean">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/" />
-			<property name="basedir" value="${checkout.dir}/com.buglabs.bug.simulator" />			
+			<property name="basedir" value="${checkout.dir}/com.buglabs.bug.simulator" />
 			<property name="distDirectory" value="${dist.dir}" />
 			<property name="full.version" value="3.0.0.${meta.project.version}" />
-			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF"/>
+			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF" />
 		</ant>
 		<ant antfile="${checkout.dir}/com.buglabs.bug.simulator/build.xml" target="build.jars">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/" />
-			<property name="basedir" value="${checkout.dir}/com.buglabs.bug.simulator" />			
+			<property name="basedir" value="${checkout.dir}/com.buglabs.bug.simulator" />
 			<property name="distDirectory" value="${dist.dir}" />
 			<property name="full.version" value="3.0.0.${meta.project.version}" />
-			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF"/>
-		</ant>		
+			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF" />
+		</ant>
 	</target>
 
 	<target name="clean" description="Delete temporary directories">
