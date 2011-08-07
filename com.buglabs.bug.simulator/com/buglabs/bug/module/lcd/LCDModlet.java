@@ -218,21 +218,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 		return frame;
 	}
 
-	public int disable() throws IOException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int enable() throws IOException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int getStatus() throws IOException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	public int setBackLight(int val) throws IOException {
 		if(val < 0 || val > 7){
 			logService.log(LogService.LOG_ERROR, "Illegal backlight intensity value. Range is 0-7");
@@ -272,10 +257,6 @@ public class LCDModlet implements IModlet, IModuleControl, ILCDModuleControl, IM
 
 	public int LEDRedOn() throws IOException {
 		return setLEDRed(true);
-	}
-
-	public int setBlackLight(int val) throws IOException {
-		return setBackLight(val);
 	}
 
 	public int resume() throws IOException {
