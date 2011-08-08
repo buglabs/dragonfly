@@ -157,7 +157,7 @@ public class NMEASentenceProvider extends Thread implements INMEASentenceProvide
 						notifySubscribers(objSentence);
 					}
 				} catch (NMEAParserException e) {
-					log.log(LogService.LOG_WARNING, "An error occured while parsing sentence.", e);
+					log.log(LogService.LOG_WARNING, "An error occured while parsing sentence: " + sentence, e);
 				}
 			} while (!Thread.currentThread().isInterrupted() && (sentence != null));
 		} catch (IOException e) {
