@@ -210,8 +210,10 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 			logService.log(LogService.LOG_ERROR, "BUG Simulator Controller unable to start.  Another process is using it's port: " + BUG_SIMULATOR_CONTROLLER_PORT);
 		}		
 		
-		shellThread = new ShellIOThread(Integer.parseInt(System.getProperty("org.knapsack.shell.port")));
-		shellThread.start();
+		if (System.getProperty("org.knapsack.shell.port") != null) {
+			shellThread = new ShellIOThread(Integer.parseInt(System.getProperty("org.knapsack.shell.port")));
+			shellThread.start();
+		}
 		
 		ShellButtonAdapter userBtn = new ShellButtonAdapter("user");
 		ShellButtonAdapter powerBtn = new ShellButtonAdapter("power");
@@ -247,7 +249,9 @@ public class Activator implements BundleActivator, ITimeProvider, ServiceListene
 		for (ServiceRegistration sr : btnServices)
 			sr.unregister();
 			
-		shellThread.shutdown();
+		if (shellThread != null) {
+			shellThread.shutdown();
+		}
 		
 		if (controllerServer != null) {
 			controllerServer.shutdown();
