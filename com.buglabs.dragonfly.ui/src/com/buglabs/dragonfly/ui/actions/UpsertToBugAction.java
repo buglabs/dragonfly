@@ -186,9 +186,9 @@ public class UpsertToBugAction extends Action {
 			} catch (Exception e1) {
 				UIUtils.handleNonvisualWarning("Unable to read Execution Environment for project " + project.getName(), e1, true); //$NON-NLS-1$
 			}
-			// No EE in App, assumed to be PhoneME
+			// No EE in App, execution environment is ok
 			if (ee == null || ee.length() == 0)
-				ee = BUGSupportInfoManager.PHONEME_EXECUTION_ENV;
+				return true;
 
 			return info.getExecutionEnvironment().contains(ee);
 		}
