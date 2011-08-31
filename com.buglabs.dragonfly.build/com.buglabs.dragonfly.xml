@@ -168,26 +168,26 @@
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
-			<property name="full.version" value="3.0.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.1.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="fetch.dependencies">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
-			<property name="full.version" value="3.0.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.1.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/bug-osgi/com.buglabs.osgi.build/com.buglabs.osgi.xml" target="jar">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/bug-osgi/" />
 			<property name="distDirectory" value="${dist.dir}" />
-			<property name="full.version" value="3.0.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.1.${meta.project.version}" />
 		</ant>
 		<ant antfile="${checkout.dir}/com.buglabs.bug.simulator/build.xml" target="clean">
 			<property name="base.build.dir" value="${script.dir}" />
 			<property name="checkout.dir" value="${checkout.dir}/" />
 			<property name="basedir" value="${checkout.dir}/com.buglabs.bug.simulator" />
 			<property name="distDirectory" value="${dist.dir}" />
-			<property name="full.version" value="3.0.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.1.${meta.project.version}" />
 			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF" />
 		</ant>
 		<ant antfile="${checkout.dir}/com.buglabs.bug.simulator/build.xml" target="build.jars">
@@ -195,7 +195,7 @@
 			<property name="checkout.dir" value="${checkout.dir}/" />
 			<property name="basedir" value="${checkout.dir}/com.buglabs.bug.simulator" />
 			<property name="distDirectory" value="${dist.dir}" />
-			<property name="full.version" value="3.0.0.${meta.project.version}" />
+			<property name="full.version" value="3.0.1.${meta.project.version}" />
 			<property name="manifest.location" location="${checkout.dir}/com.buglabs.bug.simulator/META-INF/MANIFEST.MF" />
 		</ant>
 	</target>
