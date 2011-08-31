@@ -18,7 +18,7 @@ public class APIVersionManager {
 	/**
 	 * Change upon every API-changing BUG sw release.
 	 */
-	private static final String DEFAULT_API_VERSION = "2.5.0";
+	private static final String DEFAULT_API_VERSION = "3.0.0";
 
 	public static String getSDKAPIVersion() {		
 		return DEFAULT_API_VERSION;
